@@ -18,7 +18,23 @@ const audios = {
 
 const audiosArray = Object.values(audios)
 
-export type State = (typeof states)[number]
+const playAudio = (src: string) => {
+  const audios = document.getElementById('audios')
+
+  if (audios === null) {
+    return
+  }
+
+  const selector = `.audio-${audiosArray.findIndex((el) => el === src)}`
+
+  const audio = audios.querySelector(selector) as HTMLAudioElement
+
+  if (audio === null) {
+    return
+  }
+
+  audio.play()
+}
 
 const App = () => {
   const [countBullet, setCountBullet] = useState(5)
@@ -27,21 +43,6 @@ const App = () => {
   const [total, setTotal] = useState(1075)
   const [rotate, setRotate] = useState(15)
   const [activeIndex, setActiveIndex] = useState(1)
-
-  const playAudio = (src: string) => {
-    const audios = document.getElementById('audios')
-    if (audios === null) {
-      return
-    }
-
-    const index = `audio-${audiosArray.findIndex((el) => el === src)}`
-
-    const audio = audios.querySelector(`.${index}`) as HTMLAudioElement
-    if (audio === null) {
-      return
-    }
-    audio.play()
-  }
 
   const startGame = () => {
     setState('start-game')
