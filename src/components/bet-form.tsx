@@ -24,7 +24,7 @@ const BetForm = ({ onSubmit }: FormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='flex relative justify-center px-[30px] gap-2 mt-10 left-1 z-[3] animate-bet mb-auto'
+      className='animate-bet relative left-1 z-[3] mt-10 mb-auto flex justify-center gap-2 px-[30px]'
     >
       <div className='relative w-[220px]'>
         <input
@@ -50,7 +50,7 @@ const BetForm = ({ onSubmit }: FormProps) => {
               event.preventDefault()
             }
           }}
-          className='absolute top-0 left-0 right-0 bottom-0 py-[14px] px-[10px] text-[32px] text-black placeholder:text-black/60 outline-none appearance-auto'
+          className='absolute top-0 right-0 bottom-0 left-0 appearance-auto px-[10px] py-[14px] text-[32px] text-black outline-none placeholder:text-black/60'
           placeholder='Join bet'
           type='type'
         />
@@ -88,7 +88,7 @@ const BetForm = ({ onSubmit }: FormProps) => {
         </svg>
       </div>
       <button className='relative'>
-        <span className='cursor-pointer block absolute left-1/2 top-1/2 -translate-1/2 font-bold text-[40px] pr-3'>
+        <span className='absolute top-1/2 left-1/2 block -translate-1/2 cursor-pointer pr-3 text-[40px] font-bold'>
           BET
         </span>
         <svg width='110' height='76' viewBox='0 0 110 76' fill='none'>

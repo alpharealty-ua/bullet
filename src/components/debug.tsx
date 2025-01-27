@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { State, states, multipliers } from '../utils/constants'
-import { useAppContext } from '../context'
+import { useAppContext } from '../context/use-app-context'
 
 const Debug = () => {
   const {
@@ -26,7 +26,7 @@ const Debug = () => {
   }
 
   return (
-    <div className='absolute flex flex-col gap-2 top-0 right-full w-[200px] p-4 bg-amber-100'>
+    <div className='absolute top-0 right-full flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
       <h1>
         Current state - <strong>{state}</strong>
       </h1>
@@ -34,7 +34,7 @@ const Debug = () => {
         <button
           key={i}
           className={classNames(
-            'h-10 p-2 bg-amber-300 hover:bg-amber-400 cursor-pointer transition-colors',
+            'h-10 cursor-pointer bg-amber-300 p-2 transition-colors hover:bg-amber-400',
             el === state && 'bg-amber-500',
           )}
           onClick={() => handleSetState(el)}
@@ -49,7 +49,7 @@ const Debug = () => {
             type='text'
             value={total}
             onChange={(e) => setTotal(Number(e.target.value))}
-            className='bg-white h-10 w-full px-2'
+            className='h-10 w-full bg-white px-2'
           />
         </label>
         <label>
@@ -58,13 +58,13 @@ const Debug = () => {
             type='number'
             value={bet}
             onChange={(e) => setBet(Number(e.target.value))}
-            className='bg-white h-10 w-full px-2'
+            className='h-10 w-full bg-white px-2'
           />
         </label>
         <label>
           <div className='font-black'>Multiplier</div>
           <select
-            className='bg-white h-10 w-full px-2'
+            className='h-10 w-full bg-white px-2'
             value={activeMultiplierIndex}
             onChange={(e) => setActiveMultiplierIndex(Number(e.target.value))}
           >
@@ -78,7 +78,7 @@ const Debug = () => {
         <label>
           <div className='font-black'>Count bullet</div>
           <select
-            className='bg-white h-10 w-full px-2'
+            className='h-10 w-full bg-white px-2'
             value={countBullet}
             onChange={(e) => setCountBullet(Number(e.target.value))}
           >
