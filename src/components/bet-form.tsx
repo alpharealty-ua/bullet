@@ -1,3 +1,5 @@
+import { onlyDigit } from '@/utils/libs'
+
 interface BetFormProps {
   onSubmit: (value: number) => boolean
 }
@@ -21,6 +23,14 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
     form.reset()
   }
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
+    event,
+  ) => {
+    if (!onlyDigit(event.key)) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -28,28 +38,7 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
     >
       <div className='relative w-[220px]'>
         <input
-          onKeyDown={(event) => {
-            const key = event.key
-
-            if (
-              !(
-                (key >= '0' && key <= '9') ||
-                [
-                  '+',
-                  '(',
-                  ')',
-                  '-',
-                  'ArrowLeft',
-                  'ArrowRight',
-                  'Delete',
-                  'Backspace',
-                  'Enter',
-                ].includes(key)
-              )
-            ) {
-              event.preventDefault()
-            }
-          }}
+          onKeyDown={handleKeyDown}
           className='absolute top-0 right-0 bottom-0 left-0 appearance-auto px-[10px] py-[14px] text-[32px] text-black outline-none placeholder:text-black/60'
           placeholder='Join bet'
           type='type'
