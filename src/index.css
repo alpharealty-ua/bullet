@@ -1,7 +1,25 @@
 @import 'tailwindcss';
 
+@theme {
+  --font-caveat: Caveat;
+}
+
+@font-face {
+  font-family: Bullet;
+  src: url('/assets/fonts/Bullet-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Bullet;
+  src: url('/assets/fonts/Bullet-Regular-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
 body {
-  font-family: Caveat;
+  font-family: Bullet;
   line-height: 1.3;
 }
 
@@ -16,7 +34,7 @@ img {
 }
 
 .animate-click {
-  animation: fade-in-50 0.2s linear;
+  animation: click 0.2s linear;
   animation-fill-mode: both;
 }
 
@@ -24,21 +42,21 @@ img {
 .animate-offer-money,
 .animate-offer-deal,
 .animate-offer-no-deal {
-  animation: fade-in 0.2s linear;
+  animation: fade-in 0.5s linear;
   animation-fill-mode: both;
   animation-delay: 0.5s;
 }
 
 .animate-offer-money {
-  animation-delay: 0.6s;
+  animation-delay: 1s;
 }
 
 .animate-offer-deal {
-  animation-delay: 0.7s;
+  animation-delay: 1.2s;
 }
 
 .animate-offer-no-deal {
-  animation-delay: 0.8s;
+  animation-delay: 1.4s;
 }
 
 .animate-game-over {
@@ -61,13 +79,38 @@ img {
   animation-delay: 1s;
 }
 
-@keyframes fade-in-50 {
+.animate-wiggle {
+  animation: wiggle 1s linear infinite;
+  animation-delay: 15s;
+}
+
+@keyframes wiggle {
+  0% {
+    -webkit-transform: rotate(10deg);
+  }
+  25% {
+    -webkit-transform: rotate(-10deg);
+  }
+  50% {
+    -webkit-transform: rotate(20deg);
+  }
+  75% {
+    -webkit-transform: rotate(-5deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes click {
   0%,
   100% {
     opacity: 0;
+    transform: scale(0.75);
   }
   50% {
     opacity: 1;
+    transform: scale(1);
   }
 }
 
