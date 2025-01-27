@@ -26,7 +26,7 @@ export const srcImages = [
   './assets/images/bullet-chambe.png',
   './assets/images/body.png',
   './assets/images/pull.png',
-  './assets/images/bottom-line.png',
+  './assets/images/bottom-line.jpg',
   './assets/images/settings.png',
   './assets/images/bag.png',
   './assets/images/bet.png',
