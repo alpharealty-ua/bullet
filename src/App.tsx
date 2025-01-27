@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Multipler } from './components/multiplier'
 import { BetForm } from './components/bet-form'
 import { randomIntFromInterval } from './utils/libs'
-import { multipliers, State } from './utils/constacts'
+import { multipliers, srcImages, State } from './utils/constants'
 import { AppContext } from './context'
 import { Debug } from './components/debug'
 
