@@ -1,6 +1,6 @@
-const GameOver = () => {
+const GameOver = ({ onClick }: { onClick: () => void }) => {
   return (
-    <div className='absolute inset-0 z-50'>
+    <div className='absolute inset-0 z-50 cursor-pointer' onClick={onClick}>
       <div className='animate-game-over absolute inset-0'>
         <img src='./assets/videos/game-over.gif' alt='' />
       </div>

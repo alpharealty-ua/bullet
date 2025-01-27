@@ -2,8 +2,8 @@ export const multipliers = [2, 5, 10, 25, 100]
 
 export const states = [
   'reset',
+  'init-game',
   'bet',
-  'start-game',
   'pull-start',
   'multiplier',
   'pull-next',
@@ -28,7 +28,7 @@ export const srcImages = [
   './assets/images/pull.png',
   './assets/images/bottom-line.jpg',
   './assets/images/settings.png',
-  './assets/images/bag.png',
+  './assets/images/money.svg',
   './assets/images/bet.png',
   './assets/images/bullet.png',
   './assets/images/multiplier.png',
@@ -44,3 +44,5 @@ export const audios = {
 }
 
 export const audiosEntries = Object.entries(audios)
+
+export const INIT_TOTAL = 1075

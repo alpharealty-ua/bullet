@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
-import { multipliers } from '@/lib/constants'
+import { INIT_TOTAL, multipliers } from '@/lib/constants'
 import { randomIntFromInterval } from '@/lib/utils'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
@@ -11,6 +11,7 @@ import { Revolver } from './revolver'
 import { Offer } from './offer'
 import { Click } from './click'
 import { playAudio } from './audios'
+import { DealButton } from './deal-button'
 
 const Game = () => {
   const {
@@ -27,21 +28,27 @@ const Game = () => {
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
 
-  const startGame = () => {
-    setState('start-game')
+  const spinRevolver = () => {
     const oneCircle = 360
     const spinAmount = oneCircle * randomIntFromInterval(1, 4)
     setRotate((p) => p + spinAmount)
     playAudio('sound')
-    setTimeout(() => {
-      setState('pull-start')
-    }, 2000)
   }
 
   const reset = () => {
+    setState('reset')
     setBet(0)
-    setTotal(1075)
+    setTotal(INIT_TOTAL)
     setCountBullet(5)
+  }
+
+  const initGame = () => {
+    setState('init-game')
+    setCountBullet(5)
+    spinRevolver()
+    setTimeout(() => {
+      setState('bet')
+    }, 3000)
   }
 
   const betFn = () => {
@@ -122,7 +129,7 @@ const Game = () => {
     setBet(bet)
     setTotal((p) => p - bet)
 
-    startGame()
+    setState('pull-start')
 
     form.reset()
   }
@@ -148,22 +155,21 @@ const Game = () => {
     setState('bet')
   }, [mouseClick, bet])
 
-  const handleNoDeal = useCallback(() => {
-    mouseClick()
-    setState('pull-next')
-  }, [mouseClick])
+  const handleStartGame = () => {
+    initGame()
+  }
 
   useEffect(() => {
     if (state === 'reset') {
       reset()
       return
     }
-    if (state === 'bet') {
-      betFn()
+    if (state === 'init-game') {
+      initGame()
       return
     }
-    if (state === 'start-game') {
-      startGame()
+    if (state === 'bet') {
+      betFn()
       return
     }
     if (state === 'multiplier') {
@@ -188,24 +194,20 @@ const Game = () => {
   return (
     <>
       {state === 'bet' && <BetForm onSubmit={handleBet} />}
-      {state === 'offer' && (
-        <Offer onDeal={handleDeal} onNoDeal={handleNoDeal} />
-      )}
+      {state === 'offer' && <Offer />}
       <Revolver
         beforeSlot={state === 'offer' && <Click />}
         className={classNames(
-          state === 'start-game' && 'duration-2000',
+          state === 'init-game' && 'duration-3000',
           state === 'next' && 'duration-1000',
         )}
         style={{ transform: `rotate(${rotate}deg)` }}
       />
-      {state !== 'bet' && (
-        <PullButton
-          disabled={!(state === 'pull-next' || state === 'pull-start')}
-          onClick={handlePull}
-        />
-      )}
-      {state === 'game-over' && <GameOver />}
+      <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
+        {state === 'offer' && <DealButton onClick={handleDeal} />}
+        {state !== 'bet' && <PullButton onClick={handlePull} />}
+      </div>
+      {state === 'game-over' && <GameOver onClick={handleStartGame} />}
     </>
   )
 }

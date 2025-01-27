@@ -7,10 +7,6 @@ export const usePreloadImages = () => {
     srcImages.forEach((src) => {
       const image = new Image()
       image.src = src
-
-      image.addEventListener('load', () => {
-        console.log(image)
-      })
     })
   }, [])
 }

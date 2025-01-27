@@ -28,8 +28,8 @@ const Debug = () => {
 
   return (
     <div className='absolute top-0 right-full flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
-      <h1>
-        Current state - <strong>{state}</strong>
+      <h1 className='text-xs'>
+        Current state - <strong className='block'>{state}</strong>
       </h1>
       {states.map((el, i) => (
         <button
