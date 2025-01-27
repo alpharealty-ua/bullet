@@ -1,8 +1,8 @@
-interface FormProps {
+interface BetFormProps {
   onSubmit: (value: number) => boolean
 }
 
-const BetForm = ({ onSubmit }: FormProps) => {
+const BetForm = ({ onSubmit }: BetFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
 
