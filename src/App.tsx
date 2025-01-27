@@ -3,19 +3,9 @@ import classNames from 'classnames'
 import { Multipler } from './components/multiplier'
 import { BetForm } from './components/bet-form'
 import { randomIntFromInterval } from './utils/libs'
-import { multipliers } from './utils/constacts'
-
-const states = [
-  'reset',
-  'bet',
-  'start-game',
-  'pull-start',
-  'multiplier',
-  'pull-next',
-  'next',
-  'offer',
-  'game-over',
-] as const
+import { multipliers, State } from './utils/constacts'
+import { AppContext } from './context'
+import { Debug } from './components/debug'
 
 const audios = {
   sound: './assets/audios/sound.mp3',
