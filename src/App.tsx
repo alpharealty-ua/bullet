@@ -1,10 +1,10 @@
-import { AppProvider } from './context/app-provider'
-import { usePreloadImages } from './hooks/preload-images'
-import { Debug } from './components/debug'
-import { Footer } from './components/footer'
-import { Header } from './components/header'
-import { States } from './components/game'
-import { Audios } from './components/audios'
+import { AppProvider } from '@/context/app-provider'
+import { usePreloadImages } from '@/hooks/preload-images'
+import { Debug } from '@/components/debug'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { States } from '@/components/game'
+import { Audios } from '@/components/audios'
 
 const App = () => {
   usePreloadImages()

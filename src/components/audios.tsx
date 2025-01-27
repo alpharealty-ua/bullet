@@ -1,5 +1,6 @@
-import { audiosEntries, audios } from '../utils/constants'
+import { audiosEntries, audios } from '@/utils/constants'
 
+// TODO: EXTRACT TO UTILS
 export const playAudio = (key: keyof typeof audios) => {
   const audios = document.getElementById('audios')
 

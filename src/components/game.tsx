@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 
-import { multipliers } from '../utils/constants'
-import { randomIntFromInterval } from '../utils/libs'
-import { useAppContext } from '../context/use-app-context'
+import { useAppContext } from '@/context/use-app-context'
+import { multipliers } from '@/utils/constants'
+import { randomIntFromInterval } from '@/utils/libs'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'

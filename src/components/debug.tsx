@@ -1,6 +1,7 @@
 import classNames from 'classnames'
-import { State, states, multipliers } from '../utils/constants'
-import { useAppContext } from '../context/use-app-context'
+
+import { useAppContext } from '@/context/use-app-context'
+import { State, states, multipliers } from '@/utils/constants'
 
 const Debug = () => {
   const {

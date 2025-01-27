@@ -1,6 +1,6 @@
+import { useAppContext } from '@/context/use-app-context'
 import { Logo } from './logo'
 import { Balance } from './balance'
-import { useAppContext } from '../context/use-app-context'
 
 export const Header = () => {
   const { total } = useAppContext()

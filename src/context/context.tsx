@@ -1,5 +1,6 @@
 import React from 'react'
-import { State } from '../utils/constants'
+
+import { State } from '@/utils/constants'
 
 interface ContextAppValue {
   state: State
