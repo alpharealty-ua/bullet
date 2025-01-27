@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { AppContext } from '@/context/context'
-import { State } from '@/utils/constants'
+import { State } from '@/lib/constants'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [countBullet, setCountBullet] = useState(5)

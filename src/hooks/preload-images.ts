@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { srcImages } from '@/utils/constants'
+import { srcImages } from '@/lib/constants'
 
 export const usePreloadImages = () => {
   useEffect(() => {

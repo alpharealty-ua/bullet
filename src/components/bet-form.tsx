@@ -1,4 +1,4 @@
-import { onlyDigit } from '@/utils/libs'
+import { onlyDigit } from '@/lib/utils'
 
 interface BetFormProps {
   onSubmit: (form: HTMLFormElement, value: number) => void

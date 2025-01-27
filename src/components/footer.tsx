@@ -1,5 +1,5 @@
-import { useAppContext } from '../context/use-app-context'
-import { multipliers } from '../utils/constants'
+import { useAppContext } from '@/context/use-app-context'
+import { multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'

@@ -1,4 +1,4 @@
-import { audiosEntries, audios } from '@/utils/constants'
+import { audiosEntries, audios } from '@/lib/constants'
 
 // TODO: EXTRACT TO UTILS
 export const playAudio = (key: keyof typeof audios) => {
