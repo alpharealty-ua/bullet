@@ -1,7 +1,7 @@
 import { onlyDigit } from '@/utils/libs'
 
 interface BetFormProps {
-  onSubmit: (value: number) => boolean
+  onSubmit: (form: HTMLFormElement, value: number) => void
 }
 
 const BetForm = ({ onSubmit }: BetFormProps) => {
@@ -17,10 +17,7 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
       return
     }
 
-    if (!onSubmit(Number(value))) {
-      return
-    }
-    form.reset()
+    onSubmit(form, Number(value))
   }
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (

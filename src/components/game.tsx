@@ -112,11 +112,11 @@ const Game = () => {
     }, 1000)
   }
 
-  const handleBet = (bet: number) => {
+  const handleBet = (form: HTMLFormElement, bet: number) => {
     const notHasMoney = bet > total
     if (notHasMoney) {
       alert('Not enough money')
-      return false
+      return
     }
 
     setBet(bet)
@@ -124,7 +124,7 @@ const Game = () => {
 
     startGame()
 
-    return true
+    form.reset()
   }
 
   const handlePull = () => {
