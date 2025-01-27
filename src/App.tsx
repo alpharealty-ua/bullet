@@ -3,9 +3,10 @@ import classNames from 'classnames'
 import { Multipler } from './components/multiplier'
 import { BetForm } from './components/bet-form'
 import { randomIntFromInterval } from './utils/libs'
-import { multipliers, srcImages, State } from './utils/constants'
+import { multipliers, State } from './utils/constants'
 import { AppContext } from './context'
 import { Debug } from './components/debug'
+import { usePreloadImages } from './hooks/preload-images'
 
 const audios = {
   sound: './assets/audios/sound.mp3',
@@ -201,19 +202,7 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
-  useEffect(() => {
-    const srcImages = ['./assets/videos/game-over.gif']
-
-    srcImages.forEach((src) => {
-      const image = new Image()
-      image.src = src
-
-      image.addEventListener('load', () => {
-        console.log(image)
-        console.log('load')
-      })
-    })
-  }, [])
+  usePreloadImages()
 
   return (
     <AppContext.Provider
@@ -326,9 +315,7 @@ const App = () => {
             <div className='text-[#ff0b0b] text-5xl leading-[1] font-black'>
               {bet}
             </div>
-            <div className='text-[#006100] uppercase font-bold w-[42px] h-[14px] bg-[url(/assets/images/bet.png)] bg-cover'>
-              {/* Bet */}
-            </div>
+            <div className='text-[#006100] uppercase font-bold w-[42px] h-[14px] bg-[url(/assets/images/bet.png)] bg-cover bg-center'></div>
           </div>
           <div className='flex gap-1.5 ml-auto mr-auto'>
             {Array(5)
