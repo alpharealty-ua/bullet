@@ -16,7 +16,12 @@ export const playAudio = (key: keyof typeof audios) => {
     return
   }
 
-  audio.play()
+  audio
+    .play()
+    .then(() => {
+      console.log('Play audio - ' + audio.src)
+    })
+    .catch(console.log)
 }
 
 const Audios = () => {
