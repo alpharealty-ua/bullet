@@ -35,12 +35,12 @@ export const srcImages = [
 ]
 
 export const audios = {
-  sound: './assets/audios/sound.mp3',
+  revolverspin: './assets/audios/revolverspin.mp3',
   trigger: './assets/audios/trigger.wav',
   spin: './assets/audios/spin.mp3',
   gunshot: './assets/audios/gunshot.mp3',
   drumbeat: './assets/audios/drumbeat.wav',
-  mouseClick: './assets/audios/mouse-click.mp3',
+  mouseClick: './assets/audios/click.wav',
 }
 
 export const audiosEntries = Object.entries(audios)

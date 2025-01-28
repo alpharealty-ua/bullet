@@ -32,7 +32,7 @@ const Game = () => {
     const oneCircle = 360
     const spinAmount = oneCircle * randomIntFromInterval(1, 4)
     setRotate((p) => p + spinAmount)
-    playAudio('sound')
+    playAudio('revolverspin')
   }
 
   const reset = () => {
@@ -120,6 +120,8 @@ const Game = () => {
   }
 
   const handleBet = (form: HTMLFormElement, bet: number) => {
+    mouseClick()
+
     const notHasMoney = bet > total
     if (notHasMoney) {
       alert('Not enough money')
