@@ -1,7 +1,7 @@
 const GameOver = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className='absolute inset-0 z-50 cursor-pointer' onClick={onClick}>
-      <div className='animate-game-over absolute inset-0'>
+      <div className='animate-game-over absolute inset-0 flex items-end'>
         <img src='./assets/videos/game-over.gif' alt='' />
       </div>
       <div className='animate-blood absolute inset-0 bg-[url(/assets/images/blood.png)]'>
