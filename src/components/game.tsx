@@ -60,8 +60,8 @@ const Game = () => {
     setState('multiplier')
 
     playAudio('spin')
-    const interval = 150
-    const TIME_AUDIO = 2.2
+    const interval = randomIntFromInterval(100, 300)
+    const TIME_AUDIO = 2.8
 
     let count = (TIME_AUDIO * (1000 / interval)) ^ 0
 
