@@ -29,7 +29,7 @@ const Footer = () => {
   }, [total])
 
   return (
-    <div className='relative flex h-[74px] items-center bg-[url(/assets/images/bottom-line.jpg)] bg-[-20px_top] px-1 py-1'>
+    <footer className='relative flex h-[74px] items-center overflow-hidden bg-[url(/assets/images/bottom-line.jpg)] bg-[-20px_top] px-1 py-1'>
       <div className='flex w-[120px] shrink-0 items-center'>
         <div className='flex flex-col items-center'>
           <button className='h-[17px] w-[17px] cursor-pointer bg-[url(/assets/images/settings.png)] bg-cover'></button>
@@ -47,7 +47,7 @@ const Footer = () => {
       <div className='w-[120px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
       </div>
-    </div>
+    </footer>
   )
 }
 
