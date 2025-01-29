@@ -29,7 +29,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     }, 0)
   }
 
-  if (!location.href.includes('localhost')) {
+  if (!localStorage.getItem('showDebug') === true) {
     return null
   }
 
