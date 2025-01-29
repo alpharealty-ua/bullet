@@ -304,7 +304,7 @@ const Game = () => {
         <Rules onStartGame={handleStartGame} onClose={handleClose} />
       )}
       {!(state === 'cover' || state === 'rules') && <Header />}
-      {state === 'bet' && <BetForm onSubmit={handleBet} />}
+      {state === 'bet' && <BetForm onSubmit={handleBet} disabled={disabled} />}
       {state === 'offer' && <Offer />}
       {!(state === 'cover' || state === 'rules') && (
         <Revolver

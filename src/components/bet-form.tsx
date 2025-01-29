@@ -2,9 +2,10 @@ import { onlyDigit } from '@/lib/utils'
 
 interface BetFormProps {
   onSubmit: (form: HTMLFormElement, value: number) => void
+  disabled: boolean
 }
 
-const BetForm = ({ onSubmit }: BetFormProps) => {
+const BetForm = ({ onSubmit, disabled }: BetFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
 
@@ -75,7 +76,10 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
           />
         </svg>
       </div>
-      <button className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'>
+      <button
+        className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
+        disabled={disabled}
+      >
         <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-3xl font-bold'>
           BET
         </span>
