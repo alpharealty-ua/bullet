@@ -202,6 +202,15 @@ const Game = () => {
     }, 200)
   }
 
+  const handleDrag = (x: number, y: number) => {
+    const speed = x + y
+    const oneBullet = 60
+    const spinAmount = ((speed / oneBullet) ^ 0) * oneBullet || oneBullet
+    console.log(speed, spinAmount)
+    playAudio('revolverspin')
+    setRotate((p) => p + spinAmount)
+  }
+
   useEffect(() => {
     // TODO: REFACTOR
     if (state === 'reset') {
@@ -256,12 +265,15 @@ const Game = () => {
       {state === 'offer' && <Offer />}
       {!(state === 'cover' || state === 'rules') && (
         <Revolver
-          beforeSlot={state === 'offer' && <Click />}
           className={classNames(
             state === 'init-game' && 'duration-3000',
             state === 'next' && 'duration-1000',
           )}
-          style={{ transform: `rotate(${rotate}deg)` }}
+          style={{
+            transform: `rotate(${rotate}deg)`,
+          }}
+          beforeSlot={state === 'offer' && <Click />}
+          onDrag={handleDrag}
         />
       )}
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
