@@ -3,9 +3,10 @@ import { images } from '@/lib/constants'
 const GameOver = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className='absolute inset-0 z-50 cursor-pointer' onClick={onClick}>
-      <div className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end delay-[800ms] duration-0'>
-        <img src='./assets/videos/game-over.gif' alt='' />
-      </div>
+      <div
+        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-bottom bg-no-repeat delay-[800ms] duration-0'
+        style={{ backgroundImage: `url(${images.gameOver})` }}
+      ></div>
       <div
         className='animate-in fade-in fill-mode-both absolute inset-0 delay-[800ms] duration-100'
         style={{ backgroundImage: `url(${images.blood})` }}

@@ -22,7 +22,7 @@ export const images = {
   money: './assets/images/compressed/money.png',
   logo: './assets/images/compressed/logo.png',
   wrapper: './assets/images/compressed/wrapper.jpg',
-  game: './assets/images/compressed/game-over.gif',
+  gameOver: './assets/images/compressed/game-over.gif',
   blood: './assets/images/compressed/blood.png',
   you: './assets/images/compressed/you.png',
   died: './assets/images/compressed/died.png',
