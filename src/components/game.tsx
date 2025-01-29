@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
-import { INIT_TOTAL, multipliers } from '@/lib/constants'
+import { INIT_TOTAL, multipliers, State } from '@/lib/constants'
 import { randomIntFromInterval } from '@/lib/utils'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
@@ -12,6 +12,10 @@ import { Offer } from './offer'
 import { Click } from './click'
 import { playAudio } from './audios'
 import { DealButton } from './deal-button'
+import { Rules } from './rules'
+import { Cover } from './cover'
+import { Header } from './header'
+import { Footer } from './footer'
 
 const Game = () => {
   const {
@@ -31,8 +35,10 @@ const Game = () => {
   const spinRevolver = () => {
     const oneCircle = 360
     const spinAmount = oneCircle * randomIntFromInterval(1, 4)
-    setRotate((p) => p + spinAmount)
-    playAudio('revolverspin')
+    setTimeout(() => {
+      setRotate((p) => p + spinAmount)
+      playAudio('revolverspin')
+    }, 10)
   }
 
   const reset = () => {
@@ -49,6 +55,14 @@ const Game = () => {
     setTimeout(() => {
       setState('bet')
     }, 3000)
+  }
+
+  const cover = () => {
+    setState('cover')
+  }
+
+  const rules = () => {
+    setState('rules')
   }
 
   const betFn = () => {
@@ -119,6 +133,22 @@ const Game = () => {
     }, 1000)
   }
 
+  const handlePullStart = () => {
+    mouseClick()
+
+    setTimeout(() => {
+      initGame()
+    }, 200)
+  }
+
+  const handleGameRules = () => {
+    mouseClick()
+
+    setTimeout(() => {
+      rules()
+    }, 200)
+  }
+
   const handleBet = (form: HTMLFormElement, bet: number) => {
     mouseClick()
 
@@ -147,23 +177,44 @@ const Game = () => {
     }, 1000)
   }
 
-  const mouseClick = useCallback(() => {
+  const mouseClick = () => {
     playAudio('mouseClick')
-  }, [])
+  }
 
-  const handleDeal = useCallback(() => {
+  const handleDeal = () => {
     mouseClick()
     setTotal((p) => p + bet + 100)
     setState('bet')
-  }, [mouseClick, bet])
+  }
+
+  const handleClose = () => {
+    mouseClick()
+
+    setTimeout(() => {
+      cover()
+    }, 200)
+  }
 
   const handleStartGame = () => {
-    initGame()
+    mouseClick()
+
+    setTimeout(() => {
+      initGame()
+    }, 200)
   }
 
   useEffect(() => {
+    // TODO: REFACTOR
     if (state === 'reset') {
       reset()
+      return
+    }
+    if (state === 'cover') {
+      cover()
+      return
+    }
+    if (state === 'rules') {
+      rules()
       return
     }
     if (state === 'init-game') {
@@ -195,16 +246,25 @@ const Game = () => {
 
   return (
     <>
+      {state === 'cover' && (
+        <Cover onPull={handlePullStart} onGameRules={handleGameRules} />
+      )}
+      {state === 'rules' && (
+        <Rules onStartGame={handleStartGame} onClose={handleClose} />
+      )}
+      {!(state === 'cover' || state === 'rules') && <Header />}
       {state === 'bet' && <BetForm onSubmit={handleBet} />}
       {state === 'offer' && <Offer />}
-      <Revolver
-        beforeSlot={state === 'offer' && <Click />}
-        className={classNames(
-          state === 'init-game' && 'duration-3000',
-          state === 'next' && 'duration-1000',
-        )}
-        style={{ transform: `rotate(${rotate}deg)` }}
-      />
+      {!(state === 'cover' || state === 'rules') && (
+        <Revolver
+          beforeSlot={state === 'offer' && <Click />}
+          className={classNames(
+            state === 'init-game' && 'duration-3000',
+            state === 'next' && 'duration-1000',
+          )}
+          style={{ transform: `rotate(${rotate}deg)` }}
+        />
+      )}
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
         {state === 'offer' && (
           <DealButton
@@ -212,7 +272,9 @@ const Game = () => {
             onClick={handleDeal}
           />
         )}
-        {state !== 'bet' && (
+        {!(['cover', 'rules', 'init-game', 'bet'] as State[]).includes(
+          state,
+        ) && (
           <PullButton
             disabled={state === 'next'}
             className='animate-in fade-in-0 mt-auto ml-auto duration-200'
@@ -221,6 +283,7 @@ const Game = () => {
         )}
       </div>
       {state === 'game-over' && <GameOver onClick={handleStartGame} />}
+      {!(state === 'cover' || state === 'rules') && <Footer />}
     </>
   )
 }
