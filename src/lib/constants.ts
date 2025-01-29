@@ -17,8 +17,12 @@ export const states = [
 export type State = (typeof states)[number]
 
 export const srcImages = [
+  './assets/images/money.svg',
+  './assets/images/gamerules.svg',
+  './assets/images/logo.svg',
+  './assets/images/close.svg',
   './assets/images/wrapper.jpg',
-  './assets/videos/game-over.gif',
+  './assets/images/game-over.gif',
   './assets/images/blood.png',
   './assets/images/you.png',
   './assets/images/died.png',
@@ -30,13 +34,9 @@ export const srcImages = [
   './assets/images/pull.png',
   './assets/images/bottom-line.jpg',
   './assets/images/settings.png',
-  './assets/images/money.svg',
   './assets/images/bet.png',
   './assets/images/bullet.png',
   './assets/images/multiplier.png',
-  './assets/images/gamerules.svg',
-  './assets/images/logo.svg',
-  './assets/images/close.svg',
 ]
 
 export const audios = {
