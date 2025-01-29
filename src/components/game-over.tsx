@@ -7,10 +7,12 @@ const GameOver = ({
   onClick,
   onTimeout,
   timeout,
+  image,
 }: {
   onClick: () => void
   onTimeout: () => void
   timeout: number
+  image: string
 }) => {
   const [isOpen, setIsOpen] = useState(true)
 
@@ -39,7 +41,7 @@ const GameOver = ({
       <div
         className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-bottom bg-no-repeat delay-[800ms] duration-0'
         style={{
-          backgroundImage: `url(${images.gameOver}?version=${Math.random()})`,
+          backgroundImage: `url(${image})`,
         }}
       ></div>
       <div

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
-import { INIT_TOTAL, multipliers, State } from '@/lib/constants'
+import { images, INIT_TOTAL, multipliers, State } from '@/lib/constants'
 import { randomIntFromInterval, playAudio } from '@/lib/utils'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
@@ -16,6 +16,8 @@ import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Debug } from './debug'
+
+let i = 0
 
 const Game = () => {
   const {
@@ -32,6 +34,7 @@ const Game = () => {
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
   const [disabled, setDisabled] = useState(false)
+  const [imageSrc, setImageSrc] = useState(images.gameOver)
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -125,13 +128,17 @@ const Game = () => {
   }
 
   const gameOver = () => {
-    playAudio('gunshot')
-    setTimeout(() => {
+    const image = new Image()
+    const imageSrc = `${images.gameOver}?v=${i++}`
+    image.src = imageSrc
+    image.addEventListener('load', () => {
+      setImageSrc(imageSrc)
+      playAudio('gunshot')
       setState('game-over')
-    }, 100)
-    setTimeout(() => {
-      playAudio('drumbeat')
-    }, 1000)
+      setTimeout(() => {
+        playAudio('drumbeat')
+      }, 900)
+    })
   }
 
   const handlePullStart = () => {
@@ -331,6 +338,7 @@ const Game = () => {
           onClick={handleStartGame}
           onTimeout={handleTimeout}
           timeout={2000}
+          image={imageSrc}
         />
       )}
       {!(state === 'cover' || state === 'rules') && <Footer />}
