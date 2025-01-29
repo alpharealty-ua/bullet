@@ -31,7 +31,7 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='animate-in fade-in-0 relative left-1 z-[3] mt-10 mb-auto flex justify-center gap-2 px-[30px] duration-500'
+      className='animate-in fade-in-0 relative left-1 z-[3] mt-4 mb-auto flex justify-center gap-2 px-[30px] duration-500 lg:mt-10'
     >
       <div className='relative w-[220px]'>
         <input
