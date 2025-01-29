@@ -42,7 +42,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
         <button
           key={i}
           className={classNames(
-            'h-10 cursor-pointer bg-amber-300 p-2 transition-colors hover:bg-amber-400',
+            'h-6 cursor-pointer bg-amber-300 px-2 text-xs transition-colors hover:bg-amber-400',
             el === state && 'bg-amber-500',
           )}
           onClick={() => handleSetState(el)}
