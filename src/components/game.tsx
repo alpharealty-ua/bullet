@@ -34,10 +34,8 @@ const Game = () => {
   const spinRevolver = () => {
     const oneCircle = 360
     const spinAmount = oneCircle * randomIntFromInterval(1, 4)
-    setTimeout(() => {
-      setRotate((p) => p + spinAmount)
-      playAudio('revolverspin')
-    }, 10)
+    playAudio('revolverspin')
+    setTimeout(() => setRotate((p) => p + spinAmount), 10) // timeout for change rotate after render
   }
 
   const reset = () => {
