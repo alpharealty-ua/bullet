@@ -36,7 +36,9 @@ const Footer = () => {
           <button
             className={classNames(
               '-mt-1 -mb-1 h-[50px] w-[40px] cursor-pointer bg-[url(/assets/images/money.svg)] bg-contain bg-center bg-no-repeat',
-              !hasMoney && !clickedWallet && 'animate-wiggle',
+              !hasMoney &&
+                !clickedWallet &&
+                'repeat-infinite animate-[wiggle] delay-[1000ms] duration-1000 ease-linear',
             )}
             onClick={handleAddMoney}
           ></button>
