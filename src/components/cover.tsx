@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { Logo } from './logo'
 import { PullButton } from './pull-button'
 import { DealButton } from './deal-button'
+import { images } from '@/lib/constants'
 
 const Cover = ({
   onPull,
@@ -16,16 +17,18 @@ const Cover = ({
   return (
     <div
       className={classNames(
-        'absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-[url(/assets/images/wrapper.jpg)] bg-center px-3 py-12',
+        'absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-center px-3 py-12',
         open
           ? 'animate-in fade-in-0 visible'
           : 'animate-out fade-out-0 invisible',
       )}
+      style={{ backgroundImage: `url(${images.wrapper})` }}
     >
       <Logo size='3xl' />
       <PullButton className='w-[122px]' onClick={onPull} />
       <DealButton
-        className='w-[110px] bg-[url(/assets/images/gamerules.svg)]'
+        className='w-[110px]'
+        style={{ backgroundImage: `url(${images.gamerules})` }}
         onClick={onGameRules}
       />
     </div>

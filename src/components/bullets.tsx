@@ -1,3 +1,4 @@
+import { images } from '@/lib/constants'
 import classNames from 'classnames'
 
 const Bullets = ({ countBullet }: { countBullet: number }) => {
@@ -9,9 +10,10 @@ const Bullets = ({ countBullet }: { countBullet: number }) => {
           <div
             key={index}
             className={classNames(
-              'h-[32px] w-[22px] bg-[url(/assets/images/bullet.png)] bg-cover',
+              'h-[32px] w-[22px] bg-cover',
               5 - index > countBullet && 'opacity-60',
             )}
+            style={{ backgroundImage: `url(${images.bullet})` }}
           ></div>
         ))}
     </div>

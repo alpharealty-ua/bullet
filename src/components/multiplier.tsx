@@ -1,3 +1,4 @@
+import { images } from '@/lib/constants'
 import classNames from 'classnames'
 
 interface MultiplerProps {
@@ -26,7 +27,10 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
             )
           })}
         </div>
-        <div className='h-[16px] w-[86px] bg-[url(/assets/images/multiplier.png)] bg-cover font-bold text-[#006100] uppercase'></div>
+        <div
+          className='h-[16px] w-[86px] bg-cover font-bold text-[#006100] uppercase'
+          style={{ backgroundImage: `url(${images.multiplier})` }}
+        ></div>
       </div>
     </>
   )

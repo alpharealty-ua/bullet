@@ -3,6 +3,7 @@ import classNames from 'classnames'
 
 import { CloseButton } from './close-button'
 import { Logo } from './logo'
+import { images } from '@/lib/constants'
 
 const Rules = ({
   onStartGame,
@@ -26,11 +27,12 @@ const Rules = ({
   return (
     <div
       className={classNames(
-        'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 bg-[url(/assets/images/wrapper.jpg)] bg-center px-3 py-12 duration-200',
+        'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 bg-center px-3 py-12 duration-200',
         isOpen
           ? 'animate-in fade-in-0 zoom-in-95'
           : 'animate-out fade-out-0 zoom-out-95',
       )}
+      style={{ backgroundImage: `url(${images.wrapper})` }}
     >
       <div className='flex items-center justify-between'>
         <Logo size='lg' />

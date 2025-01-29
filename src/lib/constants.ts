@@ -16,28 +16,31 @@ export const states = [
 
 export type State = (typeof states)[number]
 
-export const srcImages = [
-  './assets/images/money.svg',
-  './assets/images/gamerules.svg',
-  './assets/images/logo.svg',
-  './assets/images/close.svg',
-  './assets/images/compressed/wrapper.jpg',
-  './assets/images/compressed/game-over.gif',
-  './assets/images/compressed/blood.png',
-  './assets/images/compressed/you.png',
-  './assets/images/compressed/died.png',
-  './assets/images/compressed/100.png',
-  './assets/images/compressed/deal.png',
-  './assets/images/compressed/no-deal.png',
-  './assets/images/compressed/bullet-chambe.png',
-  './assets/images/compressed/body.png',
-  './assets/images/compressed/pull.png',
-  './assets/images/compressed/bottom-line.jpg',
-  './assets/images/compressed/settings.png',
-  './assets/images/compressed/bet.png',
-  './assets/images/compressed/bullet.png',
-  './assets/images/compressed/multiplier.png',
-]
+export const images = {
+  gamerules: './assets/images/gamerules.svg',
+  close: './assets/images/close.svg',
+  money: './assets/images/compressed/money.png',
+  logo: './assets/images/compressed/logo.png',
+  wrapper: './assets/images/compressed/wrapper.jpg',
+  game: './assets/images/compressed/game-over.gif',
+  blood: './assets/images/compressed/blood.png',
+  you: './assets/images/compressed/you.png',
+  died: './assets/images/compressed/died.png',
+  100: './assets/images/compressed/100.png',
+  deal: './assets/images/compressed/deal.png',
+  no: './assets/images/compressed/no-deal.png',
+  bulletChambe: './assets/images/compressed/bullet-chambe.png',
+  body: './assets/images/compressed/body.png',
+  pull: './assets/images/compressed/pull.png',
+  bottomLine: './assets/images/compressed/bottom-line.jpg',
+  settings: './assets/images/compressed/settings.png',
+  bet: './assets/images/compressed/bet.png',
+  bullet: './assets/images/compressed/bullet.png',
+  multiplier: './assets/images/compressed/multiplier.png',
+  balance: './assets/images/compressed/balance.png',
+}
+
+export const srcImages = Object.values(images)
 
 export const audios = {
   revolverspin: './assets/audios/revolverspin.mp3',

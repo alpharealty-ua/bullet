@@ -1,5 +1,7 @@
 import classNames from 'classnames'
 
+import { images } from '@/lib/constants'
+
 type LogoSize = 'md' | 'lg' | '3xl'
 
 const sizes = {
@@ -16,9 +18,10 @@ const Logo = ({ size = 'md' }: LogoProps) => {
   return (
     <div
       className={classNames(
-        'inline-flex aspect-[1/0.333] bg-[url(/assets/images/logo.svg)] bg-contain bg-center bg-no-repeat',
+        'inline-flex aspect-[1/0.333] bg-contain bg-center bg-no-repeat',
         sizes[size],
       )}
+      style={{ backgroundImage: `url(${images.logo})` }}
     ></div>
   )
 }
