@@ -1,20 +1,22 @@
 import React, { useEffect, useRef } from 'react'
-import classNames from 'classnames'
 
 import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 const Revolver = React.forwardRef<
   HTMLDivElement,
   Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag'> & {
     beforeSlot: React.ReactNode
     onDrag: (x: number, y: number) => void
+    disabled: boolean
   }
->(({ className, style, beforeSlot, onDrag, ...props }, ref) => {
+>(({ className, style, beforeSlot, onDrag, disabled, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const bulletDom = bulletChambeRef.current
-    if (bulletDom === null) {
+
+    if (disabled || bulletDom === null) {
       return
     }
 
@@ -48,7 +50,7 @@ const Revolver = React.forwardRef<
     return () => {
       bulletDom.removeEventListener('pointerdown', mouseDown)
     }
-  }, [onDrag])
+  }, [onDrag, disabled])
 
   return (
     <div
@@ -58,8 +60,9 @@ const Revolver = React.forwardRef<
       {beforeSlot}
       <div
         ref={bulletChambeRef}
-        className={classNames(
-          'absolute top-[85px] right-[-8px] left-[-8px] aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-2000',
+        className={cn(
+          'absolute top-[85px] right-[-8px] left-[-8px] aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
+          disabled && 'cursor-auto',
           className,
         )}
         style={{ backgroundImage: `url(${images.bulletChambe})`, ...style }}

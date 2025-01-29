@@ -15,6 +15,7 @@ import { Rules } from './rules'
 import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
+import { Debug } from './debug'
 
 const Game = () => {
   const {
@@ -30,6 +31,7 @@ const Game = () => {
     setActiveMultiplierIndex,
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
+  const [disabled, setDisabled] = useState(false)
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -69,6 +71,7 @@ const Game = () => {
 
   const multiplier = () => {
     setState('multiplier')
+    setDisabled(true)
 
     playAudio('spin')
     const interval = randomIntFromInterval(100, 300)
@@ -84,6 +87,7 @@ const Game = () => {
         clearInterval(id)
         setTimeout(() => {
           setState('next')
+          setDisabled(false)
         }, 1000)
       }
     }, interval)
@@ -131,22 +135,27 @@ const Game = () => {
   }
 
   const handlePullStart = () => {
+    setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
       initGame()
+      setDisabled(false)
     }, 500)
   }
 
   const handleGameRules = () => {
+    setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
       rules()
+      setDisabled(false)
     }, 500)
   }
 
   const handleBet = (form: HTMLFormElement, bet: number) => {
+    setDisabled(true)
     mouseClick()
 
     const notHasMoney = bet > total
@@ -155,22 +164,30 @@ const Game = () => {
       return
     }
 
-    setBet(bet)
-    setTotal((p) => p - bet)
+    setTimeout(() => {
+      setBet(bet)
+      setTotal((p) => p - bet)
 
-    setState('pull-start')
+      setState('pull-start')
 
-    form.reset()
+      form.reset()
+      setDisabled(false)
+    }, 500)
   }
 
   const handlePull = () => {
+    setDisabled(true)
     mouseClick()
     setTimeout(() => {
       if (state === 'pull-start') {
         multiplier()
+        setDisabled(false)
+
         return
       }
+
       setState('next')
+      setDisabled(false)
     }, 1000)
   }
 
@@ -179,34 +196,54 @@ const Game = () => {
   }
 
   const handleDeal = () => {
+    setDisabled(true)
     mouseClick()
-    setTotal((p) => p + bet + 100)
-    setState('bet')
+    setTimeout(() => {
+      setTotal((p) => p + bet + 100)
+      setBet(0)
+      setState('bet')
+      setDisabled(false)
+    }, 500)
   }
 
   const handleClose = () => {
+    setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
       cover()
+      setDisabled(false)
     }, 200)
   }
 
   const handleStartGame = () => {
+    setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
       initGame()
+      setDisabled(false)
     }, 200)
   }
 
+  const handleTimeout = () => {
+    initGame()
+  }
+
   const handleDrag = (x: number, y: number) => {
+    if (disabled) {
+      return
+    }
+
+    setDisabled(true)
     const speed = x + y
     const oneBullet = 60
     const spinAmount = ((speed / oneBullet) ^ 0) * oneBullet || oneBullet
-    console.log(speed, spinAmount)
     playAudio('revolverspin')
     setRotate((p) => p + spinAmount)
+    setTimeout(() => {
+      setDisabled(false)
+    }, 2000)
   }
 
   useEffect(() => {
@@ -252,6 +289,7 @@ const Game = () => {
 
   return (
     <>
+      <Debug disabled={disabled} />
       {state === 'cover' && (
         <Cover onPull={handlePullStart} onGameRules={handleGameRules} />
       )}
@@ -263,10 +301,8 @@ const Game = () => {
       {state === 'offer' && <Offer />}
       {!(state === 'cover' || state === 'rules') && (
         <Revolver
-          className={classNames(
-            state === 'init-game' && 'duration-3000',
-            state === 'next' && 'duration-1000',
-          )}
+          className={classNames(state === 'next' && 'duration-1000')}
+          disabled={disabled || state !== 'bet'}
           style={{
             transform: `rotate(${rotate}deg)`,
           }}
@@ -276,22 +312,27 @@ const Game = () => {
       )}
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
         {state === 'offer' && (
-          <DealButton
-            className='animate-in fade-in fill-mode-both mt-auto delay-[1200ms] duration-1000'
-            onClick={handleDeal}
-          />
+          <div className='animate-in fade-in fill-mode-both mt-auto delay-[1200ms] duration-1000'>
+            <DealButton disabled={disabled} onClick={handleDeal} />
+          </div>
         )}
         {!(
           ['cover', 'rules', 'init-game', 'bet'] satisfies State[] as State[]
         ).includes(state) && (
           <PullButton
-            disabled={state === 'next'}
+            disabled={disabled || state === 'next'}
             className='animate-in fade-in-0 mt-auto ml-auto duration-200'
             onClick={handlePull}
           />
         )}
       </div>
-      {state === 'game-over' && <GameOver onClick={handleStartGame} />}
+      {state === 'game-over' && (
+        <GameOver
+          onClick={handleStartGame}
+          onTimeout={handleTimeout}
+          timeout={2000}
+        />
+      )}
       {!(state === 'cover' || state === 'rules') && <Footer />}
     </>
   )

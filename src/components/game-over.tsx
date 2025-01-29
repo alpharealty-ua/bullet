@@ -1,8 +1,41 @@
-import { images } from '@/lib/constants'
+import { useEffect, useState } from 'react'
 
-const GameOver = ({ onClick }: { onClick: () => void }) => {
+import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+
+const GameOver = ({
+  onClick,
+  onTimeout,
+  timeout,
+}: {
+  onClick: () => void
+  onTimeout: () => void
+  timeout: number
+}) => {
+  const [isOpen, setIsOpen] = useState(true)
+
+  const handleClick = () => {
+    setIsOpen(false)
+    onClick()
+  }
+
+  useEffect(() => {
+    const id = setTimeout(onTimeout, timeout)
+    return () => {
+      clearTimeout(id)
+    }
+  }, [onTimeout, timeout])
+
   return (
-    <div className='absolute inset-0 z-50 cursor-pointer' onClick={onClick}>
+    <div
+      className={cn(
+        'fill-mode-both absolute inset-0 z-50 cursor-pointer duration-200',
+        isOpen
+          ? 'animate-in fade-in-0 zoom-in-95'
+          : 'animate-out fade-out-0 zoom-out-95',
+      )}
+      onClick={handleClick}
+    >
       <div
         className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-bottom bg-no-repeat delay-[800ms] duration-0'
         style={{

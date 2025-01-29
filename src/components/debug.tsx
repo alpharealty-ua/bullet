@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useAppContext } from '@/context/use-app-context'
 import { State, states, multipliers } from '@/lib/constants'
 
-const Debug = () => {
+const Debug = ({ disabled }: { disabled: boolean }) => {
   const {
     state,
     setState,
@@ -18,6 +18,9 @@ const Debug = () => {
   } = useAppContext()
 
   const handleSetState = (s: State) => {
+    if (disabled) {
+      return
+    }
     if (s === state) {
       setState('reset')
     }
