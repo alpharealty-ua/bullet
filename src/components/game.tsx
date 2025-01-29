@@ -272,9 +272,9 @@ const Game = () => {
             onClick={handleDeal}
           />
         )}
-        {!(['cover', 'rules', 'init-game', 'bet'] as State[]).includes(
-          state,
-        ) && (
+        {!(
+          ['cover', 'rules', 'init-game', 'bet'] satisfies State[] as State[]
+        ).includes(state) && (
           <PullButton
             disabled={state === 'next'}
             className='animate-in fade-in-0 mt-auto ml-auto duration-200'
