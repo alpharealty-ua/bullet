@@ -34,6 +34,9 @@ export const srcImages = [
   './assets/images/bet.png',
   './assets/images/bullet.png',
   './assets/images/multiplier.png',
+  './assets/images/gamerules.svg',
+  './assets/images/logo.svg',
+  './assets/images/close.svg',
 ]
 
 export const audios = {
