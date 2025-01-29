@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin 'tailwindcss-animate';
 
 @theme {
   --font-caveat: Caveat;
@@ -25,63 +26,6 @@ body {
 
 img {
   max-width: 100%;
-}
-
-.animate-bet,
-.animate-pull {
-  animation: fade-in 0.5s linear;
-  animation-fill-mode: both;
-}
-
-.animate-click {
-  animation: click 0.2s linear;
-  animation-fill-mode: both;
-}
-
-.animate-offer-text,
-.animate-offer-money,
-.animate-offer-deal,
-.animate-offer-no-deal {
-  animation: fade-in 0.5s linear;
-  animation-fill-mode: both;
-  animation-delay: 0.5s;
-}
-
-.animate-offer-money {
-  animation-delay: 1s;
-}
-
-.animate-offer-deal {
-  animation-delay: 1.2s;
-}
-
-.animate-offer-no-deal {
-  animation-delay: 1.4s;
-}
-
-.animate-game-over {
-  animation: fade-out 0s linear;
-  animation-delay: 0.8s;
-  animation-fill-mode: both;
-}
-
-.animate-blood,
-.animate-blood-you,
-.animate-blood-died {
-  animation: fade-in 0.1s linear;
-  animation-delay: 0.8s;
-  animation-fill-mode: both;
-}
-.animate-blood-you {
-  animation-delay: 0.9s;
-}
-.animate-blood-died {
-  animation-delay: 1s;
-}
-
-.animate-wiggle {
-  animation: wiggle 1s linear infinite;
-  animation-delay: 15s;
 }
 
 @keyframes wiggle {
@@ -111,23 +55,5 @@ img {
   50% {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
   }
 }

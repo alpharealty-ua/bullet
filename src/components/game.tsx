@@ -208,13 +208,14 @@ const Game = () => {
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
         {state === 'offer' && (
           <DealButton
-            className='animate-offer-deal mt-auto'
+            className='animate-in fade-in fill-mode-both mt-auto delay-[1200ms] duration-1000'
             onClick={handleDeal}
           />
         )}
         {state !== 'bet' && (
           <PullButton
-            className='animate-pull mt-auto ml-auto'
+            disabled={state === 'next'}
+            className='animate-in fade-in-0 mt-auto ml-auto duration-200'
             onClick={handlePull}
           />
         )}

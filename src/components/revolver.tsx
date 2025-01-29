@@ -6,7 +6,7 @@ const Revolver = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & { beforeSlot: React.ReactNode }
 >(({ className, beforeSlot, ...props }, ref) => {
   return (
-    <div className='absolute right-0 bottom-8 left-0 mx-auto h-[472px] w-[251px]'>
+    <div className='animate-in fade-in-0 absolute right-0 bottom-8 left-0 mx-auto h-[472px] w-[251px] duration-200'>
       {beforeSlot}
       <div
         ref={ref}
