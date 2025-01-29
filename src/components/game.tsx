@@ -137,7 +137,7 @@ const Game = () => {
 
     setTimeout(() => {
       initGame()
-    }, 200)
+    }, 500)
   }
 
   const handleGameRules = () => {
@@ -145,7 +145,7 @@ const Game = () => {
 
     setTimeout(() => {
       rules()
-    }, 200)
+    }, 500)
   }
 
   const handleBet = (form: HTMLFormElement, bet: number) => {
