@@ -206,8 +206,18 @@ const Game = () => {
         style={{ transform: `rotate(${rotate}deg)` }}
       />
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
-        {state === 'offer' && <DealButton onClick={handleDeal} />}
-        {state !== 'bet' && <PullButton onClick={handlePull} />}
+        {state === 'offer' && (
+          <DealButton
+            className='animate-offer-deal mt-auto'
+            onClick={handleDeal}
+          />
+        )}
+        {state !== 'bet' && (
+          <PullButton
+            className='animate-pull mt-auto ml-auto'
+            onClick={handlePull}
+          />
+        )}
       </div>
       {state === 'game-over' && <GameOver onClick={handleStartGame} />}
     </>

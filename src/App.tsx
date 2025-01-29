@@ -11,7 +11,7 @@ const App = () => {
 
   return (
     <AppProvider>
-      <div className='relative mx-auto flex h-screen min-h-[733px] max-w-[405px] flex-col justify-between bg-[url(/assets/images/wrapper.jpg)]'>
+      <div className='relative mx-auto flex h-screen min-h-[733px] max-w-[405px] flex-col justify-between bg-[url(/assets/images/wrapper.jpg)] bg-center'>
         <Debug />
         <Audios />
         <Header />
