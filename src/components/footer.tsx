@@ -13,7 +13,8 @@ const formatBet = (value: number) => {
 }
 
 const Footer = () => {
-  const { bet, countBullet, activeMultiplierIndex, total } = useAppContext()
+  const { bet, countBullet, activeMultiplierIndex, total, state } =
+    useAppContext()
   const [hasMoney, setHasMoney] = useState(true)
   const [clickedWallet, setClicketWallet] = useState(false)
 
@@ -44,7 +45,8 @@ const Footer = () => {
               'h-[30px] w-[30px] cursor-pointer bg-contain bg-center bg-no-repeat',
               !hasMoney &&
                 !clickedWallet &&
-                'repeat-infinite animate-[wiggle] delay-[1000ms] duration-1000 ease-linear',
+                state === 'bet' &&
+                'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
             )}
             style={{ backgroundImage: `url(${images.money})` }}
             onClick={handleAddMoney}
