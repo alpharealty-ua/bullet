@@ -3,7 +3,7 @@ import { usePreloadImages } from '@/hooks/preload-images'
 import { Debug } from '@/components/debug'
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
-import { States } from '@/components/game'
+import { Game } from '@/components/game'
 import { Audios } from '@/components/audios'
 
 const App = () => {
@@ -15,7 +15,7 @@ const App = () => {
         <Debug />
         <Audios />
         <Header />
-        <States />
+        <Game />
         <Footer />
       </div>
     </AppProvider>

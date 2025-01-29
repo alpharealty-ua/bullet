@@ -224,4 +224,4 @@ const Game = () => {
   )
 }
 
-export { Game as States }
+export { Game }
