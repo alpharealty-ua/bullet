@@ -7,14 +7,14 @@
 
 @font-face {
   font-family: Bullet;
-  src: url('/assets/fonts/Bullet-Regular.ttf');
+  src: url('/assets/fonts/Bullet-Regular.woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: Bullet;
-  src: url('/assets/fonts/Bullet-Regular-Italic.ttf');
+  src: url('/assets/fonts/Bullet-Regular-Italic.woff2');
   font-weight: 400;
   font-style: italic;
 }
