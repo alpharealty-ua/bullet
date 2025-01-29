@@ -5,7 +5,9 @@ const GameOver = ({ onClick }: { onClick: () => void }) => {
     <div className='absolute inset-0 z-50 cursor-pointer' onClick={onClick}>
       <div
         className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-bottom bg-no-repeat delay-[800ms] duration-0'
-        style={{ backgroundImage: `url(${images.gameOver})` }}
+        style={{
+          backgroundImage: `url(${images.gameOver}?version=${Math.random()})`,
+        }}
       ></div>
       <div
         className='animate-in fade-in fill-mode-both absolute inset-0 delay-[800ms] duration-100'
