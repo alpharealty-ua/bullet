@@ -75,7 +75,7 @@ const BetForm = ({ onSubmit }: BetFormProps) => {
           />
         </svg>
       </div>
-      <button className='relative inline-flex transition-transform active:scale-75 disabled:cursor-not-allowed'>
+      <button className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'>
         <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-3xl font-bold'>
           BET
         </span>

@@ -64,7 +64,7 @@ const Rules = ({
       <div className='text-center'>
         {/* TODO: REMOVE LATER */}
         <button
-          className='relative hidden transition-transform active:scale-75 disabled:cursor-not-allowed'
+          className='relative hidden transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
           onClick={handleStartGame}
         >
           <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-2xl font-bold'>
