@@ -39,7 +39,7 @@ const GameOver = ({
       onClick={handleClick}
     >
       <div
-        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-bottom bg-no-repeat delay-[800ms] duration-0'
+        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-[800ms] duration-0 lg:bg-bottom'
         style={{
           backgroundImage: `url(${image})`,
         }}
