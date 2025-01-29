@@ -26,6 +26,10 @@ const Debug = () => {
     }, 0)
   }
 
+  if (!location.href.includes('localhost')) {
+    return null
+  }
+
   return (
     <div className='absolute top-0 right-full flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
       <h1 className='text-xs'>
