@@ -27,7 +27,7 @@ const Rules = ({
   return (
     <div
       className={classNames(
-        'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 bg-center px-3 py-12 duration-200',
+        'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 bg-cover bg-center px-3 py-12 duration-200',
         isOpen
           ? 'animate-in fade-in-0 zoom-in-95'
           : 'animate-out fade-out-0 zoom-out-95',
@@ -62,8 +62,9 @@ const Rules = ({
         </ol>
       </div>
       <div className='text-center'>
+        {/* TODO: REMOVE LATER */}
         <button
-          className='relative inline-flex transition-transform active:scale-75 disabled:cursor-not-allowed'
+          className='relative hidden transition-transform active:scale-75 disabled:cursor-not-allowed'
           onClick={handleStartGame}
         >
           <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-2xl font-bold'>
