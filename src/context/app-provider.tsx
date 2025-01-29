@@ -34,7 +34,7 @@ const appReducer = (state: CountState, action: CountAction): CountState => {
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   // create useResucer
   const [{ countBullet }, dispatch] = useReducer(appReducer, {
-    state: 'bet',
+    state: 'cover',
     countBullet: 5,
   })
 
