@@ -1,28 +1,4 @@
-import { audiosEntries, audios } from '@/lib/constants'
-
-// TODO: EXTRACT TO UTILS
-export const playAudio = (key: keyof typeof audios) => {
-  const audios = document.getElementById('audios')
-
-  if (audios === null) {
-    return
-  }
-
-  const selector = `.audio-${key}`
-
-  const audio = audios.querySelector(selector) as HTMLAudioElement
-
-  if (audio === null) {
-    return
-  }
-
-  audio
-    .play()
-    .then(() => {
-      console.log('Play audio - ' + audio.src)
-    })
-    .catch(console.log)
-}
+import { audiosEntries } from '@/lib/constants'
 
 const Audios = () => {
   return (
