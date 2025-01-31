@@ -1,5 +1,4 @@
 import { images } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 import { PullButton } from './pull-button'
 import { DealButton } from './deal-button'
 import { Logo } from './logo'

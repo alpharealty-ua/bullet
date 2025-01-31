@@ -34,7 +34,7 @@ const Revolver = React.forwardRef<
         const endX = event.clientX
         const endY = event.clientY
 
-        const deltaX = startX - endX
+        // const deltaX = startX - endX
         const deltaY = startY - endY
 
         const prevDirection = directionY
