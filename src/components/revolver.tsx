@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils'
 
 const Revolver = React.forwardRef<
   HTMLDivElement,
-  Omit<React.HTMLAttributes<HTMLDivElement>, 'onDrag'> & {
+  React.HTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
-    onDrag: (x: number, y: number) => void
     disabled: boolean
   }
->(({ className, style, beforeSlot, onDrag, disabled, ...props }, ref) => {
+>(({ className, style, beforeSlot, disabled, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
+  const rotateRef = useRef(0)
 
   useEffect(() => {
     const bulletDom = bulletChambeRef.current
@@ -22,21 +22,42 @@ const Revolver = React.forwardRef<
 
     const mouseDown = (event: PointerEvent) => {
       const startX = event.clientX
-      const startY = event.clientY
+      let startY = event.clientY
+      let startRotate = rotateRef.current
+
+      const { left, width } = bulletDom.getBoundingClientRect()
 
       bulletDom.setPointerCapture(event.pointerId)
+      let directionY = startX > left + width / 2 ? -1 : 1
 
-      const pointerMove = () => {}
-
-      const poinerUp = (event: PointerEvent) => {
+      const pointerMove = (event: PointerEvent) => {
         const endX = event.clientX
         const endY = event.clientY
 
-        const deltaX = Math.abs(startX - endX)
-        const deltaY = Math.abs(startY - endY)
+        const deltaX = startX - endX
+        const deltaY = startY - endY
 
-        onDrag(deltaX, deltaY)
+        const prevDirection = directionY
+        directionY = endX > left + width / 2 ? -1 : 1
 
+        if (directionY !== prevDirection) {
+          startY = endY
+          startRotate = rotateRef.current
+          return
+        }
+
+        rotateRef.current = startRotate + deltaY * directionY
+        bulletDom.style.transitionDuration = `0s`
+        bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
+
+        // onDrag(deltaX, deltaY)
+      }
+
+      const poinerUp = (event: PointerEvent) => {
+        const roundedRotate = 60 * Math.round(rotateRef.current / 60)
+        rotateRef.current = roundedRotate
+        bulletDom.style.transitionDuration = ``
+        bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
         bulletDom.removeEventListener('pointermove', pointerMove)
         bulletDom.removeEventListener('pointerup', poinerUp)
       }
@@ -50,7 +71,7 @@ const Revolver = React.forwardRef<
     return () => {
       bulletDom.removeEventListener('pointerdown', mouseDown)
     }
-  }, [onDrag, disabled])
+  }, [disabled])
 
   return (
     <div
@@ -59,18 +80,28 @@ const Revolver = React.forwardRef<
     >
       {beforeSlot}
       <div
-        ref={bulletChambeRef}
         className={cn(
-          'absolute top-[18%] right-[-8px] left-[-8px] aspect-square cursor-grab touch-none bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
+          'absolute top-[18%] right-[-8px] left-[-8px] aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
           disabled && 'cursor-auto',
           className,
         )}
-        style={{ backgroundImage: `url(${images.bulletChambe})`, ...style }}
+        style={{ ...style }}
         {...props}
-      ></div>
+      >
+        <div
+          ref={bulletChambeRef}
+          className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200'
+          style={{
+            backgroundImage: `url(${images.bulletChambe})`,
+            transform: `rotate(${rotateRef.current}deg)`,
+          }}
+        ></div>
+      </div>
       <div
         className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
-        style={{ backgroundImage: `url(${images.body})` }}
+        style={{
+          backgroundImage: `url(${images.body})`,
+        }}
       ></div>
     </div>
   )

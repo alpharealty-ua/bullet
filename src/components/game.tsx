@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
@@ -33,6 +33,7 @@ const Game = () => {
     setActiveMultiplierIndex,
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
+  const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const [imageSrc, setImageSrc] = useState(images.gameOver)
 
@@ -40,7 +41,7 @@ const Game = () => {
     const oneCircle = 360
     const spinAmount = oneCircle * randomIntFromInterval(1, 4)
     playAudio('revolverspin')
-    setTimeout(() => setRotate((p) => p + spinAmount), 10) // timeout for change rotate after render
+    setTimeout(() => setRotate((rotateRef.current += spinAmount)), 10) // timeout for change rotate after render
   }
 
   const reset = () => {
@@ -97,7 +98,7 @@ const Game = () => {
   }
 
   const next = () => {
-    setRotate((p) => p + 60)
+    setRotate((rotateRef.current += 60))
     playAudio('trigger')
 
     const random = randomIntFromInterval(1, 3)
@@ -237,22 +238,6 @@ const Game = () => {
     initGame()
   }
 
-  const handleDrag = (x: number, y: number) => {
-    if (disabled) {
-      return
-    }
-
-    setDisabled(true)
-    const speed = x + y
-    const oneBullet = 60
-    const spinAmount = ((speed / oneBullet) ^ 0) * oneBullet || oneBullet
-    playAudio('revolverspin')
-    setRotate((p) => p + spinAmount)
-    setTimeout(() => {
-      setDisabled(false)
-    }, 2000)
-  }
-
   useEffect(() => {
     // TODO: REFACTOR
     if (state === 'reset') {
@@ -310,11 +295,8 @@ const Game = () => {
         <Revolver
           className={classNames(state === 'next' && 'duration-1000')}
           disabled={disabled || state !== 'bet'}
-          style={{
-            transform: `rotate(${rotate}deg)`,
-          }}
+          style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={state === 'offer' && <Click />}
-          onDrag={handleDrag}
         />
       )}
       <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
