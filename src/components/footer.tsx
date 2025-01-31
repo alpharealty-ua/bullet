@@ -1,5 +1,5 @@
 import { useAppContext } from '@/context/use-app-context'
-import { images, multipliers } from '@/lib/constants'
+import { images, MAX_BET, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -27,7 +27,7 @@ const Footer = () => {
       <div className='flex w-[120px] shrink-0 justify-center'>
         <Bet
           disabled={!(state === 'bet')}
-          balance={total}
+          maxBet={Math.min(total, MAX_BET)}
           bet={bet}
           onBet={setBet}
         />
