@@ -3,7 +3,13 @@ import { useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { WalletButtonAnimation } from './wallet-button-animation'
 
-const Balance = ({ value }: { value: number }) => {
+const Balance = ({
+  value,
+  hideWalletButton,
+}: {
+  value: number
+  hideWalletButton: boolean
+}) => {
   const textRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -26,11 +32,9 @@ const Balance = ({ value }: { value: number }) => {
     }
   }, [value])
 
-  console.log()
-
   return (
     <div className='flex gap-1'>
-      <WalletButtonAnimation />
+      {!hideWalletButton && <WalletButtonAnimation />}
       <div className='flex flex-col'>
         <div className='text-center text-2xl leading-[1] tracking-tight text-[#006100] uppercase'>
           Balance

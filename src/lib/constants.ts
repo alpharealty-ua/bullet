@@ -5,6 +5,7 @@ export const states = [
   'cover',
   'rules',
   'settings',
+  'add-money',
   'init-game',
   'bet',
   'pull-start',

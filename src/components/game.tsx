@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_TOTAL, multipliers, State } from '@/lib/constants'
 import { randomIntFromInterval, cn } from '@/lib/utils'
-import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
 import { Revolver } from './revolver'
@@ -17,6 +16,7 @@ import { Footer } from './footer'
 import { Debug } from './debug'
 import { Modal } from './modal'
 import { Settings } from './settings'
+import { AddMoney } from './add-money'
 
 let i = 0
 
@@ -309,11 +309,24 @@ const Game = () => {
           <Settings />
         </Modal>
       )}
-      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
-        <Header />
+      {state === 'add-money' && (
+        <Modal onClose={handleCloseSettings}>
+          <AddMoney total={total} disabled={disabled} />
+        </Modal>
       )}
+      {!(
+        state === 'cover' ||
+        state === 'rules' ||
+        state === 'settings' ||
+        state === 'add-money'
+      ) && <Header />}
       {state === 'offer' && <Offer />}
-      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
+      {!(
+        state === 'cover' ||
+        state === 'rules' ||
+        state === 'settings' ||
+        state === 'add-money'
+      ) && (
         <Revolver
           className={cn(state === 'next' && 'duration-1000')}
           disabled={disabled || state !== 'bet'}
@@ -361,9 +374,12 @@ const Game = () => {
           hideBlood={settings.blood}
         />
       )}
-      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
-        <Footer />
-      )}
+      {!(
+        state === 'cover' ||
+        state === 'rules' ||
+        state === 'settings' ||
+        state === 'add-money'
+      ) && <Footer />}
     </>
   )
 }

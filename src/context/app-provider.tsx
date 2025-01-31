@@ -38,7 +38,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     countBullet: 5,
   })
 
-  const [state, setState] = useState<State>('cover')
+  const [state, setState] = useState<State>('add-money')
   const [bet, setBet] = useState<number>(0)
   const [total, setTotal] = useState(INIT_TOTAL)
   const [activeMultiplierIndex, setActiveMultiplierIndex] = useState(-1)
