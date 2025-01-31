@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { images } from '@/lib/constants'
+import { images, MAX_BET } from '@/lib/constants'
 import { cn, formatBet } from '@/lib/utils'
 
 const Bet = ({
@@ -17,6 +17,16 @@ const Bet = ({
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(bet)
   const [percent, setPercent] = useState(0)
+
+  useEffect(() => {
+    setValue(bet)
+    const currentBet = Math.min(bet, MAX_BET)
+    const newXInPercent = (bet / maxBet) * 100
+
+    onBet(currentBet)
+    setValue(currentBet)
+    setPercent(newXInPercent)
+  }, [maxBet, onBet, bet])
 
   useEffect(() => {
     if (disabled) {
