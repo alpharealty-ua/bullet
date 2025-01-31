@@ -1,5 +1,7 @@
-import { images } from '@/lib/constants'
 import { useEffect, useRef } from 'react'
+
+import { images } from '@/lib/constants'
+import { formatBet } from '@/lib/utils'
 
 const Bet = ({
   balance,
@@ -31,11 +33,11 @@ const Bet = ({
 
     let bet = 0
 
-    const changePercent = (percent: number, needChangeState = true) => {
+    const changePercentAndBet = (percent: number, needChangeState = true) => {
       buttonDom.style.left = percent + '%'
 
       bet = ((balance * percent) / 100) ^ 0
-      valueDom.textContent = String(bet)
+      valueDom.textContent = formatBet(bet)
       if (needChangeState) {
         onBet(bet)
       }
@@ -47,7 +49,7 @@ const Bet = ({
 
       const newXInPercent = ((x - left) / width) * 100
 
-      changePercent(newXInPercent)
+      changePercentAndBet(newXInPercent)
     }
 
     sliderDom.addEventListener('click', sliderClick)
@@ -68,11 +70,11 @@ const Bet = ({
         const newX = Math.min(Math.max(0, deltaX), width)
         newXInPercent = (newX / width) * 100
 
-        changePercent(newXInPercent, false)
+        changePercentAndBet(newXInPercent, false)
       }
 
       const pointerUp = (_: PointerEvent) => {
-        changePercent(newXInPercent)
+        changePercentAndBet(newXInPercent)
         buttonDom.removeEventListener('pointermove', pointerMove)
         buttonDom.removeEventListener('pointerup', pointerUp)
       }
