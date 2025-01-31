@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import { useAppContext } from '@/context/use-app-context'
 import { images, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
@@ -17,7 +15,7 @@ const Footer = () => {
 
   return (
     <footer
-      className='relative flex h-[74px] items-center overflow-hidden bg-cover bg-[center_top] px-1 py-0.5'
+      className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-1 py-0.5'
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
       <div className='flex w-[120px] shrink-0 items-center'>
@@ -27,8 +25,12 @@ const Footer = () => {
         <Bet value={formatBet(bet)} />
       </div>
       <Bullets countBullet={countBullet} />
-      <div className='w-[120px] shrink-0'>
+      <div className='relative w-[120px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
+        <button
+          className='absolute right-1 bottom-1 h-[20px] w-[20px] cursor-pointer bg-contain bg-center'
+          style={{ backgroundImage: `url(${images.settings})` }}
+        ></button>
       </div>
     </footer>
   )
