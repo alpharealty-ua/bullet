@@ -32,7 +32,7 @@ const appReducer = (state: CountState, action: CountAction): CountState => {
 }
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  // create useResucer
+  // TODO: use reducer for all states
   const [{ countBullet }, dispatch] = useReducer(appReducer, {
     state: 'cover',
     countBullet: 5,
@@ -46,7 +46,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     music: true,
     soundEffects: true,
     invertButtons: false,
-    blood: true,
+    blood: false,
   })
 
   const playAudio = (key: keyof typeof audios) => {
