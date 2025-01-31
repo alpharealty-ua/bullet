@@ -8,11 +8,13 @@ const GameOver = ({
   onTimeout,
   timeout,
   image,
+  hideBlood,
 }: {
   onClick: () => void
   onTimeout: () => void
   timeout: number
   image: string
+  hideBlood?: boolean
 }) => {
   const [isOpen, setIsOpen] = useState(true)
 
@@ -46,7 +48,7 @@ const GameOver = ({
       ></div>
       <div
         className='animate-in fade-in fill-mode-both absolute inset-0 delay-[800ms] duration-100'
-        style={{ backgroundImage: `url(${images.blood})` }}
+        style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
         <div
           className='animate-in fade-in fill-mode-both absolute top-[130px] left-[105px] h-[143px] w-[143px] bg-contain bg-center delay-[900ms] duration-100'
