@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
+import { WalletButton } from './wallet-button'
+import { cn } from '@/lib/utils'
 
 const formatBet = (value: number) => {
   if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
@@ -40,17 +41,15 @@ const Footer = () => {
             className='h-[17px] w-[17px] cursor-pointer bg-cover'
             style={{ backgroundImage: `url(${images.settings})` }}
           ></button>
-          <button
-            className={classNames(
-              'h-[30px] w-[30px] cursor-pointer bg-contain bg-center bg-no-repeat',
+          <WalletButton
+            className={cn(
               !hasMoney &&
                 !clickedWallet &&
                 state === 'bet' &&
                 'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
             )}
-            style={{ backgroundImage: `url(${images.money})` }}
             onClick={handleAddMoney}
-          ></button>
+          />
         </div>
         <Bet value={formatBet(bet)} />
       </div>
