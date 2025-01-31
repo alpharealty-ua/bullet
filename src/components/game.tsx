@@ -239,13 +239,13 @@ const Game = () => {
     mouseClick()
 
     setTimeout(() => {
-      initGame()
+      betFn()
       setDisabled(false)
     }, 200)
   }
 
   const handleTimeout = () => {
-    initGame()
+    betFn()
   }
 
   useEffect(() => {
