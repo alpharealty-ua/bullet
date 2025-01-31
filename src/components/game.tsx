@@ -172,6 +172,7 @@ const Game = () => {
       if (state === 'pull-start') {
         multiplier()
         setDisabled(false)
+        setTotal((p) => p - bet)
 
         return
       }

@@ -13,7 +13,6 @@ const Footer = () => {
     setBet,
     state,
     setState,
-    setTotal,
   } = useAppContext()
 
   const handleSettings = () => {
@@ -23,9 +22,6 @@ const Footer = () => {
   const handleSetBet = (bet: number) => {
     setState('pull-start')
     setBet(bet)
-
-    setBet(bet)
-    setTotal((p) => p - bet)
   }
 
   return (
