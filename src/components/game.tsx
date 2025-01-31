@@ -350,7 +350,9 @@ const Game = () => {
           image={imageSrc}
         />
       )}
-      {!(state === 'cover' || state === 'rules') && <Footer />}
+      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
+        <Footer />
+      )}
     </>
   )
 }
