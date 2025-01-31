@@ -42,7 +42,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
         <button
           key={i}
           className={classNames(
-            'h-6 cursor-pointer bg-amber-300 px-2 text-xs transition-colors hover:bg-amber-400',
+            'h-6 cursor-pointer bg-amber-300 px-2 text-xs uppercase transition-colors hover:bg-amber-400',
             el === state && 'bg-amber-500',
           )}
           onClick={() => handleSetState(el)}
@@ -52,7 +52,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
       ))}
       <div className='flex flex-col gap-2'>
         <label>
-          <div className='font-black'>Balance</div>
+          <div className=''>Balance</div>
           <input
             type='text'
             value={total}
@@ -61,7 +61,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
           />
         </label>
         <label>
-          <div className='font-black'>Bet</div>
+          <div className=''>Bet</div>
           <input
             type='number'
             value={bet}
@@ -70,7 +70,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
           />
         </label>
         <label>
-          <div className='font-black'>Multiplier</div>
+          <div className=''>Multiplier</div>
           <select
             className='h-10 w-full bg-white px-2'
             value={activeMultiplierIndex}
@@ -84,7 +84,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
           </select>
         </label>
         <label>
-          <div className='font-black'>Count bullet</div>
+          <div className=''>Count bullet</div>
           <select
             className='h-10 w-full bg-white px-2'
             value={countBullet}

@@ -10,7 +10,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
   return (
     <>
       <div className={classNames('flex flex-col items-center text-center')}>
-        <div className='relative text-center text-4xl leading-[1] font-black text-[#ff0b0b]'>
+        <div className='relative text-center text-4xl leading-[1] text-[#ff0b0b] uppercase'>
           {activeIndex === -1 && '?'}
           &nbsp;
           {items.map((el, i) => {

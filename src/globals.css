@@ -42,8 +42,9 @@ body,
 }
 
 body {
-  font-family: Bullet;
+  font-family: BulletGame;
   line-height: 1.3;
+  text-transform: uppercase;
 }
 
 img {

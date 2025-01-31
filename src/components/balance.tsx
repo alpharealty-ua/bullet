@@ -9,9 +9,8 @@ const Balance = ({ value }: { value: number }) => {
       >
         <span className='text-transparent'>Balance</span>
       </div>
-      <div className='text-center text-[40px] leading-[1] tracking-tight uppercase italic'>
-        <span className='font-caveat mr-1 font-bold not-italic'>$</span>
-        {value}
+      <div className='text-center text-3xl leading-[1] tracking-tight'>
+        ${value}
       </div>
     </div>
   )
