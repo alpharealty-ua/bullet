@@ -311,7 +311,11 @@ const Game = () => {
       )}
       {state === 'add-money' && (
         <Modal onClose={handleCloseSettings}>
-          <AddMoney total={total} disabled={disabled} />
+          <AddMoney
+            total={total}
+            disabled={disabled}
+            onAddMoney={(money) => setTotal((p) => p + money)}
+          />
         </Modal>
       )}
       {!(
@@ -354,6 +358,7 @@ const Game = () => {
               'rules',
               'settings',
               'init-game',
+              'add-money',
               'bet',
             ] satisfies State[] as State[]
           ).includes(state) && (

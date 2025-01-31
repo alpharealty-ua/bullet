@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Balance } from './balance'
-import { cn } from '@/lib/utils'
+import { addZerro, cn } from '@/lib/utils'
 
 const AddMoney = ({
   total,
   disabled,
+  onAddMoney,
 }: {
   total: number
   disabled: boolean
+  onAddMoney: (money: number) => void
 }) => {
   const [time, setTime] = useState('')
-  const [endTime, setStartedTimeout] = useState(
+  const [endTime, setEndTime] = useState(
     Number(localStorage.getItem('endTime') ?? 0),
   )
   const handleClick = () => {
@@ -19,19 +21,29 @@ const AddMoney = ({
 
     const endTime = endDate.getTime()
 
-    // localStorage.setItem('endTime', String(endTime))
-    setStartedTimeout(endTime)
+    localStorage.setItem('endTime', String(endTime))
+    setEndTime(endTime)
+    onAddMoney(1000)
   }
 
   useEffect(() => {
+    if (endTime === 0) {
+      return
+    }
+
     const tick = () => {
       const rangeTime = ((endTime - Date.now()) / 1000) ^ 0
 
       const hours = ((rangeTime % (24 * 60 * 60)) / (60 * 60)) ^ 0
       const minutes = ((rangeTime % (60 * 60)) / 60) ^ 0
-      const seconds = rangeTime % 60 ^ 0
+      const seconds = rangeTime % 60
 
-      setTime(`${hours}:${minutes}:${seconds}`)
+      setTime(`${hours}:${addZerro(minutes)}:${addZerro(seconds)}`)
+
+      if (rangeTime <= 0) {
+        localStorage.removeItem('endTime')
+        setEndTime(0)
+      }
     }
     tick()
     const intervalId = setInterval(tick, 1000)
