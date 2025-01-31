@@ -25,29 +25,6 @@ export const onlyDigit = (key: string) =>
     'Enter',
   ].includes(key)
 
-export const playAudio = (key: keyof typeof audios) => {
-  const audios = document.getElementById('audios')
-
-  if (audios === null) {
-    return
-  }
-
-  const selector = `.audio-${key}`
-
-  const audio = audios.querySelector(selector) as HTMLAudioElement
-
-  if (audio === null) {
-    return
-  }
-
-  audio
-    .play()
-    .then(() => {
-      console.log('Play audio - ' + audio.src)
-    })
-    .catch(console.log)
-}
-
 export const formatBet = (value: number) => {
   if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
   return String(value)

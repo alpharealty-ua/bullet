@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from 'react'
 
 import { AppContext } from '@/context/context'
-import { INIT_TOTAL, State } from '@/lib/constants'
+import { INIT_TOTAL, SettingsKeys, State, audios } from '@/lib/constants'
 
 type ActionType = 'bullet'
 
@@ -39,9 +39,42 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   })
 
   const [state, setState] = useState<State>('cover')
-  const [bet, setBet] = useState<number>(100)
+  const [bet, setBet] = useState<number>(0)
   const [total, setTotal] = useState(INIT_TOTAL)
   const [activeMultiplierIndex, setActiveMultiplierIndex] = useState(-1)
+  const [settings, setSettings] = useState<Record<SettingsKeys, boolean>>({
+    music: true,
+    soundEffects: true,
+    invertButtons: false,
+    blood: true,
+  })
+
+  const playAudio = (key: keyof typeof audios) => {
+    if (!settings.soundEffects) {
+      return
+    }
+
+    const audios = document.getElementById('audios')
+
+    if (audios === null) {
+      return
+    }
+
+    const selector = `.audio-${key}`
+
+    const audio = audios.querySelector(selector) as HTMLAudioElement
+
+    if (audio === null) {
+      return
+    }
+
+    audio
+      .play()
+      .then(() => {
+        console.log('Play audio - ' + audio.src)
+      })
+      .catch(console.log)
+  }
 
   return (
     <AppContext.Provider
@@ -62,6 +95,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setBet,
         activeMultiplierIndex,
         setActiveMultiplierIndex,
+        settings,
+        setSettings,
+        playAudio,
       }}
     >
       {children}

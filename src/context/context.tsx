@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { State } from '@/lib/constants'
+import { audios, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
@@ -13,6 +13,11 @@ interface ContextAppValue {
   setBet: React.Dispatch<React.SetStateAction<number>>
   activeMultiplierIndex: number
   setActiveMultiplierIndex: React.Dispatch<React.SetStateAction<number>>
+  settings: Record<SettingsKeys, boolean>
+  setSettings: React.Dispatch<
+    React.SetStateAction<Record<SettingsKeys, boolean>>
+  >
+  playAudio: (key: keyof typeof audios) => void
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)

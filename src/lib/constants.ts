@@ -58,3 +58,17 @@ export const audiosEntries = Object.entries(audios)
 export const INIT_TOTAL = 12345
 
 export const MAX_BET = 1000
+
+export const settings = {
+  music: 'Toggle music',
+  soundEffects: 'Toggle sound effects',
+  invertButtons: 'Invert PULL AND DEAL button positions',
+  blood: 'Toggles off blood',
+}
+
+export const settingsEntries = Object.entries(settings) as [
+  SettingsKeys,
+  string,
+][]
+
+export type SettingsKeys = keyof typeof settings

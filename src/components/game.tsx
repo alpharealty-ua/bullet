@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_TOTAL, multipliers, State } from '@/lib/constants'
-import { randomIntFromInterval, playAudio, cn } from '@/lib/utils'
+import { randomIntFromInterval, cn } from '@/lib/utils'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
@@ -32,6 +32,8 @@ const Game = () => {
     setBet,
     activeMultiplierIndex,
     setActiveMultiplierIndex,
+    playAudio,
+    settings,
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
   const rotateRef = useRef(rotate)
@@ -320,27 +322,36 @@ const Game = () => {
           beforeSlot={state === 'offer' && <Click />}
         />
       )}
-      <div className='mx-4 mt-auto mb-4 flex items-center justify-between'>
-        {state === 'offer' && (
-          <div className='animate-in fade-in fill-mode-both mt-auto delay-[1200ms] duration-1000'>
-            <DealButton disabled={disabled} onClick={handleDeal} />
-          </div>
+      <div
+        className={cn(
+          'mx-4 mt-auto mb-4 flex h-[100px] items-center justify-between',
+          settings.invertButtons && 'flex-row-reverse',
         )}
-        {!(
-          [
-            'cover',
-            'rules',
-            'settings',
-            'init-game',
-            'bet',
-          ] satisfies State[] as State[]
-        ).includes(state) && (
-          <PullButton
-            disabled={disabled || state === 'next'}
-            className='animate-in fade-in-0 mt-auto ml-auto duration-200'
-            onClick={handlePull}
-          />
-        )}
+      >
+        <div>
+          {state === 'offer' && (
+            <div className='animate-in fade-in fill-mode-both relative -top-1 mt-auto delay-[1200ms] duration-1000'>
+              <DealButton disabled={disabled} onClick={handleDeal} />
+            </div>
+          )}
+        </div>
+        <div>
+          {!(
+            [
+              'cover',
+              'rules',
+              'settings',
+              'init-game',
+              'bet',
+            ] satisfies State[] as State[]
+          ).includes(state) && (
+            <PullButton
+              disabled={disabled || state === 'next'}
+              className='animate-in fade-in-0 mt-auto duration-200'
+              onClick={handlePull}
+            />
+          )}
+        </div>
       </div>
       {state === 'game-over' && (
         <GameOver
@@ -348,6 +359,7 @@ const Game = () => {
           onTimeout={handleTimeout}
           timeout={2000}
           image={imageSrc}
+          hideBlood={settings.blood}
         />
       )}
       {!(state === 'cover' || state === 'rules' || state === 'settings') && (
