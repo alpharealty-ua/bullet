@@ -18,10 +18,7 @@ const Footer = () => {
       className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-1 py-0.5'
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
-      <div className='flex w-[120px] shrink-0 items-center'>
-        <div className='flex flex-col items-center gap-2'>
-          <WalletButtonAnimation />
-        </div>
+      <div className='flex w-[120px] shrink-0 justify-center'>
         <Bet value={formatBet(bet)} />
       </div>
       <Bullets countBullet={countBullet} />
