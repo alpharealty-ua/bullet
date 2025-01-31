@@ -165,26 +165,6 @@ const Game = () => {
     }, 500)
   }
 
-  const handleBet = (bet: number) => {
-    setDisabled(true)
-    mouseClick()
-
-    const notHasMoney = bet > total
-    if (notHasMoney) {
-      alert('Not enough money')
-      return
-    }
-
-    setTimeout(() => {
-      setBet(bet)
-      setTotal((p) => p - bet)
-
-      setState('pull-start')
-
-      setDisabled(false)
-    }, 500)
-  }
-
   const handlePull = () => {
     setDisabled(true)
     mouseClick()
