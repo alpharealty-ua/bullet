@@ -3,6 +3,8 @@
 
 @theme {
   --font-caveat: Caveat;
+  --font-bullet: Bullet;
+  --font-bullet-game: BulletGame;
 }
 
 @font-face {
