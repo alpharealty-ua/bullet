@@ -1,18 +1,24 @@
 import { useEffect, useRef } from 'react'
 
 import { images } from '@/lib/constants'
-import { formatBet } from '@/lib/utils'
+import { cn, formatBet } from '@/lib/utils'
 
 const Bet = ({
   balance,
   onBet,
+  disabled,
 }: {
   balance: number
   onBet: (bet: number) => void
+  disabled: boolean
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (disabled) {
+      return
+    }
+
     const sliderWrapperDom = sliderWrapperRef.current
 
     if (sliderWrapperDom === null) {
@@ -89,7 +95,7 @@ const Bet = ({
       sliderDom.removeEventListener('click', sliderClick)
       buttonDom.removeEventListener('pointerdown', pointerDown)
     }
-  }, [balance, onBet])
+  }, [balance, onBet, disabled])
 
   return (
     <div className='flex w-full flex-col items-center text-center'>
@@ -99,12 +105,15 @@ const Bet = ({
       <div ref={sliderWrapperRef} className='relative flex w-full flex-col'>
         <div className='relative'>
           <div
-            className='aspect-[1/0.15] bg-contain bg-center bg-no-repeat'
+            className={cn('aspect-[1/0.15] bg-contain bg-center bg-no-repeat')}
             style={{ backgroundImage: `url(${images.slider})` }}
             data-slider
           ></div>
           <button
-            className='absolute top-1/2 left-0 z-[3] h-4 w-4 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat'
+            className={cn(
+              'absolute top-1/2 left-0 z-[3] h-4 w-4 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
+              disabled && 'cursor-not-allowed',
+            )}
             style={{ backgroundImage: `url(${images.bullet})` }}
             data-button
           ></button>

@@ -5,7 +5,8 @@ import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
 
 const Footer = () => {
-  const { countBullet, activeMultiplierIndex, total, setBet } = useAppContext()
+  const { countBullet, activeMultiplierIndex, total, setBet, state } =
+    useAppContext()
 
   return (
     <footer
@@ -13,7 +14,7 @@ const Footer = () => {
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
       <div className='flex w-[120px] shrink-0 justify-center'>
-        <Bet balance={total} onBet={setBet} />
+        <Bet disabled={!(state === 'bet')} balance={total} onBet={setBet} />
       </div>
       <Bullets countBullet={countBullet} />
       <div className='relative w-[120px] shrink-0'>
