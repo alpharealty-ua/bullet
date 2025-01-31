@@ -23,10 +23,9 @@ const Bet = ({
     const currentBet = Math.min(bet, MAX_BET)
     const newXInPercent = (bet / maxBet) * 100
 
-    onBet(currentBet)
     setValue(currentBet)
     setPercent(newXInPercent)
-  }, [maxBet, onBet, bet])
+  }, [maxBet, bet])
 
   useEffect(() => {
     if (disabled) {

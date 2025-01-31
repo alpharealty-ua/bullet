@@ -19,6 +19,11 @@ const Footer = () => {
     setState('settings')
   }
 
+  const handleSetBet = (bet: number) => {
+    setState('pull-start')
+    setBet(bet)
+  }
+
   return (
     <footer
       className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-2 py-0.5'
@@ -26,10 +31,10 @@ const Footer = () => {
     >
       <div className='flex w-[120px] shrink-0 justify-center'>
         <Bet
-          disabled={!(state === 'bet')}
+          disabled={!(state === 'bet' || state === 'pull-start')}
           maxBet={Math.min(total, MAX_BET)}
           bet={bet}
-          onBet={setBet}
+          onBet={handleSetBet}
         />
       </div>
       <Bullets countBullet={countBullet} />
