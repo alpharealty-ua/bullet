@@ -6,10 +6,7 @@ const Bet = ({ value }: { value: string }) => {
       <div className='w-full overflow-hidden text-3xl leading-[1] text-ellipsis text-[#ff0b0b]'>
         {value}
       </div>
-      <div
-        className='h-[14px] w-[42px] bg-cover bg-center font-bold text-[#006100] uppercase'
-        style={{ backgroundImage: `url(${images.bet})` }}
-      ></div>
+      <div className='bg-center text-lg text-[#006100] uppercase'>Bet</div>
     </div>
   )
 }

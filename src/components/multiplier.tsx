@@ -27,10 +27,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
             )
           })}
         </div>
-        <div
-          className='h-[16px] w-[86px] bg-cover font-bold text-[#006100] uppercase'
-          style={{ backgroundImage: `url(${images.multiplier})` }}
-        ></div>
+        <div className='text-lg text-[#006100] uppercase'>MULTIPLIER</div>
       </div>
     </>
   )
