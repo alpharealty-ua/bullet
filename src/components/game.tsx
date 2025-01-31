@@ -15,6 +15,8 @@ import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Debug } from './debug'
+import { Modal } from './modal'
+import { Settings } from './settings'
 
 let i = 0
 
@@ -212,12 +214,22 @@ const Game = () => {
     }, 500)
   }
 
-  const handleClose = () => {
+  const handleCloseRules = () => {
     setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
       cover()
+      setDisabled(false)
+    }, 200)
+  }
+
+  const handleCloseSettings = () => {
+    setDisabled(true)
+    mouseClick()
+
+    setTimeout(() => {
+      betFn()
       setDisabled(false)
     }, 200)
   }
@@ -281,15 +293,26 @@ const Game = () => {
     <>
       <Debug disabled={disabled} />
       {state === 'cover' && (
-        <Cover onPull={handlePullStart} onGameRules={handleGameRules} />
+        <Modal className='items-center justify-center gap-6' hideHeader>
+          <Cover onPull={handlePullStart} onGameRules={handleGameRules} />
+        </Modal>
       )}
       {state === 'rules' && (
-        <Rules onStartGame={handleStartGame} onClose={handleClose} />
+        <Modal onClose={handleCloseRules}>
+          <Rules />
+        </Modal>
       )}
-      {!(state === 'cover' || state === 'rules') && <Header />}
+      {state === 'settings' && (
+        <Modal onClose={handleCloseSettings}>
+          <Settings />
+        </Modal>
+      )}
+      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
+        <Header />
+      )}
       {state === 'bet' && <BetForm onSubmit={handleBet} disabled={disabled} />}
       {state === 'offer' && <Offer />}
-      {!(state === 'cover' || state === 'rules') && (
+      {!(state === 'cover' || state === 'rules' || state === 'settings') && (
         <Revolver
           className={cn(state === 'next' && 'duration-1000')}
           disabled={disabled || state !== 'bet'}
