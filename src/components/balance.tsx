@@ -8,7 +8,7 @@ const Balance = ({
   hideWalletButton,
 }: {
   value: number
-  hideWalletButton: boolean
+  hideWalletButton?: boolean
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
 
