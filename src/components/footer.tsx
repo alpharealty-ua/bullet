@@ -4,11 +4,6 @@ import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
 
-const formatBet = (value: number) => {
-  if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
-  return String(value)
-}
-
 const Footer = () => {
   const { countBullet, activeMultiplierIndex, total, setBet } = useAppContext()
 

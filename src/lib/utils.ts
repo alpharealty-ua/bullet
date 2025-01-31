@@ -47,3 +47,8 @@ export const playAudio = (key: keyof typeof audios) => {
     })
     .catch(console.log)
 }
+
+export const formatBet = (value: number) => {
+  if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
+  return String(value)
+}
