@@ -5,8 +5,7 @@ import { images, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
-import { WalletButton } from './wallet-button'
-import { cn } from '@/lib/utils'
+import { WalletButtonAnimation } from './wallet-button-animation'
 
 const formatBet = (value: number) => {
   if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
@@ -14,21 +13,7 @@ const formatBet = (value: number) => {
 }
 
 const Footer = () => {
-  const { bet, countBullet, activeMultiplierIndex, total, state } =
-    useAppContext()
-  const [hasMoney, setHasMoney] = useState(true)
-  const [clickedWallet, setClicketWallet] = useState(false)
-
-  const handleAddMoney = () => {
-    setClicketWallet(true)
-  }
-
-  useEffect(() => {
-    setHasMoney(total > 0)
-    if (!(total > 0)) {
-      setClicketWallet(false)
-    }
-  }, [total])
+  const { bet, countBullet, activeMultiplierIndex } = useAppContext()
 
   return (
     <footer
@@ -37,19 +22,7 @@ const Footer = () => {
     >
       <div className='flex w-[120px] shrink-0 items-center'>
         <div className='flex flex-col items-center gap-2'>
-          <button
-            className='h-[17px] w-[17px] cursor-pointer bg-cover'
-            style={{ backgroundImage: `url(${images.settings})` }}
-          ></button>
-          <WalletButton
-            className={cn(
-              !hasMoney &&
-                !clickedWallet &&
-                state === 'bet' &&
-                'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
-            )}
-            onClick={handleAddMoney}
-          />
+          <WalletButtonAnimation />
         </div>
         <Bet value={formatBet(bet)} />
       </div>
