@@ -54,4 +54,4 @@ export const audios = {
 
 export const audiosEntries = Object.entries(audios)
 
-export const INIT_TOTAL = 1075
+export const INIT_TOTAL = 12345
