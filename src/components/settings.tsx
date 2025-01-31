@@ -11,16 +11,18 @@ const Settings = () => {
   return (
     <div className='flex flex-col gap-4'>
       <h3 className='text-3xl'>Settings</h3>
-      <div className='flex flex-col items-center gap-2'>
-        {settingsEntries.map(([key, value], i) => (
-          <Checkbox
-            key={i}
-            label={value}
-            name={key}
-            onChange={handleChange}
-            checked={settings[key]}
-          />
-        ))}
+      <div className='flex flex-col items-center gap-6'>
+        <div className='flex flex-col gap-2'>
+          {settingsEntries.map(([key, value], i) => (
+            <Checkbox
+              key={i}
+              label={value}
+              name={key}
+              onChange={handleChange}
+              checked={settings[key]}
+            />
+          ))}
+        </div>
         <Button text='Login' />
         <Button text='Register' />
       </div>
@@ -98,7 +100,7 @@ const Checkbox = <Name extends string>({
         checked={checked}
         onChange={handleChange}
       />
-      <div className='absolute top-0 right-0 bottom-0 left-0 z-[-1] rounded-lg bg-[#FAFAFB] peer-checked:bg-[#22C55E]/50'></div>
+      <div className='absolute top-0 right-0 bottom-0 left-0 z-[-1] rounded-xl bg-[#FF9B2A]/20 transition-colors peer-checked:bg-[#FF9B2A]'></div>
     </label>
   )
 }
