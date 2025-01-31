@@ -3,7 +3,6 @@ import { images, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
-import { WalletButtonAnimation } from './wallet-button-animation'
 
 const formatBet = (value: number) => {
   if (value >= 1000) return ((value / 100) ^ 0) / 10 + 'K'
@@ -11,15 +10,15 @@ const formatBet = (value: number) => {
 }
 
 const Footer = () => {
-  const { bet, countBullet, activeMultiplierIndex } = useAppContext()
+  const { countBullet, activeMultiplierIndex, total, setBet } = useAppContext()
 
   return (
     <footer
-      className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-1 py-0.5'
+      className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-2 py-0.5'
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
       <div className='flex w-[120px] shrink-0 justify-center'>
-        <Bet value={formatBet(bet)} />
+        <Bet balance={total} onBet={setBet} />
       </div>
       <Bullets countBullet={countBullet} />
       <div className='relative w-[120px] shrink-0'>

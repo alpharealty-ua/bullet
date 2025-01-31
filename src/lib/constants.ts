@@ -38,6 +38,7 @@ export const images = {
   bullet: './assets/images/compressed/bullet.png',
   multiplier: './assets/images/compressed/multiplier.png',
   balance: './assets/images/compressed/balance.png',
+  slider: './assets/images/compressed/slider.png',
 }
 
 export const srcImages = Object.values(images)
