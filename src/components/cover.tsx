@@ -18,12 +18,11 @@ const Cover = ({
   return (
     <div
       className={classNames(
-        'absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-cover bg-center px-3 py-12',
+        'absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 px-3 py-12',
         open
           ? 'animate-in fade-in-0 visible'
           : 'animate-out fade-out-0 invisible',
       )}
-      style={{ backgroundImage: `url(${images.wrapper})` }}
     >
       <Logo size='3xl' />
       <PullButton className='w-[122px]' onClick={onPull} />

@@ -162,7 +162,7 @@ const Game = () => {
     }, 500)
   }
 
-  const handleBet = (form: HTMLFormElement, bet: number) => {
+  const handleBet = (bet: number) => {
     setDisabled(true)
     mouseClick()
 
@@ -178,7 +178,6 @@ const Game = () => {
 
       setState('pull-start')
 
-      form.reset()
       setDisabled(false)
     }, 500)
   }
