@@ -75,7 +75,7 @@ const Revolver = React.forwardRef<
 
   return (
     <div
-      className='animate-in fade-in-0 absolute right-0 bottom-8 left-0 mx-auto aspect-[1/1.881] w-[200px] duration-200 lg:w-[251px]'
+      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[200px] duration-200 lg:w-[251px]'
       ref={ref}
     >
       {beforeSlot}

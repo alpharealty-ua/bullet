@@ -32,7 +32,7 @@ export const images = {
   bulletChambe: './assets/images/compressed/bullet-chambe.png',
   body: './assets/images/compressed/body.png',
   pull: './assets/images/compressed/pull.png',
-  bottomLine: './assets/images/compressed/bottom-line.jpg',
+  bottomLine: './assets/images/compressed/bottom-line.png',
   settings: './assets/images/compressed/settings.png',
   bet: './assets/images/compressed/bet.png',
   bullet: './assets/images/compressed/bullet.png',
