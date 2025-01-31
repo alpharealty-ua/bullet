@@ -327,7 +327,13 @@ const Game = () => {
           </div>
         )}
         {!(
-          ['cover', 'rules', 'init-game', 'bet'] satisfies State[] as State[]
+          [
+            'cover',
+            'rules',
+            'settings',
+            'init-game',
+            'bet',
+          ] satisfies State[] as State[]
         ).includes(state) && (
           <PullButton
             disabled={disabled || state === 'next'}

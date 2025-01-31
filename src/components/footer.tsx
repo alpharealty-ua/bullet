@@ -5,8 +5,19 @@ import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
 
 const Footer = () => {
-  const { countBullet, activeMultiplierIndex, total, bet, setBet, state } =
-    useAppContext()
+  const {
+    countBullet,
+    activeMultiplierIndex,
+    total,
+    bet,
+    setBet,
+    state,
+    setState,
+  } = useAppContext()
+
+  const handleSettings = () => {
+    setState('settings')
+  }
 
   return (
     <footer
@@ -27,6 +38,7 @@ const Footer = () => {
         <button
           className='absolute right-1 bottom-1 h-[20px] w-[20px] cursor-pointer bg-contain bg-center'
           style={{ backgroundImage: `url(${images.settings})` }}
+          onClick={handleSettings}
         ></button>
       </div>
     </footer>
