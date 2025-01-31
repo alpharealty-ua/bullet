@@ -4,11 +4,13 @@ import { images } from '@/lib/constants'
 import { cn, formatBet } from '@/lib/utils'
 
 const Bet = ({
+  bet,
   balance,
   onBet,
   disabled,
 }: {
   balance: number
+  bet: number
   onBet: (bet: number) => void
   disabled: boolean
 }) => {
@@ -126,7 +128,7 @@ const Bet = ({
           className='w-full overflow-hidden text-3xl leading-[1] text-ellipsis'
           data-value
         >
-          0
+          {bet}
         </div>
       </div>
     </div>
