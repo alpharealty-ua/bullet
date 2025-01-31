@@ -15,15 +15,14 @@ const Bet = ({
   disabled: boolean
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
-  const [value, setValue] = useState(bet)
+  const [value, setValue] = useState(formatBet(bet))
   const [percent, setPercent] = useState(0)
 
   useEffect(() => {
-    setValue(bet)
     const currentBet = Math.min(bet, MAX_BET)
     const newXInPercent = (bet / maxBet) * 100
 
-    setValue(currentBet)
+    setValue(formatBet(currentBet))
     setPercent(newXInPercent)
   }, [maxBet, bet])
 
@@ -59,7 +58,7 @@ const Bet = ({
       valueDom.textContent = formatBet(currentBet)
       if (needChangeState) {
         onBet(currentBet)
-        setValue(currentBet)
+        setValue(formatBet(currentBet))
         setPercent(percent)
       }
     }
@@ -132,7 +131,7 @@ const Bet = ({
     const currentBet = ((maxBet * newXInPercent) / 100) ^ 0
 
     onBet(currentBet)
-    setValue(currentBet)
+    setValue(formatBet(currentBet))
     setPercent(newXInPercent)
   }
 
