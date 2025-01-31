@@ -37,7 +37,7 @@ const BetForm = ({ onSubmit, disabled }: BetFormProps) => {
       <div className='relative w-[220px]'>
         <input
           onKeyDown={handleKeyDown}
-          className='italicplaceholder:text-black/60 absolute top-0 right-0 bottom-0 left-0 appearance-auto px-[10px] py-[14px] text-2xl text-black outline-none'
+          className='absolute top-0 right-0 bottom-0 left-0 appearance-auto px-[10px] py-[14px] text-2xl uppercase outline-none placeholder:text-black/60'
           placeholder='Bet Amount'
           defaultValue='100'
           type='type'
