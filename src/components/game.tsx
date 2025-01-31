@@ -312,7 +312,6 @@ const Game = () => {
       {!(state === 'cover' || state === 'rules' || state === 'settings') && (
         <Header />
       )}
-      {state === 'bet' && <BetForm onSubmit={handleBet} disabled={disabled} />}
       {state === 'offer' && <Offer />}
       {!(state === 'cover' || state === 'rules' || state === 'settings') && (
         <Revolver

@@ -5,6 +5,7 @@ interface BetFormProps {
   disabled: boolean
 }
 
+// TODO: REMOVE LATER. NOW NOT USE
 const BetForm = ({ onSubmit, disabled }: BetFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
