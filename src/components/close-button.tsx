@@ -1,6 +1,6 @@
 import React from 'react'
-import classNames from 'classnames'
 import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 export const CloseButton = React.forwardRef<
   HTMLButtonElement,
@@ -9,7 +9,7 @@ export const CloseButton = React.forwardRef<
   return (
     <button
       ref={ref}
-      className={classNames(
+      className={cn(
         'relative h-[44px] w-[44px] cursor-pointer bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
         className,
       )}

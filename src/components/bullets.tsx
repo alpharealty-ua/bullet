@@ -1,5 +1,5 @@
 import { images } from '@/lib/constants'
-import classNames from 'classnames'
+import { cn } from '@/lib/utils'
 
 const Bullets = ({ countBullet }: { countBullet: number }) => {
   return (
@@ -9,7 +9,7 @@ const Bullets = ({ countBullet }: { countBullet: number }) => {
         .map((_, index) => (
           <div
             key={index}
-            className={classNames(
+            className={cn(
               'aspect-[1/1.5] w-[15px] bg-contain bg-center bg-no-repeat',
               5 - index > countBullet && 'opacity-60',
             )}

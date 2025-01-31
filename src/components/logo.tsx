@@ -1,6 +1,5 @@
-import classNames from 'classnames'
-
 import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 type LogoSize = 'md' | 'lg' | '3xl'
 
@@ -17,7 +16,7 @@ interface LogoProps {
 const Logo = ({ size = 'md' }: LogoProps) => {
   return (
     <div
-      className={classNames(
+      className={cn(
         'inline-flex aspect-[1/0.333] bg-contain bg-center bg-no-repeat',
         sizes[size],
       )}

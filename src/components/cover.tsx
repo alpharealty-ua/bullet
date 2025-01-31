@@ -1,9 +1,8 @@
-import classNames from 'classnames'
-
-import { Logo } from './logo'
+import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { PullButton } from './pull-button'
 import { DealButton } from './deal-button'
-import { images } from '@/lib/constants'
+import { Logo } from './logo'
 
 const Cover = ({
   onPull,
@@ -17,7 +16,7 @@ const Cover = ({
 
   return (
     <div
-      className={classNames(
+      className={cn(
         'absolute inset-0 z-50 flex flex-col items-center justify-center gap-6 px-3 py-12',
         open
           ? 'animate-in fade-in-0 visible'

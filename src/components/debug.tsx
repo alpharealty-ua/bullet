@@ -1,7 +1,6 @@
-import classNames from 'classnames'
-
 import { useAppContext } from '@/context/use-app-context'
 import { State, states, multipliers } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 const Debug = ({ disabled }: { disabled: boolean }) => {
   const {
@@ -41,7 +40,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
       {states.map((el, i) => (
         <button
           key={i}
-          className={classNames(
+          className={cn(
             'h-6 cursor-pointer bg-amber-300 px-2 text-xs uppercase transition-colors hover:bg-amber-400',
             el === state && 'bg-amber-500',
           )}

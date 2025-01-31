@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import classNames from 'classnames'
 
+import { cn } from '@/lib/utils'
 import { CloseButton } from './close-button'
 import { Logo } from './logo'
-import { images } from '@/lib/constants'
 
 const Rules = ({
   onStartGame,
@@ -26,7 +25,7 @@ const Rules = ({
 
   return (
     <div
-      className={classNames(
+      className={cn(
         'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 px-3 py-12 duration-200',
         isOpen
           ? 'animate-in fade-in-0 zoom-in-95'

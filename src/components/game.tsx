@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import classNames from 'classnames'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_TOTAL, multipliers, State } from '@/lib/constants'
-import { randomIntFromInterval, playAudio } from '@/lib/utils'
+import { randomIntFromInterval, playAudio, cn } from '@/lib/utils'
 import { BetForm } from './bet-form'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
@@ -292,7 +291,7 @@ const Game = () => {
       {state === 'offer' && <Offer />}
       {!(state === 'cover' || state === 'rules') && (
         <Revolver
-          className={classNames(state === 'next' && 'duration-1000')}
+          className={cn(state === 'next' && 'duration-1000')}
           disabled={disabled || state !== 'bet'}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={state === 'offer' && <Click />}
