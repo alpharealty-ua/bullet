@@ -49,11 +49,9 @@ const Revolver = React.forwardRef<
         rotateRef.current = startRotate + deltaY * directionY
         bulletDom.style.transitionDuration = `0s`
         bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
-
-        // onDrag(deltaX, deltaY)
       }
 
-      const poinerUp = (event: PointerEvent) => {
+      const poinerUp = (_: PointerEvent) => {
         const roundedRotate = 60 * Math.round(rotateRef.current / 60)
         rotateRef.current = roundedRotate
         bulletDom.style.transitionDuration = ``
