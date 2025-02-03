@@ -26,7 +26,7 @@ export const WalletButtonAnimation = () => {
       {!hasMoney ? (
         <span
           className={cn(
-            'text-[40px]',
+            'cursor-pointer text-[40px]',
             !clickedWallet &&
               state === 'bet' &&
               'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
