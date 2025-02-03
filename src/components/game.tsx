@@ -139,6 +139,8 @@ const Game = () => {
     image.addEventListener('load', () => {
       setImageSrc(imageSrc)
       playAudio('gunshot')
+      addTotal(-bet)
+      setBet(0)
       setState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
@@ -173,7 +175,6 @@ const Game = () => {
       if (state === 'pull-start') {
         multiplier()
         setDisabled(false)
-        addTotal(bet)
 
         return
       }
@@ -191,7 +192,7 @@ const Game = () => {
     setDisabled(true)
     mouseClick()
     setTimeout(() => {
-      addTotal(bet + 100)
+      addTotal(100)
       setBet(0)
       setState('bet')
       setDisabled(false)
