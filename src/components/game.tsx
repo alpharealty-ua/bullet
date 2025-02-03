@@ -18,7 +18,7 @@ import { Modal } from './modal'
 import { Settings } from './settings'
 import { AddMoney } from './add-money'
 
-let i = 0
+let gifCacheIndex = Math.random()
 
 const Game = () => {
   const {
@@ -134,7 +134,7 @@ const Game = () => {
 
   const gameOver = () => {
     const image = new Image()
-    const imageSrc = `${images.gameOver}?v=${i++}`
+    const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
     image.src = imageSrc
     image.addEventListener('load', () => {
       setImageSrc(imageSrc)
