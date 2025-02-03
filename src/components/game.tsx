@@ -146,7 +146,7 @@ const Game = () => {
     })
   }
 
-  const handlePullStart = () => {
+  const handeInitGame = () => {
     setDisabled(true)
     mouseClick()
 
@@ -282,7 +282,7 @@ const Game = () => {
       <Debug disabled={disabled} />
       {state === 'cover' && (
         <Modal className='items-center justify-center gap-6' hideHeader>
-          <Cover onPull={handlePullStart} onGameRules={handleGameRules} />
+          <Cover onPull={handeInitGame} onGameRules={handleGameRules} />
         </Modal>
       )}
       {state === 'rules' && (
