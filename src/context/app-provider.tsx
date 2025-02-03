@@ -68,7 +68,7 @@ const appReducer = (state: GameState, action: Actions): GameState => {
     case 'set-total':
       return { ...state, total: payload }
     case 'add-total':
-      return { ...state, total: state.total - payload }
+      return { ...state, total: state.total + payload }
     case 'set-bet':
       return { ...state, bet: payload }
     case 'set-multiplier-index':
