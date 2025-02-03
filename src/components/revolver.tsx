@@ -20,7 +20,12 @@ const Revolver = React.forwardRef<
       return
     }
 
-    const mouseDown = (event: PointerEvent) => {
+    let hasMove = false
+    let clickStartTime = 0
+
+    const pointerDown = (event: PointerEvent) => {
+      hasMove = false
+      clickStartTime = Date.now()
       const startX = event.clientX
       let startY = event.clientY
       let startRotate = rotateRef.current
@@ -31,6 +36,7 @@ const Revolver = React.forwardRef<
       let directionY = startX > left + width / 2 ? -1 : 1
 
       const pointerMove = (event: PointerEvent) => {
+        hasMove = true
         const endX = event.clientX
         const endY = event.clientY
 
@@ -53,10 +59,21 @@ const Revolver = React.forwardRef<
       }
 
       const poinerUp = (_: PointerEvent) => {
-        const roundedRotate = 60 * Math.round(rotateRef.current / 60)
-        rotateRef.current = roundedRotate
+        if (!hasMove) {
+          const ONE_CHAMBER = 60
+          const MAX_CHAMBERS = 4 * ONE_CHAMBER
+          const clickDuration = Date.now() - clickStartTime
+          const clickRotate = Math.max(
+            MAX_CHAMBERS - clickDuration,
+            ONE_CHAMBER,
+          )
+          rotateRef.current += clickRotate
+        }
+
+        rotateRef.current = 60 * Math.round(rotateRef.current / 60)
         bulletDom.style.transitionDuration = ``
         bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
+
         bulletDom.removeEventListener('pointermove', pointerMove)
         bulletDom.removeEventListener('pointerup', poinerUp)
       }
@@ -65,10 +82,10 @@ const Revolver = React.forwardRef<
       bulletDom.addEventListener('pointerup', poinerUp)
     }
 
-    bulletDom.addEventListener('pointerdown', mouseDown)
+    bulletDom.addEventListener('pointerdown', pointerDown)
 
     return () => {
-      bulletDom.removeEventListener('pointerdown', mouseDown)
+      bulletDom.removeEventListener('pointerdown', pointerDown)
     }
   }, [disabled])
 
