@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from 'react'
+import React, { useCallback, useReducer } from 'react'
 
 import { AppContext } from '@/context/context'
 import { INIT_TOTAL, SettingsKeys, State, audios } from '@/lib/constants'
