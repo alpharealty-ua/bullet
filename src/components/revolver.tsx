@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -12,11 +12,18 @@ const Revolver = React.forwardRef<
 >(({ className, style, beforeSlot, disabled, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
+  const speedRotateRef = useRef(0)
+  const speedRef = useRef(0)
+  const [speed, setSpeed] = useState(false)
 
   useEffect(() => {
+    if (disabled) {
+      return
+    }
+
     const bulletDom = bulletChambeRef.current
 
-    if (disabled || bulletDom === null) {
+    if (bulletDom === null) {
       return
     }
 
@@ -67,8 +74,12 @@ const Revolver = React.forwardRef<
             MAX_CHAMBERS - clickDuration,
             ONE_CHAMBER,
           )
+          speedRef.current = 0
           rotateRef.current += clickRotate
+        } else {
+          speedRef.current += 60
         }
+        setSpeed((p) => !p)
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
         bulletDom.style.transitionDuration = ``
@@ -89,9 +100,44 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
+  useEffect(() => {
+    if (disabled) {
+      return
+    }
+
+    const bulletDom = bulletChambeRef.current
+
+    if (bulletDom === null) {
+      return
+    }
+
+    const dom = bulletDom.children[0] as HTMLDivElement
+
+    if (dom === null) {
+      return
+    }
+
+    const speedRotate = () => {
+      const speed = speedRef.current
+      if (speed <= 0) {
+        clearInterval(id)
+        return
+      }
+
+      speedRef.current -= 5
+
+      dom.style.transform = `rotate(${(speedRotateRef.current += speed)}deg)`
+    }
+    const id = setInterval(speedRotate, 100)
+    speedRotate()
+    return () => {
+      clearInterval(id)
+    }
+  }, [disabled, speed])
+
   return (
     <div
-      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[200px] duration-200 lg:w-[251px]'
+      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[200px] duration-100 lg:w-[251px]'
       ref={ref}
     >
       {beforeSlot}
@@ -107,11 +153,13 @@ const Revolver = React.forwardRef<
         <div
           ref={bulletChambeRef}
           className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200'
-          style={{
-            backgroundImage: `url(${images.bulletChambe})`,
-            transform: `rotate(${rotateRef.current}deg)`,
-          }}
-        ></div>
+          style={{ transform: `rotate(${rotateRef.current}deg)` }}
+        >
+          <div
+            className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-200 ease-linear'
+            style={{ backgroundImage: `url(${images.bulletChambe})` }}
+          ></div>
+        </div>
       </div>
       <div
         className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
