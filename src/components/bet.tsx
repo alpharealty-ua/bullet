@@ -115,6 +115,10 @@ const Bet = ({
   const handleSliderClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (disabled) {
+      return
+    }
+
     const sliderWrapperDom = sliderWrapperRef.current
 
     if (sliderWrapperDom === null) {
