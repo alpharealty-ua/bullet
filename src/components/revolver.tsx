@@ -137,13 +137,13 @@ const Revolver = React.forwardRef<
 
   return (
     <div
-      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[200px] duration-100 lg:w-[251px]'
+      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] overflow-hidden duration-100 lg:w-[251px]'
       ref={ref}
     >
       {beforeSlot}
       <div
         className={cn(
-          'absolute top-[18%] right-[-8px] left-[-8px] aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
+          'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
           disabled && 'cursor-auto',
           className,
         )}
