@@ -151,6 +151,7 @@ const Bet = ({
           <div
             className={cn(
               'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
+              disabled && 'cursor-not-allowed',
             )}
             style={{ backgroundImage: `url(${images.slider})` }}
             onClick={handleSliderClick}

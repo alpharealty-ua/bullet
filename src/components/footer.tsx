@@ -36,7 +36,7 @@ const Footer = () => {
     >
       <div className='flex w-[120px] shrink-0 justify-center'>
         <Bet
-          disabled={!(state === 'bet' || state === 'pull-start')}
+          disabled={!(state === 'bet' || state === 'pull-start') || total === 0}
           maxBet={Math.min(total, MAX_BET)}
           bet={bet}
           onBet={handleSetBet}
