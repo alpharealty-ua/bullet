@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { images, MAX_BET } from '@/lib/constants'
 import { cn, formatBet } from '@/lib/utils'
@@ -18,20 +18,26 @@ const Bet = ({
   const [value, setValue] = useState(formatBet(bet))
   const [percent, setPercent] = useState(0)
 
+  const changeValue = useCallback(
+    (bet: number, percent: number) => {
+      onBet(bet)
+      setValue(formatBet(bet))
+      setPercent(percent)
+    },
+    [onBet],
+  )
+
   useEffect(() => {
     const currentBet = Math.min(bet, MAX_BET)
     const newXInPercent = (bet / maxBet) * 100
 
-    setValue(formatBet(currentBet))
-    setPercent(newXInPercent)
-  }, [maxBet, bet])
+    changeValue(currentBet, newXInPercent)
+  }, [maxBet, bet, changeValue])
 
   useEffect(() => {
     if (disabled) {
       return
     }
-
-    console.log('change')
 
     const sliderWrapperDom = sliderWrapperRef.current
 
@@ -53,19 +59,6 @@ const Bet = ({
 
     let hasMove = false
 
-    const changePercentAndBet = (percent: number, needChangeState = true) => {
-      buttonDom.style.left = percent + '%'
-
-      const currentBet = ((maxBet * percent) / 100) ^ 0
-      valueDom.textContent = formatBet(currentBet)
-
-      if (needChangeState) {
-        onBet(currentBet)
-        setValue(formatBet(currentBet))
-        setPercent(percent)
-      }
-    }
-
     const pointerDown = (event: PointerEvent) => {
       hasMove = false
       const startX = event.clientX
@@ -84,7 +77,9 @@ const Bet = ({
         const newX = Math.min(Math.max(0, deltaX + shiftX), width)
         percentX = (newX / width) * 100
 
-        changePercentAndBet(percentX, false)
+        const currentBet = ((maxBet * percentX) / 100) ^ 0
+        buttonDom.style.left = percentX + '%'
+        valueDom.textContent = formatBet(currentBet)
       }
 
       const pointerUp = (_: PointerEvent) => {
@@ -99,7 +94,8 @@ const Bet = ({
           percentX = (newBet / MAX_BET) * 100
         }
 
-        changePercentAndBet(percentX)
+        const currentBet = ((maxBet * percentX) / 100) ^ 0
+        changeValue(currentBet, percentX)
 
         buttonDom.removeEventListener('pointermove', pointerMove)
         buttonDom.removeEventListener('pointerup', pointerUp)
@@ -114,7 +110,7 @@ const Bet = ({
     return () => {
       buttonDom.removeEventListener('pointerdown', pointerDown)
     }
-  }, [maxBet, onBet, disabled])
+  }, [maxBet, onBet, disabled, changeValue])
 
   const handleSliderClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -129,15 +125,16 @@ const Bet = ({
       '[data-slider]',
     ) as HTMLDivElement
 
-    const x = event.clientX
     const { left, width } = sliderDom.getBoundingClientRect()
 
-    const newXInPercent = ((x - left) / width) * 100
-    const currentBet = ((maxBet * newXInPercent) / 100) ^ 0
+    const clientX = event.clientX
+    const shiftX = left
+    const deltaX = clientX - shiftX
 
-    onBet(currentBet)
-    setValue(formatBet(currentBet))
-    setPercent(newXInPercent)
+    const newXInPercent = deltaX / width
+    const currentBet = (maxBet * newXInPercent) ^ 0
+
+    changeValue(currentBet, newXInPercent)
   }
 
   return (
@@ -149,7 +146,7 @@ const Bet = ({
         <div className='relative z-[3]'>
           <div
             className={cn(
-              'aspect-[1/0.15] cursor-pointer bg-red-400 bg-contain bg-center bg-no-repeat',
+              'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
             )}
             style={{ backgroundImage: `url(${images.slider})` }}
             onClick={handleSliderClick}
