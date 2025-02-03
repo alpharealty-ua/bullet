@@ -307,7 +307,7 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
       {state === 'offer' && <Offer />}
-      {state !== 'add-money' && total === 0 && (
+      {state === 'bet' && total === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
             className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
