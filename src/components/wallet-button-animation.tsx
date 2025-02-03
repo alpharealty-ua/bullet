@@ -22,14 +22,30 @@ export const WalletButtonAnimation = () => {
   }, [total])
 
   return (
-    <WalletButton
-      className={cn(
-        !hasMoney &&
-          !clickedWallet &&
-          state === 'bet' &&
-          'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
+    <>
+      {!hasMoney ? (
+        <span
+          className={cn(
+            'text-[40px]',
+            !clickedWallet &&
+              state === 'bet' &&
+              'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
+          )}
+          onClick={handleAddMoney}
+        >
+          💀
+        </span>
+      ) : (
+        <WalletButton
+          className={cn(
+            !hasMoney &&
+              !clickedWallet &&
+              state === 'bet' &&
+              'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
+          )}
+          onClick={handleAddMoney}
+        />
       )}
-      onClick={handleAddMoney}
-    />
+    </>
   )
 }
