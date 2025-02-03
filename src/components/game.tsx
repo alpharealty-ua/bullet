@@ -61,7 +61,7 @@ const Game = () => {
     spinRevolver()
     setTimeout(() => {
       setState('bet')
-    }, 3000)
+    }, 1500)
   }
 
   const cover = () => {
