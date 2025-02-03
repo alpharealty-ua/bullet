@@ -2,10 +2,10 @@ import { useAppContext } from '@/context/use-app-context'
 import { settingsEntries, SettingsKeys } from '@/lib/constants'
 
 const Settings = () => {
-  const { settings, setSettings } = useAppContext()
+  const { settings, changeSettings } = useAppContext()
 
   const handleChange = (name: SettingsKeys, value: boolean) => {
-    setSettings((prev) => ({ ...prev, [name]: value }))
+    changeSettings({ [name]: value })
   }
 
   return (

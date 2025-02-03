@@ -4,19 +4,18 @@ import { audios, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
-  setState: React.Dispatch<React.SetStateAction<State>>
+  setState: React.Dispatch<State>
   countBullet: number
-  setCountBullet: React.Dispatch<React.SetStateAction<number>>
+  setCountBullet: React.Dispatch<number>
   total: number
-  setTotal: React.Dispatch<React.SetStateAction<number>>
+  addTotal: React.Dispatch<number>
+  setTotal: React.Dispatch<number>
   bet: number
-  setBet: React.Dispatch<React.SetStateAction<number>>
+  setBet: React.Dispatch<number>
   activeMultiplierIndex: number
-  setActiveMultiplierIndex: React.Dispatch<React.SetStateAction<number>>
+  setActiveMultiplierIndex: React.Dispatch<number>
   settings: Record<SettingsKeys, boolean>
-  setSettings: React.Dispatch<
-    React.SetStateAction<Record<SettingsKeys, boolean>>
-  >
+  changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   playAudio: (key: keyof typeof audios) => void
 }
 

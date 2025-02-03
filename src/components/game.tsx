@@ -28,6 +28,7 @@ const Game = () => {
     setCountBullet,
     total,
     setTotal,
+    addTotal,
     bet,
     setBet,
     activeMultiplierIndex,
@@ -118,7 +119,7 @@ const Game = () => {
     setTimeout(() => {
       if (newCountBullet < 0) {
         const win = multipliers[activeMultiplierIndex] * bet
-        setTotal((p) => p + win)
+        addTotal(win)
         setState('bet')
         alert(`you won - ${win}$`)
         return
@@ -172,7 +173,7 @@ const Game = () => {
       if (state === 'pull-start') {
         multiplier()
         setDisabled(false)
-        setTotal((p) => p - bet)
+        addTotal(bet)
 
         return
       }
@@ -190,7 +191,7 @@ const Game = () => {
     setDisabled(true)
     mouseClick()
     setTimeout(() => {
-      setTotal((p) => p + bet + 100)
+      addTotal(bet + 100)
       setBet(0)
       setState('bet')
       setDisabled(false)
@@ -292,11 +293,7 @@ const Game = () => {
       )}
       {state === 'add-money' && (
         <Modal onClose={handleCloseSettings}>
-          <AddMoney
-            total={total}
-            disabled={disabled}
-            onAddMoney={(money) => setTotal((p) => p + money)}
-          />
+          <AddMoney total={total} disabled={disabled} onAddMoney={addTotal} />
         </Modal>
       )}
       {!(

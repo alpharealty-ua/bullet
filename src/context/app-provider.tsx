@@ -1,52 +1,101 @@
-import React, { useReducer, useState } from 'react'
+import React, { useCallback, useReducer, useState } from 'react'
 
 import { AppContext } from '@/context/context'
 import { INIT_TOTAL, SettingsKeys, State, audios } from '@/lib/constants'
 
-type ActionType = 'bullet'
-
-// An interface for our actions
-interface CountAction {
-  type: ActionType
+interface SetBulletAction {
+  type: 'set-bullet'
   payload: number
 }
 
-// An interface for our state
-interface CountState {
-  state: State
-  countBullet: number
+interface SetStateAction {
+  type: 'set-state'
+  payload: State
 }
 
-const appReducer = (state: CountState, action: CountAction): CountState => {
+interface SetTotalAction {
+  type: 'set-total'
+  payload: number
+}
+interface AddTotalAction {
+  type: 'add-total'
+  payload: number
+}
+
+interface SetBetAction {
+  type: 'set-bet'
+  payload: number
+}
+
+interface SetMultiplierIndexAction {
+  type: 'set-multiplier-index'
+  payload: number
+}
+interface ChangeSettingsAction {
+  type: 'change-settings'
+  payload: Partial<Record<SettingsKeys, boolean>>
+}
+
+interface GameState {
+  state: State
+  countBullet: number
+  total: number
+  bet: number
+  activeMultiplierIndex: number
+  settings: Record<SettingsKeys, boolean>
+}
+
+type Actions =
+  | SetBulletAction
+  | SetStateAction
+  | SetTotalAction
+  | AddTotalAction
+  | SetBetAction
+  | SetMultiplierIndexAction
+  | ChangeSettingsAction
+
+const appReducer = (state: GameState, action: Actions): GameState => {
   const { type, payload } = action
 
   switch (type) {
-    case 'bullet':
+    case 'set-bullet':
       return {
         ...state,
         countBullet: payload,
       }
+    case 'set-state':
+      return { ...state, state: payload }
+    case 'set-total':
+      return { ...state, total: payload }
+    case 'add-total':
+      return { ...state, total: state.total - payload }
+    case 'set-bet':
+      return { ...state, bet: payload }
+    case 'set-multiplier-index':
+      return { ...state, activeMultiplierIndex: payload }
+    case 'change-settings':
+      return { ...state, settings: { ...state.settings, ...payload } }
     default:
       return state
   }
 }
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  // TODO: use reducer for all states
-  const [{ countBullet }, dispatch] = useReducer(appReducer, {
+  const [
+    { countBullet, state, total, bet, activeMultiplierIndex, settings },
+    dispatch,
+  ] = useReducer(appReducer, {
     state: 'cover',
     countBullet: 5,
-  })
-
-  const [state, setState] = useState<State>('cover')
-  const [bet, setBet] = useState<number>(0)
-  const [total, setTotal] = useState(INIT_TOTAL)
-  const [activeMultiplierIndex, setActiveMultiplierIndex] = useState(-1)
-  const [settings, setSettings] = useState<Record<SettingsKeys, boolean>>({
-    music: true,
-    soundEffects: true,
-    invertButtons: false,
-    blood: false,
+    total: INIT_TOTAL,
+    bet: 0,
+    activeMultiplierIndex: -1,
+    settings: {
+      music: true,
+      soundEffects: true,
+      invertButtons: false,
+      blood: false,
+    },
   })
 
   const playAudio = (key: keyof typeof audios) => {
@@ -80,23 +129,35 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     <AppContext.Provider
       value={{
         state,
-        setState,
+        setState: useCallback((payload: State) => {
+          dispatch({ type: 'set-state', payload: payload })
+        }, []),
         countBullet,
-        setCountBullet: (payload: number | ((prev: number) => number)) => {
-          dispatch({
-            type: 'bullet',
-            payload:
-              typeof payload === 'function' ? payload(countBullet) : payload,
-          })
-        },
+        setCountBullet: useCallback((payload: number) => {
+          dispatch({ type: 'set-bullet', payload })
+        }, []),
         total,
-        setTotal,
+        setTotal: useCallback((payload: number) => {
+          dispatch({ type: 'set-total', payload })
+        }, []),
+        addTotal: useCallback((payload: number) => {
+          dispatch({ type: 'add-total', payload })
+        }, []),
         bet,
-        setBet,
+        setBet: useCallback((payload: number) => {
+          dispatch({ type: 'set-bet', payload })
+        }, []),
         activeMultiplierIndex,
-        setActiveMultiplierIndex,
+        setActiveMultiplierIndex: useCallback((payload: number) => {
+          dispatch({ type: 'set-multiplier-index', payload })
+        }, []),
         settings,
-        setSettings,
+        changeSettings: useCallback(
+          (payload: Partial<Record<SettingsKeys, boolean>>) => {
+            dispatch({ type: 'change-settings', payload })
+          },
+          [],
+        ),
         playAudio,
       }}
     >
