@@ -19,8 +19,8 @@ const Bet = ({
   const [percent, setPercent] = useState(0)
 
   const changeValue = useCallback(
-    (bet: number, percent: number) => {
-      onBet(bet)
+    (bet: number, percent: number, callOnBet = true) => {
+      callOnBet && onBet(bet)
       setValue(formatBet(bet))
       setPercent(percent)
     },
@@ -31,7 +31,7 @@ const Bet = ({
     const currentBet = Math.min(bet, MAX_BET)
     const newXInPercent = (bet / maxBet) * 100
 
-    changeValue(currentBet, newXInPercent)
+    changeValue(currentBet, newXInPercent, false)
   }, [maxBet, bet, changeValue])
 
   useEffect(() => {
