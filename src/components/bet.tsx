@@ -31,6 +31,8 @@ const Bet = ({
       return
     }
 
+    console.log('change')
+
     const sliderWrapperDom = sliderWrapperRef.current
 
     if (sliderWrapperDom === null) {
@@ -49,13 +51,14 @@ const Bet = ({
       return
     }
 
-    let currentBet = 0
+    let hasMove = false
 
     const changePercentAndBet = (percent: number, needChangeState = true) => {
       buttonDom.style.left = percent + '%'
 
-      currentBet = ((maxBet * percent) / 100) ^ 0
+      const currentBet = ((maxBet * percent) / 100) ^ 0
       valueDom.textContent = formatBet(currentBet)
+
       if (needChangeState) {
         onBet(currentBet)
         setValue(formatBet(currentBet))
@@ -64,26 +67,40 @@ const Bet = ({
     }
 
     const pointerDown = (event: PointerEvent) => {
+      hasMove = false
       const startX = event.clientX
       const shiftX = buttonDom.offsetLeft
       const width = sliderWrapperDom.offsetWidth
 
       buttonDom.setPointerCapture(event.pointerId)
 
-      let newXInPercent = parseInt(buttonDom.style.left) ?? 0
+      let percentX = (shiftX / width) * 100
 
       const pointerMove = (event: PointerEvent) => {
-        const endX = event.clientX
-        const deltaX = endX - startX + shiftX
+        hasMove = true
+        const currentX = event.clientX
+        const deltaX = currentX - startX
 
-        const newX = Math.min(Math.max(0, deltaX), width)
-        newXInPercent = (newX / width) * 100
+        const newX = Math.min(Math.max(0, deltaX + shiftX), width)
+        percentX = (newX / width) * 100
 
-        changePercentAndBet(newXInPercent, false)
+        changePercentAndBet(percentX, false)
       }
 
       const pointerUp = (_: PointerEvent) => {
-        changePercentAndBet(newXInPercent)
+        if (!hasMove) {
+          const ADD_BET = 50
+          const currentBet = ((maxBet * percentX) / 100) ^ 0
+
+          const newBet = Math.min(
+            currentBet + (ADD_BET - (currentBet % ADD_BET)),
+            MAX_BET,
+          )
+          percentX = (newBet / MAX_BET) * 100
+        }
+
+        changePercentAndBet(percentX)
+
         buttonDom.removeEventListener('pointermove', pointerMove)
         buttonDom.removeEventListener('pointerup', pointerUp)
       }
@@ -102,18 +119,6 @@ const Bet = ({
   const handleSliderClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    // TODO: REPLACE ON IT LATER
-    // {
-    //   const currentBet = Math.min(bet + 50, MAX_BET)
-    //   const newXInPercent = (value / maxBet) * 100
-
-    //   onBet(currentBet)
-    //   setValue(currentBet)
-    //   setPercent(newXInPercent)
-
-    //   return
-    // }
-
     const sliderWrapperDom = sliderWrapperRef.current
 
     if (sliderWrapperDom === null) {
@@ -141,9 +146,11 @@ const Bet = ({
         Bet
       </div>
       <div ref={sliderWrapperRef} className='relative flex w-full flex-col'>
-        <div className='relative'>
+        <div className='relative z-[3]'>
           <div
-            className={cn('aspect-[1/0.15] bg-contain bg-center bg-no-repeat')}
+            className={cn(
+              'aspect-[1/0.15] cursor-pointer bg-red-400 bg-contain bg-center bg-no-repeat',
+            )}
             style={{ backgroundImage: `url(${images.slider})` }}
             onClick={handleSliderClick}
             data-slider
