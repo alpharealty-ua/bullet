@@ -363,7 +363,7 @@ const Game = () => {
       ) && (
         <Revolver
           className={cn(state === 'next' && 'duration-1000')}
-          disabled={disabled || state !== 'bet'}
+          disabled={disabled || !(state === 'bet' || state === 'pull-start')}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={<>{state === 'offer' && <Click />}</>}
         />
