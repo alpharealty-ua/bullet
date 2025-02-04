@@ -120,7 +120,9 @@ const Revolver = React.forwardRef<
     const speedRotate = () => {
       const speed = speedRef.current
       if (speed < 0) {
-        dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
+        if (speedRotateRef.current % 60) {
+          dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
+        }
         clearInterval(id)
         return
       }
@@ -132,7 +134,9 @@ const Revolver = React.forwardRef<
     const id = setInterval(speedRotate, 100)
     speedRotate()
     return () => {
-      dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
+      if (speedRotateRef.current % 60) {
+        dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
+      }
       clearInterval(id)
     }
   }, [disabled, speed])
