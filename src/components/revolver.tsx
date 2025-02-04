@@ -119,7 +119,8 @@ const Revolver = React.forwardRef<
 
     const speedRotate = () => {
       const speed = speedRef.current
-      if (speed <= 0) {
+      if (speed < 0) {
+        dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
         clearInterval(id)
         return
       }
