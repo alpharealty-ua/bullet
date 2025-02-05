@@ -34,33 +34,33 @@ const Revolver = React.forwardRef<
       hasMove = false
       clickStartTime = Date.now()
       const startX = event.clientX
-      let startY = event.clientY
-      let startRotate = rotateRef.current
+      const startY = event.clientY
 
-      const { left, width } = bulletDom.getBoundingClientRect()
+      const { left, width, top, height } = bulletDom.getBoundingClientRect()
 
       bulletDom.setPointerCapture(event.pointerId)
-      let directionY = startX > left + width / 2 ? -1 : 1
+
+      const startRotate = rotateRef.current
+      let prevX = startX
+      let prevY = startY
 
       const pointerMove = (event: PointerEvent) => {
         hasMove = true
-        const endX = event.clientX
-        const endY = event.clientY
+        const currentX = event.clientX
+        const currentY = event.clientY
 
-        // @ts-ignore
-        const deltaX = startX - endX
-        const deltaY = startY - endY
+        const deltaX = prevX - currentX
+        const deltaY = prevY - currentY
 
-        const prevDirection = directionY
-        directionY = endX > left + width / 2 ? -1 : 1
+        const directionX = currentY > top + height / 2 ? 1 : -1
+        const directionY = currentX > left + width / 2 ? -1 : 1
 
-        if (directionY !== prevDirection) {
-          startY = endY
-          startRotate = rotateRef.current
-          return
-        }
+        prevX = currentX
+        prevY = currentY
 
-        rotateRef.current = startRotate + deltaY * directionY
+        const deltaRotate = deltaY * directionY + deltaX * directionX
+
+        rotateRef.current += deltaRotate
         bulletDom.style.transitionDuration = `0s`
         bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
       }
@@ -77,7 +77,14 @@ const Revolver = React.forwardRef<
           speedRef.current = 0
           rotateRef.current += clickRotate
         } else {
-          speedRef.current += 60
+          const sign = rotateRef.current - startRotate > 0 ? 1 : -1
+          const addSpeed = Math.max(
+            Math.min((rotateRef.current - startRotate) ^ 0, 360),
+            60,
+          )
+          const speed = addSpeed * sign
+          console.log(speed)
+          speedRef.current += speed
         }
         setSpeed((p) => !p)
 
@@ -126,12 +133,14 @@ const Revolver = React.forwardRef<
 
     const speedRotate = () => {
       const speed = speedRef.current
-      if (speed < 0) {
+      const sign = speed > 0 ? 1 : 0
+
+      if (10 > speed && speed > -10) {
         stopSpin()
         return
       }
 
-      speedRef.current -= 5
+      speedRef.current -= 5 * sign
 
       dom.style.transform = `rotate(${(speedRotateRef.current += speed)}deg)`
     }
