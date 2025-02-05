@@ -14,7 +14,7 @@ const Footer = () => {
     bet,
     setBet,
     state,
-    setState,
+    changeState: setState,
   } = useAppContext()
 
   const handleSettings = () => {

@@ -23,7 +23,8 @@ let gifCacheIndex = Math.random()
 const Game = () => {
   const {
     state,
-    setState,
+    changeState,
+    undoState,
     countBullet,
     setCountBullet,
     total,
@@ -52,36 +53,36 @@ const Game = () => {
   }
 
   const reset = () => {
-    setState('reset')
+    changeState('reset')
     setBet(0)
     setTotal(INIT_TOTAL)
     setCountBullet(5)
   }
 
   const initGame = () => {
-    setState('init-game')
+    changeState('init-game')
     setCountBullet(5)
     spinRevolver()
     setTimeout(() => {
-      setState('bet')
+      changeState('bet')
     }, 1500)
   }
 
   const cover = () => {
-    setState('cover')
+    changeState('cover')
   }
 
   const rules = () => {
-    setState('rules')
+    changeState('rules')
   }
 
   const betFn = () => {
-    setState('bet')
+    changeState('bet')
     setCountBullet(5)
   }
 
   const multiplier = () => {
-    setState('multiplier')
+    changeState('multiplier')
     setDisabled(true)
 
     playAudio('spin')
@@ -97,7 +98,7 @@ const Game = () => {
       if (--count <= 0) {
         clearInterval(id)
         setTimeout(() => {
-          setState('next')
+          changeState('next')
           setDisabled(false)
         }, 1000)
       }
@@ -113,7 +114,7 @@ const Game = () => {
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
 
-    if (random === 1) {
+    if (random === 1 && !isJackpot) {
       setTimeout(() => {
         gameOver()
       }, 1000)
@@ -123,8 +124,7 @@ const Game = () => {
       if (newCountBullet < 0) {
         const win = multipliers[activeMultiplierIndex] * bet
         addTotal(win)
-        setState('bet')
-        alert(`you won - ${win}$`)
+        changeState('bet')
         return
       }
       offer()
@@ -132,7 +132,16 @@ const Game = () => {
   }
 
   const offer = () => {
-    setState('offer')
+    changeState('offer')
+    if (isJackpot) {
+      setDisabled(true)
+      setTimeout(() => {
+        const win = 100_000
+        addTotal(win)
+        changeState('bet')
+        setDisabled(false)
+      }, 3000)
+    }
   }
 
   const gameOver = () => {
@@ -144,7 +153,7 @@ const Game = () => {
       playAudio('gunshot')
       addTotal(-bet)
       setBet(0)
-      setState('game-over')
+      changeState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
       }, 900)
@@ -182,7 +191,7 @@ const Game = () => {
         return
       }
 
-      setState('next')
+      changeState('next')
       setDisabled(false)
     }, 1000)
   }
@@ -197,27 +206,17 @@ const Game = () => {
     setTimeout(() => {
       addTotal(100)
       setBet(0)
-      setState('bet')
+      changeState('bet')
       setDisabled(false)
     }, 500)
   }
 
-  const handleCloseRules = () => {
+  const handleCloseModal = () => {
     setDisabled(true)
     mouseClick()
 
     setTimeout(() => {
-      cover()
-      setDisabled(false)
-    }, 200)
-  }
-
-  const handleCloseSettings = () => {
-    setDisabled(true)
-    mouseClick()
-
-    setTimeout(() => {
-      betFn()
+      undoState()
       setDisabled(false)
     }, 200)
   }
@@ -237,7 +236,7 @@ const Game = () => {
   }
 
   const handleAddMoney = () => {
-    setState('add-money')
+    changeState('add-money')
   }
 
   useEffect(() => {
@@ -290,17 +289,17 @@ const Game = () => {
         </Modal>
       )}
       {state === 'rules' && (
-        <Modal onClose={handleCloseRules}>
+        <Modal onClose={handleCloseModal}>
           <Rules />
         </Modal>
       )}
       {state === 'settings' && (
-        <Modal onClose={handleCloseSettings}>
+        <Modal onClose={handleCloseModal}>
           <Settings />
         </Modal>
       )}
       {state === 'add-money' && (
-        <Modal onClose={handleCloseSettings}>
+        <Modal onClose={handleCloseModal}>
           <AddMoney total={total} disabled={disabled} onAddMoney={addTotal} />
         </Modal>
       )}

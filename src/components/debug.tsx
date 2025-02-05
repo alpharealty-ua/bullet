@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 const Debug = ({ disabled }: { disabled: boolean }) => {
   const {
     state,
-    setState,
+    changeState: setState,
     countBullet,
     setCountBullet,
     total,

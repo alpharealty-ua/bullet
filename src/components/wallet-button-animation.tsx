@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils'
 import { WalletButton } from './wallet-button'
 
 export const WalletButtonAnimation = () => {
-  const { total, state, setState } = useAppContext()
+  const { total, state, changeState } = useAppContext()
   const [hasMoney, setHasMoney] = useState(true)
   const [clickedWallet, setClicketWallet] = useState(false)
 
   const handleAddMoney = () => {
     setClicketWallet(true)
-    setState('add-money')
+    changeState('add-money')
   }
 
   useEffect(() => {

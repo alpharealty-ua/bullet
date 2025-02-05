@@ -4,7 +4,8 @@ import { audios, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
-  setState: React.Dispatch<State>
+  changeState: React.Dispatch<State>
+  undoState: React.Dispatch<void>
   countBullet: number
   setCountBullet: React.Dispatch<number>
   total: number

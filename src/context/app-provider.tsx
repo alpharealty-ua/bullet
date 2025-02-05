@@ -8,9 +8,15 @@ interface SetBulletAction {
   payload: number
 }
 
-interface SetStateAction {
-  type: 'set-state'
+interface ChangeStateAction {
+  type: 'change-state'
   payload: State
+}
+
+interface UndoStateAction {
+  type: 'undo-state'
+  // eslint-disable-next-line
+  payload?: any
 }
 
 interface SetTotalAction {
@@ -37,6 +43,7 @@ interface ChangeSettingsAction {
 }
 
 interface GameState {
+  stateHistory: State[]
   state: State
   countBullet: number
   total: number
@@ -47,7 +54,8 @@ interface GameState {
 
 type Actions =
   | SetBulletAction
-  | SetStateAction
+  | ChangeStateAction
+  | UndoStateAction
   | SetTotalAction
   | AddTotalAction
   | SetBetAction
@@ -63,8 +71,21 @@ const appReducer = (state: GameState, action: Actions): GameState => {
         ...state,
         countBullet: payload,
       }
-    case 'set-state':
-      return { ...state, state: payload }
+    case 'change-state':
+      return {
+        ...state,
+        stateHistory: [...state.stateHistory, payload],
+        state: payload,
+      }
+    case 'undo-state': {
+      state.stateHistory.pop()
+      const newState = state.stateHistory[state.stateHistory.length - 1]
+      return {
+        ...state,
+        stateHistory: [...state.stateHistory],
+        state: newState,
+      }
+    }
     case 'set-total':
       return { ...state, total: payload }
     case 'add-total':
@@ -85,6 +106,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     { countBullet, state, total, bet, activeMultiplierIndex, settings },
     dispatch,
   ] = useReducer(appReducer, {
+    stateHistory: ['cover'],
     state: 'cover',
     countBullet: 5,
     total: INIT_TOTAL,
@@ -97,6 +119,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       blood: false,
     },
   })
+
+  const changeState = useCallback((payload: State) => {
+    dispatch({ type: 'change-state', payload })
+  }, [])
+
+  const undoState = useCallback(() => {
+    dispatch({ type: 'undo-state' })
+  }, [])
 
   const playAudio = (key: keyof typeof audios) => {
     if (!settings.soundEffects) {
@@ -129,9 +159,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     <AppContext.Provider
       value={{
         state,
-        setState: useCallback((payload: State) => {
-          dispatch({ type: 'set-state', payload: payload })
-        }, []),
+        changeState,
+        undoState,
         countBullet,
         setCountBullet: useCallback((payload: number) => {
           dispatch({ type: 'set-bullet', payload })
