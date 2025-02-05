@@ -153,36 +153,38 @@ const Revolver = React.forwardRef<
 
   return (
     <div
-      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] overflow-hidden duration-100 lg:w-[251px]'
+      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] duration-100 lg:w-[251px]'
       ref={ref}
     >
       {beforeSlot}
-      <div
-        className={cn(
-          'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
-          disabled && 'cursor-auto',
-          className,
-        )}
-        style={{ ...style }}
-        {...props}
-      >
+      <div className='absolute inset-0 overflow-hidden'>
         <div
-          ref={bulletChambeRef}
-          className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200'
-          style={{ transform: `rotate(${rotateRef.current}deg)` }}
+          className={cn(
+            'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms]',
+            disabled && 'cursor-auto',
+            className,
+          )}
+          style={{ ...style }}
+          {...props}
         >
           <div
-            className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-200 ease-linear'
-            style={{ backgroundImage: `url(${images.bulletChambe})` }}
-          ></div>
+            ref={bulletChambeRef}
+            className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200'
+            style={{ transform: `rotate(${rotateRef.current}deg)` }}
+          >
+            <div
+              className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-200 ease-linear'
+              style={{ backgroundImage: `url(${images.bulletChambe})` }}
+            ></div>
+          </div>
         </div>
+        <div
+          className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
+          style={{
+            backgroundImage: `url(${images.body})`,
+          }}
+        ></div>
       </div>
-      <div
-        className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
-        style={{
-          backgroundImage: `url(${images.body})`,
-        }}
-      ></div>
     </div>
   )
 })
