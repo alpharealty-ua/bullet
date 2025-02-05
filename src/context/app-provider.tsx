@@ -78,11 +78,12 @@ const appReducer = (state: GameState, action: Actions): GameState => {
         state: payload,
       }
     case 'undo-state': {
-      state.stateHistory.pop()
-      const newState = state.stateHistory[state.stateHistory.length - 1]
+      const stateHistory = [...state.stateHistory]
+      stateHistory.pop()
+      const newState = stateHistory[stateHistory.length - 1]
       return {
         ...state,
-        stateHistory: [...state.stateHistory],
+        stateHistory,
         state: newState,
       }
     }
