@@ -40,6 +40,7 @@ const Game = () => {
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const [imageSrc, setImageSrc] = useState(images.gameOver)
+  const isJackpot = activeMultiplierIndex === 5
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -309,7 +310,17 @@ const Game = () => {
         state === 'settings' ||
         state === 'add-money'
       ) && <Header />}
-      {state === 'offer' && <Offer />}
+      {state === 'offer' && isJackpot && (
+        <div className='flex flex-col items-center gap-2'>
+          <div className='animate-in fade-in zoom-in-50 fill-mode-both origin-top text-center text-3xl delay-500 duration-500'>
+            Jackpot
+          </div>
+          <div className='animate-in fade-in fill-mode-both max-w-[300px] delay-1000 duration-1000'>
+            <img src={images['100000$']} alt='' />
+          </div>
+        </div>
+      )}
+      {state === 'offer' && !isJackpot && <Offer />}
       {state === 'bet' && total === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
@@ -378,7 +389,7 @@ const Game = () => {
         )}
       >
         <div>
-          {state === 'offer' && (
+          {state === 'offer' && !isJackpot && (
             <div className='animate-in fade-in fill-mode-both relative -top-1 mt-auto delay-[1200ms] duration-1000'>
               <DealButton disabled={disabled} onClick={handleDeal} />
             </div>
