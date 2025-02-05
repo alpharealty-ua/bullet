@@ -1,3 +1,4 @@
+import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface MultiplerProps {
@@ -16,14 +17,22 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
           {activeIndex === -1 && <span className='text-[#ffbf00]'>?</span>}
           &nbsp;
           {items.map((el, i) => {
+            const isJackpot = el === 1000
+
             return (
               <div
                 key={i}
                 className={cn(
                   'absolute top-1/2 left-1/2 -translate-1/2 text-[#ff0b0b] opacity-0 transition-opacity',
                   i === activeIndex && 'opacity-100',
+                  isJackpot && 'text-transparent',
                 )}
               >
+                {isJackpot && (
+                  <div className='absolute inset-0 px-1'>
+                    <img src={images['1000x']} alt='' />
+                  </div>
+                )}
                 {el}x
               </div>
             )

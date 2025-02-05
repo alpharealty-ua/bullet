@@ -1,4 +1,4 @@
-export const multipliers = [2, 5, 10, 25, 100]
+export const multipliers = [2, 5, 10, 25, 100, 1000]
 
 export const states = [
   'reset',
@@ -41,6 +41,8 @@ export const images = {
   multiplier: './assets/images/compressed/multiplier.png',
   balance: './assets/images/compressed/balance.png',
   slider: './assets/images/compressed/slider.png',
+  '1000x': './assets/images/1000x.png',
+  '100000$': './assets/images/100000$.png',
 }
 
 export const srcImages = Object.values(images)
