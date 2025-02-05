@@ -231,7 +231,7 @@ const Game = () => {
     }, 200)
   }
 
-  const handleTimeout = () => {
+  const handleGameOverTimeout = () => {
     betFn()
   }
 
@@ -406,7 +406,7 @@ const Game = () => {
       {state === 'game-over' && (
         <GameOver
           onClick={handleStartGame}
-          onTimeout={handleTimeout}
+          onTimeout={handleGameOverTimeout}
           timeout={2000}
           image={imageSrc}
           hideBlood={settings.blood}
