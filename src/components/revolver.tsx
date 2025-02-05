@@ -133,7 +133,7 @@ const Revolver = React.forwardRef<
 
     const speedRotate = () => {
       const speed = speedRef.current
-      const sign = speed > 0 ? 1 : 0
+      const sign = speed > 0 ? 1 : -1
 
       if (10 > speed && speed > -10) {
         stopSpin()
