@@ -142,10 +142,10 @@ const Bet = ({
     const clickInTheRight = buttomDomRect.left < clientX
     const sign = clickInTheRight ? 1 : -1
 
-    const ADD_BET = 100
+    const INCREMENT_BET = 100
     const currentBet = bet
-    const addedBet = currentBet + ADD_BET * sign
-    const roundAddedBet = Math.floor(addedBet / ADD_BET) * ADD_BET
+    const addedBet = currentBet + INCREMENT_BET * sign
+    const roundAddedBet = Math.floor(addedBet / INCREMENT_BET) * INCREMENT_BET
 
     const newBet = Math.min(roundAddedBet, MAX_BET)
     const percentX = (newBet / MAX_BET) * 100
