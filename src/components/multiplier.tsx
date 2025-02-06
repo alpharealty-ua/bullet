@@ -13,7 +13,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
         <div className='text-lg font-bold text-[#006100] uppercase'>
           MULTIPLIER
         </div>
-        <div className='relative text-center text-4xl leading-[1] uppercase'>
+        <div className='relative text-center text-3xl leading-[1] uppercase'>
           {activeIndex === -1 && (
             <span className='text-[#ffbf00] drop-shadow-[2px_1px_0px_#000]'>
               ?
