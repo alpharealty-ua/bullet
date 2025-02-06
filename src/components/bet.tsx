@@ -144,8 +144,7 @@ const Bet = ({
 
     const newXInPercent = deltaX / width
     const currentBet = (maxBet * newXInPercent) ^ 0
-
-    changeValue(currentBet, newXInPercent)
+    changeValue(currentBet, newXInPercent * 100)
   }
 
   return (
