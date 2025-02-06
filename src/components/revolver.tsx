@@ -27,6 +27,8 @@ const Revolver = React.forwardRef<
       return
     }
 
+    bulletDom.ondragstart = () => false
+
     let clickStartTime = 0
 
     const pointerDown = (event: PointerEvent) => {
