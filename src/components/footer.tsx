@@ -14,19 +14,19 @@ const Footer = () => {
     bet,
     setBet,
     state,
-    changeState: setState,
+    changeState,
   } = useAppContext()
 
   const handleSettings = () => {
-    setState('settings')
+    changeState('settings')
   }
 
   const handleSetBet = useCallback(
     (bet: number) => {
-      setState('pull-start')
+      changeState('pull-start')
       setBet(bet)
     },
-    [setState, setBet],
+    [changeState, setBet],
   )
 
   return (
