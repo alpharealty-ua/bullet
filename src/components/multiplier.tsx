@@ -14,7 +14,11 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
           MULTIPLIER
         </div>
         <div className='relative text-center text-4xl leading-[1] uppercase'>
-          {activeIndex === -1 && <span className='text-[#ffbf00]'>?</span>}
+          {activeIndex === -1 && (
+            <span className='text-[#ffbf00] drop-shadow-[2px_1px_0px_#000]'>
+              ?
+            </span>
+          )}
           &nbsp;
           {items.map((el, i) => {
             const isJackpot = el === 1000
@@ -23,9 +27,9 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
               <div
                 key={i}
                 className={cn(
-                  'absolute top-1/2 left-1/2 -translate-1/2 text-[#ff0b0b] opacity-0 transition-opacity',
+                  'absolute top-1/2 left-1/2 -translate-1/2 text-[#ff0b0b] opacity-0 drop-shadow-[2px_1px_0px_#000] transition-opacity',
                   i === activeIndex && 'opacity-100',
-                  isJackpot && 'text-transparent',
+                  isJackpot && 'text-transparent drop-shadow-none',
                 )}
               >
                 {isJackpot && (
