@@ -79,11 +79,20 @@ const Bet = ({
         const currentX = event.clientX
         const deltaX = currentX - startX
 
-        const newX = Math.min(Math.max(0, deltaX + startLeft), width)
-        percentX = (newX / width) * 100
+        const newX = deltaX + startLeft
+        const boundaryRoundNewX = Math.min(Math.max(0, newX), width)
 
-        const currentBet = ((maxBet * percentX) / 100) ^ 0
-        buttonDom.style.left = percentX + '%'
+        percentX = (boundaryRoundNewX / width) * 100
+
+        const ROUND_BET = 5
+        const BET_IN_ONE_PERCENT = maxBet / 100
+        const ROUND_PERCENT = ROUND_BET / BET_IN_ONE_PERCENT
+
+        const roundPercentX = (percentX =
+          Math.round(percentX / ROUND_PERCENT) * ROUND_PERCENT)
+        const currentBet = Math.round((maxBet * roundPercentX) / 100)
+
+        buttonDom.style.left = roundPercentX + '%'
         valueDom.textContent = formatBet(currentBet)
       }
 
