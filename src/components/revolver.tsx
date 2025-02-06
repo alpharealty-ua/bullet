@@ -131,9 +131,8 @@ const Revolver = React.forwardRef<
     }
 
     const stopSpin = () => {
-      if (speedRotateRef.current % 60) {
-        dom.style.transform = `rotate(${(speedRotateRef.current += 60 - (speedRotateRef.current % 60))}deg)`
-      }
+      const roundedRatate = 60 * Math.round(speedRotateRef.current / 60)
+      dom.style.transform = `rotate(${roundedRatate}deg)`
       clearInterval(id)
     }
 
