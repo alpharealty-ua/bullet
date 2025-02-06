@@ -4,7 +4,7 @@ import { CSSTransition } from 'react-transition-group'
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-const Offer = forwardRef<
+const Result = forwardRef<
   HTMLDivElement,
   {
     jackpot: boolean
@@ -49,4 +49,4 @@ const Offer = forwardRef<
   )
 })
 
-export { Offer }
+export { Result }

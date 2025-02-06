@@ -6,7 +6,7 @@ import { randomIntFromInterval, cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
 import { Revolver } from './revolver'
-import { Offer } from './offer'
+import { Result } from './result'
 import { Click } from './click'
 import { DealButton } from './deal-button'
 import { Rules } from './rules'
@@ -139,14 +139,13 @@ const Game = () => {
         changeState('bet')
         return
       }
-      offer()
+      result()
     }, 900)
   }
 
-  const offer = () => {
-    changeState('offer')
+  const result = () => {
+    changeState('result')
     if (isJackpot) {
-      return
       setDisabled(true)
       setTimeout(() => {
         const win = 100_000
@@ -154,6 +153,10 @@ const Game = () => {
         changeState('bet')
         setDisabled(false)
       }, 3000)
+    }
+    if (multipliers[activeMultiplierIndex] < 10) {
+      changeState('pull-next')
+      return
     }
   }
 
@@ -282,8 +285,8 @@ const Game = () => {
       next()
       return
     }
-    if (state === 'offer') {
-      offer()
+    if (state === 'result') {
+      result()
       return
     }
     if (state === 'game-over') {
@@ -323,7 +326,7 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
 
-      <Offer jackpot={isJackpot} in={state === 'offer'} />
+      <Result jackpot={isJackpot} in={state === 'result'} />
 
       {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
@@ -386,7 +389,7 @@ const Game = () => {
           )}
           disabled={disabled || !(state === 'bet' || state === 'pull-start')}
           style={{ transform: `rotate(${rotate}deg)` }}
-          beforeSlot={<>{state === 'offer' && <Click />}</>}
+          beforeSlot={<>{state === 'result' && <Click />}</>}
         />
       )}
       <div
@@ -396,7 +399,7 @@ const Game = () => {
         )}
       >
         <div>
-          {state === 'offer' && !isJackpot && (
+          {state === 'result' && !isJackpot && (
             <div className='animate-in fade-in fill-mode-both relative -top-1 mt-auto delay-[1200ms] duration-1000'>
               <DealButton disabled={disabled} onClick={handleDeal} />
             </div>

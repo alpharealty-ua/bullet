@@ -12,7 +12,7 @@ export const states = [
   'multiplier',
   'pull-next',
   'next',
-  'offer',
+  'result',
   'game-over',
 ] as const
 
