@@ -1,16 +1,16 @@
 import { forwardRef, useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
-import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const Result = forwardRef<
   HTMLDivElement,
   {
-    jackpot: boolean
-    in: boolean
+    title: string
+    price: string
+    open: boolean
   }
->(({ jackpot, in: open }, ref) => {
+>(({ title, price, open }, ref) => {
   const nodeRef = useRef(null)
 
   return (
@@ -18,6 +18,7 @@ const Result = forwardRef<
       {(state) => {
         const open = state === 'entering' || state === 'entered'
         const close = state === 'exiting' || state === 'exited'
+
         return (
           <div
             ref={nodeRef}
@@ -31,7 +32,7 @@ const Result = forwardRef<
                   'animate-out fade-out zoom-out-50 delay-200 duration-200',
               )}
             >
-              {jackpot ? 'Jackpot' : ' the banker offers...'}
+              {title}
             </div>
             <div
               className={cn(
@@ -40,7 +41,7 @@ const Result = forwardRef<
                 close && 'animate-out fade-out duration-200',
               )}
             >
-              {jackpot ? <img src={images['100000$']} alt='' /> : '$100'}
+              {price}
             </div>
           </div>
         )

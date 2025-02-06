@@ -43,6 +43,7 @@ const Game = () => {
   const [imageSrc, setImageSrc] = useState(images.gameOver)
   const isJackpot = activeMultiplierIndex === 5
   const hasResult = multipliers[activeMultiplierIndex] >= 10
+  const jackpot = bet * multipliers[activeMultiplierIndex]
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -119,6 +120,10 @@ const Game = () => {
   }
 
   const next = () => {
+    if (isJackpot) {
+      result()
+      return
+    }
     setRotate((rotateRef.current += 60))
     playAudio('trigger')
 
@@ -149,8 +154,7 @@ const Game = () => {
     if (isJackpot) {
       setDisabled(true)
       setTimeout(() => {
-        const win = 100_000
-        addTotal(win)
+        addTotal(jackpot)
         changeState('bet')
         setDisabled(false)
       }, 3000)
@@ -329,7 +333,11 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
 
-      <Result jackpot={isJackpot} in={state === 'result' && hasResult} />
+      <Result
+        title={isJackpot ? 'Jackpot' : ' the banker offers...'}
+        price={isJackpot ? `$${jackpot}` : '$100'}
+        open={state === 'result' && hasResult}
+      />
 
       {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
@@ -392,7 +400,7 @@ const Game = () => {
           )}
           disabled={disabled || !(state === 'bet' || state === 'pull-start')}
           style={{ transform: `rotate(${rotate}deg)` }}
-          beforeSlot={<>{state === 'result' && <Click />}</>}
+          beforeSlot={<>{state === 'result' && !isJackpot && <Click />}</>}
         />
       )}
       <div
