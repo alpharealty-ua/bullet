@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_BALANCE, multipliers, State } from '@/lib/constants'
@@ -293,7 +292,6 @@ const Game = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
-  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -325,15 +323,7 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
 
-      <CSSTransition in={state === 'offer'} unmountOnExit timeout={1000}>
-        {(state) => (
-          <Offer
-            jackpot={isJackpot}
-            open={state === 'entering' || state === 'entered'}
-            close={state === 'exiting' || state === 'exited'}
-          />
-        )}
-      </CSSTransition>
+      <Offer jackpot={isJackpot} in={state === 'offer'} />
 
       {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
