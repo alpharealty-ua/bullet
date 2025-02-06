@@ -176,17 +176,16 @@ const Bet = ({
     const shiftX = left
     const deltaX = clientX - shiftX
 
+    const percentX = (deltaX / width) * 100
+
     const ROUND_BET = 100
     const BET_IN_ONE_PERCENT = maxBet / 100
     const ROUND_PERCENT = ROUND_BET / BET_IN_ONE_PERCENT
 
-    const newPercentX = (deltaX / width) * 100
-    const newRoundPercentX =
-      Math.round(newPercentX / ROUND_PERCENT) * ROUND_PERCENT
+    const roundPercentX = Math.round(percentX / ROUND_PERCENT) * ROUND_PERCENT
+    const currentBet = ((maxBet * roundPercentX) / 100) ^ 0
 
-    const currentBet = ((maxBet * newRoundPercentX) / 100) ^ 0
-
-    changeValue(currentBet, newRoundPercentX)
+    changeValue(currentBet, roundPercentX)
   }
 
   return (
