@@ -8,7 +8,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     changeState: setState,
     countBullet,
     setCountBullet,
-    total,
+    balance,
     setTotal,
     bet,
     setBet,
@@ -54,7 +54,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
           <div className=''>Balance</div>
           <input
             type='text'
-            value={total}
+            value={balance}
             onChange={(e) => setTotal(Number(e.target.value))}
             className='h-10 w-full bg-white px-2'
           />

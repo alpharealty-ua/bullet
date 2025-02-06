@@ -6,7 +6,7 @@ import { appReducer, initState } from './app-reducer'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
-    { countBullet, state, total, bet, activeMultiplierIndex, settings },
+    { countBullet, state, balance, bet, activeMultiplierIndex, settings },
     dispatch,
   ] = useReducer(appReducer, initState)
 
@@ -55,7 +55,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setCountBullet: useCallback((payload: number) => {
           dispatch({ type: 'set-bullet', payload })
         }, []),
-        total,
+        balance,
         setTotal: useCallback((payload: number) => {
           dispatch({ type: 'set-total', payload })
         }, []),

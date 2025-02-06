@@ -8,7 +8,7 @@ interface ContextAppValue {
   undoState: React.Dispatch<void>
   countBullet: number
   setCountBullet: React.Dispatch<number>
-  total: number
+  balance: number
   addTotal: React.Dispatch<number>
   setTotal: React.Dispatch<number>
   bet: number

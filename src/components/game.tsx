@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useAppContext } from '@/context/use-app-context'
-import { images, INIT_TOTAL, multipliers, State } from '@/lib/constants'
+import { images, INIT_BALANCE, multipliers, State } from '@/lib/constants'
 import { randomIntFromInterval, cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
@@ -27,7 +27,7 @@ const Game = () => {
     undoState,
     countBullet,
     setCountBullet,
-    total,
+    balance,
     setTotal,
     addTotal,
     bet,
@@ -55,7 +55,7 @@ const Game = () => {
   const reset = () => {
     changeState('reset')
     setBet(0)
-    setTotal(INIT_TOTAL)
+    setTotal(INIT_BALANCE)
     setCountBullet(5)
   }
 
@@ -300,7 +300,7 @@ const Game = () => {
       )}
       {state === 'add-money' && (
         <Modal onClose={handleCloseModal}>
-          <AddMoney total={total} disabled={disabled} onAddMoney={addTotal} />
+          <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
         </Modal>
       )}
       {!(
@@ -320,7 +320,7 @@ const Game = () => {
         </div>
       )}
       {state === 'offer' && !isJackpot && <Offer />}
-      {state === 'bet' && total === 0 && (
+      {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
             className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'

@@ -10,7 +10,7 @@ const Footer = () => {
   const {
     countBullet,
     activeMultiplierIndex,
-    total,
+    balance,
     bet,
     setBet,
     state,
@@ -36,8 +36,10 @@ const Footer = () => {
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
-          disabled={!(state === 'bet' || state === 'pull-start') || total === 0}
-          maxBet={Math.min(total, MAX_BET)}
+          disabled={
+            !(state === 'bet' || state === 'pull-start') || balance === 0
+          }
+          maxBet={Math.min(balance, MAX_BET)}
           bet={bet}
           onBet={handleSetBet}
         />

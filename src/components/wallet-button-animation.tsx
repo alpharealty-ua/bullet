@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { WalletButton } from './wallet-button'
 
 export const WalletButtonAnimation = () => {
-  const { total, state, changeState } = useAppContext()
+  const { balance, state, changeState } = useAppContext()
   const [hasMoney, setHasMoney] = useState(true)
   const [clickedWallet, setClicketWallet] = useState(false)
 
@@ -15,11 +15,11 @@ export const WalletButtonAnimation = () => {
   }
 
   useEffect(() => {
-    setHasMoney(total > 0)
-    if (!(total > 0)) {
+    setHasMoney(balance > 0)
+    if (!(balance > 0)) {
       setClicketWallet(false)
     }
-  }, [total])
+  }, [balance])
 
   return (
     <>

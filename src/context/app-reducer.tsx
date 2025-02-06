@@ -1,4 +1,4 @@
-import { State, SettingsKeys, INIT_TOTAL } from '@/lib/constants'
+import { State, SettingsKeys, INIT_BALANCE } from '@/lib/constants'
 
 interface SetBulletAction {
   type: 'set-bullet'
@@ -37,7 +37,7 @@ interface GameState {
   stateHistory: State[]
   state: State
   countBullet: number
-  total: number
+  balance: number
   bet: number
   activeMultiplierIndex: number
   settings: Record<SettingsKeys, boolean>
@@ -56,7 +56,7 @@ export const initState: GameState = {
   stateHistory: ['cover'],
   state: 'cover',
   countBullet: 5,
-  total: INIT_TOTAL,
+  balance: INIT_BALANCE,
   bet: 0,
   activeMultiplierIndex: -1,
   settings: {
@@ -99,9 +99,9 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
       }
     }
     case 'set-total':
-      return { ...state, total: payload }
+      return { ...state, balance: payload }
     case 'add-total':
-      return { ...state, total: state.total + payload }
+      return { ...state, balance: state.balance + payload }
     case 'set-bet':
       return { ...state, bet: payload }
     case 'set-multiplier-index':
