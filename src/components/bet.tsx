@@ -87,19 +87,7 @@ const Bet = ({
         valueDom.textContent = formatBet(currentBet)
       }
 
-      const pointerUp = (event: PointerEvent) => {
-        const hasMove = !(startX === event.clientX && startY === event.clientY)
-
-        if (!hasMove) {
-          const ADD_BET = 100
-          const currentBet = (maxBet * percentX) / 100
-          const addedBet = currentBet + ADD_BET
-          const roundAddedBet = Math.floor(addedBet / ADD_BET) * ADD_BET
-
-          const newBet = Math.min(roundAddedBet, MAX_BET)
-          percentX = (newBet / MAX_BET) * 100
-        }
-
+      const pointerUp = (_: PointerEvent) => {
         const currentBet = ((maxBet * percentX) / 100) ^ 0
         changeValue(currentBet, percentX)
 
@@ -131,6 +119,44 @@ const Bet = ({
       return
     }
 
+    const buttonDom = sliderWrapperDom.querySelector(
+      '[data-button]',
+    ) as HTMLButtonElement
+
+    const buttomDomRect = buttonDom.getBoundingClientRect()
+
+    if (buttonDom === null) {
+      return
+    }
+
+    const clientX = event.clientX
+    const clickInTheRight = buttomDomRect.left < clientX
+    const sign = clickInTheRight ? 1 : -1
+
+    const ADD_BET = 100
+    const currentBet = bet
+    const addedBet = currentBet + ADD_BET * sign
+    const roundAddedBet = Math.floor(addedBet / ADD_BET) * ADD_BET
+
+    const newBet = Math.min(roundAddedBet, MAX_BET)
+    const percentX = (newBet / MAX_BET) * 100
+
+    changeValue(newBet, percentX)
+  }
+
+  const handleSliderDbClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    if (disabled) {
+      return
+    }
+
+    const sliderWrapperDom = sliderWrapperRef.current
+
+    if (sliderWrapperDom === null) {
+      return
+    }
+
     const sliderDom = sliderWrapperDom.querySelector(
       '[data-slider]',
     ) as HTMLDivElement
@@ -150,6 +176,7 @@ const Bet = ({
       Math.round(newPercentX / ROUND_PERCENT) * ROUND_PERCENT
 
     const currentBet = ((maxBet * newRoundPercentX) / 100) ^ 0
+
     changeValue(currentBet, newRoundPercentX)
   }
 
@@ -166,7 +193,8 @@ const Bet = ({
               disabled && 'cursor-not-allowed',
             )}
             style={{ backgroundImage: `url(${images.slider})` }}
-            onDoubleClick={handleSliderClick}
+            onClick={handleSliderClick}
+            onDoubleClick={handleSliderDbClick}
             data-slider
           ></div>
           <button
