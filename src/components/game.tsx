@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_BALANCE, multipliers, State } from '@/lib/constants'
@@ -146,6 +147,7 @@ const Game = () => {
   const offer = () => {
     changeState('offer')
     if (isJackpot) {
+      return
       setDisabled(true)
       setTimeout(() => {
         const win = 100_000
@@ -291,6 +293,7 @@ const Game = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
+  const [open, setOpen] = useState(false)
 
   return (
     <>
@@ -321,17 +324,17 @@ const Game = () => {
         state === 'settings' ||
         state === 'add-money'
       ) && <Header />}
-      {state === 'offer' && isJackpot && (
-        <div className='flex flex-col items-center gap-2'>
-          <div className='animate-in fade-in zoom-in-50 fill-mode-both origin-top text-center text-3xl delay-500 duration-500'>
-            Jackpot
-          </div>
-          <div className='animate-in fade-in fill-mode-both max-w-[300px] delay-1000 duration-1000'>
-            <img src={images['100000$']} alt='' />
-          </div>
-        </div>
-      )}
-      {state === 'offer' && !isJackpot && <Offer />}
+
+      <CSSTransition in={state === 'offer'} unmountOnExit timeout={1000}>
+        {(state) => (
+          <Offer
+            jackpot={isJackpot}
+            open={state === 'entering' || state === 'entered'}
+            close={state === 'exiting' || state === 'exited'}
+          />
+        )}
+      </CSSTransition>
+
       {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
