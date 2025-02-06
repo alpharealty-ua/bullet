@@ -66,16 +66,17 @@ const Revolver = React.forwardRef<
       }
 
       const poinerUp = (event: PointerEvent) => {
-        const hasMove = !(startX === event.clientX && startY === event.clientY)
+        const isClick = startX === event.clientX && startY === event.clientY
+        const clickDuration = Date.now() - clickStartTime
         const MIN_ADD_SPEED = 10
         const MAX_ADD_SPEED = 100
         const MAX_SPEED = 100
+        const prevSpeed = speedRef.current
 
-        if (!hasMove) {
-          const clickDuration = Date.now() - clickStartTime
+        if (isClick) {
           const speed = Math.max(MAX_ADD_SPEED - clickDuration, MIN_ADD_SPEED)
           speedRef.current += speed
-        } else {
+        } else if (clickDuration < 200) {
           const endRotate = rotateRef.current - startRotate
           const sign = endRotate > 0 ? 1 : -1
           const speed =
@@ -91,8 +92,10 @@ const Revolver = React.forwardRef<
           (speedRef.current > 0 ? 1 : -1)
         speedRef.current = speedBoundary
 
-        // TODO: ADD CUSTOM EVENT TO UPDATE WITHOUT UPDATE STATE
-        setSpeed((p) => !p)
+        if (prevSpeed !== speedRef.current) {
+          // TODO: ADD CUSTOM EVENT TO UPDATE WITHOUT UPDATE STATE
+          setSpeed((p) => !p)
+        }
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
         bulletDom.style.transitionDuration = ``
