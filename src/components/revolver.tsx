@@ -27,12 +27,11 @@ const Revolver = React.forwardRef<
       return
     }
 
-    let hasMove = false
     let clickStartTime = 0
 
     const pointerDown = (event: PointerEvent) => {
-      hasMove = false
       clickStartTime = Date.now()
+
       const startX = event.clientX
       const startY = event.clientY
 
@@ -45,7 +44,6 @@ const Revolver = React.forwardRef<
       let prevY = startY
 
       const pointerMove = (event: PointerEvent) => {
-        hasMove = true
         const currentX = event.clientX
         const currentY = event.clientY
 
@@ -65,7 +63,9 @@ const Revolver = React.forwardRef<
         bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
       }
 
-      const poinerUp = (_: PointerEvent) => {
+      const poinerUp = (event: PointerEvent) => {
+        const hasMove = !(startX === event.clientX && startY === event.clientY)
+
         if (!hasMove) {
           const ONE_CHAMBER = 60
           const MAX_CHAMBERS = 4 * ONE_CHAMBER
@@ -83,9 +83,9 @@ const Revolver = React.forwardRef<
             60,
           )
           const speed = addSpeed * sign
-          console.log(speed)
           speedRef.current += speed
         }
+        // TODO: ADD CUSTOM EVENT TO UPDATE WITHOUT UPDATE STATE
         setSpeed((p) => !p)
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)

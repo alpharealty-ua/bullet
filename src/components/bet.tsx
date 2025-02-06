@@ -59,24 +59,27 @@ const Bet = ({
       return
     }
 
-    let hasMove = false
-
     const pointerDown = (event: PointerEvent) => {
-      hasMove = false
-      const startX = event.clientX
-      const shiftX = buttonDom.offsetLeft
-      const width = sliderWrapperDom.offsetWidth
-
       buttonDom.setPointerCapture(event.pointerId)
 
-      let percentX = (shiftX / width) * 100
+      const startX = event.clientX
+      const startY = event.clientY
+
+      // getBoundingClientRect more accurate than offsetleft
+      const sliderDomRect = sliderDom.getBoundingClientRect()
+      const buttonDomRect = buttonDom.getBoundingClientRect()
+      const shiftTranslateX = buttonDomRect.width / 2
+      const startLeft =
+        buttonDomRect.left - sliderDomRect.left + shiftTranslateX
+      const width = sliderWrapperDom.offsetWidth
+
+      let percentX = Math.round((startLeft / width) * 100)
 
       const pointerMove = (event: PointerEvent) => {
-        hasMove = true
         const currentX = event.clientX
         const deltaX = currentX - startX
 
-        const newX = Math.min(Math.max(0, deltaX + shiftX), width)
+        const newX = Math.min(Math.max(0, deltaX + startLeft), width)
         percentX = (newX / width) * 100
 
         const currentBet = ((maxBet * percentX) / 100) ^ 0
@@ -84,10 +87,12 @@ const Bet = ({
         valueDom.textContent = formatBet(currentBet)
       }
 
-      const pointerUp = (_: PointerEvent) => {
+      const pointerUp = (event: PointerEvent) => {
+        const hasMove = !(startX === event.clientX && startY === event.clientY)
+
         if (!hasMove) {
           const ADD_BET = 50
-          const currentBet = ((maxBet * percentX) / 100) ^ 0
+          const currentBet = (maxBet * percentX) / 100
 
           const newBet = Math.min(
             currentBet + (ADD_BET - (currentBet % ADD_BET)),
