@@ -169,7 +169,7 @@ const Bet = ({
             data-button
           ></button>
         </div>
-        <div className='absolute top-[-10px] right-0 left-0 flex justify-between text-[12px] text-[#ff0b0b] uppercase'>
+        <div className='absolute -top-3.5 right-0 left-0 flex justify-between text-[12px] text-[#ff0b0b] uppercase'>
           <div>0</div>
           <div>Max</div>
         </div>
