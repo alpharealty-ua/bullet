@@ -42,6 +42,7 @@ const Game = () => {
   const [disabled, setDisabled] = useState(false)
   const [imageSrc, setImageSrc] = useState(images.gameOver)
   const isJackpot = activeMultiplierIndex === 5
+  const hasResult = multipliers[activeMultiplierIndex] >= 10
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -154,10 +155,12 @@ const Game = () => {
         setDisabled(false)
       }, 3000)
     }
-    if (multipliers[activeMultiplierIndex] < 10) {
-      changeState('pull-next')
-      return
-    }
+    setTimeout(() => {
+      if (!hasResult) {
+        changeState('pull-next')
+        return
+      }
+    }, 1000)
   }
 
   const gameOver = () => {
@@ -326,7 +329,7 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
 
-      <Result jackpot={isJackpot} in={state === 'result'} />
+      <Result jackpot={isJackpot} in={state === 'result' && hasResult} />
 
       {state === 'bet' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
