@@ -110,7 +110,7 @@ const Game = () => {
         setTimeout(() => {
           changeState('next')
           setDisabled(false)
-        }, 1000)
+        }, 500)
       }
     }
 
