@@ -34,7 +34,7 @@ const Footer = () => {
       className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-2 py-0.5'
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
-      <div className='flex w-[120px] shrink-0 justify-center'>
+      <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
           disabled={!(state === 'bet' || state === 'pull-start') || total === 0}
           maxBet={Math.min(total, MAX_BET)}
@@ -43,7 +43,7 @@ const Footer = () => {
         />
       </div>
       <Bullets countBullet={countBullet} />
-      <div className='relative w-[120px] shrink-0'>
+      <div className='relative w-[130px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
         <button
           className='absolute right-1 bottom-1 h-[20px] w-[20px] cursor-pointer bg-contain bg-center'
