@@ -10,7 +10,7 @@ const App = () => {
   return (
     <AppProvider>
       <div
-        className='relative mx-auto flex h-full min-h-[600px] max-w-[405px] flex-col justify-between bg-cover bg-center lg:min-h-[733px]'
+        className='relative mx-auto flex h-full min-h-[600px] max-w-[405px] flex-col justify-between bg-cover bg-[right_center] lg:min-h-[733px]'
         style={{ backgroundImage: `url(${images.wrapper})` }}
       >
         <Audios />
