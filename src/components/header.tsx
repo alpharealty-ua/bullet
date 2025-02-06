@@ -6,11 +6,11 @@ export const Header = () => {
   const { balance, bet, state } = useAppContext()
 
   return (
-    <div className='flex items-center justify-between px-3 py-2'>
+    <header className='flex items-center justify-between px-3 py-2'>
       <Logo />
       <Balance
         value={balance - (state === 'bet' || state === 'pull-start' ? 0 : bet)}
       />
-    </div>
+    </header>
   )
 }
