@@ -91,13 +91,12 @@ const Bet = ({
         const hasMove = !(startX === event.clientX && startY === event.clientY)
 
         if (!hasMove) {
-          const ADD_BET = 50
+          const ADD_BET = 100
           const currentBet = (maxBet * percentX) / 100
+          const addedBet = currentBet + ADD_BET
+          const roundAddedBet = Math.floor(addedBet / ADD_BET) * ADD_BET
 
-          const newBet = Math.min(
-            currentBet + (ADD_BET - (currentBet % ADD_BET)),
-            MAX_BET,
-          )
+          const newBet = Math.min(roundAddedBet, MAX_BET)
           percentX = (newBet / MAX_BET) * 100
         }
 
