@@ -71,12 +71,18 @@ const appReducer = (state: GameState, action: Actions): GameState => {
         ...state,
         countBullet: payload,
       }
-    case 'change-state':
+    case 'change-state': {
+      const stateHistory = state.stateHistory
+      if (stateHistory[stateHistory.length - 1] === payload) {
+        return state
+      }
+
       return {
         ...state,
         stateHistory: [...state.stateHistory, payload],
         state: payload,
       }
+    }
     case 'undo-state': {
       const stateHistory = [...state.stateHistory]
       stateHistory.pop()
@@ -112,7 +118,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     countBullet: 5,
     total: INIT_TOTAL,
     bet: 0,
-    activeMultiplierIndex: -1,
+    activeMultiplierIndex: 5,
     settings: {
       music: true,
       soundEffects: true,
@@ -126,6 +132,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   const undoState = useCallback(() => {
+    console.log('call undo')
     dispatch({ type: 'undo-state' })
   }, [])
 
