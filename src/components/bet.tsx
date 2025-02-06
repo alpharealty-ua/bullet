@@ -45,6 +45,8 @@ const Bet = ({
       return
     }
 
+    sliderWrapperDom.ondragstart = () => false
+
     const sliderDom = sliderWrapperDom.querySelector(
       '[data-slider]',
     ) as HTMLDivElement
@@ -154,7 +156,7 @@ const Bet = ({
               disabled && 'cursor-not-allowed',
             )}
             style={{ backgroundImage: `url(${images.slider})` }}
-            onClick={handleSliderClick}
+            onDoubleClick={handleSliderClick}
             data-slider
           ></div>
           <button
