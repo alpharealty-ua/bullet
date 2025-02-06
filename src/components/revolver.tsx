@@ -67,26 +67,30 @@ const Revolver = React.forwardRef<
 
       const poinerUp = (event: PointerEvent) => {
         const hasMove = !(startX === event.clientX && startY === event.clientY)
+        const MIN_ADD_SPEED = 10
+        const MAX_ADD_SPEED = 100
+        const MAX_SPEED = 100
 
         if (!hasMove) {
-          const ONE_CHAMBER = 60
-          const MAX_CHAMBERS = 4 * ONE_CHAMBER
           const clickDuration = Date.now() - clickStartTime
-          const clickRotate = Math.max(
-            MAX_CHAMBERS - clickDuration,
-            ONE_CHAMBER,
-          )
-          speedRef.current = 0
-          rotateRef.current += clickRotate
+          const speed = Math.max(MAX_ADD_SPEED - clickDuration, MIN_ADD_SPEED)
+          speedRef.current += speed
         } else {
-          const sign = rotateRef.current - startRotate > 0 ? 1 : -1
-          const addSpeed = Math.max(
-            Math.min((rotateRef.current - startRotate) ^ 0, 360),
-            60,
-          )
-          const speed = addSpeed * sign
+          const endRotate = rotateRef.current - startRotate
+          const sign = endRotate > 0 ? 1 : -1
+          const speed =
+            sign *
+            Math.max(
+              Math.min(Math.abs(endRotate), MAX_ADD_SPEED),
+              MIN_ADD_SPEED,
+            )
           speedRef.current += speed
         }
+        const speedBoundary =
+          Math.min(Math.abs(speedRef.current), MAX_SPEED) *
+          (speedRef.current > 0 ? 1 : -1)
+        speedRef.current = speedBoundary
+
         // TODO: ADD CUSTOM EVENT TO UPDATE WITHOUT UPDATE STATE
         setSpeed((p) => !p)
 
