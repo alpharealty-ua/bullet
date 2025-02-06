@@ -86,23 +86,35 @@ const Game = () => {
     setDisabled(true)
 
     playAudio('spin')
-    const interval = randomIntFromInterval(100, 300)
-    const TIME_AUDIO = 2.8
+    const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
+    const DURATION = 1.7 * 1000
+    const interval = DURATION / AMOUNT_CHAMBER
+    setRotate((rotateRef.current += 60 * AMOUNT_CHAMBER))
 
-    let count = (TIME_AUDIO * (1000 / interval)) ^ 0
+    let count = DURATION / interval
 
     let index = 0
-    const id = setInterval(() => {
+    let prev = -Infinity
+    const animateFn = (timestamp: number) => {
+      if (timestamp - prev < interval) {
+        requestAnimationFrame(animateFn)
+        return
+      }
+      prev = timestamp
+
       const newIndex = index++ % multipliers.length
       setActiveMultiplierIndex(newIndex)
-      if (--count <= 0) {
-        clearInterval(id)
+      if (--count > 0) {
+        requestAnimationFrame(animateFn)
+      } else {
         setTimeout(() => {
           changeState('next')
           setDisabled(false)
         }, 1000)
       }
-    }, interval)
+    }
+
+    requestAnimationFrame(animateFn)
   }
 
   const next = () => {
@@ -375,7 +387,10 @@ const Game = () => {
         state === 'add-money'
       ) && (
         <Revolver
-          className={cn(state === 'next' && 'duration-1000')}
+          className={cn(
+            state === 'next' && 'duration-1000',
+            state === 'multiplier' && 'duration-1800',
+          )}
           disabled={disabled || !(state === 'bet' || state === 'pull-start')}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={<>{state === 'offer' && <Click />}</>}
