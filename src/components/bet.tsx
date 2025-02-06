@@ -84,7 +84,7 @@ const Bet = ({
 
         percentX = (boundaryRoundNewX / width) * 100
 
-        const ROUND_BET = 5
+        const ROUND_BET = 10
         const BET_IN_ONE_PERCENT = maxBet / 100
         const ROUND_PERCENT = ROUND_BET / BET_IN_ONE_PERCENT
 
@@ -178,7 +178,7 @@ const Bet = ({
 
     const percentX = (deltaX / width) * 100
 
-    const ROUND_BET = 100
+    const ROUND_BET = 50
     const BET_IN_ONE_PERCENT = maxBet / 100
     const ROUND_PERCENT = ROUND_BET / BET_IN_ONE_PERCENT
 
