@@ -3,12 +3,14 @@ import { Logo } from './logo'
 import { Balance } from './balance'
 
 export const Header = () => {
-  const { balance, bet } = useAppContext()
+  const { balance, bet, state } = useAppContext()
 
   return (
     <div className='flex items-center justify-between px-3 py-2'>
       <Logo />
-      <Balance value={balance - bet} />
+      <Balance
+        value={balance - (state === 'bet' || state === 'pull-start' ? 0 : bet)}
+      />
     </div>
   )
 }
