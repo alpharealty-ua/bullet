@@ -1,16 +1,17 @@
-import { forwardRef, useRef } from 'react'
+import { useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
 
-const Result = forwardRef<
-  HTMLDivElement,
-  {
-    title: string
-    price: string
-    open: boolean
-  }
->(({ title, price, open }, ref) => {
+const Result = ({
+  title,
+  price,
+  open,
+}: {
+  title: string
+  price: string
+  open: boolean
+}) => {
   const nodeRef = useRef(null)
 
   return (
@@ -48,6 +49,6 @@ const Result = forwardRef<
       }}
     </CSSTransition>
   )
-})
+}
 
 export { Result }
