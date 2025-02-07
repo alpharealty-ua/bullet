@@ -9,6 +9,7 @@ interface ContextAppValue {
   countBullet: number
   setCountBullet: React.Dispatch<number>
   balance: number
+  // TODO: CHANGE NAME -> addBalance/setBalance
   addTotal: React.Dispatch<number>
   setTotal: React.Dispatch<number>
   bet: number
