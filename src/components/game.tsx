@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, INIT_BALANCE, multipliers, State } from '@/lib/constants'
@@ -44,6 +45,7 @@ const Game = () => {
   const isJackpot = activeMultiplierIndex === 5
   const hasResult = multipliers[activeMultiplierIndex] >= 10
   const jackpot = bet * multipliers[activeMultiplierIndex]
+  const nodeRef = useRef(null)
 
   const spinRevolver = () => {
     const oneCircle = 360
@@ -410,11 +412,33 @@ const Game = () => {
         )}
       >
         <div>
-          {state === 'result' && !isJackpot && (
-            <div className='animate-in fade-in fill-mode-both relative -top-1 mt-auto delay-[1200ms] duration-1000'>
-              <DealButton disabled={disabled} onClick={handleDeal} />
-            </div>
-          )}
+          {
+            <CSSTransition
+              nodeRef={nodeRef}
+              in={state === 'result' && !isJackpot}
+              unmountOnExit
+              timeout={400}
+            >
+              {(state) => {
+                const open = state === 'entering' || state === 'entered'
+                const close = state === 'exiting' || state === 'exited'
+
+                return (
+                  <div
+                    ref={nodeRef}
+                    className={cn(
+                      'fill-mode-both relative -top-1 mt-auto',
+                      open &&
+                        'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
+                      close && 'animate-out fade-out zoom-out-50 duration-400',
+                    )}
+                  >
+                    <DealButton disabled={disabled} onClick={handleDeal} />
+                  </div>
+                )
+              }}
+            </CSSTransition>
+          }
         </div>
         <div>
           {!(
