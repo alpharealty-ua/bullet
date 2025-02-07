@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { WalletButtonAnimation } from './wallet-button-animation'
@@ -11,8 +11,16 @@ const Balance = ({
   hideWalletButton?: boolean
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
+  const prevValue = useRef(value)
 
   useEffect(() => {
+    const prevVal = prevValue.current
+    prevValue.current = value
+
+    if (prevVal === value) {
+      return
+    }
+
     const domText = textRef.current
 
     if (domText === null) {
@@ -21,14 +29,13 @@ const Balance = ({
 
     domText.classList.add('animate-in')
     domText.classList.add('fade-in-0')
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       domText.classList.remove('animate-in')
       domText.classList.remove('fade-in-0')
     }, 500)
 
     return () => {
-      domText.classList.remove('animate-in')
-      domText.classList.remove('fade-in-0')
+      clearTimeout(timeoutId)
     }
   }, [value])
 
