@@ -63,6 +63,7 @@ const Bet = ({
       buttonDom.setPointerCapture(event.pointerId)
 
       const startX = event.clientX
+      // @ts-ignore
       const startY = event.clientY
 
       // getBoundingClientRect more accurate than offsetleft
