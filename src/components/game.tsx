@@ -415,7 +415,7 @@ const Game = () => {
           {
             <CSSTransition
               nodeRef={nodeRef}
-              in={state === 'result' && !isJackpot}
+              in={state === 'result' && hasResult && !isJackpot}
               unmountOnExit
               timeout={400}
             >
