@@ -61,7 +61,7 @@ const Game = () => {
     setActiveMultiplierIndex(-1)
     setTimeout(() => {
       changeState('bet')
-    }, 1500)
+    }, 500)
   }
 
   const cover = () => {
