@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
-import { images, INIT_BALANCE, multipliers, State } from '@/lib/constants'
+import { images, multipliers, State } from '@/lib/constants'
 import { randomIntFromInterval, cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
@@ -43,22 +43,15 @@ const Game = () => {
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const [imageSrc, setImageSrc] = useState(images.gameOver)
-  const isJackpot = activeMultiplierIndex === 5
-  const hasResult = multipliers[activeMultiplierIndex] >= 10
+  const isFirstPull = state === 'pull' && hasMultiplier && countBullet === 5
   const jackpot = bet * multipliers[activeMultiplierIndex]
   const nodeRef = useRef(null)
-
-  const reset = () => {
-    changeState('reset')
-    setBet(0)
-    setTotal(INIT_BALANCE)
-    setCountBullet(5)
-  }
+  const [offer, setOffer] = useState(0)
+  const hasOffer = multipliers[activeMultiplierIndex] >= 10 && Boolean(offer)
 
   const initGame = () => {
     changeState('init-game')
-    setCountBullet(5)
-    setActiveMultiplierIndex(-1)
+    setOffer(0)
     setTimeout(() => {
       changeState('bet')
     }, 500)
@@ -75,7 +68,9 @@ const Game = () => {
   const betFn = () => {
     changeState('bet')
     setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
+    setOffer(0)
     setCountBullet(5)
+    setActiveMultiplierIndex(-1)
   }
 
   const multiplier = () => {
@@ -105,7 +100,7 @@ const Game = () => {
         requestAnimationFrame(animateFn)
       } else {
         setTimeout(() => {
-          changeState('next')
+          changeState('pull')
           setDisabled(false)
         }, 500)
       }
@@ -115,10 +110,6 @@ const Game = () => {
   }
 
   const next = () => {
-    if (isJackpot) {
-      result()
-      return
-    }
     setRotate((rotateRef.current += 60))
     playAudio('trigger')
 
@@ -127,7 +118,7 @@ const Game = () => {
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
 
-    if (random === 1 && !isJackpot) {
+    if (random === 1) {
       setTimeout(() => {
         gameOver()
       }, 1000)
@@ -135,31 +126,13 @@ const Game = () => {
     }
     setTimeout(() => {
       if (newCountBullet < 0) {
-        const win = multipliers[activeMultiplierIndex] * bet
+        const win = multipliers[activeMultiplierIndex] * bet + bet
         addTotal(win)
         changeState('bet')
         return
       }
-      result()
+      setOffer(100)
     }, 900)
-  }
-
-  const result = () => {
-    changeState('result')
-    if (isJackpot) {
-      setDisabled(true)
-      setTimeout(() => {
-        addTotal(jackpot)
-        changeState('bet')
-        setDisabled(false)
-      }, 3000)
-    }
-    setTimeout(() => {
-      if (!hasResult) {
-        changeState('pull')
-        return
-      }
-    }, 1000)
   }
 
   const gameOver = () => {
@@ -172,7 +145,6 @@ const Game = () => {
       changeState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
-        setActiveMultiplierIndex(-1)
       }, 900)
     })
   }
@@ -199,18 +171,19 @@ const Game = () => {
 
   const handlePull = () => {
     setDisabled(true)
+    setOffer(0)
     mouseClick()
+
     setTimeout(() => {
-      if (hasMultiplier) {
+      setDisabled(false)
+      if (!hasMultiplier) {
         multiplier()
-        setDisabled(false)
         addTotal(-bet)
 
         return
       }
 
-      changeState('next')
-      setDisabled(false)
+      next()
     }, 1000)
   }
 
@@ -222,7 +195,7 @@ const Game = () => {
     setDisabled(true)
     mouseClick()
     setTimeout(() => {
-      addTotal(100)
+      addTotal(offer + bet)
       changeState('bet')
       setDisabled(false)
     }, 500)
@@ -258,10 +231,7 @@ const Game = () => {
 
   useEffect(() => {
     // TODO: REFACTOR
-    if (state === 'reset') {
-      reset()
-      return
-    }
+
     if (state === 'cover') {
       cover()
       return
@@ -280,14 +250,6 @@ const Game = () => {
     }
     if (state === 'multiplier') {
       multiplier()
-      return
-    }
-    if (state === 'next') {
-      next()
-      return
-    }
-    if (state === 'result') {
-      result()
       return
     }
     if (state === 'game-over') {
@@ -328,10 +290,17 @@ const Game = () => {
       ) && <Header />}
 
       <Result
-        topText={isJackpot ? 'Jackpot' : 'the banker offers...'}
-        bottomText={isJackpot ? 'the banker offers...' : ''}
-        price={isJackpot ? `$${jackpot}` : '$100'}
-        open={state === 'result' && hasResult}
+        topText={'Jackpot'}
+        bottomText={'the banker offers...'}
+        price={`$${jackpot}`}
+        open={isFirstPull}
+      />
+
+      <Result
+        topText={'the banker offers...'}
+        bottomText={''}
+        price={'$100'}
+        open={hasOffer}
       />
 
       {state === 'bet' && balance === 0 && (
@@ -389,13 +358,10 @@ const Game = () => {
         state === 'add-money'
       ) && (
         <Revolver
-          className={cn(
-            state === 'next' && 'duration-1000',
-            state === 'multiplier' && 'duration-1800',
-          )}
+          className={cn(state === 'multiplier' && 'duration-1800')}
           disabled={disabled || !(state === 'bet' || hasMultiplier)}
           style={{ transform: `rotate(${rotate}deg)` }}
-          beforeSlot={<>{state === 'result' && !isJackpot && <Click />}</>}
+          beforeSlot={<>{Boolean(offer) && <Click />}</>}
         />
       )}
       <div
@@ -405,33 +371,31 @@ const Game = () => {
         )}
       >
         <div>
-          {
-            <CSSTransition
-              nodeRef={nodeRef}
-              in={state === 'result' && hasResult && !isJackpot}
-              unmountOnExit
-              timeout={400}
-            >
-              {(state) => {
-                const open = state === 'entering' || state === 'entered'
-                const close = state === 'exiting' || state === 'exited'
+          <CSSTransition
+            nodeRef={nodeRef}
+            in={hasOffer}
+            unmountOnExit
+            timeout={400}
+          >
+            {(state) => {
+              const open = state === 'entering' || state === 'entered'
+              const close = state === 'exiting' || state === 'exited'
 
-                return (
-                  <div
-                    ref={nodeRef}
-                    className={cn(
-                      'fill-mode-both relative -top-1 mt-auto',
-                      open &&
-                        'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
-                      close && 'animate-out fade-out zoom-out-50 duration-400',
-                    )}
-                  >
-                    <DealButton disabled={disabled} onClick={handleDeal} />
-                  </div>
-                )
-              }}
-            </CSSTransition>
-          }
+              return (
+                <div
+                  ref={nodeRef}
+                  className={cn(
+                    'fill-mode-both relative -top-1 mt-auto',
+                    open &&
+                      'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
+                    close && 'animate-out fade-out zoom-out-50 duration-400',
+                  )}
+                >
+                  <DealButton disabled={disabled} onClick={handleDeal} />
+                </div>
+              )
+            }}
+          </CSSTransition>
         </div>
         <div>
           {!(

@@ -1,7 +1,6 @@
 export const multipliers = [2, 5, 10, 25, 100, 1000]
 
 export const states = [
-  'reset',
   'cover',
   'rules',
   'settings',
@@ -10,8 +9,6 @@ export const states = [
   'bet',
   'pull',
   'multiplier',
-  'next',
-  'result',
   'game-over',
 ] as const
 
