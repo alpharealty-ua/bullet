@@ -4,6 +4,29 @@ import { AppContext } from '@/context/context'
 import { SettingsKeys, State, audios } from '@/lib/constants'
 import { appReducer, initState } from './app-reducer'
 
+const playAudio = async (key: keyof typeof audios): Promise<void> => {
+  const audios = document.getElementById('audios')
+
+  if (audios === null) {
+    return
+  }
+
+  const selector = `.audio-${key}`
+
+  const audio = audios.querySelector(selector) as HTMLAudioElement
+
+  if (audio === null) {
+    return
+  }
+
+  try {
+    await audio.play()
+    console.log('Play audio - ' + audio.src)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
     { countBullet, state, balance, bet, activeMultiplierIndex, settings },
@@ -18,31 +41,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'undo-state' })
   }, [])
 
-  const playAudio = async (key: keyof typeof audios): Promise<void> => {
+  const playAudioWrapper = async (key: keyof typeof audios): Promise<void> => {
     if (!settings.soundEffects) {
       return
     }
 
-    const audios = document.getElementById('audios')
-
-    if (audios === null) {
-      return
-    }
-
-    const selector = `.audio-${key}`
-
-    const audio = audios.querySelector(selector) as HTMLAudioElement
-
-    if (audio === null) {
-      return
-    }
-
-    try {
-      await audio.play()
-      console.log('Play audio - ' + audio.src)
-    } catch (error) {
-      console.log(error)
-    }
+    return playAudio(key)
   }
 
   return (
@@ -78,7 +82,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           },
           [],
         ),
-        playAudio,
+        playAudio: playAudioWrapper,
       }}
     >
       {children}
