@@ -168,7 +168,7 @@ const Revolver = React.forwardRef<
       <div className='absolute inset-0 overflow-hidden'>
         <div
           className={cn(
-            'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-[1500ms] ease-linear',
+            'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-1000 ease-linear',
             disabled && 'cursor-auto',
             className,
           )}
