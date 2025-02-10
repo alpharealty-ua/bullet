@@ -57,6 +57,7 @@ const Game = () => {
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
     setImageSrc('')
+    setDisabled(false)
   }
 
   const cover = () => {
@@ -105,10 +106,17 @@ const Game = () => {
   }
 
   const next = async () => {
+    if (!hasMultiplier) {
+      multiplier()
+      addTotal(-bet)
+
+      return
+    }
+
     setRotate((rotateRef.current += 60))
     await playAudio('trigger')
 
-    const random = randomIntFromInterval(1, 5)
+    const random = randomIntFromInterval(1, 4)
 
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
@@ -127,10 +135,12 @@ const Game = () => {
         return
       }
       setOffer(100)
+      setDisabled(false)
     }, 900)
   }
 
   const gameOver = () => {
+    setDisabled(true)
     const image = new Image()
     const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
     image.src = imageSrc
@@ -140,6 +150,7 @@ const Game = () => {
       changeState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
+        setDisabled(false)
       }, 900)
     })
   }
@@ -170,16 +181,8 @@ const Game = () => {
     mouseClick()
 
     setTimeout(() => {
-      setDisabled(false)
-      if (!hasMultiplier) {
-        multiplier()
-        addTotal(-bet)
-
-        return
-      }
-
       next()
-    }, 1000)
+    }, 500)
   }
 
   const mouseClick = async () => {
