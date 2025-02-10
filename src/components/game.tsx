@@ -74,6 +74,7 @@ const Game = () => {
 
   const betFn = () => {
     changeState('bet')
+    setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
     setCountBullet(5)
   }
 
@@ -168,7 +169,6 @@ const Game = () => {
     image.addEventListener('load', () => {
       setImageSrc(imageSrc)
       playAudio('gunshot')
-      setBet(0)
       changeState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
@@ -222,7 +222,6 @@ const Game = () => {
     mouseClick()
     setTimeout(() => {
       addTotal(100)
-      setBet(0)
       changeState('bet')
       setDisabled(false)
     }, 500)
