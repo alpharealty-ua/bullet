@@ -113,6 +113,7 @@ const Game = () => {
       return
     }
 
+    setOffer(0)
     setRotate((rotateRef.current += 60))
     await playAudio('trigger')
 
@@ -177,7 +178,6 @@ const Game = () => {
 
   const handlePull = () => {
     setDisabled(true)
-    setOffer(0)
     mouseClick()
 
     setTimeout(() => {
