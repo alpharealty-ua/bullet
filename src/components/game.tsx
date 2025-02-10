@@ -41,7 +41,7 @@ const Game = () => {
   const [rotate, setRotate] = useState(15)
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
-  const [imageSrc, setImageSrc] = useState(images.gameOver)
+  const [imageSrc, setImageSrc] = useState('')
   const isFirstPull =
     state === 'pull' && !disabled && hasMultiplier && countBullet === 5
   const jackpot = bet * multipliers[activeMultiplierIndex]
@@ -56,6 +56,7 @@ const Game = () => {
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
+    setImageSrc('')
   }
 
   const cover = () => {
@@ -134,8 +135,8 @@ const Game = () => {
     const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
     image.src = imageSrc
     image.addEventListener('load', () => {
-      setImageSrc(imageSrc)
       playAudio('gunshot').then(() => {
+        setImageSrc(imageSrc)
         changeState('game-over')
         setTimeout(() => {
           playAudio('drumbeat')
@@ -392,7 +393,7 @@ const Game = () => {
           )}
         </div>
       </div>
-      {state === 'game-over' && (
+      {state === 'game-over' && imageSrc && (
         <GameOver
           onClick={handleStartGame}
           onTimeout={handleGameOverTimeout}
