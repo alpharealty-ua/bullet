@@ -230,10 +230,6 @@ const Game = () => {
       cover()
       return
     }
-    if (state === 'init-game') {
-      initGame()
-      return
-    }
     if (state === 'game-over') {
       gameOver()
       return
