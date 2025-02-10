@@ -67,11 +67,11 @@ const Game = () => {
     changeState('rules')
   }
 
-  const multiplier = () => {
+  const multiplier = async () => {
     setDurationSpinRotate('duration-1800')
     setDisabled(true)
 
-    playAudio('spin')
+    await playAudio('spin')
     const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
     const DURATION = 1.7 * 1000
     const interval = DURATION / AMOUNT_CHAMBER
@@ -104,9 +104,9 @@ const Game = () => {
     requestAnimationFrame(animateFn)
   }
 
-  const next = () => {
+  const next = async () => {
     setRotate((rotateRef.current += 60))
-    playAudio('trigger')
+    await playAudio('trigger')
 
     const random = randomIntFromInterval(1, 5)
 
@@ -134,20 +134,19 @@ const Game = () => {
     const image = new Image()
     const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
     image.src = imageSrc
-    image.addEventListener('load', () => {
-      playAudio('gunshot').then(() => {
-        setImageSrc(imageSrc)
-        changeState('game-over')
-        setTimeout(() => {
-          playAudio('drumbeat')
-        }, 900)
-      })
+    image.addEventListener('load', async () => {
+      await playAudio('gunshot')
+      setImageSrc(imageSrc)
+      changeState('game-over')
+      setTimeout(() => {
+        playAudio('drumbeat')
+      }, 900)
     })
   }
 
-  const handeInitGame = () => {
+  const handeInitGame = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
 
     setTimeout(() => {
       initGame()
@@ -183,13 +182,13 @@ const Game = () => {
     }, 1000)
   }
 
-  const mouseClick = () => {
-    playAudio('mouseClick')
+  const mouseClick = async () => {
+    await playAudio('mouseClick')
   }
 
-  const handleDeal = () => {
+  const handleDeal = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
     setTimeout(() => {
       addTotal(offer + bet)
       initGame()
@@ -197,9 +196,9 @@ const Game = () => {
     }, 500)
   }
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
 
     setTimeout(() => {
       undoState()
@@ -207,9 +206,9 @@ const Game = () => {
     }, 200)
   }
 
-  const handleStartGame = () => {
+  const handleStartGame = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
 
     setTimeout(() => {
       initGame()
