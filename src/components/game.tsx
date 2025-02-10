@@ -45,6 +45,7 @@ const Game = () => {
   const [imageSrc, setImageSrc] = useState(images.gameOver)
   const isFirstPull = state === 'pull' && hasMultiplier && countBullet === 5
   const jackpot = bet * multipliers[activeMultiplierIndex]
+  const [durationSpinRotate, setDurationSpinRotate] = useState('')
   const nodeRef = useRef(null)
   const [offer, setOffer] = useState(0)
   const hasOffer = multipliers[activeMultiplierIndex] >= 10 && Boolean(offer)
@@ -74,7 +75,7 @@ const Game = () => {
   }
 
   const multiplier = () => {
-    changeState('multiplier')
+    setDurationSpinRotate('duration-1800')
     setDisabled(true)
 
     playAudio('spin')
@@ -100,6 +101,7 @@ const Game = () => {
         requestAnimationFrame(animateFn)
       } else {
         setTimeout(() => {
+          setDurationSpinRotate('')
           changeState('pull')
           setDisabled(false)
         }, 500)
@@ -248,10 +250,6 @@ const Game = () => {
       betFn()
       return
     }
-    if (state === 'multiplier') {
-      multiplier()
-      return
-    }
     if (state === 'game-over') {
       gameOver()
       return
@@ -358,7 +356,7 @@ const Game = () => {
         state === 'add-money'
       ) && (
         <Revolver
-          className={cn(state === 'multiplier' && 'duration-1800')}
+          className={cn(durationSpinRotate)}
           disabled={disabled || !(state === 'bet' || hasMultiplier)}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={<>{Boolean(offer) && <Click />}</>}

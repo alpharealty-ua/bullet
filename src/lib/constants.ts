@@ -8,7 +8,6 @@ export const states = [
   'init-game',
   'bet',
   'pull',
-  'multiplier',
   'game-over',
 ] as const
 
