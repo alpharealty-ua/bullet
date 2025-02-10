@@ -18,7 +18,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'undo-state' })
   }, [])
 
-  const playAudio = (key: keyof typeof audios) => {
+  const playAudio = async (key: keyof typeof audios): Promise<void> => {
     if (!settings.soundEffects) {
       return
     }
@@ -37,12 +37,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
-    audio
-      .play()
-      .then(() => {
-        console.log('Play audio - ' + audio.src)
-      })
-      .catch(console.log)
+    try {
+      await audio.play()
+      console.log('Play audio - ' + audio.src)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
