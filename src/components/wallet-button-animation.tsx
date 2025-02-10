@@ -11,7 +11,7 @@ export const WalletButtonAnimation = () => {
 
   return (
     <>
-      {state === 'bet' && !(balance > 0 || bet > 0) ? (
+      {state === 'pull' && !(balance > 0 || bet > 0) ? (
         <span
           className={cn(
             'cursor-pointer text-[40px]',

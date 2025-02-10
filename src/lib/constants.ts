@@ -6,7 +6,6 @@ export const states = [
   'settings',
   'add-money',
   'init-game',
-  'bet',
   'pull',
   'game-over',
 ] as const

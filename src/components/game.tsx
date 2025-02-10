@@ -29,7 +29,6 @@ const Game = () => {
     countBullet,
     setCountBullet,
     balance,
-    setTotal,
     addTotal,
     bet,
     setBet,
@@ -43,7 +42,8 @@ const Game = () => {
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const [imageSrc, setImageSrc] = useState(images.gameOver)
-  const isFirstPull = state === 'pull' && hasMultiplier && countBullet === 5
+  const isFirstPull =
+    state === 'pull' && !disabled && hasMultiplier && countBullet === 5
   const jackpot = bet * multipliers[activeMultiplierIndex]
   const [durationSpinRotate, setDurationSpinRotate] = useState('')
   const nodeRef = useRef(null)
@@ -51,11 +51,11 @@ const Game = () => {
   const hasOffer = multipliers[activeMultiplierIndex] >= 10 && Boolean(offer)
 
   const initGame = () => {
-    changeState('init-game')
+    changeState('pull')
+    setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
     setOffer(0)
-    setTimeout(() => {
-      changeState('bet')
-    }, 500)
+    setCountBullet(5)
+    setActiveMultiplierIndex(-1)
   }
 
   const cover = () => {
@@ -64,14 +64,6 @@ const Game = () => {
 
   const rules = () => {
     changeState('rules')
-  }
-
-  const betFn = () => {
-    changeState('bet')
-    setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
-    setOffer(0)
-    setCountBullet(5)
-    setActiveMultiplierIndex(-1)
   }
 
   const multiplier = () => {
@@ -115,7 +107,7 @@ const Game = () => {
     setRotate((rotateRef.current += 60))
     playAudio('trigger')
 
-    const random = randomIntFromInterval(1, 3)
+    const random = randomIntFromInterval(1, 5)
 
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
@@ -130,7 +122,7 @@ const Game = () => {
       if (newCountBullet < 0) {
         const win = multipliers[activeMultiplierIndex] * bet + bet
         addTotal(win)
-        changeState('bet')
+        initGame()
         return
       }
       setOffer(100)
@@ -198,7 +190,7 @@ const Game = () => {
     mouseClick()
     setTimeout(() => {
       addTotal(offer + bet)
-      changeState('bet')
+      initGame()
       setDisabled(false)
     }, 500)
   }
@@ -218,13 +210,13 @@ const Game = () => {
     mouseClick()
 
     setTimeout(() => {
-      betFn()
+      initGame()
       setDisabled(false)
     }, 200)
   }
 
   const handleGameOverTimeout = () => {
-    betFn()
+    initGame()
   }
 
   const handleAddMoney = () => {
@@ -233,21 +225,12 @@ const Game = () => {
 
   useEffect(() => {
     // TODO: REFACTOR
-
     if (state === 'cover') {
       cover()
       return
     }
-    if (state === 'rules') {
-      rules()
-      return
-    }
     if (state === 'init-game') {
       initGame()
-      return
-    }
-    if (state === 'bet') {
-      betFn()
       return
     }
     if (state === 'game-over') {
@@ -301,7 +284,7 @@ const Game = () => {
         open={hasOffer}
       />
 
-      {state === 'bet' && balance === 0 && (
+      {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
             className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
@@ -357,7 +340,7 @@ const Game = () => {
       ) && (
         <Revolver
           className={cn(durationSpinRotate)}
-          disabled={disabled || !(state === 'bet' || hasMultiplier)}
+          disabled={disabled || hasMultiplier}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={<>{Boolean(offer) && <Click />}</>}
         />

@@ -20,12 +20,9 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     if (disabled) {
       return
     }
-    if (s === state) {
-      setState('reset')
-    }
     setTimeout(() => {
       setState(s)
-    }, 0)
+    })
   }
 
   if (!localStorage.getItem('showDebug') === true) {
