@@ -4,11 +4,13 @@ import { CSSTransition } from 'react-transition-group'
 import { cn } from '@/lib/utils'
 
 const Result = ({
-  title,
+  topText,
+  bottomText,
   price,
   open,
 }: {
-  title: string
+  topText: string
+  bottomText: string
   price: string
   open: boolean
 }) => {
@@ -28,21 +30,34 @@ const Result = ({
             <div
               className={cn(
                 'fill-mode-both origin-top text-2xl leading-[1] font-bold',
-                open && 'animate-in fade-in zoom-in-50 delay-500 duration-500',
+                open &&
+                  'animate-in fade-in zoom-in-50 slide-in-from-top-6 delay-500 duration-500',
                 close &&
-                  'animate-out fade-out zoom-out-50 delay-200 duration-200',
+                  'animate-out fade-out zoom-out-50 slide-out-to-top-6 delay-200 duration-200',
               )}
             >
-              {title}
+              {topText}
             </div>
             <div
               className={cn(
-                'fill-mode-both max-w-[300px] text-6xl text-[#006100] drop-shadow-[2px_1px_0px_#000]',
-                open && 'animate-in fade-in delay-1000 duration-1000',
-                close && 'animate-out fade-out duration-200',
+                'fill-mode-both max-w-[300px] text-5xl text-[#006100] drop-shadow-[2px_1px_0px_#000]',
+                open &&
+                  'animate-in fade-in zoom-in-50 delay-1000 duration-1000',
+                close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
               {price}
+            </div>
+            <div
+              className={cn(
+                'fill-mode-both origin-top text-2xl leading-[1] font-bold',
+                open &&
+                  'animate-in fade-in zoom-in-50 slide-in-from-bottom-6 delay-500 duration-500',
+                close &&
+                  'animate-out fade-out zoom-out-50 slide-out-to-bottom-6 delay-200 duration-200',
+              )}
+            >
+              {bottomText}
             </div>
           </div>
         )

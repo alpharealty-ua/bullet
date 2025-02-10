@@ -327,7 +327,8 @@ const Game = () => {
       ) && <Header />}
 
       <Result
-        title={isJackpot ? 'Jackpot' : ' the banker offers...'}
+        topText={isJackpot ? 'Jackpot' : 'the banker offers...'}
+        bottomText={isJackpot ? 'the banker offers...' : ''}
         price={isJackpot ? `$${jackpot}` : '$100'}
         open={state === 'result' && hasResult}
       />
