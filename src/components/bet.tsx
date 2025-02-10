@@ -194,7 +194,10 @@ const Bet = ({
       <div className='bg-center text-lg font-bold text-[#006100] uppercase'>
         Bet
       </div>
-      <div ref={sliderWrapperRef} className='relative flex w-full flex-col'>
+      <div
+        ref={sliderWrapperRef}
+        className='relative -mt-1.5 flex w-full flex-col'
+      >
         <div className='relative z-[3]'>
           <div
             className={cn(
@@ -223,7 +226,7 @@ const Bet = ({
           <div>Max</div>
         </div>
         <div
-          className='w-full overflow-hidden text-3xl leading-[1] text-ellipsis'
+          className='w-full overflow-hidden text-2xl leading-[1] text-ellipsis'
           data-value
         >
           {value}
