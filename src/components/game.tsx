@@ -48,15 +48,6 @@ const Game = () => {
   const jackpot = bet * multipliers[activeMultiplierIndex]
   const nodeRef = useRef(null)
 
-  const spinRevolver = () => {
-    const oneCircle = 360
-    const spinAmount = oneCircle * randomIntFromInterval(1, 4)
-    playAudio('revolverspin')
-    requestAnimationFrame(() => {
-      setRotate((rotateRef.current += spinAmount))
-    })
-  }
-
   const reset = () => {
     changeState('reset')
     setBet(0)
@@ -67,7 +58,7 @@ const Game = () => {
   const initGame = () => {
     changeState('init-game')
     setCountBullet(5)
-    spinRevolver()
+    setActiveMultiplierIndex(-1)
     setTimeout(() => {
       changeState('bet')
     }, 1500)
