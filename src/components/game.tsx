@@ -135,11 +135,12 @@ const Game = () => {
     image.src = imageSrc
     image.addEventListener('load', () => {
       setImageSrc(imageSrc)
-      playAudio('gunshot')
-      changeState('game-over')
-      setTimeout(() => {
-        playAudio('drumbeat')
-      }, 900)
+      playAudio('gunshot').then(() => {
+        changeState('game-over')
+        setTimeout(() => {
+          playAudio('drumbeat')
+        }, 900)
+      })
     })
   }
 
