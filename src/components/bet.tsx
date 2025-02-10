@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { images, MAX_BET } from '@/lib/constants'
+import { images } from '@/lib/constants'
 import { cn, formatBet } from '@/lib/utils'
 
 const Bet = ({
@@ -28,7 +28,7 @@ const Bet = ({
   )
 
   useEffect(() => {
-    const currentBet = Math.min(bet, MAX_BET)
+    const currentBet = Math.min(bet, maxBet)
     const newXInPercent = (bet / maxBet) * 100
 
     changeValue(currentBet, newXInPercent, false)
@@ -148,8 +148,8 @@ const Bet = ({
     const addedBet = currentBet + INCREMENT_BET * sign
     const roundAddedBet = Math.floor(addedBet / INCREMENT_BET) * INCREMENT_BET
 
-    const newBet = Math.min(roundAddedBet, MAX_BET)
-    const percentX = (newBet / MAX_BET) * 100
+    const newBet = Math.min(roundAddedBet, maxBet)
+    const percentX = (newBet / maxBet) * 100
 
     changeValue(newBet, percentX)
   }
