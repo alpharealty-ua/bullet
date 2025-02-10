@@ -22,7 +22,7 @@ const Bet = ({
     (bet: number, percent: number, callOnBet = true) => {
       callOnBet && onBet(bet)
       setValue(formatBet(bet))
-      setPercent(percent)
+      setPercent(Math.min(percent, 100))
     },
     [onBet],
   )
