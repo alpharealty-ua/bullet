@@ -172,6 +172,7 @@ const Game = () => {
       changeState('game-over')
       setTimeout(() => {
         playAudio('drumbeat')
+        setActiveMultiplierIndex(-1)
       }, 900)
     })
   }
