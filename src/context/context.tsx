@@ -15,6 +15,7 @@ interface ContextAppValue {
   bet: number
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number
+  hasMultiplier: boolean
   setActiveMultiplierIndex: React.Dispatch<number>
   settings: Record<SettingsKeys, boolean>
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>

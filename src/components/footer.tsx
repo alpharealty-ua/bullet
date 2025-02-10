@@ -10,6 +10,7 @@ const Footer = () => {
   const {
     countBullet,
     activeMultiplierIndex,
+    hasMultiplier,
     balance,
     bet,
     setBet,
@@ -23,7 +24,7 @@ const Footer = () => {
 
   const handleSetBet = useCallback(
     (bet: number) => {
-      changeState('pull-start')
+      changeState('pull')
       setBet(bet)
     },
     [changeState, setBet],
@@ -36,9 +37,7 @@ const Footer = () => {
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
-          disabled={
-            !(state === 'bet' || state === 'pull-start') || balance === 0
-          }
+          disabled={!(state === 'bet' || hasMultiplier) || balance === 0}
           maxBet={Math.min(balance, MAX_BET)}
           bet={bet}
           onBet={handleSetBet}

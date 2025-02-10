@@ -34,6 +34,7 @@ const Game = () => {
     bet,
     setBet,
     activeMultiplierIndex,
+    hasMultiplier,
     setActiveMultiplierIndex,
     playAudio,
     settings,
@@ -163,7 +164,7 @@ const Game = () => {
     }
     setTimeout(() => {
       if (!hasResult) {
-        changeState('pull-next')
+        changeState('pull')
         return
       }
     }, 1000)
@@ -208,7 +209,7 @@ const Game = () => {
     setDisabled(true)
     mouseClick()
     setTimeout(() => {
-      if (state === 'pull-start') {
+      if (hasMultiplier) {
         multiplier()
         setDisabled(false)
         addTotal(-bet)
@@ -400,7 +401,7 @@ const Game = () => {
             state === 'next' && 'duration-1000',
             state === 'multiplier' && 'duration-1800',
           )}
-          disabled={disabled || !(state === 'bet' || state === 'pull-start')}
+          disabled={disabled || !(state === 'bet' || hasMultiplier)}
           style={{ transform: `rotate(${rotate}deg)` }}
           beforeSlot={<>{state === 'result' && !isJackpot && <Click />}</>}
         />
@@ -453,9 +454,7 @@ const Game = () => {
           ).includes(state) && (
             <PullButton
               disabled={
-                disabled ||
-                state === 'next' ||
-                (state === 'pull-start' && bet === 0)
+                disabled || state === 'next' || (state === 'pull' && bet === 0)
               }
               className='animate-in fade-in-0 mt-auto duration-200'
               onClick={handlePull}
