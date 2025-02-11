@@ -10,7 +10,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
   return (
     <>
       <div className={cn('flex flex-col items-center text-center')}>
-        <div className='text-lg font-bold text-[#006100] uppercase'>
+        <div className='text-xl font-bold text-[#006100] uppercase'>
           MULTIPLIER
         </div>
         <div className='relative text-center text-3xl leading-[1] uppercase'>

@@ -191,9 +191,7 @@ const Bet = ({
 
   return (
     <div className='flex w-full flex-col items-center text-center'>
-      <div className='bg-center text-lg font-bold text-[#006100] uppercase'>
-        Bet
-      </div>
+      <div className='text-xl font-bold text-[#006100] uppercase'>Bet</div>
       <div
         ref={sliderWrapperRef}
         className='relative -mt-1.5 flex w-full flex-col'
