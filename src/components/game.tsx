@@ -59,6 +59,12 @@ const Game = () => {
   const [offer, setOffer] = useState(1)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
+  // TODO: removed modal from state
+  const notStartGame =
+    state === 'cover' ||
+    state === 'rules' ||
+    state === 'settings' ||
+    state === 'add-money'
 
   const newGame = () => {
     const hasPrevBet = bet !== 0
@@ -192,7 +198,6 @@ const Game = () => {
           resolve()
           return
         }
-        // TODO: add state for click animation
         setOffer(100)
         setShowResult(true)
         resolve()
@@ -319,19 +324,9 @@ const Game = () => {
           <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
         </Modal>
       )}
-      {!(
-        state === 'cover' ||
-        state === 'rules' ||
-        state === 'settings' ||
-        state === 'add-money'
-      ) && <Header />}
+      {!notStartGame && <Header />}
 
-      {!(
-        state === 'cover' ||
-        state === 'rules' ||
-        state === 'settings' ||
-        state === 'add-money'
-      ) && (
+      {!notStartGame && (
         <Result
           topText={'Jackpot'}
           bottomText={offer ? 'the banker offers...' : ''}
@@ -389,12 +384,7 @@ const Game = () => {
           </button>
         </div>
       )}
-      {!(
-        state === 'cover' ||
-        state === 'rules' ||
-        state === 'settings' ||
-        state === 'add-money'
-      ) && (
+      {!notStartGame && (
         <Revolver
           ref={revolverRef}
           disabled={disabled || hasMultiplier}
@@ -460,7 +450,8 @@ const Game = () => {
                       key='helper'
                       className={cn(
                         'fill-mode-both absolute right-0 bottom-full aspect-[1/0.5] w-[75px] origin-top bg-contain bg-center bg-no-repeat duration-400',
-                        open && 'animate-in fade-in slide-in-from-top-4',
+                        open &&
+                          'animate-in fade-in slide-in-from-top-4 delay-400',
                         close && 'animate-out fade-out slide-out-to-top-4',
                       )}
                       style={{ backgroundImage: `url(${images.startgame})` }}
@@ -486,12 +477,7 @@ const Game = () => {
           hideBlood={settings.blood}
         />
       )}
-      {!(
-        state === 'cover' ||
-        state === 'rules' ||
-        state === 'settings' ||
-        state === 'add-money'
-      ) && <Footer />}
+      {!notStartGame && <Footer />}
     </>
   )
 }
