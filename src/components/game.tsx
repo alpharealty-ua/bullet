@@ -44,16 +44,16 @@ const Game = () => {
     settings,
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
+  const revolverRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const disabledRef = useRef(disabled)
   const [imageSrc, setImageSrc] = useState('')
-  const isFirstPull =
-    state === 'pull' && !disabled && hasMultiplier && countBullet === 5
+
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
-  const [durationSpinRotate, setDurationSpinRotate] = useState('')
   const nodeRef = useRef(null)
-  const [offer, setOffer] = useState(0)
+  const [showResult, setShowResult] = useState(false)
+  const [offer, setOffer] = useState(1)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
 
@@ -64,44 +64,57 @@ const Game = () => {
     changeState('pull')
     setBet(prevBet)
     setOffer(0)
+    setShowResult(false)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
     setImageSrc('')
   }
 
-  const multiplier = async (): Promise<void> => {
-    setDurationSpinRotate('duration-1800')
+  const getMultiplier = async (): Promise<void> => {
+    const chambeDom = revolverRef.current?.querySelector(
+      '[data-chambe]',
+    ) as HTMLDivElement
+
+    if (chambeDom === null) {
+      return
+    }
 
     await playAudio('spin')
     const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
-    const DURATION = 1.7 * 1000
+    const DURATION = 1500
     const interval = DURATION / AMOUNT_CHAMBER
-    setRotate((rotateRef.current += 60 * AMOUNT_CHAMBER))
 
-    let count = DURATION / interval
+    chambeDom.style.transitionDuration = `${interval}ms`
 
+    let count = AMOUNT_CHAMBER
     let index = 0
-    let prev = -Infinity
 
     return new Promise<void>((resolve) => {
-      const animateFn = (timestamp: number) => {
-        if (timestamp - prev < interval) {
-          requestAnimationFrame(animateFn)
-          return
-        }
-        prev = timestamp
+      // TODO: REFACTOR
+      const animateFn = () => {
+        const transitionEnd = (event: TransitionEvent) => {
+          if (event.propertyName !== 'rotate') {
+            return
+          }
 
-        const newIndex = index++ % multipliers.length
-        setActiveMultiplierIndex(newIndex)
-        if (--count > 0) {
-          requestAnimationFrame(animateFn)
+          const newIndex = index++ % multipliers.length
+          setActiveMultiplierIndex(newIndex)
+          animateFn()
+        }
+
+        if (count-- > 0) {
+          chambeDom?.addEventListener('transitionend', transitionEnd, {
+            once: true,
+          })
+          chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
         } else {
-          setDurationSpinRotate('')
+          chambeDom.style.transitionDuration = ``
+          setRotate(rotateRef.current)
           resolve()
         }
       }
 
-      requestAnimationFrame(animateFn)
+      animateFn()
     })
   }
 
@@ -124,7 +137,6 @@ const Game = () => {
     const result = await callback()
 
     setDisabled(false)
-
     disabledRef.current = false
     return result
   }
@@ -136,8 +148,10 @@ const Game = () => {
 
   const next = async () => {
     if (!hasMultiplier) {
-      await multiplier()
+      await getMultiplier()
       addTotal(-bet)
+      setOffer(0)
+      setShowResult(true)
 
       return
     }
@@ -149,6 +163,7 @@ const Game = () => {
     }
 
     setOffer(0)
+    setShowResult(false)
     setRotate((rotateRef.current += 60))
 
     const random = randomIntFromInterval(1, 4)
@@ -158,7 +173,7 @@ const Game = () => {
 
     return new Promise<void>((resolve) => {
       const result = async () => {
-        if (random === 1) {
+        if (random === -1) {
           await gameOver()
           resolve()
           return
@@ -173,6 +188,7 @@ const Game = () => {
         }
         // TODO: add state for click animation
         setOffer(100)
+        setShowResult(true)
         resolve()
       }
 
@@ -305,16 +321,10 @@ const Game = () => {
 
       <Result
         topText={'Jackpot'}
-        bottomText={'the banker offers...'}
+        bottomText={offer ? 'the banker offers...' : ''}
         price={`$${jackpot}`}
-        open={isFirstPull}
-      />
-
-      <Result
-        topText={'the banker offers...'}
-        bottomText={''}
-        price={'$100'}
-        open={hasOffer}
+        offer={offer ? `$${offer}` : ''}
+        open={showResult}
       />
 
       {state === 'pull' && !hasMultiplier && balance === 0 && (
@@ -372,9 +382,9 @@ const Game = () => {
         state === 'add-money'
       ) && (
         <Revolver
-          className={cn(durationSpinRotate)}
+          ref={revolverRef}
           disabled={disabled || hasMultiplier}
-          style={{ transform: `rotate(${rotate}deg)` }}
+          style={{ rotate: `${rotate}deg` }}
           beforeSlot={<>{Boolean(offer) && <Click />}</>}
         />
       )}

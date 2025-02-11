@@ -173,6 +173,7 @@ const Revolver = React.forwardRef<
             className,
           )}
           style={{ ...style }}
+          data-chambe
           {...props}
         >
           <div
