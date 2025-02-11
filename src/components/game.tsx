@@ -178,14 +178,14 @@ const Game = () => {
     setShowResult(false)
     setRotate((rotateRef.current += 60))
 
-    const random = randomIntFromInterval(1, 4)
+    const random = randomIntFromInterval(1, 6)
 
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
 
     return new Promise<void>((resolve) => {
       const result = async () => {
-        if (random === -1) {
+        if (random === 2) {
           await gameOver()
           resolve()
           return
