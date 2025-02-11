@@ -326,13 +326,20 @@ const Game = () => {
         state === 'add-money'
       ) && <Header />}
 
-      <Result
-        topText={'Jackpot'}
-        bottomText={offer ? 'the banker offers...' : ''}
-        price={`$${jackpot}`}
-        offer={offer ? `$${offer}` : ''}
-        open={showResult}
-      />
+      {!(
+        state === 'cover' ||
+        state === 'rules' ||
+        state === 'settings' ||
+        state === 'add-money'
+      ) && (
+        <Result
+          topText={'Jackpot'}
+          bottomText={offer ? 'the banker offers...' : ''}
+          price={`$${jackpot}`}
+          offer={offer ? `$${offer}` : ''}
+          open={showResult}
+        />
+      )}
 
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
