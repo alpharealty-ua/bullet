@@ -17,6 +17,8 @@ interface ContextAppValue {
   activeMultiplierIndex: number
   hasMultiplier: boolean
   setActiveMultiplierIndex: React.Dispatch<number>
+  setShowHelpers: React.Dispatch<boolean>
+  showHelpers: boolean
   settings: Record<SettingsKeys, boolean>
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement | null>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 import { images } from '@/lib/constants'
 import { cn, formatBet } from '@/lib/utils'
@@ -8,15 +9,18 @@ const Bet = ({
   maxBet,
   onBet,
   disabled,
+  showHelpers,
 }: {
   maxBet: number
   bet: number
   onBet: (bet: number) => void
   disabled: boolean
+  showHelpers: boolean
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(formatBet(bet))
   const [percent, setPercent] = useState(0)
+  const nodeRef2 = useRef(null)
 
   const changeValue = useCallback(
     (bet: number, percent: number, callOnBet = true) => {
@@ -190,7 +194,30 @@ const Bet = ({
   }
 
   return (
-    <div className='flex w-full flex-col items-center text-center'>
+    <div className='relative flex w-full flex-col items-center text-center'>
+      <CSSTransition
+        nodeRef={nodeRef2}
+        in={showHelpers && bet === 0}
+        unmountOnExit
+        timeout={400}
+      >
+        {(state) => {
+          const open = state === 'entering' || state === 'entered'
+          const close = state === 'exiting' || state === 'exited'
+          return (
+            <div
+              ref={nodeRef2}
+              key='helper'
+              className={cn(
+                'fill-mode-both absolute bottom-full left-4 aspect-[1/0.4] w-[75px] origin-top bg-contain bg-center bg-no-repeat duration-400',
+                open && 'animate-in fade-in slide-in-from-top-4',
+                close && 'animate-out fade-out slide-out-to-top-4',
+              )}
+              style={{ backgroundImage: `url(${images.startgame})` }}
+            ></div>
+          )
+        }}
+      </CSSTransition>
       <div className='text-xl font-bold text-[#006100] uppercase'>Bet</div>
       <div
         ref={sliderWrapperRef}

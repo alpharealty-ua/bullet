@@ -15,6 +15,7 @@ const Footer = () => {
     bet,
     setBet,
     changeState,
+    showHelpers,
   } = useAppContext()
 
   const handleSettings = () => {
@@ -31,7 +32,7 @@ const Footer = () => {
 
   return (
     <footer
-      className='relative flex h-[74px] overflow-hidden bg-cover bg-[center_top] px-2 py-0.5'
+      className='relative flex h-[74px] bg-cover bg-[center_top] px-2 py-0.5'
       style={{ backgroundImage: `url(${images.bottomLine})` }}
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
@@ -40,6 +41,7 @@ const Footer = () => {
           maxBet={Math.min(balance, MAX_BET)}
           bet={bet}
           onBet={handleSetBet}
+          showHelpers={showHelpers && bet === 0}
         />
       </div>
       <Bullets countBullet={countBullet} />

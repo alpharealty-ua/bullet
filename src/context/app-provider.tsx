@@ -35,7 +35,15 @@ const playAudio = async (
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
-    { countBullet, state, balance, bet, activeMultiplierIndex, settings },
+    {
+      countBullet,
+      state,
+      balance,
+      bet,
+      activeMultiplierIndex,
+      settings,
+      showHelpers,
+    },
     dispatch,
   ] = useReducer(appReducer, initState)
 
@@ -82,6 +90,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         hasMultiplier: activeMultiplierIndex !== -1,
         setActiveMultiplierIndex: useCallback((payload: number) => {
           dispatch({ type: 'set-multiplier-index', payload })
+        }, []),
+        showHelpers,
+        setShowHelpers: useCallback((payload: boolean) => {
+          dispatch({ type: 'set-show-helpers', payload })
         }, []),
         settings,
         changeSettings: useCallback(

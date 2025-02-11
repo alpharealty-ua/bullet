@@ -41,6 +41,8 @@ const Game = () => {
     hasMultiplier,
     setActiveMultiplierIndex,
     playAudio,
+    showHelpers,
+    setShowHelpers,
     settings,
   } = useAppContext()
   const [rotate, setRotate] = useState(15)
@@ -52,6 +54,7 @@ const Game = () => {
 
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
+  const nodeRef2 = useRef(null)
   const [showResult, setShowResult] = useState(false)
   const [offer, setOffer] = useState(1)
   const hasOffer =
@@ -394,7 +397,7 @@ const Game = () => {
           settings.invertButtons && 'flex-row-reverse',
         )}
       >
-        <div>
+        <div className='relative'>
           <CSSTransition
             nodeRef={nodeRef}
             in={hasOffer}
@@ -421,7 +424,7 @@ const Game = () => {
             }}
           </CSSTransition>
         </div>
-        <div>
+        <div className='relative'>
           {!(
             [
               'cover',
@@ -430,11 +433,36 @@ const Game = () => {
               'add-money',
             ] satisfies State[] as State[]
           ).includes(state) && (
-            <PullButton
-              disabled={disabled || bet === 0}
-              className='animate-in fade-in-0 mt-auto duration-200'
-              onClick={handlePull}
-            />
+            <>
+              <CSSTransition
+                nodeRef={nodeRef2}
+                in={showHelpers && bet > 0}
+                unmountOnExit
+                timeout={400}
+              >
+                {(state) => {
+                  const open = state === 'entering' || state === 'entered'
+                  const close = state === 'exiting' || state === 'exited'
+                  return (
+                    <div
+                      ref={nodeRef2}
+                      key='helper'
+                      className={cn(
+                        'fill-mode-both absolute right-0 bottom-full aspect-[1/0.5] w-[75px] origin-top bg-contain bg-center bg-no-repeat duration-400',
+                        open && 'animate-in fade-in slide-in-from-top-4',
+                        close && 'animate-out fade-out slide-out-to-top-4',
+                      )}
+                      style={{ backgroundImage: `url(${images.startgame})` }}
+                    ></div>
+                  )
+                }}
+              </CSSTransition>
+              <PullButton
+                disabled={disabled || bet === 0}
+                className='animate-in fade-in-0 mt-auto duration-200'
+                onClick={handlePull}
+              />
+            </>
           )}
         </div>
       </div>

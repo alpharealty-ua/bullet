@@ -29,6 +29,11 @@ interface SetMultiplierIndexAction {
   type: 'set-multiplier-index'
   payload: number
 }
+
+interface ChangeShowHelpersAction {
+  type: 'set-show-helpers'
+  payload: boolean
+}
 interface ChangeSettingsAction {
   type: 'change-settings'
   payload: Partial<Record<SettingsKeys, boolean>>
@@ -40,6 +45,7 @@ interface GameState {
   balance: number
   bet: number
   activeMultiplierIndex: number
+  showHelpers: boolean
   settings: Record<SettingsKeys, boolean>
 }
 type Actions =
@@ -50,6 +56,7 @@ type Actions =
   | AddTotalAction
   | SetBetAction
   | SetMultiplierIndexAction
+  | ChangeShowHelpersAction
   | ChangeSettingsAction
 
 export const initState: GameState = {
@@ -59,6 +66,7 @@ export const initState: GameState = {
   balance: INIT_BALANCE,
   bet: 0,
   activeMultiplierIndex: -1,
+  showHelpers: true,
   settings: {
     music: true,
     soundEffects: true,
@@ -106,6 +114,11 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
       return { ...state, bet: payload }
     case 'set-multiplier-index':
       return { ...state, activeMultiplierIndex: payload }
+    case 'set-show-helpers':
+      if (state.showHelpers === payload) {
+        return state
+      }
+      return { ...state, showHelpers: payload }
     case 'change-settings':
       return { ...state, settings: { ...state.settings, ...payload } }
     default:
