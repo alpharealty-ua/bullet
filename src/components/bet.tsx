@@ -213,7 +213,7 @@ const Bet = ({
                 open && 'animate-in fade-in slide-in-from-top-4',
                 close && 'animate-out fade-out slide-out-to-top-4',
               )}
-              style={{ backgroundImage: `url(${images.startgame})` }}
+              style={{ backgroundImage: `url(${images.wagerhere})` }}
             ></div>
           )
         }}
