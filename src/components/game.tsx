@@ -24,8 +24,6 @@ import { Modal } from './modal'
 import { Settings } from './settings'
 import { AddMoney } from './add-money'
 
-let gifCacheIndex = Math.random()
-
 const Game = () => {
   const {
     state,
@@ -50,7 +48,6 @@ const Game = () => {
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
   const disabledRef = useRef(disabled)
-  const [imageSrc, setImageSrc] = useState('')
 
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
@@ -76,7 +73,6 @@ const Game = () => {
     setShowResult(false)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
-    setImageSrc('')
   }
 
   const getMultiplier = async (): Promise<void> => {
@@ -207,26 +203,22 @@ const Game = () => {
     })
   }
 
-  const gameOver = async () => {
+  useEffect(() => {
     const image = new Image()
-    const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
+    const imageSrc = `${images.gameOver}`
     image.src = imageSrc
+  }, [])
 
-    const gameOverOnLoadImage = async () => {
-      await playAudio('gunshot')
-      const DURATION_GUNSHOT_AUDIO = 1000
-      const DELAY = -100
-      const DURATION = DURATION_GUNSHOT_AUDIO + DELAY
+  const gameOver = async () => {
+    await playAudio('gunshot')
+    const DURATION_GUNSHOT_AUDIO = 1000
+    const DELAY = -100
+    const DURATION = DURATION_GUNSHOT_AUDIO + DELAY
 
-      setTimeout(() => {
-        playAudio('drumbeat')
-      }, DURATION)
-
-      setImageSrc(imageSrc)
-      changeState('game-over')
-    }
-
-    image.addEventListener('load', gameOverOnLoadImage, { once: true })
+    setTimeout(() => {
+      playAudio('drumbeat')
+    }, DURATION)
+    changeState('game-over')
   }
 
   const handeInitGame = async () => {
@@ -468,12 +460,12 @@ const Game = () => {
           )}
         </div>
       </div>
-      {state === 'game-over' && imageSrc && (
+      {state === 'game-over' && (
         <GameOver
           onClick={handleStartGame}
           onTimeout={handleGameOverTimeout}
           timeout={2000}
-          image={imageSrc}
+          image={images.gameOver}
           hideBlood={settings.blood}
         />
       )}
