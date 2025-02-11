@@ -1,4 +1,15 @@
-export const multipliers = [2, 3, 5, 10, 25, 100, 1000]
+export const multipliers: { value: number; color: `#${string}` }[] = [
+  { value: 2, color: '#2d95ff' },
+  { value: 3, color: '#ff8787' },
+  { value: 5, color: '#ff06a4' },
+  { value: 10, color: '#b588ff' },
+  { value: 25, color: '#ff9e10' },
+  { value: 100, color: '#ff0000' },
+  { value: 1000, color: '#ffbf00' },
+]
+
+export const getMultiplierValueByIndex = (index: number) =>
+  multipliers[index]?.value ?? 0
 
 export const states = [
   'cover',

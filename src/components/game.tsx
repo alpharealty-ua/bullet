@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
-import { images, multipliers, State } from '@/lib/constants'
+import {
+  getMultiplierValueByIndex,
+  images,
+  multipliers,
+  State,
+} from '@/lib/constants'
 import { randomIntFromInterval, cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { PullButton } from './pull-button'
@@ -45,11 +50,12 @@ const Game = () => {
   const [imageSrc, setImageSrc] = useState('')
   const isFirstPull =
     state === 'pull' && !disabled && hasMultiplier && countBullet === 5
-  const jackpot = bet * multipliers[activeMultiplierIndex]
+  const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const [durationSpinRotate, setDurationSpinRotate] = useState('')
   const nodeRef = useRef(null)
   const [offer, setOffer] = useState(0)
-  const hasOffer = multipliers[activeMultiplierIndex] >= 10 && Boolean(offer)
+  const hasOffer =
+    getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
 
   const newGame = () => {
     changeState('pull')
@@ -155,7 +161,8 @@ const Game = () => {
           return
         }
         if (newCountBullet < 0) {
-          const win = multipliers[activeMultiplierIndex] * bet + bet
+          const win =
+            getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
           addTotal(win)
           newGame()
           resolve()

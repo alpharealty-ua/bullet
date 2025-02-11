@@ -73,9 +73,9 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
             onChange={(e) => setActiveMultiplierIndex(Number(e.target.value))}
           >
             <option value='-1'>-1</option>
-            {multipliers.map((el, i) => (
+            {multipliers.map(({ value }, i) => (
               <option key={i} value={i}>
-                {el}
+                {value}
               </option>
             ))}
           </select>
