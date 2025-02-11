@@ -145,7 +145,10 @@ const Game = () => {
   }
 
   const deal = () => {
-    addTotal(offer + bet)
+    if (offer > 0) {
+      addTotal(offer + bet)
+      setOffer(0)
+    }
     newGame()
   }
 
