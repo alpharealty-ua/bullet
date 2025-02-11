@@ -1,4 +1,4 @@
-export const multipliers = [2, 5, 10, 25, 100, 1000]
+export const multipliers = [2, 3, 5, 10, 25, 100, 1000]
 
 export const states = [
   'cover',
