@@ -58,8 +58,11 @@ const Game = () => {
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
 
   const newGame = () => {
+    const hasPrevBet = bet !== 0
+    const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
+
     changeState('pull')
-    setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
+    setBet(prevBet)
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
