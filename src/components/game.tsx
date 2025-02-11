@@ -239,6 +239,7 @@ const Game = () => {
   }
 
   const handlePull = async () => {
+    setShowHelpers(false)
     await callWithAnimation(next)
   }
 
