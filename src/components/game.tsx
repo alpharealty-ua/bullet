@@ -261,7 +261,7 @@ const Game = () => {
 
   const handleCloseModal = async () => {
     setDisabled(true)
-    await mouseClick()
+    mouseClick()
 
     setTimeout(() => {
       undoState()
@@ -271,7 +271,7 @@ const Game = () => {
 
   const handleStartGame = async () => {
     setDisabled(true)
-    await mouseClick()
+    mouseClick()
 
     setTimeout(() => {
       newGame()
