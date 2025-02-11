@@ -33,9 +33,8 @@ const Result = ({
               className={cn(
                 'fill-mode-both origin-top text-xl leading-[1] font-bold',
                 open &&
-                  'animate-in fade-in zoom-in-50 slide-in-from-top-6 delay-500 duration-500',
-                close &&
-                  'animate-out fade-out zoom-out-50 slide-out-to-top-6 delay-200 duration-200',
+                  'animate-in fade-in slide-in-from-top-6 delay-500 duration-500',
+                close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
               {topText}
@@ -44,7 +43,7 @@ const Result = ({
               className={cn(
                 'fill-mode-both max-w-[300px] origin-top text-5xl text-[#006100] drop-shadow-[2px_1px_0px_#000]',
                 open &&
-                  'animate-in fade-in zoom-in-50 slide-in-from-top-6 delay-1000 duration-1000',
+                  'animate-in fade-in slide-in-from-top-6 delay-750 duration-500',
                 close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
@@ -54,9 +53,8 @@ const Result = ({
               className={cn(
                 'fill-mode-both origin-top text-xl leading-[1] font-bold',
                 open &&
-                  'animate-in fade-in zoom-in-50 slide-in-from-top-6 delay-500 duration-500',
-                close &&
-                  'animate-out fade-out zoom-out-50 slide-out-to-top-6 delay-200 duration-200',
+                  'animate-in fade-in slide-in-from-top-6 delay-1250 duration-500',
+                close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
               {bottomText}
@@ -65,7 +63,7 @@ const Result = ({
               className={cn(
                 'fill-mode-both max-w-[300px] origin-top text-5xl text-[#006100] drop-shadow-[2px_1px_0px_#000]',
                 open &&
-                  'animate-in fade-in zoom-in-50 slide-in-from-top-6 delay-1000 duration-1000',
+                  'animate-in fade-in slide-in-from-top-6 delay-1500 duration-500',
                 close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
