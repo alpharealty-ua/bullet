@@ -41,6 +41,7 @@ const Game = () => {
   const [rotate, setRotate] = useState(15)
   const rotateRef = useRef(rotate)
   const [disabled, setDisabled] = useState(false)
+  const disabledRef = useRef(disabled)
   const [imageSrc, setImageSrc] = useState('')
   const isFirstPull =
     state === 'pull' && !disabled && hasMultiplier && countBullet === 5
@@ -50,27 +51,17 @@ const Game = () => {
   const [offer, setOffer] = useState(0)
   const hasOffer = multipliers[activeMultiplierIndex] >= 10 && Boolean(offer)
 
-  const initGame = () => {
+  const newGame = () => {
     changeState('pull')
     setBet(bet === 0 ? 0 : bet > balance ? balance : bet)
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
     setImageSrc('')
-    setDisabled(false)
   }
 
-  const cover = () => {
-    changeState('cover')
-  }
-
-  const rules = () => {
-    changeState('rules')
-  }
-
-  const multiplier = async () => {
+  const multiplier = async (): Promise<void> => {
     setDurationSpinRotate('duration-1800')
-    setDisabled(true)
 
     await playAudio('spin')
     const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
@@ -82,121 +73,157 @@ const Game = () => {
 
     let index = 0
     let prev = -Infinity
-    const animateFn = (timestamp: number) => {
-      if (timestamp - prev < interval) {
-        requestAnimationFrame(animateFn)
-        return
-      }
-      prev = timestamp
 
-      const newIndex = index++ % multipliers.length
-      setActiveMultiplierIndex(newIndex)
-      if (--count > 0) {
-        requestAnimationFrame(animateFn)
-      } else {
-        setTimeout(() => {
+    return new Promise<void>((resolve) => {
+      const animateFn = (timestamp: number) => {
+        if (timestamp - prev < interval) {
+          requestAnimationFrame(animateFn)
+          return
+        }
+        prev = timestamp
+
+        const newIndex = index++ % multipliers.length
+        setActiveMultiplierIndex(newIndex)
+        if (--count > 0) {
+          requestAnimationFrame(animateFn)
+        } else {
           setDurationSpinRotate('')
-          changeState('pull')
-          setDisabled(false)
-        }, 500)
+          resolve()
+        }
       }
+
+      requestAnimationFrame(animateFn)
+    })
+  }
+
+  const callWithAnimation = async <T,>(callback: () => T | Promise<T>) => {
+    const disabled = disabledRef.current
+    disabledRef.current = true
+
+    if (disabled) {
+      return
     }
 
-    requestAnimationFrame(animateFn)
+    const BTN_TRANSITION_DURATION = 200
+    setTimeout(() => {
+      if (disabledRef.current) {
+        setDisabled(true)
+      }
+    }, BTN_TRANSITION_DURATION)
+    await mouseClick()
+
+    const result = await callback()
+
+    setDisabled(false)
+
+    disabledRef.current = false
+    return result
+  }
+
+  const deal = () => {
+    addTotal(offer + bet)
+    newGame()
   }
 
   const next = async () => {
     if (!hasMultiplier) {
-      multiplier()
+      await multiplier()
       addTotal(-bet)
 
       return
     }
 
+    const audio = await playAudio('trigger')
+
+    if (audio === null) {
+      return
+    }
+
     setOffer(0)
     setRotate((rotateRef.current += 60))
-    await playAudio('trigger')
 
     const random = randomIntFromInterval(1, 4)
 
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
 
-    if (random === 1) {
-      setTimeout(() => {
-        gameOver()
-      }, 1000)
-      return
-    }
-    setTimeout(() => {
-      if (newCountBullet < 0) {
-        const win = multipliers[activeMultiplierIndex] * bet + bet
-        addTotal(win)
-        initGame()
-        return
+    return new Promise<void>((resolve) => {
+      const result = async () => {
+        if (random === 1) {
+          await gameOver()
+          resolve()
+          return
+        }
+        if (newCountBullet < 0) {
+          const win = multipliers[activeMultiplierIndex] * bet + bet
+          addTotal(win)
+          newGame()
+          resolve()
+          return
+        }
+        // TODO: add state for click animation
+        setOffer(100)
+        resolve()
       }
-      setOffer(100)
-      setDisabled(false)
-    }, 900)
-  }
 
-  const gameOver = () => {
-    setDisabled(true)
-    const image = new Image()
-    const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
-    image.src = imageSrc
-    image.addEventListener('load', async () => {
-      await playAudio('gunshot')
-      setImageSrc(imageSrc)
-      changeState('game-over')
-      setTimeout(() => {
-        playAudio('drumbeat')
-        setDisabled(false)
-      }, 900)
+      audio.addEventListener('ended', result, { once: true })
     })
   }
 
+  const gameOver = async () => {
+    const image = new Image()
+    const imageSrc = `${images.gameOver}?v=${gifCacheIndex++}`
+    image.src = imageSrc
+
+    const gameOverOnLoadImage = async () => {
+      await playAudio('gunshot')
+      const DURATION_GUNSHOT_AUDIO = 1000
+      const DELAY = -100
+      const DURATION = DURATION_GUNSHOT_AUDIO + DELAY
+
+      setTimeout(() => {
+        playAudio('drumbeat')
+      }, DURATION)
+
+      setImageSrc(imageSrc)
+      changeState('game-over')
+    }
+
+    image.addEventListener('load', gameOverOnLoadImage, { once: true })
+  }
+
   const handeInitGame = async () => {
-    setDisabled(true)
     await mouseClick()
-
-    setTimeout(() => {
-      initGame()
-      setDisabled(false)
-    }, 500)
+    setDisabled(true)
+    newGame()
+    setDisabled(false)
   }
 
-  const handleGameRules = () => {
+  const handleGameRules = async () => {
+    await mouseClick()
     setDisabled(true)
-    mouseClick()
-
-    setTimeout(() => {
-      rules()
-      setDisabled(false)
-    }, 500)
+    changeState('rules')
+    setDisabled(false)
   }
 
-  const handlePull = () => {
-    setDisabled(true)
-    mouseClick()
-
-    setTimeout(() => {
-      next()
-    }, 500)
+  const handlePull = async () => {
+    await callWithAnimation(next)
   }
 
   const mouseClick = async () => {
-    await playAudio('mouseClick')
+    const audio = await playAudio('mouseClick')
+
+    if (audio === null) {
+      return
+    }
+
+    return new Promise((resolve) => {
+      audio.addEventListener('ended', resolve, { once: true })
+    })
   }
 
   const handleDeal = async () => {
-    setDisabled(true)
-    await mouseClick()
-    setTimeout(() => {
-      addTotal(offer + bet)
-      initGame()
-      setDisabled(false)
-    }, 500)
+    await callWithAnimation(deal)
   }
 
   const handleCloseModal = async () => {
@@ -214,13 +241,13 @@ const Game = () => {
     await mouseClick()
 
     setTimeout(() => {
-      initGame()
+      newGame()
       setDisabled(false)
     }, 200)
   }
 
   const handleGameOverTimeout = () => {
-    initGame()
+    newGame()
   }
 
   const handleAddMoney = () => {
@@ -229,10 +256,6 @@ const Game = () => {
 
   useEffect(() => {
     // TODO: REFACTOR
-    if (state === 'cover') {
-      cover()
-      return
-    }
     if (state === 'game-over') {
       gameOver()
       return

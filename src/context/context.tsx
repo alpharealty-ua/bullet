@@ -19,7 +19,7 @@ interface ContextAppValue {
   setActiveMultiplierIndex: React.Dispatch<number>
   settings: Record<SettingsKeys, boolean>
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
-  playAudio: (key: keyof typeof audios) => Promise<void>
+  playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement | null>
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)
