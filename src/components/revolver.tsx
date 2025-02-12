@@ -9,11 +9,11 @@ const Revolver = React.forwardRef<
   {
     spin: (interval: number) => Promise<void>
   },
-  React.HTMLAttributes<HTMLDivElement> & {
+  {
     beforeSlot: React.ReactNode
     disabled: boolean
   }
->(({ className, style, beforeSlot, disabled, ...props }, ref) => {
+>(({ beforeSlot, disabled }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
@@ -201,11 +201,9 @@ const Revolver = React.forwardRef<
           className={cn(
             'absolute top-[18%] right-0 left-0 aspect-square cursor-grab bg-contain bg-center bg-no-repeat transition-transform duration-1000 ease-linear',
             disabled && 'cursor-auto',
-            className,
           )}
           style={{ rotate: `${START_ROTATE}deg` }}
           data-chambe
-          {...props}
         >
           <div
             ref={bulletChambeRef}
