@@ -138,8 +138,8 @@ const Game = () => {
   const next = async () => {
     if (!hasMultiplier) {
       setShowJackpot(false)
-      await getMultiplier()
       addTotal(-bet)
+      await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
 
