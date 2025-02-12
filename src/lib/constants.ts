@@ -23,9 +23,9 @@ export const states = [
 export type State = (typeof states)[number]
 
 export const images = {
-  gamerules: './assets/images/gamerules.svg',
+  gamerules: './assets/images/gamer-ules.svg',
   close: './assets/images/close.svg',
-  money: './assets/images/compressed/money.png',
+  money: './assets/images/money-bag.svg',
   logo: './assets/images/compressed/logo.png',
   wrapper: './assets/images/wrapper.png',
   gameOver: './assets/images/compressed/game-over.gif',
@@ -34,12 +34,12 @@ export const images = {
   died: './assets/images/compressed/died.png',
   100: './assets/images/compressed/100.png',
   deal: './assets/images/deal.svg',
-  startgame: './assets/images/startgame.svg',
-  wagerhere: './assets/images/wagerhere.svg',
+  startgame: './assets/images/start-game.svg',
+  wagerhere: './assets/images/wager-here.svg',
   no: './assets/images/compressed/no-deal.png',
   bulletChambe: './assets/images/compressed/bullet-chambe.png',
   body: './assets/images/compressed/body.png',
-  pull: './assets/images/compressed/pull.png',
+  pull: './assets/images/pull.svg',
   bottomLine: './assets/images/compressed/bottom-line.png',
   settings: './assets/images/compressed/settings.png',
   bet: './assets/images/compressed/bet.png',
