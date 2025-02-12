@@ -54,9 +54,9 @@ const Game = () => {
   const nodeRef2 = useRef(null)
   // TODO: EXTRACT ALL STATE IN CONTEXT
   const [offer, setOffer] = useState(1)
-  const [showMultiplier, setShowMultiplier] = useState(false)
-  const hasOffer =
-    getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
+  const [showJackpot, setShowJackpot] = useState(false)
+  const [showOffer, setShowOffer] = useState(false)
+  const [showClick, setShowClick] = useState(false)
 
   // TODO: EXTRACT GAME LOGIC IN CONTEXT
   const newGame = () => {
@@ -68,7 +68,7 @@ const Game = () => {
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
-    setShowMultiplier(false)
+    setShowJackpot(false)
   }
 
   const getMultiplier = async (): Promise<void> => {
@@ -136,11 +136,11 @@ const Game = () => {
 
   const next = async () => {
     if (!hasMultiplier) {
-      setShowMultiplier(false)
+      setShowJackpot(false)
       await getMultiplier()
       addTotal(-bet)
       setOffer(0)
-      setShowMultiplier(true)
+      setShowJackpot(true)
 
       return
     }
@@ -151,42 +151,33 @@ const Game = () => {
       return
     }
 
-    const audio = await playAudio('trigger')
-
-    if (audio === null) {
-      return
-    }
-
     setOffer(0)
+    setShowJackpot(true)
+    setShowOffer(false)
 
     const random = randomIntFromInterval(1, 6)
-
     const newCountBullet = countBullet - 1
+
     setCountBullet(newCountBullet)
+    setShowClick(false)
 
-    revolverHandle.spin(1000)
+    await playAudio('triggerpull')
+    await revolverHandle.spin(200)
 
-    return new Promise<void>((resolve) => {
-      const result = async () => {
-        if (random === 2) {
-          await gameOver()
-          resolve()
-          return
-        }
-        if (newCountBullet === 0) {
-          const win =
-            getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
-          addTotal(win)
-          newGame()
-          resolve()
-          return
-        }
-        setOffer(100)
-        resolve()
-      }
+    setShowClick(true)
 
-      audio.addEventListener('ended', result, { once: true })
-    })
+    if (random === 1) {
+      await gameOver()
+      return
+    }
+    if (newCountBullet === 0) {
+      const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
+      addTotal(win)
+      newGame()
+      return
+    }
+    setOffer(100)
+    setShowOffer(true)
   }
 
   useEffect(() => {
@@ -223,6 +214,7 @@ const Game = () => {
 
   const handlePull = async () => {
     setShowHelpers(false)
+    setShowOffer(false)
     await callWithAnimation(next)
   }
 
@@ -299,15 +291,11 @@ const Game = () => {
         <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
       </Modal>
       <Header />
-      <Result
-        title={'Jackpot'}
-        price={`$${jackpot}`}
-        open={hasMultiplier && showMultiplier}
-      />
+      <Result title={'Jackpot'} price={`$${jackpot}`} open={showJackpot} />
       <Result
         title={'the banker offers...'}
-        price={offer ? `$${offer}` : ''}
-        open={hasMultiplier && showMultiplier && Boolean(offer)}
+        price={`$${offer}`}
+        open={showOffer}
       />
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
@@ -360,7 +348,7 @@ const Game = () => {
       <Revolver
         ref={revolverRefHandle}
         disabled={disabled || hasMultiplier}
-        beforeSlot={<>{Boolean(offer) && <Click />}</>}
+        beforeSlot={<>{showClick && <Click />}</>}
       />
       <div
         className={cn(
@@ -371,7 +359,7 @@ const Game = () => {
         <div className='relative'>
           <CSSTransition
             nodeRef={nodeRef}
-            in={hasOffer}
+            in={showOffer}
             unmountOnExit
             timeout={400}
           >
