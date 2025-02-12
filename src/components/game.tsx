@@ -180,7 +180,7 @@ const Game = () => {
           resolve()
           return
         }
-        if (newCountBullet < 0) {
+        if (newCountBullet === 0) {
           const win =
             getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
           addTotal(win)
