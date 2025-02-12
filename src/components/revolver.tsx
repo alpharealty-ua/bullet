@@ -204,7 +204,6 @@ const Revolver = React.forwardRef<
             disabled && 'cursor-auto',
           )}
           style={{ rotate: `${START_ROTATE}deg` }}
-          data-chambe
         >
           <div
             ref={bulletChambeRef}
