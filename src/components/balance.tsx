@@ -11,31 +11,48 @@ const Balance = ({
   hideWalletButton?: boolean
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
-  const prevValue = useRef(value)
+  const valueRef = useRef(value)
 
   useEffect(() => {
-    const prevVal = prevValue.current
-    prevValue.current = value
-
-    if (prevVal === value) {
-      return
-    }
-
     const domText = textRef.current
 
     if (domText === null) {
       return
     }
 
-    domText.classList.add('animate-in')
-    domText.classList.add('fade-in-0')
-    const timeoutId = setTimeout(() => {
-      domText.classList.remove('animate-in')
-      domText.classList.remove('fade-in-0')
-    }, 500)
+    const prevVal = valueRef.current
+    valueRef.current = value
+
+    if (prevVal === value) {
+      domText.textContent = `${value}`
+      return
+    }
+
+    let currentValue = prevVal
+
+    const TIME_FRAME = 16
+    const TOTAL_TIME = 400
+    const COUNT = TOTAL_TIME / TIME_FRAME
+
+    const delta = value - currentValue
+    const sign = delta > 0 ? 1 : -1
+
+    const intervalValue = (delta / COUNT) ^ 0 || sign
+
+    const add = () => {
+      domText.textContent = `${(currentValue += intervalValue)}`
+      if (currentValue * sign >= value * sign) {
+        domText.textContent = `${value}`
+        return
+      }
+      requestID = requestAnimationFrame(add)
+    }
+
+    let requestID = requestAnimationFrame(add)
 
     return () => {
-      clearTimeout(timeoutId)
+      domText.textContent = `${value}`
+      cancelAnimationFrame(requestID)
     }
   }, [value])
 
@@ -51,9 +68,7 @@ const Balance = ({
           className={cn(
             'fill-mode-both text-center text-3xl leading-[1] tracking-tight duration-500',
           )}
-        >
-          ${value}
-        </div>
+        ></div>
       </div>
     </div>
   )
