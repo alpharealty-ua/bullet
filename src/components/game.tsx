@@ -54,6 +54,7 @@ const Game = () => {
   const nodeRef2 = useRef(null)
   // TODO: EXTRACT ALL STATE IN CONTEXT
   const [offer, setOffer] = useState(1)
+  const [showMultiplier, setShowMultiplier] = useState(false)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
 
@@ -67,6 +68,7 @@ const Game = () => {
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
+    setShowMultiplier(false)
   }
 
   const getMultiplier = async (): Promise<void> => {
@@ -297,11 +299,15 @@ const Game = () => {
         <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
       </Modal>
       <Header />
-      <Result title={'Jackpot'} price={`$${jackpot}`} open={hasMultiplier} />
+      <Result
+        title={'Jackpot'}
+        price={`$${jackpot}`}
+        open={hasMultiplier && showMultiplier}
+      />
       <Result
         title={'the banker offers...'}
         price={offer ? `$${offer}` : ''}
-        open={Boolean(offer)}
+        open={hasMultiplier && showMultiplier && Boolean(offer)}
       />
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
