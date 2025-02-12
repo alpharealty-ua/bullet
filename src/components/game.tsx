@@ -249,10 +249,8 @@ const Game = () => {
     setDisabled(true)
     mouseClick()
 
-    setTimeout(() => {
-      newGame()
-      setDisabled(false)
-    }, 200)
+    newGame()
+    setDisabled(false)
   }
 
   const handleGameOverTimeout = () => {
