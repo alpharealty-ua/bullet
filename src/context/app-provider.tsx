@@ -76,11 +76,11 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           dispatch({ type: 'set-bullet', payload })
         }, []),
         balance,
-        setTotal: useCallback((payload: number) => {
-          dispatch({ type: 'set-total', payload })
+        setBalance: useCallback((payload: number) => {
+          dispatch({ type: 'set-balance', payload })
         }, []),
-        addTotal: useCallback((payload: number) => {
-          dispatch({ type: 'add-total', payload })
+        addBalance: useCallback((payload: number) => {
+          dispatch({ type: 'add-balance', payload })
         }, []),
         bet,
         setBet: useCallback((payload: number) => {

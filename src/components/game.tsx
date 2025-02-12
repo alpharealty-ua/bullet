@@ -32,7 +32,7 @@ const Game = () => {
     countBullet,
     setCountBullet,
     balance,
-    addTotal,
+    addBalance,
     bet,
     setBet,
     activeMultiplierIndex,
@@ -129,7 +129,7 @@ const Game = () => {
 
   const deal = () => {
     if (offer > 0) {
-      addTotal(offer + bet)
+      addBalance(offer + bet)
       setOffer(0)
     }
     newGame()
@@ -138,7 +138,7 @@ const Game = () => {
   const next = async () => {
     if (!hasMultiplier) {
       setShowJackpot(false)
-      addTotal(-bet)
+      addBalance(-bet)
       await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
@@ -173,7 +173,7 @@ const Game = () => {
     }
     if (newCountBullet === 0) {
       const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
-      addTotal(win)
+      addBalance(win)
       newGame()
       return
     }
@@ -289,7 +289,11 @@ const Game = () => {
         <Settings />
       </Modal>
       <Modal onClose={handleCloseModal} open={state === 'add-money'}>
-        <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
+        <AddMoney
+          balance={balance}
+          disabled={disabled}
+          onAddMoney={addBalance}
+        />
       </Modal>
       <Header />
       <Result title={'Jackpot'} price={`$${jackpot}`} open={showJackpot} />

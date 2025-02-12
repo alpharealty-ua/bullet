@@ -3,11 +3,11 @@ import { Balance } from './balance'
 import { addZerro, cn } from '@/lib/utils'
 
 const AddMoney = ({
-  total,
+  balance,
   disabled,
   onAddMoney,
 }: {
-  total: number
+  balance: number
   disabled: boolean
   onAddMoney: (money: number) => void
 }) => {
@@ -54,7 +54,7 @@ const AddMoney = ({
 
   return (
     <div className='flex items-center justify-between'>
-      <Balance value={total} />
+      <Balance value={balance} />
       <button
         className={cn(
           'relative inline-flex cursor-pointer transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',

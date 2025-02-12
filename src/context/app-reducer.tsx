@@ -13,12 +13,12 @@ interface UndoStateAction {
   // eslint-disable-next-line
   payload?: any
 }
-interface SetTotalAction {
-  type: 'set-total'
+interface SetBalanceAction {
+  type: 'set-balance'
   payload: number
 }
-interface AddTotalAction {
-  type: 'add-total'
+interface AddBalanceAction {
+  type: 'add-balance'
   payload: number
 }
 interface SetBetAction {
@@ -52,8 +52,8 @@ type Actions =
   | SetBulletAction
   | ChangeStateAction
   | UndoStateAction
-  | SetTotalAction
-  | AddTotalAction
+  | SetBalanceAction
+  | AddBalanceAction
   | SetBetAction
   | SetMultiplierIndexAction
   | ChangeShowHelpersAction
@@ -106,9 +106,9 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
         state: newState,
       }
     }
-    case 'set-total':
+    case 'set-balance':
       return { ...state, balance: payload }
-    case 'add-total':
+    case 'add-balance':
       return { ...state, balance: state.balance + payload }
     case 'set-bet':
       return { ...state, bet: payload }

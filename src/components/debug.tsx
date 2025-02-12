@@ -9,7 +9,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     countBullet,
     setCountBullet,
     balance,
-    setTotal,
+    setBalance,
     bet,
     setBet,
     activeMultiplierIndex,
@@ -52,7 +52,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
           <input
             type='text'
             value={balance}
-            onChange={(e) => setTotal(Number(e.target.value))}
+            onChange={(e) => setBalance(Number(e.target.value))}
             className='h-10 w-full bg-white px-2'
           />
         </label>
