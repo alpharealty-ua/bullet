@@ -4,16 +4,12 @@ import { CSSTransition } from 'react-transition-group'
 import { cn } from '@/lib/utils'
 
 const Result = ({
-  topText,
-  bottomText,
+  title,
   price,
-  offer,
   open,
 }: {
-  topText: string
-  bottomText: string
+  title: string
   price: string
-  offer: string
   open: boolean
 }) => {
   const nodeRef = useRef(null)
@@ -37,7 +33,7 @@ const Result = ({
                 close && 'animate-out fade-out zoom-out-50 duration-200',
               )}
             >
-              {topText}
+              {title}
             </div>
             <div
               className={cn(
@@ -48,26 +44,6 @@ const Result = ({
               )}
             >
               {price}
-            </div>
-            <div
-              className={cn(
-                'fill-mode-both origin-top text-xl leading-[1] font-bold',
-                open &&
-                  'animate-in fade-in slide-in-from-top-6 delay-1250 duration-500',
-                close && 'animate-out fade-out zoom-out-50 duration-200',
-              )}
-            >
-              {bottomText}
-            </div>
-            <div
-              className={cn(
-                'fill-mode-both max-w-[300px] origin-top text-5xl text-[#006100] drop-shadow-[2px_1px_0px_#000]',
-                open &&
-                  'animate-in fade-in slide-in-from-top-6 delay-1500 duration-500',
-                close && 'animate-out fade-out zoom-out-50 duration-200',
-              )}
-            >
-              {offer}
             </div>
           </div>
         )

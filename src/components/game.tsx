@@ -52,7 +52,6 @@ const Game = () => {
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
-  const [showResult, setShowResult] = useState(false)
   const [offer, setOffer] = useState(1)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
@@ -64,7 +63,6 @@ const Game = () => {
     changeState('pull')
     setBet(prevBet)
     setOffer(0)
-    setShowResult(false)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
   }
@@ -153,7 +151,6 @@ const Game = () => {
       await getMultiplier()
       addTotal(-bet)
       setOffer(0)
-      setShowResult(true)
 
       return
     }
@@ -165,7 +162,6 @@ const Game = () => {
     }
 
     setOffer(0)
-    setShowResult(false)
     setRotate((rotateRef.current += 60))
 
     const random = randomIntFromInterval(1, 6)
@@ -189,7 +185,6 @@ const Game = () => {
           return
         }
         setOffer(100)
-        setShowResult(true)
         resolve()
       }
 
@@ -306,15 +301,12 @@ const Game = () => {
         <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
       </Modal>
       <Header />
-
+      <Result title={'Jackpot'} price={`$${jackpot}`} open={hasMultiplier} />
       <Result
-        topText={'Jackpot'}
-        bottomText={offer ? 'the banker offers...' : ''}
-        price={`$${jackpot}`}
-        offer={offer ? `$${offer}` : ''}
-        open={showResult}
+        title={'the banker offers...'}
+        price={offer ? `$${offer}` : ''}
+        open={Boolean(offer)}
       />
-
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
