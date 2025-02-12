@@ -132,6 +132,7 @@ const Game = () => {
       addBalance(offer + bet)
       setOffer(0)
     }
+    // TODO: ADD PROMISE
     setTimeout(() => {
       newGame()
     }, 400)
