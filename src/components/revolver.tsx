@@ -15,7 +15,7 @@ const Revolver = React.forwardRef<
   }
 >(({ className, style, beforeSlot, disabled, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
-  const rotateRef = useRef(START_ROTATE)
+  const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
   const speedRef = useRef(0)
   const [speed, setSpeed] = useState(false)
@@ -203,7 +203,7 @@ const Revolver = React.forwardRef<
             disabled && 'cursor-auto',
             className,
           )}
-          style={{ ...style }}
+          style={{ rotate: `${START_ROTATE}deg` }}
           data-chambe
           {...props}
         >
