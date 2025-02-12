@@ -296,12 +296,8 @@ const Game = () => {
         />
       </Modal>
       <Header />
-      <Result title={'Jackpot'} price={`$${jackpot}`} open={showJackpot} />
-      <Result
-        title={'the banker offers...'}
-        price={`$${offer}`}
-        open={showOffer}
-      />
+      <Result title={'Jackpot'} price={jackpot} open={showJackpot} />
+      <Result title={'the banker offers...'} price={offer} open={showOffer} />
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
