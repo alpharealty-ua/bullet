@@ -56,12 +56,6 @@ const Game = () => {
   const [offer, setOffer] = useState(1)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
-  // TODO: removed modal from state
-  const notStartGame =
-    state === 'cover' ||
-    state === 'rules' ||
-    state === 'settings' ||
-    state === 'add-money'
 
   const newGame = () => {
     const hasPrevBet = bet !== 0
@@ -258,12 +252,10 @@ const Game = () => {
 
   const handleCloseModal = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
 
-    setTimeout(() => {
-      undoState()
-      setDisabled(false)
-    }, 200)
+    undoState()
+    setDisabled(false)
   }
 
   const handleStartGame = async () => {
@@ -296,37 +288,32 @@ const Game = () => {
   return (
     <>
       <Debug disabled={disabled} />
-      {state === 'cover' && (
-        <Modal className='items-center justify-center gap-6' hideHeader>
-          <Cover onPull={handeInitGame} onGameRules={handleGameRules} />
-        </Modal>
-      )}
-      {state === 'rules' && (
-        <Modal onClose={handleCloseModal}>
-          <Rules />
-        </Modal>
-      )}
-      {state === 'settings' && (
-        <Modal onClose={handleCloseModal}>
-          <Settings />
-        </Modal>
-      )}
-      {state === 'add-money' && (
-        <Modal onClose={handleCloseModal}>
-          <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
-        </Modal>
-      )}
-      {!notStartGame && <Header />}
+      <Modal
+        onClose={handleCloseModal}
+        className='items-center justify-center gap-6'
+        open={state === 'cover'}
+        hideHeader
+      >
+        <Cover onPull={handeInitGame} onGameRules={handleGameRules} />
+      </Modal>
+      <Modal onClose={handleCloseModal} open={state === 'rules'}>
+        <Rules />
+      </Modal>
+      <Modal onClose={handleCloseModal} open={state === 'settings'}>
+        <Settings />
+      </Modal>
+      <Modal onClose={handleCloseModal} open={state === 'add-money'}>
+        <AddMoney total={balance} disabled={disabled} onAddMoney={addTotal} />
+      </Modal>
+      <Header />
 
-      {!notStartGame && (
-        <Result
-          topText={'Jackpot'}
-          bottomText={offer ? 'the banker offers...' : ''}
-          price={`$${jackpot}`}
-          offer={offer ? `$${offer}` : ''}
-          open={showResult}
-        />
-      )}
+      <Result
+        topText={'Jackpot'}
+        bottomText={offer ? 'the banker offers...' : ''}
+        price={`$${jackpot}`}
+        offer={offer ? `$${offer}` : ''}
+        open={showResult}
+      />
 
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
@@ -376,14 +363,12 @@ const Game = () => {
           </button>
         </div>
       )}
-      {!notStartGame && (
-        <Revolver
-          ref={revolverRef}
-          disabled={disabled || hasMultiplier}
-          style={{ rotate: `${rotate}deg` }}
-          beforeSlot={<>{Boolean(offer) && <Click />}</>}
-        />
-      )}
+      <Revolver
+        ref={revolverRef}
+        disabled={disabled || hasMultiplier}
+        style={{ rotate: `${rotate}deg` }}
+        beforeSlot={<>{Boolean(offer) && <Click />}</>}
+      />
       <div
         className={cn(
           'mx-4 mt-auto mb-4 flex h-[100px] items-center justify-between',
@@ -469,7 +454,7 @@ const Game = () => {
           hideBlood={settings.blood}
         />
       )}
-      {!notStartGame && <Footer />}
+      <Footer />
     </>
   )
 }
