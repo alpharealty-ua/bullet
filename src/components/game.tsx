@@ -132,7 +132,9 @@ const Game = () => {
       addBalance(offer + bet)
       setOffer(0)
     }
-    newGame()
+    setTimeout(() => {
+      newGame()
+    }, 400)
   }
 
   const next = async () => {
