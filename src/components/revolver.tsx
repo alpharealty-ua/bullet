@@ -138,26 +138,27 @@ const Revolver = React.forwardRef<
     }
 
     const stopSpin = () => {
-      const roundedRatate = 60 * Math.round(speedRotateRef.current / 60)
-      dom.style.transform = `rotate(${roundedRatate}deg)`
-      clearInterval(id)
+      const roundedRotate = 60 * Math.round(speedRotateRef.current / 60)
+      dom.style.rotate = `${roundedRotate}deg`
+      dom.removeEventListener('transitionend', startSpin)
     }
 
-    const speedRotate = () => {
+    const startSpin = () => {
       const speed = speedRef.current
-      const sign = speed > 0 ? 1 : -1
+      const sign = speed >= 0 ? 1 : -1
 
-      if (10 > speed && speed > -10) {
+      if (speed * sign < 5 * sign) {
         stopSpin()
         return
       }
 
       speedRef.current -= 5 * sign
-
-      dom.style.transform = `rotate(${(speedRotateRef.current += speed)}deg)`
+      dom.style.rotate = `${(speedRotateRef.current += speed)}deg`
     }
-    const id = setInterval(speedRotate, 100)
-    speedRotate()
+
+    dom.addEventListener('transitionend', startSpin)
+    startSpin()
+
     return () => {
       stopSpin()
     }
@@ -211,7 +212,7 @@ const Revolver = React.forwardRef<
             style={{ rotate: `${rotateRef.current}deg` }}
           >
             <div
-              className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-200 ease-linear'
+              className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-100 ease-linear'
               style={{ backgroundImage: `url(${images.bulletChambe})` }}
             ></div>
           </div>
