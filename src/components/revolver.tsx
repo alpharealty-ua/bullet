@@ -66,7 +66,7 @@ const Revolver = React.forwardRef<
 
         rotateRef.current += deltaRotate
         bulletDom.style.transitionDuration = `0s`
-        bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
+        bulletDom.style.rotate = `${rotateRef.current}deg`
       }
 
       const poinerUp = (event: PointerEvent) => {
@@ -103,7 +103,7 @@ const Revolver = React.forwardRef<
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
         bulletDom.style.transitionDuration = ``
-        bulletDom.style.transform = `rotate(${rotateRef.current}deg)`
+        bulletDom.style.rotate = `${rotateRef.current}deg`
 
         bulletDom.removeEventListener('pointermove', pointerMove)
         bulletDom.removeEventListener('pointerup', poinerUp)
