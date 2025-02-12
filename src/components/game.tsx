@@ -43,6 +43,7 @@ const Game = () => {
     setShowHelpers,
     settings,
   } = useAppContext()
+  // TODO: MOVE IN REVOLVER COMPONENT
   const [rotate, setRotate] = useState(15)
   const revolverRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(rotate)
@@ -52,10 +53,12 @@ const Game = () => {
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
+  // TODO: EXTRACT ALL STATE IN CONTEXT
   const [offer, setOffer] = useState(1)
   const hasOffer =
     getMultiplierValueByIndex(activeMultiplierIndex) >= 10 && Boolean(offer)
 
+  // TODO: EXTRACT GAME LOGIC IN CONTEXT
   const newGame = () => {
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
@@ -283,6 +286,7 @@ const Game = () => {
   return (
     <>
       <Debug disabled={disabled} />
+      {/* TODO: EXTRACT MODALS */}
       <Modal
         onClose={handleCloseModal}
         className='items-center justify-center gap-6'
