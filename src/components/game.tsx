@@ -102,7 +102,7 @@ const Game = () => {
         }
 
         if (count-- > 0) {
-          chambeDom?.addEventListener('transitionend', transitionEnd, {
+          chambeDom.addEventListener('transitionend', transitionEnd, {
             once: true,
           })
           chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
