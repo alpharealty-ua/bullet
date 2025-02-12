@@ -1,17 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
+const START_ROTATE = 15
+
 const Revolver = React.forwardRef<
-  HTMLDivElement,
+  {
+    spin: (interval: number) => Promise<void>
+  },
   React.HTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
     disabled: boolean
   }
 >(({ className, style, beforeSlot, disabled, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
-  const rotateRef = useRef(0)
+  const rotateRef = useRef(START_ROTATE)
   const speedRotateRef = useRef(0)
   const speedRef = useRef(0)
   const [speed, setSpeed] = useState(false)
@@ -159,11 +163,38 @@ const Revolver = React.forwardRef<
     }
   }, [disabled, speed])
 
+  const spin = async (interval: number): Promise<void> => {
+    const bulletDom = bulletChambeRef.current
+
+    if (bulletDom === null) {
+      return
+    }
+
+    return new Promise<void>((resolve) => {
+      const transitionend = (event: TransitionEvent) => {
+        if (event.propertyName !== 'rotate') {
+          return
+        }
+
+        bulletDom.style.transitionDuration = ``
+        bulletDom.removeEventListener('transitionend', transitionend)
+        resolve()
+      }
+
+      bulletDom.style.rotate = (rotateRef.current += 60) + 'deg'
+      bulletDom.style.transitionDuration = `${interval}ms`
+      bulletDom.addEventListener('transitionend', transitionend)
+    })
+  }
+
+  useImperativeHandle(ref, () => {
+    return {
+      spin,
+    }
+  })
+
   return (
-    <div
-      className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] duration-100 lg:w-[251px]'
-      ref={ref}
-    >
+    <div className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] duration-100 lg:w-[251px]'>
       {beforeSlot}
       <div className='absolute inset-0 overflow-hidden'>
         <div
@@ -178,8 +209,8 @@ const Revolver = React.forwardRef<
         >
           <div
             ref={bulletChambeRef}
-            className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200'
-            style={{ transform: `rotate(${rotateRef.current}deg)` }}
+            className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200 ease-linear'
+            style={{ rotate: `${rotateRef.current}deg` }}
           >
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-200 ease-linear'

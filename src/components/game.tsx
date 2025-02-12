@@ -43,10 +43,9 @@ const Game = () => {
     setShowHelpers,
     settings,
   } = useAppContext()
-  // TODO: MOVE IN REVOLVER COMPONENT
-  const [rotate, setRotate] = useState(15)
-  const revolverRef = useRef<HTMLDivElement>(null)
-  const rotateRef = useRef(rotate)
+  const revolverRefHandle = useRef<{
+    spin: (interval: number) => Promise<void>
+  }>(null)
   const [disabled, setDisabled] = useState(false)
   const disabledRef = useRef(disabled)
 
@@ -71,15 +70,12 @@ const Game = () => {
   }
 
   const getMultiplier = async (): Promise<void> => {
-    const chambeDom = revolverRef.current?.querySelector(
-      '[data-chambe]',
-    ) as HTMLDivElement
+    const revolverHandle = revolverRefHandle.current
 
-    if (chambeDom === null) {
+    if (revolverHandle === null) {
       return
     }
 
-    await playAudio('spin')
     const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
     const DURATION = 1500
     const interval = DURATION / AMOUNT_CHAMBER
@@ -87,28 +83,21 @@ const Game = () => {
     let count = AMOUNT_CHAMBER
     let index = 0
 
-    return new Promise<void>((resolve) => {
-      // TODO: REFACTOR
-      const transitionend = (event: TransitionEvent) => {
-        if (event.propertyName !== 'rotate') {
-          return
-        }
+    await playAudio('spin')
 
+    return new Promise<void>((resolve) => {
+      const spin = async () => {
         if (count-- > 0) {
+          await revolverHandle.spin(interval)
           const newIndex = index++ % multipliers.length
           setActiveMultiplierIndex(newIndex)
-          chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
+          spin()
         } else {
-          chambeDom.style.transitionDuration = ``
-          chambeDom.removeEventListener('transitionend', transitionend)
-          setRotate(rotateRef.current)
           resolve()
         }
       }
 
-      chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
-      chambeDom.style.transitionDuration = `${interval}ms`
-      chambeDom.addEventListener('transitionend', transitionend)
+      spin()
     })
   }
 
@@ -145,10 +134,18 @@ const Game = () => {
 
   const next = async () => {
     if (!hasMultiplier) {
+      setShowMultiplier(false)
       await getMultiplier()
       addTotal(-bet)
       setOffer(0)
+      setShowMultiplier(true)
 
+      return
+    }
+
+    const revolverHandle = revolverRefHandle.current
+
+    if (revolverHandle === null) {
       return
     }
 
@@ -159,12 +156,13 @@ const Game = () => {
     }
 
     setOffer(0)
-    setRotate((rotateRef.current += 60))
 
     const random = randomIntFromInterval(1, 6)
 
     const newCountBullet = countBullet - 1
     setCountBullet(newCountBullet)
+
+    revolverHandle.spin(1000)
 
     return new Promise<void>((resolve) => {
       const result = async () => {
@@ -354,9 +352,8 @@ const Game = () => {
         </div>
       )}
       <Revolver
-        ref={revolverRef}
+        ref={revolverRefHandle}
         disabled={disabled || hasMultiplier}
-        style={{ rotate: `${rotate}deg` }}
         beforeSlot={<>{Boolean(offer) && <Click />}</>}
       />
       <div
