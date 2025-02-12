@@ -84,37 +84,31 @@ const Game = () => {
     const DURATION = 1500
     const interval = DURATION / AMOUNT_CHAMBER
 
-    chambeDom.style.transitionDuration = `${interval}ms`
-
     let count = AMOUNT_CHAMBER
     let index = 0
 
     return new Promise<void>((resolve) => {
       // TODO: REFACTOR
-      const animateFn = () => {
-        const transitionEnd = (event: TransitionEvent) => {
-          if (event.propertyName !== 'rotate') {
-            return
-          }
-
-          const newIndex = index++ % multipliers.length
-          setActiveMultiplierIndex(newIndex)
-          animateFn()
+      const transitionend = (event: TransitionEvent) => {
+        if (event.propertyName !== 'rotate') {
+          return
         }
 
         if (count-- > 0) {
-          chambeDom.addEventListener('transitionend', transitionEnd, {
-            once: true,
-          })
+          const newIndex = index++ % multipliers.length
+          setActiveMultiplierIndex(newIndex)
           chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
         } else {
           chambeDom.style.transitionDuration = ``
+          chambeDom.removeEventListener('transitionend', transitionend)
           setRotate(rotateRef.current)
           resolve()
         }
       }
 
-      animateFn()
+      chambeDom.style.rotate = (rotateRef.current += 60) + 'deg'
+      chambeDom.style.transitionDuration = `${interval}ms`
+      chambeDom.addEventListener('transitionend', transitionend)
     })
   }
 
