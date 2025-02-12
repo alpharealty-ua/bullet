@@ -69,6 +69,7 @@ const Game = () => {
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
     setShowJackpot(false)
+    setShowOffer(false)
   }
 
   const getMultiplier = async (): Promise<void> => {
