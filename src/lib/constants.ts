@@ -23,7 +23,7 @@ export const states = [
 export type State = (typeof states)[number]
 
 export const images = {
-  gamerules: './assets/images/gamer-ules.svg',
+  gamerules: './assets/images/game-rules.svg',
   close: './assets/images/close.svg',
   money: './assets/images/money-bag.svg',
   logo: './assets/images/compressed/logo.png',
@@ -34,8 +34,8 @@ export const images = {
   died: './assets/images/compressed/died.png',
   100: './assets/images/compressed/100.png',
   deal: './assets/images/deal.svg',
-  startgame: './assets/images/start-game.svg',
-  wagerhere: './assets/images/wager-here.svg',
+  startgame: './assets/images/startgame.svg',
+  wagerhere: './assets/images/wagerhere.svg',
   no: './assets/images/compressed/no-deal.png',
   bulletChambe: './assets/images/compressed/bullet-chambe.png',
   body: './assets/images/compressed/body.png',
@@ -56,6 +56,7 @@ export const srcImages = Object.values(images)
 export const audios = {
   revolverspin: './assets/audios/revolverspin.mp3',
   trigger: './assets/audios/trigger.wav',
+  triggerpull: './assets/audios/trigger-pull.wav',
   spin: './assets/audios/spin.mp3',
   gunshot: './assets/audios/gunshot.mp3',
   drumbeat: './assets/audios/drumbeat.wav',
