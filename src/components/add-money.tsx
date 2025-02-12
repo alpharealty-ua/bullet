@@ -54,7 +54,7 @@ const AddMoney = ({
 
   return (
     <div className='flex items-center justify-between'>
-      <Balance value={total} hideWalletButton />
+      <Balance value={total} />
       <button
         className={cn(
           'relative inline-flex cursor-pointer transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',

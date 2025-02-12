@@ -1,14 +1,13 @@
 import { useEffect, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
-import { WalletButtonAnimation } from './wallet-button-animation'
 
 const Balance = ({
   value,
-  hideWalletButton,
+  beforeSlot,
 }: {
   value: number
-  hideWalletButton?: boolean
+  beforeSlot?: React.ReactNode
 }) => {
   const textRef = useRef<HTMLDivElement>(null)
   const valueRef = useRef(value)
@@ -58,7 +57,7 @@ const Balance = ({
 
   return (
     <div className='flex gap-1'>
-      {!hideWalletButton && <WalletButtonAnimation />}
+      {beforeSlot}
       <div className='flex flex-col'>
         <div className='text-center text-2xl leading-[1] tracking-tight text-[#006100] uppercase'>
           Balance
