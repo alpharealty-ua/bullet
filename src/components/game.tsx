@@ -237,7 +237,7 @@ const Game = () => {
 
   const handleCloseModal = async () => {
     setDisabled(true)
-    await mouseClick()
+    mouseClick()
 
     undoState()
     setDisabled(false)
