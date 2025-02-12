@@ -72,11 +72,11 @@ const Game = () => {
     setShowOffer(false)
   }
 
-  const getMultiplier = async (): Promise<void> => {
+  const getMultiplier = async (): Promise<number> => {
     const revolverHandle = revolverRefHandle.current
 
     if (revolverHandle === null) {
-      return
+      return -1
     }
 
     const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
@@ -88,7 +88,7 @@ const Game = () => {
 
     await playAudio('spin')
 
-    return new Promise<void>((resolve) => {
+    return new Promise<number>((resolve) => {
       const spin = async () => {
         if (count-- > 0) {
           await revolverHandle.spin(interval)
@@ -96,7 +96,7 @@ const Game = () => {
           setActiveMultiplierIndex(newIndex)
           spin()
         } else {
-          resolve()
+          resolve(index)
         }
       }
 
