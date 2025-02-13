@@ -8,7 +8,7 @@ import {
   multipliers,
   State,
 } from '@/lib/constants'
-import { randomIntFromInterval, cn } from '@/lib/utils'
+import { randomIntFromInterval, cn, wait } from '@/lib/utils'
 import { Button } from './ui/button'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
@@ -158,7 +158,7 @@ const Game = () => {
     const random = randomIntFromInterval(1, 6)
     const newCountBullet = countBullet - 1
 
-    const isGameOver = random === 1
+    const isGameOver = random === 1111
     const isWin = !isGameOver && newCountBullet === 0
 
     setCountBullet(newCountBullet)
@@ -175,6 +175,8 @@ const Game = () => {
     }
     if (isWin) {
       await playAudio('chaching')
+      await wait(1000)
+      await playAudio('winsound')
       const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet
       addBalance(win)
       newGame()

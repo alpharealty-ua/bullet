@@ -1,4 +1,3 @@
-import { wait } from '@/lib/utils'
 import { useRef, useEffect } from 'react'
 
 export const useIncreaseNumber = (value: number) => {
@@ -27,12 +26,17 @@ export const useIncreaseNumber = (value: number) => {
     const deltaValue = value - currentValue
 
     const TIME_FRAME = 16
-    const TOTAL_TIME = deltaValue > 0 ? 1000 : 100
+    const TIME_WIN_AUDIO = 2800
+    const TIME_ANIMATION_DELAY = 200
+    const TIME_ANIMATION_DURATION = 500
+    const TIME_INCREASE_NUMBER =
+      TIME_WIN_AUDIO - TIME_ANIMATION_DURATION - TIME_ANIMATION_DELAY
+    const TOTAL_TIME = deltaValue > 0 ? TIME_INCREASE_NUMBER : 100
     const COUNT = TOTAL_TIME / TIME_FRAME
 
     const sign = deltaValue > 0 ? 1 : -1
 
-    const intervalValue = (deltaValue / COUNT) ^ 0 || sign
+    const intervalValue = deltaValue / COUNT
 
     const winValue = deltaValue
     winDom.textContent = `${winValue}`
@@ -43,8 +47,6 @@ export const useIncreaseNumber = (value: number) => {
     let requestID = -1
     let isUnmounted = false
     const animationend = async (event: AnimationEvent) => {
-      await wait(50)
-
       if (isUnmounted) {
         return
       }
@@ -59,9 +61,9 @@ export const useIncreaseNumber = (value: number) => {
             winDom.classList.add('is-out')
             return
           }
-
-          textDom.textContent = `${currentValue}`
-          winDom.textContent = `${value - currentValue}`
+          const rounedValue = Math.round(currentValue)
+          textDom.textContent = `${rounedValue}`
+          winDom.textContent = `${value - rounedValue}`
           requestID = requestAnimationFrame(addNumber)
         })
       }
