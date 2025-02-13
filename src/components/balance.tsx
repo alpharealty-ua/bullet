@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { useIncreaseNumber } from '@/hooks/increase-number'
+import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
 const Balance = ({
   value,

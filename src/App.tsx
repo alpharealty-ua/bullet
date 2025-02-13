@@ -1,8 +1,8 @@
 import { AppProvider } from '@/context/app-provider'
-import { usePreloadImages } from '@/hooks/preload-images'
+import { usePreloadImages } from '@/hooks/use-preload-images'
 import { Game } from '@/components/game'
 import { Audios } from '@/components/audios'
-import { images } from './lib/constants'
+import { images } from '@/lib/constants'
 
 const App = () => {
   usePreloadImages()

@@ -5,7 +5,6 @@ export const useIncreaseNumber = (value: number, ...deps: unknown[]) => {
   const valueRef = useRef(value)
 
   useEffect(() => {
-    console.log('render')
     const textDom = textRef.current
 
     if (textDom === null) {

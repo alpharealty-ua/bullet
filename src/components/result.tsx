@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
-import { useIncreaseNumber } from '@/hooks/increase-number'
+import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
 const Result = ({
   title,
