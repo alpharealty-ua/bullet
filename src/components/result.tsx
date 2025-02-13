@@ -2,7 +2,6 @@ import { useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
-import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
 const Result = ({
   title,
@@ -14,7 +13,6 @@ const Result = ({
   open: boolean
 }) => {
   const nodeRef = useRef(null)
-  const { textRef } = useIncreaseNumber(price, open)
 
   return (
     <CSSTransition nodeRef={nodeRef} in={open} unmountOnExit timeout={600}>
@@ -47,7 +45,7 @@ const Result = ({
                   'animate-out fade-out zoom-out-50 delay-400 duration-200',
               )}
             >
-              $<span ref={textRef}></span>
+              ${price}
             </div>
           </div>
         )
