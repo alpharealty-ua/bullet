@@ -66,7 +66,7 @@ export const audios = {
 
 export const audiosEntries = Object.entries(audios)
 
-export const INIT_BALANCE = 12345
+export const INIT_BALANCE = 1000
 
 export const MAX_BET = 1000
 
