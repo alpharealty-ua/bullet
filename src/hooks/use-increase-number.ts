@@ -1,46 +1,57 @@
 import { useRef, useEffect } from 'react'
 
-export const useIncreaseNumber = (value: number) => {
+export const useIncreaseNumber = ({
+  value,
+  increaseTime,
+  decreaseTime,
+}: {
+  value: number
+  increaseTime: number
+  decreaseTime: number
+}) => {
   const textRef = useRef<HTMLDivElement>(null)
   const winRef = useRef<HTMLDivElement>(null)
   const valueRef = useRef(value)
 
   useEffect(() => {
-    const textDom = textRef.current
+    const totalDom = textRef.current
     const winDom = winRef.current
 
-    if (textDom === null || winDom === null) {
+    if (totalDom === null || winDom === null) {
       return
     }
+
+    const totalValueDom = totalDom.querySelector('[data-value]') ?? totalDom
+    const winValueDom = winDom.querySelector('[data-value]') ?? winDom
 
     const prevVal = valueRef.current
     valueRef.current = value
 
     if (prevVal === value) {
-      textDom.textContent = `${value}`
-      winDom.textContent = '0'
+      totalValueDom.textContent = `${value}`
+      winValueDom.textContent = '0'
       return
     }
 
     let currentValue = prevVal
     const deltaValue = value - currentValue
+    const isIncrease = deltaValue >= 0
 
     const TIME_FRAME = 16
-    const TIME_WIN_AUDIO = 2800
-    const TIME_ANIMATION_DELAY = 200
-    const TIME_ANIMATION_DURATION = 500
-    const TIME_INCREASE_NUMBER =
-      TIME_WIN_AUDIO - TIME_ANIMATION_DURATION - TIME_ANIMATION_DELAY
-    const TOTAL_TIME = deltaValue > 0 ? TIME_INCREASE_NUMBER : 100
+
+    const TOTAL_TIME = isIncrease ? increaseTime : decreaseTime
     const COUNT = TOTAL_TIME / TIME_FRAME
 
-    const sign = deltaValue > 0 ? 1 : -1
+    const sign = isIncrease ? 1 : -1
 
     const intervalValue = deltaValue / COUNT
 
     const winValue = deltaValue
-    winDom.textContent = `${winValue}`
+    winValueDom.textContent = `${Math.abs(winValue)}`
 
+    const state = sign === 1 ? 'is-increase' : 'is-decrease'
+
+    winDom.classList.add(state)
     winDom.classList.add('is-in')
     winDom.classList.remove('is-out')
 
@@ -55,20 +66,21 @@ export const useIncreaseNumber = (value: number) => {
         requestID = requestAnimationFrame(function addNumber() {
           currentValue += intervalValue
           if (currentValue * sign >= value * sign) {
-            textDom.textContent = `${value}`
-            winDom.textContent = '0'
+            totalValueDom.textContent = `${value}`
+            winValueDom.textContent = '0'
             winDom.classList.remove('is-in')
             winDom.classList.add('is-out')
             return
           }
           const rounedValue = Math.round(currentValue)
-          textDom.textContent = `${rounedValue}`
-          winDom.textContent = `${value - rounedValue}`
+          totalValueDom.textContent = `${rounedValue}`
+          winValueDom.textContent = `${Math.abs(value - rounedValue)}`
           requestID = requestAnimationFrame(addNumber)
         })
       }
       if (event.animationName === 'exit') {
         winDom.classList.remove('is-out')
+        winDom.classList.remove(state)
       }
     }
     winDom.addEventListener('animationend', animationend)
@@ -77,12 +89,12 @@ export const useIncreaseNumber = (value: number) => {
       isUnmounted = true
       winDom.removeEventListener('animationend', animationend)
       cancelAnimationFrame(requestID)
-      textDom.textContent = `${value}`
-      winDom.textContent = '0'
-      winDom.classList.remove('is-in', 'is-out')
-      winDom.offsetWidth // need for force layout
+      totalValueDom.textContent = `${value}`
+      winValueDom.textContent = '0'
+      winDom.classList.remove('is-in', 'is-out', state)
+      winDom.offsetWidth // need for force layout -> for rmeove class
     }
-  }, [value])
+  }, [value, increaseTime, decreaseTime])
 
   return { totalRef: textRef, winRef }
 }
