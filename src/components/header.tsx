@@ -5,9 +5,10 @@ import { Logo } from './logo'
 import { Balance } from './balance'
 
 export const Header = () => {
-  const { balance, bet, state, changeState } = useAppContext()
+  const { balance, bet, state, changeState, playAudio } = useAppContext()
 
-  const handleAddMoney = () => {
+  const handleAddMoney = async () => {
+    await playAudio('mouseclick')
     changeState('add-money')
   }
 
