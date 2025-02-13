@@ -33,7 +33,7 @@ const Footer = () => {
   return (
     <footer
       className='relative flex h-[74px] bg-cover bg-[center_top] px-2 py-0.5'
-      style={{ backgroundImage: `url(${images.bottomLine})` }}
+      style={{ backgroundImage: `url(${images.footer})` }}
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet

@@ -186,7 +186,7 @@ const Game = () => {
 
   useEffect(() => {
     const image = new Image()
-    const imageSrc = `${images.gameOver}`
+    const imageSrc = `${images.gameover}`
     image.src = imageSrc
   }, [])
 
@@ -223,7 +223,7 @@ const Game = () => {
   }
 
   const mouseClick = async () => {
-    const audio = await playAudio('mouseClick')
+    const audio = await playAudio('mouseclick')
 
     if (audio === null) {
       return
@@ -433,7 +433,7 @@ const Game = () => {
           onClick={handleStartGame}
           onTimeout={handleGameOverTimeout}
           timeout={2000}
-          image={images.gameOver}
+          image={images.gameover}
           hideBlood={settings.blood}
         />
       )}

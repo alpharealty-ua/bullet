@@ -28,7 +28,7 @@ export const images = {
   moneybag: './assets/images/money-bag.svg',
   logo: './assets/images/bullet-logo.svg',
   wrapper: './assets/images/wrapper.png',
-  gameOver: './assets/images/compressed/game-over.gif',
+  gameover: './assets/images/compressed/game-over.gif',
   blood: './assets/images/compressed/blood.png',
   you: './assets/images/compressed/you.png',
   died: './assets/images/compressed/died.png',
@@ -36,10 +36,10 @@ export const images = {
   deal: './assets/images/deal.svg',
   startgame: './assets/images/start-game.svg',
   wagerhere: './assets/images/wager-here.svg',
-  bulletChambe: './assets/images/compressed/bullet-chambe.png',
+  bulletchambe: './assets/images/compressed/bullet-chambe.png',
   body: './assets/images/compressed/body.png',
   pull: './assets/images/pull.svg',
-  bottomLine: './assets/images/compressed/bottom-line.png',
+  footer: './assets/images/compressed/footer.png',
   settings: './assets/images/compressed/settings.png',
   bet: './assets/images/compressed/bet.png',
   bullet: './assets/images/compressed/bullet.png',
@@ -59,7 +59,7 @@ export const audios = {
   spin: './assets/audios/spin.mp3',
   gunshot: './assets/audios/gunshot.mp3',
   drumbeat: './assets/audios/drumbeat.wav',
-  mouseClick: './assets/audios/click.wav',
+  mouseclick: './assets/audios/click.wav',
 }
 
 export const audiosEntries = Object.entries(audios)
