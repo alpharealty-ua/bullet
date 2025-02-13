@@ -23,7 +23,7 @@ const Balance = ({
         <div
           ref={winRef}
           className={cn(
-            'fill-mode-both absolute top-full right-0 left-0 hidden text-center text-3xl leading-[1] tracking-tight duration-500',
+            'fill-mode-both absolute top-full right-0 left-0 hidden text-center text-3xl leading-[1] tracking-tight text-[#006100] duration-500',
             '[&.is-in]:animate-in [&.is-in]:fade-in [&.is-in]:slide-in-from-bottom-10 [&.is-in]:block [&.is-in]:delay-200',
             '[&.is-out]:animate-out [&.is-out]:fade-out [&.is-out]:block',
           )}
