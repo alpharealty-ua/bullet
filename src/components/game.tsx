@@ -131,10 +131,7 @@ const Game = () => {
       addBalance(offer + bet)
       setOffer(0)
     }
-    // TODO: ADD PROMISE
-    setTimeout(() => {
-      newGame()
-    }, 400)
+    newGame()
   }
 
   const next = async () => {
@@ -178,7 +175,7 @@ const Game = () => {
     }
     if (isWin) {
       await playAudio('chaching')
-      const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
+      const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet
       addBalance(win)
       newGame()
       return
@@ -300,8 +297,16 @@ const Game = () => {
         />
       </Modal>
       <Header />
-      <Result title={'Jackpot'} price={jackpot} open={showJackpot} />
-      <Result title={'the banker offers...'} price={offer} open={showOffer} />
+      <Result
+        title={'Jackpot'}
+        price={jackpot}
+        open={showJackpot && Boolean(jackpot)}
+      />
+      <Result
+        title={'the banker offers...'}
+        price={offer}
+        open={showOffer && Boolean(offer)}
+      />
       {state === 'pull' && !hasMultiplier && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
