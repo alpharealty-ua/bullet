@@ -1,7 +1,7 @@
 import { wait } from '@/lib/utils'
 import { useRef, useEffect } from 'react'
 
-export const useIncreaseNumber = (value: number, ...deps: unknown[]) => {
+export const useIncreaseNumber = (value: number) => {
   const textRef = useRef<HTMLDivElement>(null)
   const winRef = useRef<HTMLDivElement>(null)
   const valueRef = useRef(value)
