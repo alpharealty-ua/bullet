@@ -48,7 +48,7 @@ export const images = {
   sliderbar: './assets/images/sliderbar.svg',
   '1000x': './assets/images/compressed/1000x.png',
   '100000$': './assets/images/compressed/100000$.png',
-}
+} as const
 
 export const srcImages = Object.values(images)
 
