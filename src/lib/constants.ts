@@ -60,7 +60,8 @@ export const audios = {
   gunshot: './assets/audios/gunshot.mp3',
   drumbeat: './assets/audios/drumbeat.wav',
   mouseclick: './assets/audios/click.wav',
-}
+  chaching: './assets/audios/chaching.mp3',
+} as const
 
 export const audiosEntries = Object.entries(audios)
 
@@ -73,7 +74,7 @@ export const settings = {
   soundEffects: 'Toggle sound effects',
   invertButtons: 'Invert PULL AND DEAL button positions',
   blood: 'Toggles off blood',
-}
+} as const
 
 export const settingsEntries = Object.entries(settings) as [
   SettingsKeys,

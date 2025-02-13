@@ -175,6 +175,7 @@ const Game = () => {
       return
     }
     if (newCountBullet === 0) {
+      await playAudio('chaching')
       const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
       addBalance(win)
       newGame()
