@@ -1,8 +1,8 @@
 import { useAppContext } from '@/context/use-app-context'
+import { cn } from '@/lib/utils'
+import { Button } from './ui/button'
 import { Logo } from './logo'
 import { Balance } from './balance'
-import { WalletButton } from './wallet-button'
-import { cn } from '@/lib/utils'
 
 export const Header = () => {
   const { balance, bet, state, changeState } = useAppContext()
@@ -29,7 +29,11 @@ export const Header = () => {
                 💀
               </span>
             ) : (
-              <WalletButton onClick={handleAddMoney} />
+              <Button
+                className='w-8'
+                image='moneybag'
+                onClick={handleAddMoney}
+              />
             )}
           </>
         }

@@ -1,7 +1,5 @@
-import { images } from '@/lib/constants'
-import { PullButton } from './pull-button'
-import { DealButton } from './deal-button'
 import { Logo } from './logo'
+import { Button } from './ui/button'
 
 const Cover = ({
   onPull,
@@ -13,12 +11,8 @@ const Cover = ({
   return (
     <>
       <Logo size='3xl' />
-      <PullButton className='w-[122px]' onClick={onPull} />
-      <DealButton
-        className='w-[110px]'
-        style={{ backgroundImage: `url(${images.gamerules})` }}
-        onClick={onGameRules}
-      />
+      <Button image='pull' className='w-30' onClick={onPull} />
+      <Button image='gamerules' onClick={onGameRules} />
     </>
   )
 }

@@ -3,9 +3,9 @@ import { CSSTransition } from 'react-transition-group'
 import mergeRefs from 'merge-refs'
 
 import { cn } from '@/lib/utils'
-import { Logo } from './logo'
-import { CloseButton } from './close-button'
 import { images } from '@/lib/constants'
+import { Button } from './ui/button'
+import { Logo } from './logo'
 
 export const Modal = React.forwardRef<
   HTMLDivElement,
@@ -43,7 +43,7 @@ export const Modal = React.forwardRef<
               {!hideHeader && (
                 <div className='flex items-center justify-between'>
                   <Logo size='lg' />
-                  <CloseButton onClick={onClose} />
+                  <Button className='w-11' image='close' onClick={onClose} />
                 </div>
               )}
               {children}

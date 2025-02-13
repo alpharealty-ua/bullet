@@ -9,12 +9,11 @@ import {
   State,
 } from '@/lib/constants'
 import { randomIntFromInterval, cn } from '@/lib/utils'
+import { Button } from './ui/button'
 import { GameOver } from './game-over'
-import { PullButton } from './pull-button'
 import { Revolver } from './revolver'
 import { Result } from './result'
 import { Click } from './click'
-import { DealButton } from './deal-button'
 import { Rules } from './rules'
 import { Cover } from './cover'
 import { Header } from './header'
@@ -383,7 +382,11 @@ const Game = () => {
                     close && 'animate-out fade-out zoom-out-50 duration-400',
                   )}
                 >
-                  <DealButton disabled={disabled} onClick={handleDeal} />
+                  <Button
+                    disabled={disabled}
+                    image='deal'
+                    onClick={handleDeal}
+                  />
                 </div>
               )
             }}
@@ -423,9 +426,10 @@ const Game = () => {
                   )
                 }}
               </CSSTransition>
-              <PullButton
+              <Button
                 disabled={disabled || bet === 0}
                 className='animate-in fade-in-0 mt-auto duration-200'
+                image='pull'
                 onClick={handlePull}
               />
             </>
