@@ -1,9 +1,10 @@
-import React, { useCallback, useReducer } from 'react'
+import React, { useCallback, useReducer, useState } from 'react'
 
 import { AppContext } from '@/context/context'
 import { SettingsKeys, State, audios } from '@/lib/constants'
 import { appReducer, initState } from './app-reducer'
 
+// TODO: MOVE TO UTILS
 const playAudio = async (
   key: keyof typeof audios,
 ): Promise<HTMLAudioElement | null> => {
@@ -46,6 +47,11 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     },
     dispatch,
   ] = useReducer(appReducer, initState)
+  // TODO: MOVE TO REDUCER
+  const [offer, setOffer] = useState(0)
+  const [showJackpot, setShowJackpot] = useState(false)
+  const [showOffer, setShowOffer] = useState(false)
+  const [showClick, setShowClick] = useState(false)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -102,6 +108,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           },
           [],
         ),
+        offer,
+        setOffer,
+        showJackpot,
+        setShowJackpot,
+        showOffer,
+        setShowOffer,
+        showClick,
+        setShowClick,
         playAudio: playAudioWrapper,
       }}
     >

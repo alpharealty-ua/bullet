@@ -41,6 +41,14 @@ const Game = () => {
     showHelpers,
     setShowHelpers,
     settings,
+    offer,
+    setOffer,
+    showOffer,
+    setShowOffer,
+    showJackpot,
+    setShowJackpot,
+    showClick,
+    setShowClick,
   } = useAppContext()
   const revolverRefHandle = useRef<{
     spin: (interval: number) => Promise<void>
@@ -51,11 +59,6 @@ const Game = () => {
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
-  // TODO: EXTRACT ALL STATE IN CONTEXT
-  const [offer, setOffer] = useState(1)
-  const [showJackpot, setShowJackpot] = useState(false)
-  const [showOffer, setShowOffer] = useState(false)
-  const [showClick, setShowClick] = useState(false)
 
   // TODO: EXTRACT GAME LOGIC IN CONTEXT
   const newGame = () => {

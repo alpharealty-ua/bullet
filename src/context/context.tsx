@@ -21,6 +21,14 @@ interface ContextAppValue {
   settings: Record<SettingsKeys, boolean>
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement | null>
+  offer: number
+  setOffer: React.Dispatch<number>
+  showOffer: boolean
+  setShowOffer: React.Dispatch<boolean>
+  showJackpot: boolean
+  setShowJackpot: React.Dispatch<boolean>
+  showClick: boolean
+  setShowClick: React.Dispatch<boolean>
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)
