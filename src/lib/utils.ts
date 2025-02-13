@@ -29,3 +29,6 @@ export const formatBet = (value: number) => {
 }
 
 export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
+
+export const wait = (timeout: number) =>
+  new Promise((res) => setTimeout(res, timeout))
