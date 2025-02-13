@@ -158,7 +158,7 @@ const Game = () => {
     const random = randomIntFromInterval(1, 6)
     const newCountBullet = countBullet - 1
 
-    const isGameOver = random === 1111
+    const isGameOver = random === 1
     const isWin = !isGameOver && newCountBullet === 0
 
     setCountBullet(newCountBullet)
