@@ -32,6 +32,7 @@ const Settings = () => {
 
 export { Settings }
 
+// TODO: MOVE TO COMPONENT
 const Button = ({ text }: { text: string }) => {
   return (
     <button className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'>
@@ -75,6 +76,7 @@ const Button = ({ text }: { text: string }) => {
   )
 }
 
+// TODO: MOVE TO COMPONENT
 const Checkbox = <Name extends string>({
   label,
   name,
