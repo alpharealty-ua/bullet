@@ -229,7 +229,7 @@ const Bet = ({
               'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
               disabled && 'cursor-not-allowed',
             )}
-            style={{ backgroundImage: `url(${images.slider})` }}
+            style={{ backgroundImage: `url(${images.sliderbar})` }}
             onClick={handleSliderClick}
             onDoubleClick={handleSliderDbClick}
             data-slider

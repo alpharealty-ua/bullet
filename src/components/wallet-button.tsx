@@ -11,10 +11,10 @@ export const WalletButton = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        'aspect-[1/1.5] w-[30px] cursor-pointer bg-[length:170%] bg-center bg-no-repeat',
+        'aspect-[1/1.5] w-8 cursor-pointer self-center bg-contain bg-center bg-no-repeat',
         className,
       )}
-      style={{ backgroundImage: `url(${images.money})` }}
+      style={{ backgroundImage: `url(${images.moneybag})` }}
       {...props}
     ></button>
   )
