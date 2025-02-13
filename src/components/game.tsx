@@ -162,6 +162,9 @@ const Game = () => {
     const random = randomIntFromInterval(1, 6)
     const newCountBullet = countBullet - 1
 
+    const isGameOver = random === 1
+    const isWin = !isGameOver && newCountBullet === 0
+
     setCountBullet(newCountBullet)
     setShowClick(false)
 
@@ -170,11 +173,11 @@ const Game = () => {
 
     setShowClick(true)
 
-    if (random === 1) {
+    if (isGameOver) {
       await gameOver()
       return
     }
-    if (newCountBullet === 0) {
+    if (isWin) {
       await playAudio('chaching')
       const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet + bet
       addBalance(win)
