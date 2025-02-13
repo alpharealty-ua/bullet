@@ -9,12 +9,12 @@ export const useIncreaseNumber = ({
   increaseTime: number
   decreaseTime: number
 }) => {
-  const textRef = useRef<HTMLDivElement>(null)
+  const totalRef = useRef<HTMLDivElement>(null)
   const winRef = useRef<HTMLDivElement>(null)
   const valueRef = useRef(value)
 
   useEffect(() => {
-    const totalDom = textRef.current
+    const totalDom = totalRef.current
     const winDom = winRef.current
 
     if (totalDom === null || winDom === null) {
@@ -96,5 +96,5 @@ export const useIncreaseNumber = ({
     }
   }, [value, increaseTime, decreaseTime])
 
-  return { totalRef: textRef, winRef }
+  return { totalRef, winRef }
 }
