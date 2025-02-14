@@ -23,19 +23,26 @@ const Bet = ({
   const nodeRef2 = useRef(null)
 
   const changeValue = useCallback(
-    (bet: number, percent: number, callOnBet = true) => {
+    (bet?: number, percent?: number, callOnBet = true) => {
+      if (bet === undefined && percent) {
+        bet = ((maxBet * percent) / 100) ^ 0
+      }
+      if (percent === undefined && bet) {
+        percent = (bet / maxBet) * 100
+      }
+      bet = Math.max(0, Math.min(bet ?? 0, maxBet))
+      percent = Math.max(0, Math.min(percent ?? 0, 100))
       callOnBet && onBet(bet)
       setValue(formatBet(bet))
       setPercent(Math.min(percent, 100))
     },
-    [onBet],
+    [onBet, maxBet],
   )
 
   useEffect(() => {
     const currentBet = Math.min(bet, maxBet)
-    const newXInPercent = (bet / maxBet) * 100
 
-    changeValue(currentBet, newXInPercent, false)
+    changeValue(currentBet, undefined, false)
   }, [maxBet, bet, changeValue])
 
   useEffect(() => {
@@ -102,8 +109,7 @@ const Bet = ({
       }
 
       const pointerUp = (_: PointerEvent) => {
-        const currentBet = ((maxBet * percentX) / 100) ^ 0
-        changeValue(currentBet, percentX)
+        changeValue(undefined, percentX)
 
         buttonDom.removeEventListener('pointermove', pointerMove)
         buttonDom.removeEventListener('pointerup', pointerUp)
@@ -153,9 +159,8 @@ const Bet = ({
     const roundAddedBet = Math.floor(addedBet / INCREMENT_BET) * INCREMENT_BET
 
     const newBet = Math.max(0, Math.min(roundAddedBet, maxBet))
-    const percentX = (newBet / maxBet) * 100
 
-    changeValue(newBet, percentX)
+    changeValue(newBet)
   }
 
   const handleSliderDbClick = (
@@ -175,22 +180,19 @@ const Bet = ({
       '[data-slider]',
     ) as HTMLDivElement
 
-    const { left, width } = sliderDom.getBoundingClientRect()
+    const { x, width } = sliderDom.getBoundingClientRect()
 
-    const clientX = event.clientX
-    const shiftX = left
-    const deltaX = clientX - shiftX
+    const clickX = event.clientX
+    const sliderX = x
+    const clickRelativeSliderX = clickX - sliderX
 
-    const percentX = (deltaX / width) * 100
+    const percentX = (clickRelativeSliderX / width) * 100
 
     const ROUND_BET = 50
-    const BET_IN_ONE_PERCENT = maxBet / 100
-    const ROUND_PERCENT = ROUND_BET / BET_IN_ONE_PERCENT
+    const roundedBet =
+      Math.round((maxBet * percentX) / 100 / ROUND_BET) * ROUND_BET
 
-    const roundPercentX = Math.round(percentX / ROUND_PERCENT) * ROUND_PERCENT
-    const currentBet = ((maxBet * roundPercentX) / 100) ^ 0
-
-    changeValue(currentBet, roundPercentX)
+    changeValue(roundedBet)
   }
 
   return (
