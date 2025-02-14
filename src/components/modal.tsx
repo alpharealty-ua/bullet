@@ -1,5 +1,12 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useModal } from '@ebay/nice-modal-react'
+import mergeRefs from 'merge-refs'
 
 import { cn } from '@/lib/utils'
 import { images } from '@/lib/constants'
@@ -23,11 +30,19 @@ export const Modal = React.forwardRef<
     hideHeader?: boolean
   }
 >(({ children, hideHeader = false, className, ...props }, ref) => {
+  const modalRef = useRef<HTMLDivElement>(null)
   const { remove } = useModal()
   const [isOpen, setIsOpen] = useState(true)
 
   const closeWithDelay = useCallback(() => {
-    setTimeout(remove, 200)
+    const modalDom = modalRef.current
+
+    if (modalDom === null) {
+      return
+    }
+
+    modalDom.addEventListener('animationend', remove, { once: true })
+
     setIsOpen(false)
   }, [remove])
 
@@ -50,7 +65,7 @@ export const Modal = React.forwardRef<
 
   return (
     <div
-      ref={ref}
+      ref={mergeRefs(ref, modalRef)}
       className={cn(
         'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col gap-12 overflow-auto bg-cover bg-[right_center] px-3 py-12 duration-200',
         className,
