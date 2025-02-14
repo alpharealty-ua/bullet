@@ -11,7 +11,6 @@ export const multipliers: { value: number; color: `#${string}` }[] = [
 export const getMultiplierValueByIndex = (index: number) =>
   multipliers[index]?.value ?? 0
 
-// TODO: REMOVED MODALS STATE
 export const states = [
   'cover',
   'preparation',
