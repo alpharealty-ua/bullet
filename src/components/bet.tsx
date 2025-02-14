@@ -253,11 +253,8 @@ const Bet = ({
           <div>0</div>
           <div>Max</div>
         </div>
-        <div
-          className='w-full overflow-hidden text-2xl leading-[1] text-ellipsis'
-          data-value
-        >
-          {value}
+        <div className='w-full text-2xl leading-[1] text-ellipsis'>
+          <span data-value>{value}</span>$
         </div>
       </div>
     </div>
