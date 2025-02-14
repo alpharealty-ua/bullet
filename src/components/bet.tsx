@@ -152,7 +152,7 @@ const Bet = ({
     const addedBet = currentBet + INCREMENT_BET * sign
     const roundAddedBet = Math.floor(addedBet / INCREMENT_BET) * INCREMENT_BET
 
-    const newBet = Math.min(roundAddedBet, maxBet)
+    const newBet = Math.max(0, Math.min(roundAddedBet, maxBet))
     const percentX = (newBet / maxBet) * 100
 
     changeValue(newBet, percentX)
