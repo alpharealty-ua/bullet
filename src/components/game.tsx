@@ -303,6 +303,24 @@ const Game = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
+  useEffect(() => {
+    const isModal = ['rules', 'settings', 'add-money'].includes(state)
+    if (!isModal) {
+      return
+    }
+
+    const closeModal = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        undoState()
+      }
+    }
+    document.addEventListener('keydown', closeModal)
+
+    return () => {
+      document.removeEventListener('keydown', closeModal)
+    }
+  }, [state, undoState])
+
   return (
     <>
       <Debug disabled={disabled} />
