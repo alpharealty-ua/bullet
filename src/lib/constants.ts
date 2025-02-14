@@ -40,6 +40,7 @@ export const images = {
   wagerhere: './assets/images/wager-here.svg',
   bulletchambe: './assets/images/compressed/bullet-chambe.png',
   body: './assets/images/compressed/body.png',
+  play: './assets/images/play.svg',
   pull: './assets/images/pull.svg',
   footer: './assets/images/compressed/footer.png',
   settings: './assets/images/compressed/settings.png',

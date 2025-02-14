@@ -2,16 +2,16 @@ import { Logo } from './logo'
 import { Button } from './ui/button'
 
 const Cover = ({
-  onPull,
+  onStart,
   onGameRules,
 }: {
-  onPull: () => void
+  onStart: () => void
   onGameRules: () => void
 }) => {
   return (
     <>
       <Logo size='3xl' />
-      <Button image='pull' className='w-30' onClick={onPull} />
+      <Button image='play' className='w-30' onClick={onStart} />
       <Button image='gamerules' onClick={onGameRules} />
     </>
   )

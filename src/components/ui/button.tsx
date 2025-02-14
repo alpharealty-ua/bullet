@@ -4,6 +4,7 @@ import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const imagesMap = {
+  play: images.play,
   pull: images.pull,
   deal: images.deal,
   gamerules: images.gamerules,

@@ -281,7 +281,7 @@ const Game = () => {
         open={state === 'cover'}
         hideHeader
       >
-        <Cover onPull={handeInitGame} onGameRules={handleGameRules} />
+        <Cover onStart={handeInitGame} onGameRules={handleGameRules} />
       </Modal>
       <Modal onClose={handleCloseModal} open={state === 'rules'}>
         <Rules />
