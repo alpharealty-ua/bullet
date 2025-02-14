@@ -209,12 +209,13 @@ const Bet = ({
               ref={nodeRef2}
               key='helper'
               className={cn(
-                'fill-mode-both absolute bottom-full left-4 aspect-[1/0.4] w-[75px] origin-top bg-contain bg-center bg-no-repeat duration-400',
+                'fill-mode-both absolute bottom-full left-4 w-[90px] origin-top bg-contain bg-center bg-no-repeat duration-400',
                 open && 'animate-in fade-in slide-in-from-top-4',
                 close && 'animate-out fade-out slide-out-to-top-4',
               )}
-              style={{ backgroundImage: `url(${images.wagerhere})` }}
-            ></div>
+            >
+              <img src={images.wagerhere} alt='' />
+            </div>
           )
         }}
       </CSSTransition>
