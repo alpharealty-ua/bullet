@@ -72,6 +72,7 @@ export const initState: GameState = {
     soundEffects: true,
     invertButtons: false,
     blood: false,
+    declineAllDeals: false,
   },
 }
 
