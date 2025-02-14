@@ -5,7 +5,7 @@ import { Logo } from './logo'
 import { Balance } from './balance'
 
 export const Header = () => {
-  const { balance, state, changeState, playAudio } = useAppContext()
+  const { balance, bet, state, changeState, playAudio } = useAppContext()
 
   const handleAddMoney = async () => {
     await playAudio('mouseclick')
@@ -19,7 +19,8 @@ export const Header = () => {
         value={balance}
         beforeSlot={
           <>
-            {state === 'preparation' && !(balance > 0) ? (
+            {/* TODO: ADD FLAG NO_MONEY  */}
+            {state === 'preparation' && !(balance > 0 || bet > 0) ? (
               <span
                 className={cn(
                   'cursor-pointer text-[40px]',

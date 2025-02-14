@@ -47,6 +47,7 @@ const Game = () => {
   const revolverRefHandle = useRef<{
     spin: (interval: number) => Promise<void>
   }>(null)
+  // TODO: MOVE TO CONTEXT
   const [disabled, setDisabled] = useState(false)
   const disabledRef = useRef(disabled)
 
@@ -307,7 +308,7 @@ const Game = () => {
         price={offer}
         open={showOffer && Boolean(offer)}
       />
-      {state === 'preparation' && balance === 0 && (
+      {state === 'preparation' && !(balance > 0 || bet > 0) && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
             className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
