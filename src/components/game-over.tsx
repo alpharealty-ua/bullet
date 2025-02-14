@@ -50,17 +50,17 @@ const GameOver = ({
       onClick={handleClick}
     >
       <div
-        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-[800ms] duration-0 lg:bg-bottom'
+        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-800 duration-0 lg:bg-bottom'
         style={{
           backgroundImage: `url(${image})`,
         }}
       ></div>
       <div
-        className='animate-in fade-in fill-mode-both absolute inset-0 bg-cover bg-center delay-[800ms] duration-100'
+        className='animate-in fade-in fill-mode-both absolute inset-0 bg-cover bg-center delay-800 duration-100'
         style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
         <div
-          className='animate-in fade-in fill-mode-both w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center delay-[900ms] duration-100'
+          className='animate-in fade-in fill-mode-both w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center delay-900 duration-100'
           style={{ backgroundImage: `url(${images.you})` }}
         ></div>
         <div
