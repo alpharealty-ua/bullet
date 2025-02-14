@@ -38,7 +38,7 @@ const Footer = () => {
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
           disabled={(hasMultiplier && bet > 0) || balance === 0}
-          maxBet={Math.min(balance, MAX_BET)}
+          maxBet={Math.min(hasMultiplier ? bet + balance : balance, MAX_BET)}
           bet={bet}
           onBet={handleSetBet}
           showHelpers={showHelpers && bet === 0}
