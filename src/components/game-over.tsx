@@ -16,27 +16,36 @@ const GameOver = ({
   image: string
   hideBlood?: boolean
 }) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [disabled, setDisabled] = useState(true)
 
   const handleClick = () => {
-    setIsOpen(false)
+    if (disabled) {
+      return
+    }
+
     onClick()
   }
 
   useEffect(() => {
-    const id = setTimeout(onTimeout, timeout)
+    const timeoutId = setTimeout(onTimeout, timeout)
     return () => {
-      clearTimeout(id)
+      clearTimeout(timeoutId)
     }
   }, [onTimeout, timeout])
+
+  useEffect(() => {
+    const TIME_ANIMATION = 1100
+    const timeoutId = setTimeout(() => setDisabled(false), TIME_ANIMATION)
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [])
 
   return (
     <div
       className={cn(
-        'fill-mode-both absolute inset-0 z-50 cursor-pointer duration-200',
-        isOpen
-          ? 'animate-in fade-in-0 zoom-in-95'
-          : 'animate-out fade-out-0 zoom-out-95',
+        'fill-mode-both absolute inset-0 z-50 duration-200',
+        !disabled && 'cursor-pointer',
       )}
       onClick={handleClick}
     >
