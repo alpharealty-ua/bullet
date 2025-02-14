@@ -1,38 +1,9 @@
 import React, { useCallback, useReducer, useState } from 'react'
 
 import { AppContext } from '@/context/context'
+import { playAudio } from '@/lib/utils'
 import { SettingsKeys, State, audios } from '@/lib/constants'
 import { appReducer, initState } from './app-reducer'
-
-// TODO: MOVE TO UTILS
-const playAudio = async (
-  key: keyof typeof audios,
-): Promise<HTMLAudioElement | null> => {
-  const audios = document.getElementById('audios')
-
-  if (audios === null) {
-    return null
-  }
-
-  const selector = `[data-audio=${key}]`
-
-  const audio = audios.querySelector(selector) as HTMLAudioElement
-
-  if (audio === null) {
-    return null
-  }
-
-  try {
-    await audio.play()
-    console.log('Play audio - ' + audio.src)
-
-    return audio
-  } catch (error) {
-    console.log(error)
-
-    return null
-  }
-}
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
