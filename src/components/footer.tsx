@@ -48,7 +48,7 @@ const Footer = () => {
       <div className='relative w-[130px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
         <button
-          className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center'
+          className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center bg-repeat'
           style={{ backgroundImage: `url(${images.settings})` }}
           onClick={handleSettings}
         ></button>
