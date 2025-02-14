@@ -1,16 +1,21 @@
 import { useAppContext } from '@/context/use-app-context'
+import { useCustomModal } from '@/hooks/use-custom-modal'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
 import { Balance } from './balance'
+import { AddMoney } from './add-money'
 
 export const Header = () => {
-  const { balance, bet, state, changeState, playAudio } = useAppContext()
+  const { balance, bet, state, addBalance, playAudio } = useAppContext()
+  const modal = useCustomModal()
 
   const handleAddMoney = async () => {
     await playAudio('mouseclick')
-    changeState('add-money')
+    modal.show({
+      contentSlot: <AddMoney balance={balance} onAddMoney={addBalance} />,
+    })
   }
 
   return (

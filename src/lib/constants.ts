@@ -14,9 +14,6 @@ export const getMultiplierValueByIndex = (index: number) =>
 // TODO: REMOVED MODALS STATE
 export const states = [
   'cover',
-  'rules',
-  'settings',
-  'add-money',
   'preparation',
   'running',
   'win',

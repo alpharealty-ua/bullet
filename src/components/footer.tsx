@@ -1,10 +1,12 @@
 import { useCallback } from 'react'
 
 import { useAppContext } from '@/context/use-app-context'
+import { useCustomModal } from '@/hooks/use-custom-modal'
 import { images, MAX_BET, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
+import { Settings } from './settings'
 
 const Footer = () => {
   const {
@@ -14,9 +16,9 @@ const Footer = () => {
     bet,
     setBet,
     state,
-    changeState,
     showHelpers,
   } = useAppContext()
+  const modal = useCustomModal()
   // TODO: MOVE MAX BET TO CONTEXT
   const maxBet = Math.min(
     state === 'running' ? bet + balance : balance,
@@ -24,9 +26,10 @@ const Footer = () => {
   )
 
   const handleSettings = () => {
-    changeState('settings')
+    modal.show({ contentSlot: <Settings /> })
   }
 
+  // TODO: REMOVE WRAPPER
   const handleSetBet = useCallback(
     (bet: number) => {
       setBet(bet)

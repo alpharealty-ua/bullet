@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
+import { useCustomModal } from '@/hooks/use-custom-modal'
 import { getMultiplierValueByIndex, images, multipliers } from '@/lib/constants'
 import { randomIntFromInterval, cn, wait } from '@/lib/utils'
 import { Button } from './ui/button'
@@ -14,8 +15,6 @@ import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Debug } from './debug'
-import { Modal } from './modal'
-import { Settings } from './settings'
 import { AddMoney } from './add-money'
 
 const Game = () => {
@@ -54,6 +53,7 @@ const Game = () => {
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
+  const modal = useCustomModal()
 
   // TODO: EXTRACT GAME LOGIC IN CONTEXT
   const newGame = () => {
@@ -240,7 +240,9 @@ const Game = () => {
   const handleGameRules = async () => {
     await mouseClick()
     setDisabled(true)
-    changeState('rules')
+    modal.show({
+      contentSlot: <Rules />,
+    })
     setDisabled(false)
   }
 
@@ -266,17 +268,9 @@ const Game = () => {
     await callWithAnimation(deal)
   }
 
-  const handleCloseModal = async () => {
-    setDisabled(true)
-    mouseClick()
-
-    undoState()
-    setDisabled(false)
-  }
-
   const handleStartGame = async () => {
     setDisabled(true)
-    mouseClick()
+    await mouseClick()
 
     newGame()
     setDisabled(false)
@@ -286,8 +280,11 @@ const Game = () => {
     newGame()
   }
 
-  const handleAddMoney = () => {
-    changeState('add-money')
+  const handleAddMoney = async () => {
+    await mouseClick()
+    modal.show({
+      contentSlot: <AddMoney balance={balance} onAddMoney={addBalance} />,
+    })
   }
 
   useEffect(() => {
@@ -303,49 +300,12 @@ const Game = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
-  useEffect(() => {
-    const isModal = ['rules', 'settings', 'add-money'].includes(state)
-    if (!isModal) {
-      return
-    }
-
-    const closeModal = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        undoState()
-      }
-    }
-    document.addEventListener('keydown', closeModal)
-
-    return () => {
-      document.removeEventListener('keydown', closeModal)
-    }
-  }, [state, undoState])
-
   return (
     <>
       <Debug disabled={disabled} />
-      {/* TODO: EXTRACT MODALS */}
-      <Modal
-        onClose={handleCloseModal}
-        className='items-center justify-center gap-6'
-        open={state === 'cover'}
-        hideHeader
-      >
+      {state === 'cover' && (
         <Cover onStart={handeInitGame} onGameRules={handleGameRules} />
-      </Modal>
-      <Modal onClose={handleCloseModal} open={state === 'rules'}>
-        <Rules />
-      </Modal>
-      <Modal onClose={handleCloseModal} open={state === 'settings'}>
-        <Settings />
-      </Modal>
-      <Modal onClose={handleCloseModal} open={state === 'add-money'}>
-        <AddMoney
-          balance={balance}
-          disabled={disabled}
-          onAddMoney={addBalance}
-        />
-      </Modal>
+      )}
       <Header />
       <Result
         title={'Jackpot'}

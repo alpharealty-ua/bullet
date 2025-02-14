@@ -4,11 +4,9 @@ import { addZerro, cn } from '@/lib/utils'
 
 const AddMoney = ({
   balance,
-  disabled,
   onAddMoney,
 }: {
   balance: number
-  disabled: boolean
   onAddMoney: (money: number) => void
 }) => {
   const [time, setTime] = useState('')
@@ -60,7 +58,7 @@ const AddMoney = ({
           'relative inline-flex cursor-pointer transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
           endTime && 'cursor-not-allowed',
         )}
-        disabled={disabled || Boolean(endTime)}
+        disabled={Boolean(endTime)}
         onClick={handleClick}
       >
         <span className='absolute inset-0 inline-flex items-center justify-center text-lg uppercase'>
