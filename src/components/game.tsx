@@ -192,15 +192,21 @@ const Game = () => {
   }, [])
 
   const gameOver = async () => {
-    await playAudio('gunshot')
-    const DURATION_GUNSHOT_AUDIO = 1000
-    const DELAY = -100
-    const DURATION = DURATION_GUNSHOT_AUDIO + DELAY
+    const audio = await playAudio('gunshot')
 
-    setTimeout(() => {
-      playAudio('drumbeat')
-    }, DURATION)
     changeState('game-over')
+
+    if (audio === null) {
+      return
+    }
+
+    audio.addEventListener(
+      'ended',
+      () => {
+        playAudio('drumbeat')
+      },
+      { once: true },
+    )
   }
 
   const handeInitGame = async () => {
