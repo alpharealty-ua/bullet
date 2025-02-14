@@ -14,7 +14,7 @@ const playAudio = async (
     return null
   }
 
-  const selector = `.audio-${key}`
+  const selector = `[data-audio=${key}]`
 
   const audio = audios.querySelector(selector) as HTMLAudioElement
 

@@ -4,7 +4,7 @@ const Audios = () => {
   return (
     <div id='audios'>
       {audiosEntries.map(([key, src], i) => (
-        <audio key={i} src={src} className={`audio-${key}`}></audio>
+        <audio key={i} src={src} data-audio={`${key}`}></audio>
       ))}
     </div>
   )
