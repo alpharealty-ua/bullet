@@ -22,8 +22,8 @@ const Logo = ({ size = 'md' }: LogoProps) => {
       )}
     >
       <div
-        className='absolute top-[33%] left-[25%] aspect-square w-[17%] bg-contain bg-no-repeat'
-        style={{ backgroundImage: `url(${images.logobullet})` }}
+        className='absolute top-[33%] left-[25.5%] aspect-square w-[17%] -rotate-5 bg-contain bg-no-repeat'
+        style={{ backgroundImage: `url(${images.bullet})` }}
       ></div>
       <img src={images.logo} alt='' />
     </div>
