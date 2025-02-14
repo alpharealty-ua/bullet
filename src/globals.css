@@ -88,6 +88,6 @@ img {
 
 @layer components {
   .custom-scroll {
-    @apply overflow-auto [&::-webkit-scrollbar]:h-[2px] [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-thumb]:bg-[#FF9B2A] [&::-webkit-scrollbar-track]:bg-[#FF9B2A]/20;
+    @apply overflow-auto [&::-webkit-scrollbar]:h-[3px] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#000]/10;
   }
 }
