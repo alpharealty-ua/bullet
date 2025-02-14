@@ -1,6 +1,7 @@
 import { useAppContext } from '@/context/use-app-context'
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
 const Debug = ({ disabled }: { disabled: boolean }) => {
   const {
@@ -14,6 +15,7 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     setBet,
     activeMultiplierIndex,
     setActiveMultiplierIndex,
+    game,
   } = useAppContext()
 
   const handleSetState = (s: State) => {
@@ -24,6 +26,19 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
       setState(s)
     })
   }
+
+  useEffect(() => {
+    // TODO: REFACTOR
+    if (state === 'game-over') {
+      game.gameOver()
+      return
+    }
+    if (state === 'win') {
+      game.winGame()
+      return
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   if (!localStorage.getItem('showDebug') === true) {
     return null

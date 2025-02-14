@@ -94,19 +94,6 @@ const Game = () => {
     })
   }
 
-  useEffect(() => {
-    // TODO: REFACTOR
-    if (state === 'game-over') {
-      game.gameOver()
-      return
-    }
-    if (state === 'win') {
-      game.winGame()
-      return
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state])
-
   return (
     <>
       <Debug disabled={disabled} />
