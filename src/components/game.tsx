@@ -403,47 +403,36 @@ const Game = () => {
           </CSSTransition>
         </div>
         <div className='relative'>
-          {!(
-            [
-              'cover',
-              'rules',
-              'settings',
-              'add-money',
-            ] satisfies State[] as State[]
-          ).includes(state) && (
-            <>
-              <CSSTransition
-                nodeRef={nodeRef2}
-                in={showHelpers && bet > 0}
-                unmountOnExit
-                timeout={400}
-              >
-                {(state) => {
-                  const open = state === 'entering' || state === 'entered'
-                  const close = state === 'exiting' || state === 'exited'
-                  return (
-                    <div
-                      ref={nodeRef2}
-                      key='helper'
-                      className={cn(
-                        'fill-mode-both absolute right-0 bottom-full w-[90px] origin-top bg-contain bg-center bg-no-repeat duration-400',
-                        open && 'animate-in fade-in slide-in-from-top-4',
-                        close && 'animate-out fade-out slide-out-to-top-4',
-                      )}
-                    >
-                      <img src={images.startgame} alt='' />
-                    </div>
-                  )
-                }}
-              </CSSTransition>
-              <Button
-                disabled={disabled || bet === 0}
-                className='animate-in fade-in-0 mt-auto duration-200'
-                image='pull'
-                onClick={handlePull}
-              />
-            </>
-          )}
+          <CSSTransition
+            nodeRef={nodeRef2}
+            in={showHelpers && bet > 0}
+            unmountOnExit
+            timeout={400}
+          >
+            {(state) => {
+              const open = state === 'entering' || state === 'entered'
+              const close = state === 'exiting' || state === 'exited'
+              return (
+                <div
+                  ref={nodeRef2}
+                  key='helper'
+                  className={cn(
+                    'fill-mode-both absolute right-0 bottom-full w-[90px] origin-top bg-contain bg-center bg-no-repeat duration-400',
+                    open && 'animate-in fade-in slide-in-from-top-4',
+                    close && 'animate-out fade-out slide-out-to-top-4',
+                  )}
+                >
+                  <img src={images.startgame} alt='' />
+                </div>
+              )
+            }}
+          </CSSTransition>
+          <Button
+            disabled={disabled || bet === 0}
+            className='animate-in fade-in-0 mt-auto duration-200'
+            image='pull'
+            onClick={handlePull}
+          />
         </div>
       </div>
       {state === 'game-over' && (
