@@ -32,7 +32,7 @@ export const Modal = React.forwardRef<
             <div
               ref={mergeRefs(nodeRef, ref)}
               className={cn(
-                'fill-mode-both absolute inset-0 z-50 flex flex-col gap-12 bg-cover bg-[right_center] px-3 py-12 duration-200',
+                'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col gap-12 overflow-auto bg-cover bg-[right_center] px-3 py-12 duration-200',
                 className,
                 open && 'animate-in fade-in-0 zoom-in-95',
                 close && 'animate-out fade-out-0 zoom-out-95',
