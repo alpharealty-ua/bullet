@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
 // TODO: MOVE TO CONSTANTS
-const TIME_WIN_AUDIO = 2800
+const TIME_WIN_AUDIO = 3500
 const TIME_ANIMATION_DELAY = 200
 const TIME_ANIMATION_DURATION = 500
 const TIME_INCREASE =
