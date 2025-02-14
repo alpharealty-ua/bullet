@@ -31,6 +31,17 @@ interface ContextAppValue {
   jackpot: number
   disabled: boolean
   setDisabled: React.Dispatch<boolean>
+  game: {
+    next: () => void
+    gameOver: () => void
+    newGame: () => void
+    deal: () => void
+    winGame: () => void
+  }
+  mouseClick: () => Promise<unknown>
+  revolverRefHandle: React.RefObject<{
+    spin: (interval: number) => Promise<void>
+  }>
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)

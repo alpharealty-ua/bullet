@@ -3,8 +3,8 @@ import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { getMultiplierValueByIndex, images, multipliers } from '@/lib/constants'
-import { randomIntFromInterval, cn, wait } from '@/lib/utils'
+import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
@@ -20,168 +20,28 @@ import { AddMoney } from './add-money'
 const Game = () => {
   const {
     state,
-    changeState,
-    undoState,
-    countBullet,
-    setCountBullet,
     balance,
     addBalance,
     bet,
-    setBet,
-    activeMultiplierIndex,
-    setActiveMultiplierIndex,
-    playAudio,
     showHelpers,
     setShowHelpers,
     settings,
     offer,
-    setOffer,
     showOffer,
     setShowOffer,
     showJackpot,
-    setShowJackpot,
     showClick,
-    setShowClick,
     disabled,
     setDisabled,
     jackpot,
+    game,
+    mouseClick,
+    revolverRefHandle,
   } = useAppContext()
-  const revolverRefHandle = useRef<{
-    spin: (interval: number) => Promise<void>
-  }>(null)
-  const disabledRef = useRef(disabled)
 
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
   const modal = useCustomModal()
-
-  // TODO: EXTRACT GAME LOGIC IN CONTEXT
-  const newGame = () => {
-    const hasPrevBet = bet !== 0
-    const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
-
-    changeState('preparation')
-    setBet(prevBet)
-    setOffer(0)
-    setCountBullet(5)
-    setActiveMultiplierIndex(-1)
-    setShowJackpot(false)
-    setShowOffer(false)
-  }
-
-  const getMultiplier = async (): Promise<number> => {
-    const revolverHandle = revolverRefHandle.current
-
-    if (revolverHandle === null) {
-      return -1
-    }
-
-    const AMOUNT_CHAMBER = randomIntFromInterval(18, 30)
-    const DURATION_AUDIO = 1500
-    const interval = DURATION_AUDIO / AMOUNT_CHAMBER
-
-    let count = AMOUNT_CHAMBER
-    let index = 0
-
-    await playAudio('spin')
-
-    return new Promise<number>((resolve) => {
-      const spin = async () => {
-        if (count-- > 0) {
-          await revolverHandle.spin(interval)
-          const newIndex = index++ % multipliers.length
-          setActiveMultiplierIndex(newIndex)
-          spin()
-        } else {
-          resolve(index)
-        }
-      }
-
-      spin()
-    })
-  }
-
-  const callWithAnimation = async <T,>(callback: () => T | Promise<T>) => {
-    const disabled = disabledRef.current
-    disabledRef.current = true
-
-    if (disabled) {
-      return
-    }
-
-    const BTN_TRANSITION_DURATION = 200
-    setTimeout(() => {
-      if (disabledRef.current) {
-        setDisabled(true)
-      }
-    }, BTN_TRANSITION_DURATION)
-    await mouseClick()
-
-    const result = await callback()
-
-    setDisabled(false)
-    disabledRef.current = false
-    return result
-  }
-
-  const deal = async () => {
-    if (offer > 0) {
-      await playAudio('chaching')
-      addBalance(offer + bet)
-      setOffer(0)
-    }
-    newGame()
-  }
-
-  const next = async () => {
-    if (state === 'preparation') {
-      setShowJackpot(false)
-      addBalance(-bet)
-      await getMultiplier()
-      setOffer(0)
-      setShowJackpot(true)
-      changeState('running')
-
-      return
-    }
-
-    const revolverHandle = revolverRefHandle.current
-
-    if (revolverHandle === null) {
-      return
-    }
-
-    setOffer(0)
-    setShowJackpot(true)
-    setShowOffer(false)
-
-    const random = randomIntFromInterval(1, 6)
-    const newCountBullet = countBullet - 1
-
-    const isGameOver = random === 1
-    const isWin = !isGameOver && newCountBullet === 0
-
-    setCountBullet(newCountBullet)
-    setShowClick(false)
-
-    await playAudio('triggerpull')
-    await revolverHandle.spin(200)
-
-    setShowClick(true)
-
-    if (isGameOver) {
-      await gameOver()
-      return
-    }
-    if (isWin) {
-      await winGame()
-      return
-    }
-    if (!settings.declineAllDeals) {
-      setOffer(100)
-      setShowOffer(true)
-    }
-  }
 
   useEffect(() => {
     const image = new Image()
@@ -189,51 +49,10 @@ const Game = () => {
     image.src = imageSrc
   }, [])
 
-  const gameOver = async () => {
-    const audio = await playAudio('gunshot')
-
-    changeState('game-over')
-
-    if (audio === null) {
-      return
-    }
-
-    audio.addEventListener(
-      'ended',
-      () => {
-        playAudio('drumbeat')
-      },
-      { once: true },
-    )
-  }
-
-  const winGame = async () => {
-    await playAudio('chaching')
-    await wait(1000)
-    const audio = await playAudio('winsound')
-
-    changeState('win')
-
-    // TODO: REMOVE 1000. ONLY FOR TEST
-    addBalance(jackpot || 1000)
-
-    if (audio === null) {
-      newGame()
-      return
-    }
-
-    return new Promise<void>((resolve) => {
-      audio.addEventListener('ended', () => {
-        newGame()
-        resolve()
-      })
-    })
-  }
-
   const handeInitGame = async () => {
     await mouseClick()
     setDisabled(true)
-    newGame()
+    game.newGame()
     setDisabled(false)
   }
 
@@ -249,35 +68,23 @@ const Game = () => {
   const handlePull = async () => {
     setShowHelpers(false)
     setShowOffer(false)
-    await callWithAnimation(next)
-  }
-
-  const mouseClick = async () => {
-    const audio = await playAudio('mouseclick')
-
-    if (audio === null) {
-      return
-    }
-
-    return new Promise((resolve) => {
-      audio.addEventListener('ended', resolve, { once: true })
-    })
+    game.next()
   }
 
   const handleDeal = async () => {
-    await callWithAnimation(deal)
+    game.deal()
   }
 
   const handleStartGame = async () => {
     setDisabled(true)
     await mouseClick()
 
-    newGame()
+    game.newGame()
     setDisabled(false)
   }
 
   const handleGameOverTimeout = () => {
-    newGame()
+    game.newGame()
   }
 
   const handleAddMoney = async () => {
@@ -290,11 +97,11 @@ const Game = () => {
   useEffect(() => {
     // TODO: REFACTOR
     if (state === 'game-over') {
-      gameOver()
+      game.gameOver()
       return
     }
     if (state === 'win') {
-      winGame()
+      game.winGame()
       return
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
