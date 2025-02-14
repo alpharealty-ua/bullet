@@ -17,11 +17,16 @@ const Logo = ({ size = 'md' }: LogoProps) => {
   return (
     <div
       className={cn(
-        'inline-flex aspect-[1/0.333] bg-contain bg-center bg-no-repeat',
+        'relative inline-flex bg-contain bg-center bg-no-repeat',
         sizes[size],
       )}
-      style={{ backgroundImage: `url(${images.logo})` }}
-    ></div>
+    >
+      <div
+        className='absolute top-[33%] left-[25%] aspect-square w-[17%] bg-contain bg-no-repeat'
+        style={{ backgroundImage: `url(${images.logobullet})` }}
+      ></div>
+      <img src={images.logo} alt='' />
+    </div>
   )
 }
 

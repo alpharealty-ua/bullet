@@ -36,7 +36,7 @@ const Footer = () => {
 
   return (
     <footer
-      className='relative flex h-[74px] bg-cover bg-[center_top] px-2 py-0.5'
+      className='relative flex h-[74px] bg-cover bg-[center_top] bg-no-repeat px-2 py-0.5'
       style={{ backgroundImage: `url(${images.footer})` }}
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
@@ -52,7 +52,7 @@ const Footer = () => {
       <div className='relative w-[130px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
         <button
-          className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center bg-repeat'
+          className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
           style={{ backgroundImage: `url(${images.settings})` }}
           onClick={handleSettings}
         ></button>
