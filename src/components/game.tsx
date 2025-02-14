@@ -76,9 +76,9 @@ const Game = () => {
       return -1
     }
 
-    const AMOUNT_CHAMBER = randomIntFromInterval(6, 18)
-    const DURATION = 1500
-    const interval = DURATION / AMOUNT_CHAMBER
+    const AMOUNT_CHAMBER = randomIntFromInterval(18, 30)
+    const DURATION_AUDIO = 1500
+    const interval = DURATION_AUDIO / AMOUNT_CHAMBER
 
     let count = AMOUNT_CHAMBER
     let index = 0
