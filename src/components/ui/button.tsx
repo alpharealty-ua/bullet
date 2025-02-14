@@ -13,6 +13,7 @@ const imagesMap = {
   moneybag: images.moneybag,
 }
 
+// ADD ON CLICK WRAPPER FOR AUDIO
 const Button = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -24,7 +25,7 @@ const Button = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        'relative cursor-pointer bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
+        'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
         className,
       )}
       {...props}
