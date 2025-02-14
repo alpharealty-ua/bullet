@@ -177,8 +177,10 @@ const Game = () => {
       await winGame()
       return
     }
-    setOffer(100)
-    setShowOffer(true)
+    if (!settings.declineAllDeals) {
+      setOffer(100)
+      setShowOffer(true)
+    }
   }
 
   useEffect(() => {
