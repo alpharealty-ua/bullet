@@ -42,15 +42,15 @@ const Game = () => {
     setShowJackpot,
     showClick,
     setShowClick,
+    disabled,
+    setDisabled,
+    jackpot,
   } = useAppContext()
   const revolverRefHandle = useRef<{
     spin: (interval: number) => Promise<void>
   }>(null)
-  // TODO: MOVE TO CONTEXT
-  const [disabled, setDisabled] = useState(false)
   const disabledRef = useRef(disabled)
 
-  const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
   const modal = useCustomModal()

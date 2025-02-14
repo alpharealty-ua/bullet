@@ -28,6 +28,9 @@ interface ContextAppValue {
   setShowJackpot: React.Dispatch<boolean>
   showClick: boolean
   setShowClick: React.Dispatch<boolean>
+  jackpot: number
+  disabled: boolean
+  setDisabled: React.Dispatch<boolean>
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)

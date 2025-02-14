@@ -2,7 +2,12 @@ import React, { useCallback, useReducer, useState } from 'react'
 
 import { AppContext } from '@/context/context'
 import { playAudio } from '@/lib/utils'
-import { SettingsKeys, State, audios } from '@/lib/constants'
+import {
+  SettingsKeys,
+  State,
+  audios,
+  getMultiplierValueByIndex,
+} from '@/lib/constants'
 import { appReducer, initState } from './app-reducer'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +28,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showJackpot, setShowJackpot] = useState(false)
   const [showOffer, setShowOffer] = useState(false)
   const [showClick, setShowClick] = useState(false)
+  const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
+  const [disabled, setDisabled] = useState(false)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -87,6 +94,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         showClick,
         setShowClick,
         playAudio: playAudioWrapper,
+        jackpot,
+        setDisabled,
+        disabled,
       }}
     >
       {children}
