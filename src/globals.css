@@ -36,9 +36,14 @@
 }
 
 html,
-body,
+body {
+  min-height: 100vh;
+}
+body {
+  display: flex;
+}
 #root {
-  height: 100%;
+  flex-grow: 1;
 }
 
 body {
@@ -80,3 +85,4 @@ img {
     transform: scale(1);
   }
 }
+
