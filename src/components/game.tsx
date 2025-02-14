@@ -124,8 +124,9 @@ const Game = () => {
     return result
   }
 
-  const deal = () => {
+  const deal = async () => {
     if (offer > 0) {
+      await playAudio('chaching')
       addBalance(offer + bet)
       setOffer(0)
     }
@@ -405,7 +406,6 @@ const Game = () => {
             {(state) => {
               const open = state === 'entering' || state === 'entered'
               const close = state === 'exiting' || state === 'exited'
-
               return (
                 <div
                   ref={nodeRef}
@@ -418,6 +418,7 @@ const Game = () => {
                 >
                   <Button
                     disabled={disabled}
+                    className='w-24'
                     image='deal'
                     onClick={handleDeal}
                   />
@@ -453,7 +454,7 @@ const Game = () => {
           </CSSTransition>
           <Button
             disabled={disabled || bet === 0}
-            className='animate-in fade-in-0 mt-auto duration-200'
+            className='w-24'
             image='pull'
             onClick={handlePull}
           />
