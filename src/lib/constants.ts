@@ -31,7 +31,7 @@ export const images = {
   logo: './assets/images/bullet-logo.svg',
   wrapper: './assets/images/wrapper.png',
   gameover: './assets/images/compressed/game-over.gif',
-  blood: './assets/images/compressed/blood.png',
+  blood: './assets/images/blood.svg',
   you: './assets/images/compressed/you.png',
   died: './assets/images/compressed/died.png',
   100: './assets/images/compressed/100.png',

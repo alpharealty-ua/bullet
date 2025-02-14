@@ -51,11 +51,11 @@ const GameOver = ({
         style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
         <div
-          className='animate-in fade-in fill-mode-both w-[143px absolute bottom-[63%] left-[26%] h-[143px] w-[143px] bg-contain bg-center delay-[900ms] duration-100'
+          className='animate-in fade-in fill-mode-both w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center delay-[900ms] duration-100'
           style={{ backgroundImage: `url(${images.you})` }}
         ></div>
         <div
-          className='animate-in fade-in fill-mode-both absolute top-[60%] right-[8%] h-[153px] w-[158px] bg-contain bg-center delay-1000 duration-100'
+          className='animate-in fade-in fill-mode-both absolute top-[48%] right-[8%] h-[153px] w-[158px] bg-contain bg-center delay-1000 duration-100'
           style={{ backgroundImage: `url(${images.died})` }}
         ></div>
       </div>
