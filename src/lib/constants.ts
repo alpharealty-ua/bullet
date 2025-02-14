@@ -36,6 +36,7 @@ export const images = {
   you: './assets/images/you.svg',
   died: './assets/images/died.svg',
   deal: './assets/images/deal.svg',
+  button: './assets/images/button.svg',
   startgame: './assets/images/start-game.svg',
   wagerhere: './assets/images/wager-here.svg',
   bulletchambe: './assets/images/compressed/bullet-chambe.png',
@@ -80,6 +81,7 @@ export const settings = {
   soundEffects: 'Toggle sound effects',
   invertButtons: 'Invert PULL AND DEAL button positions',
   blood: 'Toggles off blood',
+  declineAllDeals: 'Decline all deals',
 } as const
 
 export const settingsEntries = Object.entries(settings) as [

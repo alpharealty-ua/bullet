@@ -4,6 +4,7 @@ import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const imagesMap = {
+  button: images.button,
   play: images.play,
   pull: images.pull,
   deal: images.deal,
@@ -12,22 +13,30 @@ const imagesMap = {
   moneybag: images.moneybag,
 }
 
-export const Button = React.forwardRef<
+const Button = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    image: keyof typeof imagesMap
+    image?: keyof typeof imagesMap
+    text?: string
   }
->(({ className, image, ...props }, ref) => {
+>(({ className, image = 'button', text, ...props }, ref) => {
   return (
     <button
       ref={ref}
       className={cn(
-        'relative w-24 cursor-pointer bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
+        'relative cursor-pointer bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
         className,
       )}
       {...props}
     >
+      {text && (
+        <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-3xl font-bold'>
+          {text}
+        </span>
+      )}
       <img src={imagesMap[image]} alt='' />
     </button>
   )
 })
+
+export { Button }
