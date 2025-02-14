@@ -19,6 +19,7 @@ export const states = [
   'add-money',
   'preparation',
   'running',
+  'win',
   'game-over',
 ] as const
 
@@ -67,6 +68,12 @@ export const audiosEntries = Object.entries(audios)
 export const INIT_BALANCE = 1000
 
 export const MAX_BET = 1000
+
+const TIME_WIN_AUDIO = 3500
+const TIME_ANIMATION_DELAY = 200
+const TIME_ANIMATION_DURATION = 500
+export const TIME_WIN_INCREASE_NUMBER =
+  TIME_WIN_AUDIO - TIME_ANIMATION_DURATION - TIME_ANIMATION_DELAY
 
 export const settings = {
   music: 'Toggle music',

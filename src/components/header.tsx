@@ -1,4 +1,5 @@
 import { useAppContext } from '@/context/use-app-context'
+import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
@@ -17,6 +18,7 @@ export const Header = () => {
       <Logo />
       <Balance
         value={balance}
+        increaseTime={state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined}
         beforeSlot={
           <>
             {/* TODO: ADD FLAG NO_MONEY  */}

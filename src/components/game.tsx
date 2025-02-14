@@ -173,12 +173,7 @@ const Game = () => {
       return
     }
     if (isWin) {
-      await playAudio('chaching')
-      await wait(1000)
-      await playAudio('winsound')
-      const win = getMultiplierValueByIndex(activeMultiplierIndex) * bet
-      addBalance(win)
-      newGame()
+      await winGame()
       return
     }
     setOffer(100)
@@ -207,6 +202,29 @@ const Game = () => {
       },
       { once: true },
     )
+  }
+
+  const winGame = async () => {
+    await playAudio('chaching')
+    await wait(1000)
+    const audio = await playAudio('winsound')
+
+    changeState('win')
+
+    // TODO: REMOVE 1000. ONLY FOR TEST
+    addBalance(jackpot || 1000)
+
+    if (audio === null) {
+      newGame()
+      return
+    }
+
+    return new Promise<void>((resolve) => {
+      audio.addEventListener('ended', () => {
+        newGame()
+        resolve()
+      })
+    })
   }
 
   const handeInitGame = async () => {
@@ -273,6 +291,10 @@ const Game = () => {
     // TODO: REFACTOR
     if (state === 'game-over') {
       gameOver()
+      return
+    }
+    if (state === 'win') {
+      winGame()
       return
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
