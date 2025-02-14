@@ -441,7 +441,7 @@ const Game = () => {
         <GameOver
           onClick={handleStartGame}
           onTimeout={handleGameOverTimeout}
-          timeout={2000}
+          timeout={3000}
           image={images.gameover}
           hideBlood={settings.blood}
         />
