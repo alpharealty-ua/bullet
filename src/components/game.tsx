@@ -2,12 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
-import {
-  getMultiplierValueByIndex,
-  images,
-  multipliers,
-  State,
-} from '@/lib/constants'
+import { getMultiplierValueByIndex, images, multipliers } from '@/lib/constants'
 import { randomIntFromInterval, cn, wait } from '@/lib/utils'
 import { Button } from './ui/button'
 import { GameOver } from './game-over'
