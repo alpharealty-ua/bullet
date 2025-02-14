@@ -66,7 +66,7 @@ const GameOver = ({
           You
         </div>
         <div
-          className='animate-in fade-in fill-mode-both uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent delay-1000 duration-100 select-none'
+          className='animate-in fade-in fill-mode-both uppercasee absolute top-[48%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent delay-1000 duration-100 select-none'
           style={{ backgroundImage: `url(${images.died})` }}
         >
           Died
