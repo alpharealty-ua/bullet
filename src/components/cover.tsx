@@ -12,7 +12,7 @@ const Cover = ({
     <>
       <Logo size='3xl' />
       <Button image='play' className='w-30' onClick={onStart} />
-      <Button image='gamerules' onClick={onGameRules} />
+      <Button image='gamerules' className='w-24' onClick={onGameRules} />
     </>
   )
 }
