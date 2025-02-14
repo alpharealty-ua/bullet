@@ -10,13 +10,18 @@ const Footer = () => {
   const {
     countBullet,
     activeMultiplierIndex,
-    hasMultiplier,
     balance,
     bet,
     setBet,
+    state,
     changeState,
     showHelpers,
   } = useAppContext()
+  // TODO: MOVE MAX BET TO CONTEXT
+  const maxBet = Math.min(
+    state === 'running' ? bet + balance : balance,
+    MAX_BET,
+  )
 
   const handleSettings = () => {
     changeState('settings')
@@ -24,10 +29,9 @@ const Footer = () => {
 
   const handleSetBet = useCallback(
     (bet: number) => {
-      changeState('pull')
       setBet(bet)
     },
-    [changeState, setBet],
+    [setBet],
   )
 
   return (
@@ -37,8 +41,8 @@ const Footer = () => {
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
-          disabled={(hasMultiplier && bet > 0) || balance === 0}
-          maxBet={Math.min(hasMultiplier ? bet + balance : balance, MAX_BET)}
+          disabled={(state === 'running' && bet > 0) || balance === 0}
+          maxBet={maxBet}
           bet={bet}
           onBet={handleSetBet}
           showHelpers={showHelpers && bet === 0}

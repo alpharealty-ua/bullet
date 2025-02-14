@@ -35,7 +35,6 @@ const Game = () => {
     bet,
     setBet,
     activeMultiplierIndex,
-    hasMultiplier,
     setActiveMultiplierIndex,
     playAudio,
     showHelpers,
@@ -65,7 +64,7 @@ const Game = () => {
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
-    changeState('pull')
+    changeState('preparation')
     setBet(prevBet)
     setOffer(0)
     setCountBullet(5)
@@ -138,12 +137,13 @@ const Game = () => {
   }
 
   const next = async () => {
-    if (!hasMultiplier) {
+    if (state === 'preparation') {
       setShowJackpot(false)
       addBalance(-bet)
       await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
+      changeState('running')
 
       return
     }
@@ -312,7 +312,7 @@ const Game = () => {
         price={offer}
         open={showOffer && Boolean(offer)}
       />
-      {state === 'pull' && !hasMultiplier && balance === 0 && (
+      {state === 'preparation' && balance === 0 && (
         <div className='relative flex justify-center pt-[50px]'>
           <button
             className='relative inline-flex transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed'
@@ -362,7 +362,7 @@ const Game = () => {
       )}
       <Revolver
         ref={revolverRefHandle}
-        disabled={disabled || hasMultiplier}
+        disabled={disabled || !(state === 'preparation')}
         beforeSlot={<>{showClick && <Click />}</>}
       />
       <div

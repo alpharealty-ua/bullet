@@ -93,7 +93,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           dispatch({ type: 'set-bet', payload })
         }, []),
         activeMultiplierIndex,
-        hasMultiplier: activeMultiplierIndex !== -1,
         setActiveMultiplierIndex: useCallback((payload: number) => {
           dispatch({ type: 'set-multiplier-index', payload })
         }, []),

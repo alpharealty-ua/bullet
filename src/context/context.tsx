@@ -14,7 +14,6 @@ interface ContextAppValue {
   bet: number
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number
-  hasMultiplier: boolean
   setActiveMultiplierIndex: React.Dispatch<number>
   setShowHelpers: React.Dispatch<boolean>
   showHelpers: boolean
