@@ -37,15 +37,17 @@ export const wait = (timeout: number) =>
 
 export const playAudio = async (
   key: keyof typeof audios,
+  play = true,
 ): Promise<HTMLAudioElement | null> => {
   const src = audios[key]
 
   const audio = new Audio(src)
 
   try {
-    await audio.play()
-    console.log('Play audio - ' + audio.src)
-
+    if (play) {
+      await audio.play()
+      console.log('Play audio - ' + audio.src)
+    }
     return audio
   } catch (error) {
     console.log(error)

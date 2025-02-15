@@ -250,18 +250,19 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const gameOver = async () => {
+    const drumBeatAudio = await playAudio('drumbeat', false)
     const audio = await playAudio('gunshot')
 
     changeState('game-over')
 
-    if (audio === null) {
+    if (audio === null || drumBeatAudio === null) {
       return
     }
 
     audio.addEventListener(
       'ended',
       () => {
-        playAudio('drumbeat')
+        drumBeatAudio.play()
       },
       { once: true },
     )
