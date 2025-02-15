@@ -33,10 +33,10 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
       game.gameOver()
       return
     }
-    if (state === 'win') {
-      game.winGame()
-      return
-    }
+    // if (state === 'win') {
+    //   game.winGame()
+    //   return
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state])
 
