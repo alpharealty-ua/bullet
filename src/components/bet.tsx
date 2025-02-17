@@ -222,7 +222,12 @@ const Bet = ({
           )
         }}
       </CSSTransition>
-      <div className='text-xl font-bold text-[#006100] uppercase'>Bet</div>
+      {label && (
+        <div className='text-xl font-bold text-[#006100] uppercase'>
+          {label}
+        </div>
+      )}
+
       <div
         ref={sliderWrapperRef}
         className='relative -mt-1.5 flex w-full flex-col'
@@ -248,15 +253,31 @@ const Bet = ({
               left: `${percent}%`,
             }}
             data-button
-          ></button>
+          >
+            {/* TODO: TEMPORARY SOLUTION  */}
+            {label === '' && (
+              <>
+                <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
+                  <div>Risk</div>
+                  $1000
+                </div>
+                <div className='absolute top-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
+                  <div>To win</div>
+                  $500
+                </div>
+              </>
+            )}
+          </button>
         </div>
         <div className='absolute -top-3.5 right-0 left-0 flex justify-between text-[12px] text-[#ff0b0b] uppercase'>
           <div>0</div>
           <div>Max</div>
         </div>
-        <div className='w-full text-2xl leading-[1] text-ellipsis'>
-          $<span data-value>{value}</span>
-        </div>
+        {label && (
+          <div className='w-full text-2xl leading-[1] text-ellipsis'>
+            $<span data-value>{value}</span>
+          </div>
+        )}
       </div>
     </div>
   )
