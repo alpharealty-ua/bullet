@@ -15,13 +15,12 @@ import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Debug } from './debug'
-import { AddMoney } from './add-money'
+import { AddMoneyModal } from './add-money-modal'
 
 const Game = () => {
   const {
     state,
     balance,
-    addBalance,
     bet,
     showHelpers,
     setShowHelpers,
@@ -82,7 +81,7 @@ const Game = () => {
   const handleAddMoney = async () => {
     await mouseClick()
     modal.show({
-      contentSlot: <AddMoney balance={balance} onAddMoney={addBalance} />,
+      contentSlot: <AddMoneyModal />,
     })
   }
 

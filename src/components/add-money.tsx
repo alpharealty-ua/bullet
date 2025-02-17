@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Balance } from './balance'
+
 import { addZerro, cn } from '@/lib/utils'
+import { Balance } from './balance'
 
 const AddMoney = ({
   balance,

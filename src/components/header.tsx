@@ -5,16 +5,16 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
 import { Balance } from './balance'
-import { AddMoney } from './add-money'
+import { AddMoneyModal } from './add-money-modal'
 
 export const Header = () => {
-  const { balance, bet, state, addBalance, playAudio } = useAppContext()
+  const { balance, bet, state, playAudio } = useAppContext()
   const modal = useCustomModal()
 
   const handleAddMoney = async () => {
     await playAudio('mouseclick')
     modal.show({
-      contentSlot: <AddMoney balance={balance} onAddMoney={addBalance} />,
+      contentSlot: <AddMoneyModal />,
     })
   }
 
