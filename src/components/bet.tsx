@@ -24,7 +24,7 @@ const Bet = ({
 
   const changeValue = useCallback(
     (bet: number, callOnBet = true) => {
-      bet = Math.max(0, Math.min(bet, maxBet))
+      bet = Math.max(0, Math.min(Math.round(bet), maxBet))
       const percent = Math.max(0, Math.min((bet / maxBet) * 100, 100))
       callOnBet && onBet(bet)
       setValue(bet)
@@ -96,7 +96,10 @@ const Bet = ({
 
         const roundPercentX = (percentX =
           Math.round(percentX / ROUND_PERCENT) * ROUND_PERCENT)
-        const currentBet = Math.round((maxBet * roundPercentX) / 100)
+        const currentBet = Math.min(
+          Math.round((maxBet * roundPercentX) / 100),
+          maxBet,
+        )
 
         buttonDom.style.left = roundPercentX + '%'
         valueDom.textContent = String(currentBet)
