@@ -32,7 +32,6 @@ const Game = () => {
     showJackpot,
     showClick,
     disabled,
-    setDisabled,
     jackpot,
     game,
     mouseClick,
@@ -51,36 +50,29 @@ const Game = () => {
 
   const handeInitGame = async () => {
     await mouseClick()
-    setDisabled(true)
     game.newGame()
-    setDisabled(false)
   }
 
   const handleGameRules = async () => {
     await mouseClick()
-    setDisabled(true)
     modal.show({
       contentSlot: <Rules />,
     })
-    setDisabled(false)
   }
 
   const handlePull = async () => {
     setShowHelpers(false)
     setShowOffer(false)
-    game.next()
+    await mouseClick(game.next)
   }
 
   const handleDeal = async () => {
-    game.deal()
+    await mouseClick(game.deal)
   }
 
   const handleStartGame = async () => {
-    setDisabled(true)
     await mouseClick()
-
     game.newGame()
-    setDisabled(false)
   }
 
   const handleGameOverTimeout = () => {

@@ -148,25 +148,16 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
-  const mouseClick = async () => {
-    const audio = await playAudio('mouseclick')
-
-    if (audio === null) {
-      return
-    }
-
-    return new Promise((resolve) => {
-      audio.addEventListener('ended', resolve, { once: true })
-    })
-  }
-
-  const callWithAnimation = async <T,>(callback: () => T | Promise<T>) => {
+  const mouseClick = async (
+    callback?: () => void | Promise<void>,
+  ): Promise<void> => {
     const disabled = disabledRef.current
-    disabledRef.current = true
 
     if (disabled) {
       return
     }
+
+    disabledRef.current = true
 
     const BTN_TRANSITION_DURATION = 200
     setTimeout(() => {
@@ -174,13 +165,29 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setDisabled(true)
       }
     }, BTN_TRANSITION_DURATION)
-    await mouseClick()
 
-    const result = await callback()
+    const audio = await playAudio('mouseclick')
 
-    setDisabled(false)
-    disabledRef.current = false
-    return result
+    const promise = new Promise<void>((resolve) => {
+      audio.addEventListener(
+        'ended',
+        async () => {
+          if (!callback) {
+            resolve()
+            return
+          }
+          await callback()
+          resolve()
+        },
+        { once: true },
+      )
+    })
+
+    return promise.then((result) => {
+      setDisabled(false)
+      disabledRef.current = false
+      return result
+    })
   }
 
   const deal = async () => {
@@ -242,14 +249,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const nextWrapper = async () => {
-    callWithAnimation(next)
-  }
-
-  const dealWrapper = async () => {
-    callWithAnimation(deal)
-  }
-
   const gameOver = async () => {
     const drumBeatAudio = await playAudio('drumbeat', false)
     const audio = await playAudio('gunshot')
@@ -297,10 +296,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         ...context,
         game: {
-          deal: dealWrapper,
+          deal,
           newGame,
           gameOver,
-          next: nextWrapper,
+          next,
           winGame,
         },
         mouseClick,
