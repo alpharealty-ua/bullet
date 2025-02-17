@@ -1,0 +1,22 @@
+const Rank = ({ value }: { value: number }) => {
+  return (
+    <div className='relative left-[1px] h-4 w-full overflow-hidden border-2 border-black bg-[#eee]'>
+      <div className='absolute inset-0 -right-1 -left-1'>
+        <div
+          className='absolute inset-0 -skew-x-30 bg-[#ff9c2a] transition-all'
+          style={{ width: `${value}%` }}
+        ></div>
+      </div>
+      {Array(10)
+        .fill(null)
+        .map((_, i) => (
+          <div
+            className='absolute h-full w-0.5 -skew-x-30 bg-black'
+            style={{ left: 8 + 10 * i }}
+          ></div>
+        ))}
+    </div>
+  )
+}
+
+export { Rank }

@@ -16,6 +16,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     {
       countBullet,
       state,
+      rank,
       balance,
       bet,
       activeMultiplierIndex,
@@ -54,10 +55,15 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     return playAudio(key)
   }
 
+  const addRank = useCallback((payload: number) => {
+    dispatch({ type: 'add-rank', payload })
+  }, [])
+
   const context = {
     state,
     changeState,
     undoState,
+    rank,
     countBullet,
     setCountBullet: useCallback((payload: number) => {
       dispatch({ type: 'set-bullet', payload })
@@ -195,6 +201,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       await playAudio('chaching')
       context.addBalance(offer + bet)
       setOffer(0)
+      addRank(2)
     }
     newGame()
   }
@@ -254,6 +261,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const audio = await playAudio('gunshot')
 
     changeState('game-over')
+    addRank(-5)
 
     audio.addEventListener(
       'ended',
@@ -267,6 +275,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const winGame = async () => {
     changeState('win')
 
+    addRank(5)
     await playAudio('chaching')
     await wait(1000)
     const audio = await playAudio('winsound')

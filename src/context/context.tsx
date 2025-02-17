@@ -6,6 +6,7 @@ interface ContextAppValue {
   state: State
   changeState: React.Dispatch<State>
   undoState: React.Dispatch<void>
+  rank: number
   countBullet: number
   setCountBullet: React.Dispatch<number>
   balance: number

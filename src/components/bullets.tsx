@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 
 const Bullets = ({ countBullet }: { countBullet: number }) => {
   return (
-    <div className='mr-auto ml-auto flex gap-2 self-end'>
+    <div className='flex gap-2'>
       {Array(5)
         .fill(null)
         .map((_, index) => (

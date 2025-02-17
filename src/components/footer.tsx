@@ -7,6 +7,7 @@ import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
 import { Settings } from './settings'
+import { Rank } from './rank'
 
 const Footer = () => {
   const {
@@ -18,6 +19,7 @@ const Footer = () => {
     state,
     showHelpers,
     disabled,
+    rank,
   } = useAppContext()
   const modal = useCustomModal()
   // TODO: MOVE MAX BET TO CONTEXT
@@ -54,7 +56,10 @@ const Footer = () => {
           showHelpers={showHelpers && bet === 0}
         />
       </div>
-      <Bullets countBullet={countBullet} />
+      <div className='mr-auto ml-auto flex w-[114px] flex-col self-end'>
+        <Rank value={rank} />
+        <Bullets countBullet={countBullet} />
+      </div>
       <div className='relative w-[130px] shrink-0'>
         <Multiplier items={multipliers} activeIndex={activeMultiplierIndex} />
         <button

@@ -13,6 +13,10 @@ interface UndoStateAction {
   // eslint-disable-next-line
   payload?: any
 }
+interface AddRankAction {
+  type: 'add-rank'
+  payload: number
+}
 interface SetBalanceAction {
   type: 'set-balance'
   payload: number
@@ -41,6 +45,7 @@ interface ChangeSettingsAction {
 interface GameState {
   stateHistory: State[]
   state: State
+  rank: number
   countBullet: number
   balance: number
   bet: number
@@ -52,6 +57,7 @@ type Actions =
   | SetBulletAction
   | ChangeStateAction
   | UndoStateAction
+  | AddRankAction
   | SetBalanceAction
   | AddBalanceAction
   | SetBetAction
@@ -62,6 +68,7 @@ type Actions =
 export const initState: GameState = {
   stateHistory: ['cover'],
   state: 'cover',
+  rank: 30,
   countBullet: 5,
   balance: INIT_BALANCE,
   bet: 0,
@@ -107,6 +114,11 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
         state: newState,
       }
     }
+    case 'add-rank':
+      return {
+        ...state,
+        rank: Math.max(0, Math.min(100, state.rank + payload)),
+      }
     case 'set-balance':
       return { ...state, balance: payload }
     case 'add-balance':
