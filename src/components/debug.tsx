@@ -1,9 +1,29 @@
-import { useAppContext } from '@/context/use-app-context'
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
 
-const Debug = ({ disabled }: { disabled: boolean }) => {
+interface Props {
+  state: State
+  changeState: React.Dispatch<State>
+  balance: number
+  setBalance: React.Dispatch<number>
+  countBullet: number
+  setCountBullet: React.Dispatch<number>
+  bet: number
+  setBet: React.Dispatch<number>
+  activeMultiplierIndex: number
+  setActiveMultiplierIndex: React.Dispatch<number>
+  game: {
+    next: () => void
+    gameOver: () => void
+    newGame: () => void
+    deal: () => void
+    winGame: () => void
+  }
+  disabled: boolean
+}
+
+const Debug = (props: Props) => {
   const {
     state,
     changeState: setState,
@@ -16,7 +36,8 @@ const Debug = ({ disabled }: { disabled: boolean }) => {
     activeMultiplierIndex,
     setActiveMultiplierIndex,
     game,
-  } = useAppContext()
+    disabled,
+  } = props
 
   const handleSetState = (s: State) => {
     if (disabled) {

@@ -9,6 +9,7 @@ import {
   getMultiplierValueByIndex,
   multipliers,
 } from '@/lib/constants'
+import { Debug } from '@/components/debug'
 import { appReducer, initState } from './app-reducer'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -59,52 +60,56 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'add-rank', payload })
   }, [])
 
+  const setCountBullet = useCallback((payload: number) => {
+    dispatch({ type: 'set-bullet', payload })
+  }, [])
+
+  const setBalance = useCallback((payload: number) => {
+    dispatch({ type: 'set-balance', payload })
+  }, [])
+
+  const setActiveMultiplierIndex = useCallback((payload: number) => {
+    dispatch({ type: 'set-multiplier-index', payload })
+  }, [])
+
+  const setShowHelpers = useCallback((payload: boolean) => {
+    dispatch({ type: 'set-show-helpers', payload })
+  }, [])
+
+  const changeSettings = useCallback(
+    (payload: Partial<Record<SettingsKeys, boolean>>) => {
+      dispatch({ type: 'change-settings', payload })
+    },
+    [],
+  )
+
+  const addBalance = useCallback((payload: number) => {
+    dispatch({ type: 'add-balance', payload })
+  }, [])
+
+  const setBet = useCallback((payload: number) => {
+    dispatch({ type: 'set-bet', payload })
+  }, [])
+
   const context = {
     state,
-    changeState,
-    undoState,
     rank,
     countBullet,
-    setCountBullet: useCallback((payload: number) => {
-      dispatch({ type: 'set-bullet', payload })
-    }, []),
     balance,
-    setBalance: useCallback((payload: number) => {
-      dispatch({ type: 'set-balance', payload })
-    }, []),
-    addBalance: useCallback((payload: number) => {
-      dispatch({ type: 'add-balance', payload })
-    }, []),
+    addBalance,
     bet,
-    setBet: useCallback((payload: number) => {
-      dispatch({ type: 'set-bet', payload })
-    }, []),
+    setBet,
     activeMultiplierIndex,
-    setActiveMultiplierIndex: useCallback((payload: number) => {
-      dispatch({ type: 'set-multiplier-index', payload })
-    }, []),
+    setActiveMultiplierIndex,
     showHelpers,
-    setShowHelpers: useCallback((payload: boolean) => {
-      dispatch({ type: 'set-show-helpers', payload })
-    }, []),
     settings,
-    changeSettings: useCallback(
-      (payload: Partial<Record<SettingsKeys, boolean>>) => {
-        dispatch({ type: 'change-settings', payload })
-      },
-      [],
-    ),
+    changeSettings,
     offer,
-    setOffer,
     showJackpot,
-    setShowJackpot,
     showOffer,
-    setShowOffer,
     showClick,
-    setShowClick,
     playAudio: playAudioWrapper,
     jackpot,
-    setDisabled,
     disabled,
   }
 
@@ -114,10 +119,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
     changeState('preparation')
-    context.setBet(prevBet)
+    setBet(prevBet)
     setOffer(0)
-    context.setCountBullet(5)
-    context.setActiveMultiplierIndex(-1)
+    setCountBullet(5)
+    setActiveMultiplierIndex(-1)
     setShowJackpot(false)
     setShowOffer(false)
   }
@@ -207,6 +212,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const next = async () => {
+    setShowHelpers(false)
+    setShowOffer(false)
+
     if (state === 'preparation') {
       changeState('running')
       setShowJackpot(false)
@@ -234,7 +242,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const isGameOver = random === 1
     const isWin = !isGameOver && newCountBullet === 0
 
-    context.setCountBullet(newCountBullet)
+    setCountBullet(newCountBullet)
     setShowClick(false)
 
     await playAudio('triggerpull')
@@ -291,21 +299,39 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
+  const game = {
+    deal,
+    newGame,
+    gameOver,
+    next,
+    winGame,
+  }
+
   return (
     <AppContext.Provider
       value={{
         ...context,
-        game: {
-          deal,
-          newGame,
-          gameOver,
-          next,
-          winGame,
-        },
         mouseClick,
         revolverRefHandle,
+        game,
       }}
     >
+      <Debug
+        {...{
+          state,
+          changeState,
+          balance,
+          setBalance,
+          countBullet,
+          setCountBullet,
+          bet,
+          setBet,
+          activeMultiplierIndex,
+          setActiveMultiplierIndex,
+          game,
+          disabled,
+        }}
+      />
       {children}
     </AppContext.Provider>
   )

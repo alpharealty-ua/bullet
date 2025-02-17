@@ -14,7 +14,6 @@ import { Rules } from './rules'
 import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
-import { Debug } from './debug'
 import { AddMoneyModal } from './add-money-modal'
 
 const Game = () => {
@@ -23,11 +22,9 @@ const Game = () => {
     balance,
     bet,
     showHelpers,
-    setShowHelpers,
     settings,
     offer,
     showOffer,
-    setShowOffer,
     showJackpot,
     showClick,
     disabled,
@@ -60,8 +57,6 @@ const Game = () => {
   }
 
   const handlePull = async () => {
-    setShowHelpers(false)
-    setShowOffer(false)
     await mouseClick(game.next)
   }
 
@@ -87,7 +82,6 @@ const Game = () => {
 
   return (
     <>
-      <Debug disabled={disabled} />
       {state === 'cover' && (
         <Cover onStart={handeInitGame} onGameRules={handleGameRules} />
       )}
