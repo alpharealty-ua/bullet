@@ -201,12 +201,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const next = async () => {
     if (state === 'preparation') {
+      changeState('running')
       setShowJackpot(false)
       context.addBalance(-bet)
       await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
-      changeState('running')
 
       return
     }
