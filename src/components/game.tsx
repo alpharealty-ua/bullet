@@ -19,6 +19,7 @@ import { AddMoneyModal } from './add-money-modal'
 const Game = () => {
   const {
     state,
+    format,
     balance,
     bet,
     showHelpers,
@@ -95,6 +96,59 @@ const Game = () => {
         />
       )}
       <Header />
+      {format === 'duel' && (
+        <div className='p-4'>
+          <div className='relative bg-green-400 p-3 pl-10'>
+            <div className='absolute top-0 bottom-0 left-0 flex items-center'>
+              <div className='relative w-8'>
+                <div className='absolute top-1/2 left-1/2 -translate-1/2 -rotate-90 whitespace-nowrap'>
+                  SIDE BETS
+                </div>
+              </div>
+              <div className='absolute top-1/2 left-0 w-0'></div>
+            </div>
+            <div className='flex bg-white p-3'>
+              <div className='flex flex-col gap-2'>
+                <div>
+                  <div>PLACE WAGERS ON LIVE GAMES</div>
+                  <div>BET ON: YOKOZUNA</div>
+                  <div>Survival ODDS: 66.6%</div>
+                  <div>BETTING ODDS: -200</div>
+                </div>
+              </div>
+              <div className='flex flex-col justify-between'>
+                <table className=''>
+                  <thead>
+                    <tr>
+                      <th>USER</th>
+                      <th>RISK</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <td>BILL2</td>
+                      <td>$1000</td>
+                    </tr>
+                    <tr>
+                      <td>HARVY</td>
+                      <td>$1000</td>
+                    </tr>
+                    <tr>
+                      <td>SMART</td>
+                      <td>$1000</td>
+                    </tr>
+                    <tr>
+                      <td>FIREA</td>
+                      <td>$1000</td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <div>LIVE WAGERS</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <Result
         title={'Jackpot'}
         price={jackpot}
