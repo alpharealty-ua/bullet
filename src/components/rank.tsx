@@ -11,6 +11,7 @@ const Rank = ({ value }: { value: number }) => {
         .fill(null)
         .map((_, i) => (
           <div
+            key={i}
             className='absolute h-full w-0.5 -skew-x-30 bg-black'
             style={{ left: 8 + 10 * i }}
           ></div>
