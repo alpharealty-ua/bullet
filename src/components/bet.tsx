@@ -18,7 +18,7 @@ const Bet = ({
   showHelpers: boolean
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
-  const [value, setValue] = useState(formatBet(bet))
+  const [value, setValue] = useState(bet)
   const [percent, setPercent] = useState(0)
   const nodeRef2 = useRef(null)
 
@@ -33,7 +33,7 @@ const Bet = ({
       bet = Math.max(0, Math.min(bet ?? 0, maxBet))
       percent = Math.max(0, Math.min(percent ?? 0, 100))
       callOnBet && onBet(bet)
-      setValue(formatBet(bet))
+      setValue(bet)
       setPercent(Math.min(percent, 100))
     },
     [onBet, maxBet],
@@ -105,7 +105,7 @@ const Bet = ({
         const currentBet = Math.round((maxBet * roundPercentX) / 100)
 
         buttonDom.style.left = roundPercentX + '%'
-        valueDom.textContent = formatBet(currentBet)
+        valueDom.textContent = String(currentBet)
       }
 
       const pointerUp = (_: PointerEvent) => {
