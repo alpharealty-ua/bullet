@@ -269,11 +269,11 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const winGame = async () => {
+    changeState('win')
+
     await playAudio('chaching')
     await wait(1000)
     const audio = await playAudio('winsound')
-
-    changeState('win')
 
     // TODO: REMOVE 1000. ONLY FOR TEST
     context.addBalance(jackpot || 1000)
