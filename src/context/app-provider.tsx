@@ -255,10 +255,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     changeState('game-over')
 
-    if (audio === null || drumBeatAudio === null) {
-      return
-    }
-
     audio.addEventListener(
       'ended',
       () => {
@@ -277,11 +273,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     // TODO: REMOVE 1000. ONLY FOR TEST
     context.addBalance(jackpot || 1000)
-
-    if (audio === null) {
-      newGame()
-      return
-    }
 
     return new Promise<void>((resolve) => {
       audio.addEventListener('ended', () => {
