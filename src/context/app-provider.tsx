@@ -44,6 +44,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'change-state', payload })
   }, [])
 
+  // @ts-ignore
   const undoState = useCallback(() => {
     dispatch({ type: 'undo-state' })
   }, [])
