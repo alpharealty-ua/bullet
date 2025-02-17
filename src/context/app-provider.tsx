@@ -102,7 +102,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     disabled,
   }
 
-  const newGame = () => {
+  const newGame = async () => {
+    await wait(0) // need for update states
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
