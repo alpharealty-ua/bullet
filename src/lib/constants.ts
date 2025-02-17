@@ -32,6 +32,7 @@ export const images = {
   you: './assets/images/you.svg',
   died: './assets/images/died.svg',
   deal: './assets/images/deal.svg',
+  duel: './assets/images/duel.svg',
   button: './assets/images/button.svg',
   startgame: './assets/images/start-game.svg',
   wagerhere: './assets/images/wager-here.svg',
