@@ -5,17 +5,19 @@ import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const Bet = ({
-  bet,
-  maxBet,
+  bet = 50,
+  maxBet = 1000,
   onBet,
-  disabled,
-  showHelpers,
+  disabled = false,
+  showHelpers = false,
+  label = 'Bet',
 }: {
-  maxBet: number
-  bet: number
-  onBet: (bet: number) => void
-  disabled: boolean
-  showHelpers: boolean
+  maxBet?: number
+  bet?: number
+  onBet?: (bet: number) => void
+  disabled?: boolean
+  showHelpers?: boolean
+  label?: string
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(bet)
@@ -26,7 +28,7 @@ const Bet = ({
     (bet: number, callOnBet = true) => {
       bet = Math.max(0, Math.min(Math.round(bet), maxBet))
       const percent = Math.max(0, Math.min((bet / maxBet) * 100, 100))
-      callOnBet && onBet(bet)
+      callOnBet && onBet && onBet(bet)
       setValue(bet)
       setPercent(Math.min(percent, 100))
     },
@@ -153,7 +155,7 @@ const Bet = ({
     const sign = clickInTheRight ? 1 : -1
 
     const INCREMENT_BET = 50
-    const currentBet = bet
+    const currentBet = value
     const addedBet = currentBet + INCREMENT_BET * sign
     const roundAddedBet = Math.floor(addedBet / INCREMENT_BET) * INCREMENT_BET
 
