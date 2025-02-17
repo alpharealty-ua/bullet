@@ -60,7 +60,7 @@ export const audios = {
   winsound: './assets/audios/winsound.mp3',
 } as const
 
-export const audiosValues = Object.values(audios)
+export const audiosEntries = Object.entries(audios)
 
 export const INIT_BALANCE = 1000
 

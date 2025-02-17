@@ -39,9 +39,20 @@ export const playAudio = async (
   key: keyof typeof audios,
   play = true,
 ): Promise<HTMLAudioElement | null> => {
-  const src = audios[key]
+  // TODO: CREATE AUDIO AND PLAY WITHOUT SEARCH
+  const audios = document.getElementById('audios')
 
-  const audio = new Audio(src)
+  if (audios === null) {
+    return null
+  }
+
+  const selector = `[data-audio=${key}]`
+
+  const audio = audios.querySelector(selector) as HTMLAudioElement
+
+  if (audio === null) {
+    return null
+  }
 
   try {
     if (play) {

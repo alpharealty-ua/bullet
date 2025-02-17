@@ -1,10 +1,10 @@
-import { audiosValues } from '@/lib/constants'
+import { audiosEntries } from '@/lib/constants'
 
 const Audios = () => {
   return (
-    <div>
-      {audiosValues.map((src, i) => (
-        <audio key={i} src={src}></audio>
+    <div id='audios'>
+      {audiosEntries.map(([key, src], i) => (
+        <audio key={i} src={src} data-audio={`${key}`}></audio>
       ))}
     </div>
   )
