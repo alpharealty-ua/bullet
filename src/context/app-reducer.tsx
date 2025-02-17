@@ -1,4 +1,4 @@
-import { State, SettingsKeys, INIT_BALANCE } from '@/lib/constants'
+import { State, SettingsKeys, INIT_BALANCE, FormatGame } from '@/lib/constants'
 
 interface SetBulletAction {
   type: 'set-bullet'
@@ -8,11 +8,18 @@ interface ChangeStateAction {
   type: 'change-state'
   payload: State
 }
+
 interface UndoStateAction {
   type: 'undo-state'
   // eslint-disable-next-line
   payload?: any
 }
+
+interface ChangeFormat {
+  type: 'change-format'
+  payload: FormatGame
+}
+
 interface AddRankAction {
   type: 'add-rank'
   payload: number
@@ -45,6 +52,7 @@ interface ChangeSettingsAction {
 interface GameState {
   stateHistory: State[]
   state: State
+  format: FormatGame
   rank: number
   countBullet: number
   balance: number
@@ -57,6 +65,7 @@ type Actions =
   | SetBulletAction
   | ChangeStateAction
   | UndoStateAction
+  | ChangeFormat
   | AddRankAction
   | SetBalanceAction
   | AddBalanceAction
@@ -68,6 +77,7 @@ type Actions =
 export const initState: GameState = {
   stateHistory: ['cover'],
   state: 'cover',
+  format: 'single',
   rank: 30,
   countBullet: 5,
   balance: INIT_BALANCE,
@@ -114,6 +124,8 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
         state: newState,
       }
     }
+    case 'change-format':
+      return { ...state, format: payload }
     case 'add-rank':
       return {
         ...state,

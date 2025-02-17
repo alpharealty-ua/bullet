@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { audios, SettingsKeys, State } from '@/lib/constants'
+import { audios, FormatGame, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
+  format: FormatGame
   rank: number
   countBullet: number
   balance: number
@@ -24,7 +25,7 @@ interface ContextAppValue {
   game: {
     next: () => void
     gameOver: () => void
-    newGame: () => void
+    newGame: (format?: FormatGame) => void
     deal: () => void
     winGame: () => void
   }

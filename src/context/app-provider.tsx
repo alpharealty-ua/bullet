@@ -3,6 +3,7 @@ import React, { useCallback, useReducer, useRef, useState } from 'react'
 import { AppContext } from '@/context/context'
 import { playAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
+  FormatGame,
   SettingsKeys,
   State,
   audios,
@@ -17,6 +18,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     {
       countBullet,
       state,
+      format,
       rank,
       balance,
       bet,
@@ -82,6 +84,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     },
     [],
   )
+  const changeFormat = useCallback((payload: FormatGame) => {
+    dispatch({ type: 'change-format', payload })
+  }, [])
 
   const addBalance = useCallback((payload: number) => {
     dispatch({ type: 'add-balance', payload })
@@ -91,29 +96,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'set-bet', payload })
   }, [])
 
-  const context = {
-    state,
-    rank,
-    countBullet,
-    balance,
-    addBalance,
-    bet,
-    setBet,
-    activeMultiplierIndex,
-    setActiveMultiplierIndex,
-    showHelpers,
-    settings,
-    changeSettings,
-    offer,
-    showJackpot,
-    showOffer,
-    showClick,
-    playAudio: playAudioWrapper,
-    jackpot,
-    disabled,
-  }
-
-  const newGame = async () => {
+  const newGame = async (format?: FormatGame) => {
+    if (format) {
+      changeFormat(format)
+    }
     await wait(0) // need for update states
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
@@ -148,7 +134,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         if (count-- > 0) {
           await revolverHandle.spin(interval)
           const newIndex = index++ % multipliers.length
-          context.setActiveMultiplierIndex(newIndex)
+          setActiveMultiplierIndex(newIndex)
           spin()
         } else {
           resolve(index)
@@ -204,7 +190,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const deal = async () => {
     if (offer > 0) {
       await playAudio('chaching')
-      context.addBalance(offer + bet)
+      addBalance(offer + bet)
       setOffer(0)
       addRank(2)
     }
@@ -218,7 +204,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (state === 'preparation') {
       changeState('running')
       setShowJackpot(false)
-      context.addBalance(-bet)
+      addBalance(-bet)
       await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
@@ -289,7 +275,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const audio = await playAudio('winsound')
 
     // TODO: REMOVE 1000. ONLY FOR TEST
-    context.addBalance(jackpot || 1000)
+    addBalance(jackpot || 1000)
 
     return new Promise<void>((resolve) => {
       audio.addEventListener('ended', () => {
@@ -310,7 +296,25 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AppContext.Provider
       value={{
-        ...context,
+        state,
+        format,
+        rank,
+        countBullet,
+        balance,
+        addBalance,
+        bet,
+        setBet,
+        activeMultiplierIndex,
+        showHelpers,
+        settings,
+        changeSettings,
+        offer,
+        showJackpot,
+        showOffer,
+        showClick,
+        playAudio: playAudioWrapper,
+        jackpot,
+        disabled,
         mouseClick,
         revolverRefHandle,
         game,

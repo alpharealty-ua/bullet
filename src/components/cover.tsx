@@ -4,10 +4,12 @@ import { Logo } from './logo'
 import { Button } from './ui/button'
 
 const Cover = ({
-  onStart,
+  onStartSingle,
+  onStartDuel,
   onGameRules,
 }: {
-  onStart: () => void
+  onStartSingle: () => void
+  onStartDuel: () => void
   onGameRules: () => void
 }) => {
   return (
@@ -18,8 +20,8 @@ const Cover = ({
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
       <Logo size='3xl' />
-      <Button image='play' className='w-30' onClick={onStart} />
-      <Button image='duel' className='w-30' onClick={onStart} />
+      <Button image='play' className='w-30' onClick={onStartSingle} />
+      <Button image='duel' className='w-30' onClick={onStartDuel} />
       <Button image='gamerules' className='w-24' onClick={onGameRules} />
     </div>
   )

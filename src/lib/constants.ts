@@ -21,6 +21,8 @@ export const states = [
 
 export type State = (typeof states)[number]
 
+export type FormatGame = 'single' | 'duel'
+
 export const images = {
   gamerules: './assets/images/game-rules.svg',
   close: './assets/images/close.svg',

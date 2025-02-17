@@ -44,9 +44,14 @@ const Game = () => {
     image.src = imageSrc
   }, [])
 
-  const handeInitGame = async () => {
+  const handleStartSingle = async () => {
     await mouseClick()
-    game.newGame()
+    game.newGame('single')
+  }
+
+  const handleStartDuel = async () => {
+    await mouseClick()
+    game.newGame('duel')
   }
 
   const handleGameRules = async () => {
@@ -83,7 +88,11 @@ const Game = () => {
   return (
     <>
       {state === 'cover' && (
-        <Cover onStart={handeInitGame} onGameRules={handleGameRules} />
+        <Cover
+          onStartSingle={handleStartSingle}
+          onStartDuel={handleStartDuel}
+          onGameRules={handleGameRules}
+        />
       )}
       <Header />
       <Result
