@@ -23,15 +23,9 @@ const Bet = ({
   const nodeRef2 = useRef(null)
 
   const changeValue = useCallback(
-    (bet?: number, percent?: number, callOnBet = true) => {
-      if (bet === undefined && percent) {
-        bet = ((maxBet * percent) / 100) ^ 0
-      }
-      if (percent === undefined && bet) {
-        percent = (bet / maxBet) * 100
-      }
-      bet = Math.max(0, Math.min(bet ?? 0, maxBet))
-      percent = Math.max(0, Math.min(percent ?? 0, 100))
+    (bet: number, callOnBet = true) => {
+      bet = Math.max(0, Math.min(bet, maxBet))
+      const percent = Math.max(0, Math.min((bet / maxBet) * 100, 100))
       callOnBet && onBet(bet)
       setValue(bet)
       setPercent(Math.min(percent, 100))
@@ -42,7 +36,7 @@ const Bet = ({
   useEffect(() => {
     const currentBet = Math.min(bet, maxBet)
 
-    changeValue(currentBet, undefined, false)
+    changeValue(currentBet, false)
   }, [maxBet, bet, changeValue])
 
   useEffect(() => {
@@ -109,7 +103,7 @@ const Bet = ({
       }
 
       const pointerUp = (_: PointerEvent) => {
-        changeValue(undefined, percentX)
+        changeValue((maxBet * percentX) / 100)
 
         buttonDom.removeEventListener('pointermove', pointerMove)
         buttonDom.removeEventListener('pointerup', pointerUp)
