@@ -58,9 +58,11 @@ const Bet = ({
     const buttonDom = sliderWrapperDom.querySelector(
       '[data-button]',
     ) as HTMLButtonElement
-    const valueDom = sliderWrapperDom.querySelector('[data-value]')
+    const valueDom =
+      sliderWrapperDom.querySelector('[data-value]') ??
+      document.createTextNode('')
 
-    if (sliderDom === null || buttonDom === null || valueDom === null) {
+    if (sliderDom === null || buttonDom === null) {
       return
     }
 
