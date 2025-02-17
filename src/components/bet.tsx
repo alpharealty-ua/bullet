@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { images } from '@/lib/constants'
-import { cn, formatBet } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 const Bet = ({
   bet,
