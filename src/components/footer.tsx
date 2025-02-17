@@ -17,6 +17,7 @@ const Footer = () => {
     setBet,
     state,
     showHelpers,
+    disabled,
   } = useAppContext()
   const modal = useCustomModal()
   // TODO: MOVE MAX BET TO CONTEXT
@@ -44,7 +45,9 @@ const Footer = () => {
     >
       <div className='flex w-[130px] shrink-0 justify-center'>
         <Bet
-          disabled={(state === 'running' && bet > 0) || balance === 0}
+          disabled={
+            disabled || (state === 'running' && bet > 0) || balance === 0
+          }
           maxBet={maxBet}
           bet={bet}
           onBet={handleSetBet}
