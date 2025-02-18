@@ -51,7 +51,7 @@ const Cover = () => {
       <div className='relative inline-flex'>
         <Logo size='3xl' />
         {showDuelCover && (
-          <div className='animate-in fade-in zoom-in-50 absolute top-full left-full -mt-8 -ml-8 text-4xl text-[#ff0101] italic duration-500'>
+          <div className='animate-in fade-in absolute top-full left-full -mt-8 -ml-8 text-4xl text-[#ff0101] italic duration-500'>
             duel
           </div>
         )}
