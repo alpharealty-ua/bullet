@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -13,13 +15,19 @@ interface LogoProps {
   size?: LogoSize
 }
 
-const Logo = ({ size = 'md' }: LogoProps) => {
+const Logo = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & LogoProps
+>(({ size = 'md', ...props }, ref) => {
   return (
     <div
+      ref={ref}
       className={cn(
         'relative inline-flex bg-contain bg-center bg-no-repeat',
         sizes[size],
+        Boolean(props.onClick) && 'cursor-pointer',
       )}
+      {...props}
     >
       <div
         className='absolute top-[33%] left-[25.5%] aspect-square w-[17%] -rotate-5 bg-contain bg-no-repeat'
@@ -28,6 +36,6 @@ const Logo = ({ size = 'md' }: LogoProps) => {
       <img src={images.logo} alt='' />
     </div>
   )
-}
+})
 
 export { Logo }

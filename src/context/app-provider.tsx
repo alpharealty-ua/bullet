@@ -338,6 +338,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     <AppContext.Provider
       value={{
         state,
+        changeState,
         format,
         rank,
         countBullet,
