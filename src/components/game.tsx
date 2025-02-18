@@ -10,7 +10,6 @@ import { GameOver } from './game-over'
 import { Revolver } from './revolver'
 import { Result } from './result'
 import { Click } from './click'
-import { Rules } from './rules'
 import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
@@ -41,23 +40,6 @@ const Game = () => {
   const nodeRef2 = useRef(null)
   const modal = useCustomModal()
 
-  const handleStartSingle = async () => {
-    await mouseClick()
-    game.newGame('single')
-  }
-
-  const handleStartDuel = async () => {
-    await mouseClick()
-    game.newGame('duel')
-  }
-
-  const handleGameRules = async () => {
-    await mouseClick()
-    modal.show({
-      contentSlot: <Rules />,
-    })
-  }
-
   const handlePull = async () => {
     await mouseClick(game.next)
   }
@@ -84,13 +66,7 @@ const Game = () => {
 
   return (
     <>
-      {state === 'cover' && (
-        <Cover
-          onStartSingle={handleStartSingle}
-          onStartDuel={handleStartDuel}
-          onGameRules={handleGameRules}
-        />
-      )}
+      {state === 'cover' && <Cover />}
       <Header />
       {format === 'duel' && <DuelBar />}
       <Result
