@@ -7,11 +7,12 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
 import { Rules } from './rules'
+import { CharacterSelector } from './character-selector'
 
 const Cover = () => {
   const { game, mouseClick } = useAppContext()
   const modal = useCustomModal()
-  const [showDuelCover, setShowDuelCover] = useState(false)
+  const [showDuelCover, setShowDuelCover] = useState(true)
 
   const handleStartButton = async () => {
     await mouseClick()
@@ -75,7 +76,7 @@ const Cover = () => {
                 onClick={handleWatchButton}
               />
             </div>
-            <h3>Choose your character</h3>
+            <CharacterSelector />
           </>
         )}
       </div>
