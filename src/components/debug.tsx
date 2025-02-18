@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
+
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useEffect } from 'react'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   state: State
@@ -48,6 +50,10 @@ const Debug = (props: Props) => {
     })
   }
 
+  const handleResetAddMoney = () => {
+    localStorage.removeItem('endTime')
+  }
+
   useEffect(() => {
     // TODO: REFACTOR
     if (state === 'game-over') {
@@ -70,26 +76,41 @@ const Debug = (props: Props) => {
       <h1 className='text-xs'>
         Current state - <strong className='block'>{state}</strong>
       </h1>
+      <Button
+        text='Reset add money'
+        className='text-base'
+        onClick={handleResetAddMoney}
+      />
       {states.map((el, i) => (
-        <button
+        <Button
           key={i}
-          className={cn(
-            'h-6 cursor-pointer bg-amber-300 px-2 text-xs uppercase transition-colors hover:bg-amber-400',
-            el === state && 'bg-amber-500',
-          )}
+          className={cn('text-base', el === state && 'text-white')}
           onClick={() => handleSetState(el)}
-        >
-          {el}
-        </button>
+          text={el}
+        />
       ))}
       <div className='flex flex-col gap-2'>
+        <label>
+          <div className=''>State</div>
+          <select
+            className='h-10 w-full bg-white px-2 uppercase'
+            value={state}
+            onChange={(e) => handleSetState(e.target.value as State)}
+          >
+            {states.map((state, i) => (
+              <option key={i} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+        </label>
         <label>
           <div className=''>Balance</div>
           <input
             type='text'
             value={balance}
             onChange={(e) => setBalance(Number(e.target.value))}
-            className='h-10 w-full bg-white px-2'
+            className='h-10 w-full bg-white px-2 uppercase'
           />
         </label>
         <label>
@@ -98,13 +119,13 @@ const Debug = (props: Props) => {
             type='number'
             value={bet}
             onChange={(e) => setBet(Number(e.target.value))}
-            className='h-10 w-full bg-white px-2'
+            className='h-10 w-full bg-white px-2 uppercase'
           />
         </label>
         <label>
           <div className=''>Multiplier</div>
           <select
-            className='h-10 w-full bg-white px-2'
+            className='h-10 w-full bg-white px-2 uppercase'
             value={activeMultiplierIndex}
             onChange={(e) => setActiveMultiplierIndex(Number(e.target.value))}
           >
@@ -119,7 +140,7 @@ const Debug = (props: Props) => {
         <label>
           <div className=''>Count bullet</div>
           <select
-            className='h-10 w-full bg-white px-2'
+            className='h-10 w-full bg-white px-2 uppercase'
             value={countBullet}
             onChange={(e) => setCountBullet(Number(e.target.value))}
           >
