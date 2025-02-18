@@ -1,7 +1,7 @@
 import React, { useCallback, useReducer, useRef, useState } from 'react'
 
 import { AppContext } from '@/context/context'
-import { playAudio, randomIntFromInterval, wait } from '@/lib/utils'
+import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
   FormatGame,
   SettingsKeys,
@@ -49,14 +49,32 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'undo-state' })
   }, [])
 
-  const playAudioWrapper = async (
+  const playAudio = async (
     key: keyof typeof audios,
-  ): Promise<HTMLAudioElement | null> => {
-    if (!settings.soundEffects) {
-      return null
+    play = true,
+  ): Promise<HTMLAudioElement> => {
+    const audio = getAudio(key)
+
+    audio.addEventListener(
+      'ended',
+      () => {
+        console.log('Play audio - ' + audio.src)
+      },
+      { once: true },
+    )
+
+    try {
+      audio.muted = !settings.soundEffects
+      if (play) {
+        await audio.play()
+      }
+
+      return audio
+    } catch (error) {
+      console.log(error)
     }
 
-    return playAudio(key)
+    return audio
   }
 
   const addRank = useCallback((payload: number) => {
@@ -311,7 +329,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         showJackpot,
         showOffer,
         showClick,
-        playAudio: playAudioWrapper,
+        playAudio,
         jackpot,
         disabled,
         mouseClick,

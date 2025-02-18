@@ -35,10 +35,7 @@ export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
 export const wait = (timeout: number) =>
   new Promise((res) => setTimeout(res, timeout))
 
-export const playAudio = async (
-  key: keyof typeof audios,
-  play = true,
-): Promise<HTMLAudioElement> => {
+export const getAudio = (key: keyof typeof audios): HTMLAudioElement => {
   const audiosDom = document.getElementById('audios')
 
   const selector = `[data-audio=${key}]`
@@ -46,16 +43,5 @@ export const playAudio = async (
   const audio = ((audiosDom ?? document).querySelector(selector) ??
     new Audio(audios[key])) as HTMLAudioElement
 
-  try {
-    if (play) {
-      await audio.play()
-      console.log('Play audio - ' + audio.src)
-    }
-
-    return audio
-  } catch (error) {
-    console.log(error)
-
-    return audio
-  }
+  return audio
 }
