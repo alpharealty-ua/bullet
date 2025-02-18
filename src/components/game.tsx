@@ -3,7 +3,7 @@ import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { images } from '@/lib/constants'
+import { CHARACTER_IMAGES, images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { GameOver } from './game-over'
@@ -24,6 +24,7 @@ const Game = () => {
     bet,
     showHelpers,
     settings,
+    characterIndex,
     offer,
     showOffer,
     showJackpot,
@@ -92,7 +93,11 @@ const Game = () => {
         />
       ) : (
         <div className='absolute right-0 bottom-7 left-0 mx-auto flex h-[370px] items-center justify-center'>
-          <img src={images.duelcharacter1} alt='' className='max-h-full' />
+          <img
+            src={CHARACTER_IMAGES[characterIndex]}
+            alt=''
+            className='max-h-full'
+          />
         </div>
       )}
       <div

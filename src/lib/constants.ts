@@ -54,6 +54,8 @@ export const images = {
 
 export const srcImages = Object.values(images)
 
+export const CHARACTER_IMAGES = [images.duelcharacter1, images.duelcharacter2]
+
 export const audios = {
   revolverspin: './assets/audios/revolverspin.mp3',
   trigger: './assets/audios/trigger.wav',

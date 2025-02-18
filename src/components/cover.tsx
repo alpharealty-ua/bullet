@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { useAppContext } from '@/context/use-app-context'
-import { images } from '@/lib/constants'
+import { images, CHARACTER_IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
@@ -10,9 +10,9 @@ import { Rules } from './rules'
 import { CharacterSelector } from './character-selector'
 
 const Cover = () => {
-  const { game, mouseClick } = useAppContext()
+  const { game, mouseClick, setCharacterIndex } = useAppContext()
   const modal = useCustomModal()
-  const [showDuelCover, setShowDuelCover] = useState(true)
+  const [showDuelCover, setShowDuelCover] = useState(false)
 
   const handleStartButton = async () => {
     await mouseClick()
@@ -34,6 +34,10 @@ const Cover = () => {
     modal.show({
       contentSlot: <Rules />,
     })
+  }
+
+  const handleSelectCharacter = (index: number) => {
+    setCharacterIndex(index)
   }
 
   return (
@@ -76,7 +80,11 @@ const Cover = () => {
                 onClick={handleWatchButton}
               />
             </div>
-            <CharacterSelector />
+            <CharacterSelector
+              label='Choose your character'
+              images={CHARACTER_IMAGES}
+              onSelect={handleSelectCharacter}
+            />
           </>
         )}
       </div>

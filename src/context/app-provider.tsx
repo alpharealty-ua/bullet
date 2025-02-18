@@ -54,6 +54,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     spin: (interval: number) => Promise<void>
   }>(null)
   const [gameOverImage, setGameOverImage] = useState<string>(images.gameover)
+  const [characterIndex, setCharacterIndex] = useState(0)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -348,6 +349,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setBet,
         activeMultiplierIndex,
         showHelpers,
+        characterIndex,
+        setCharacterIndex,
         settings,
         changeSettings,
         offer,
