@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import { Bet } from '@/components/bet'
+import { Button } from '@/components/ui/button'
 
 const SideBets = () => {
   return (
@@ -18,13 +18,7 @@ const SideBets = () => {
           <Bet label='' />
         </div>
         <div className='flex justify-end'>
-          <button
-            className={cn(
-              'relative inline-flex cursor-pointer items-center justify-center rounded-sm border-2 border-black bg-[#006100] bg-contain bg-center bg-no-repeat px-3 py-1 transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
-            )}
-          >
-            <span className='text-xl font-bold text-white uppercase'>Bet</span>
-          </button>
+          <Button text='Bet' bg='green' />
         </div>
       </div>
       <div className='-my-1 w-0.5 shrink-0 bg-black'></div>
