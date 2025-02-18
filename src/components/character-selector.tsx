@@ -6,12 +6,14 @@ export const CharacterSelector = ({
   label,
   images,
   onSelect,
+  defaultIndex = 0,
 }: {
   label: string
   images: string[]
   onSelect: (index: number) => void
+  defaultIndex?: number
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(defaultIndex)
 
   const changeIndex = (index: number) => {
     const newIndex = index < 0 ? images.length - 1 : index % images.length

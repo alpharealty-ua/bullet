@@ -10,7 +10,8 @@ import { Rules } from './rules'
 import { CharacterSelector } from './character-selector'
 
 const Cover = () => {
-  const { game, mouseClick, setCharacterIndex } = useAppContext()
+  const { game, mouseClick, characterIndex, setCharacterIndex } =
+    useAppContext()
   const modal = useCustomModal()
   const [showDuelCover, setShowDuelCover] = useState(false)
 
@@ -84,6 +85,7 @@ const Cover = () => {
               label='Choose your character'
               images={CHARACTER_IMAGES}
               onSelect={handleSelectCharacter}
+              defaultIndex={characterIndex}
             />
           </>
         )}
