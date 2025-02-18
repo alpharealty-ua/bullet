@@ -256,7 +256,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     const audio = await playAudio('gunshot')
 
     changeState('game-over')
-    addRank(-5)
+    addRank(3)
 
     audio.addEventListener(
       'ended',
