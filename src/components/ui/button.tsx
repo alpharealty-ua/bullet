@@ -9,6 +9,7 @@ const imagesMap = {
   pull: images.pull,
   deal: images.deal,
   duel: images.duel,
+  watch: images.watch,
   gamerules: images.gamerules,
   close: images.close,
   moneybag: images.moneybag,

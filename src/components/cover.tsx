@@ -70,8 +70,8 @@ const Cover = () => {
                 onClick={handleStartButton}
               />
               <Button
-                image='duel'
-                className='w-30'
+                image='watch'
+                className='w-30 text-2xl'
                 onClick={handleWatchButton}
               />
             </div>
