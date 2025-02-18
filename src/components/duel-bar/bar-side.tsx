@@ -30,7 +30,13 @@ export const BarSide = ({
         onClick={onClickButton}
       >
         <div className='w-7'>
-          <div className='absolute top-1/2 left-1/2 -translate-1/2 rotate-90 font-bold whitespace-nowrap uppercase'>
+          <div
+            className={cn(
+              'absolute top-1/2 left-1/2 -translate-1/2 font-bold whitespace-nowrap uppercase',
+              side === 'left' && 'rotate-90',
+              side === 'right' && '-rotate-90',
+            )}
+          >
             {label}
           </div>
         </div>
