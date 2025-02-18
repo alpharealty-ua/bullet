@@ -32,7 +32,7 @@ const DuelBar = () => {
   return (
     <div
       ref={ref}
-      className='relative z-3 flex min-h-[200px] overflow-hidden scroll-smooth'
+      className='relative z-3 flex max-h-[260px] min-h-[200px] overflow-hidden scroll-smooth'
     >
       <BarSide
         side='left'

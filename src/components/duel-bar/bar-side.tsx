@@ -37,7 +37,7 @@ export const BarSide = ({
       </button>
       <div
         className={cn(
-          'w-[345px] rounded-md border-2 bg-white p-1 text-base leading-[1.1] text-black',
+          'flex w-[345px] rounded-md border-2 bg-white p-1 text-base leading-[1.1] text-black',
           side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-0',
           side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-0',
         )}
