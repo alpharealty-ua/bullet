@@ -4,6 +4,9 @@ import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const START_ROTATE = 15
+const MIN_ADD_SPEED = 10
+const MAX_ADD_SPEED = 100
+const MAX_SPEED = 100
 
 const Revolver = React.forwardRef<
   {
@@ -49,32 +52,39 @@ const Revolver = React.forwardRef<
       let prevX = startX
       let prevY = startY
 
+      bulletDom.style.transitionDuration = `0s`
+
       const pointerMove = (event: PointerEvent) => {
         const currentX = event.clientX
         const currentY = event.clientY
 
-        const deltaX = prevX - currentX
-        const deltaY = prevY - currentY
-
-        const directionX = currentY > top + height / 2 ? 1 : -1
-        const directionY = currentX > left + width / 2 ? -1 : 1
+        const deltaX = currentX - prevX
+        const deltaY = currentY - prevY
 
         prevX = currentX
         prevY = currentY
 
+        const halfHeight = height / 2
+        const halfWidth = width / 2
+
+        const y = currentY - top
+        const x = currentX - left
+
+        const passedCenterOnY = y > halfHeight
+        const passedCenterOnX = x > halfWidth
+
+        const directionX = passedCenterOnY ? -1 : 1
+        const directionY = passedCenterOnX ? 1 : -1
+
         const deltaRotate = deltaY * directionY + deltaX * directionX
 
         rotateRef.current += deltaRotate
-        bulletDom.style.transitionDuration = `0s`
         bulletDom.style.rotate = `${rotateRef.current}deg`
       }
 
       const poinerUp = (event: PointerEvent) => {
         const isClick = startX === event.clientX && startY === event.clientY
         const clickDuration = Date.now() - clickStartTime
-        const MIN_ADD_SPEED = 10
-        const MAX_ADD_SPEED = 100
-        const MAX_SPEED = 100
         const prevSpeed = speedRef.current
 
         if (isClick) {
