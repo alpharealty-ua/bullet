@@ -8,58 +8,6 @@ const initMessages = [
     author: 'WallStreetWhale',
     message: "Fresh blood at the table. Let's see what you've got.",
   },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
 ].map((m, i) => ({ id: String(UTC + i), ...m }))
 
 const SideChat = () => {
@@ -84,7 +32,7 @@ const SideChat = () => {
   }
 
   const addMessage = () => {
-    const newMessage = { id: String(Date.now()), author: 'Player', message }
+    const newMessage = { id: String(Date.now()), author: 'John Doe', message }
     setMessages((p) => [...p, newMessage])
     setMessage('')
   }
