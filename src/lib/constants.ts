@@ -47,6 +47,7 @@ export const images = {
   bullet: './assets/images/bullet.png',
   sliderbar: './assets/images/sliderbar.svg',
   '1000x': './assets/images/compressed/1000x.png',
+  duelcharacter: './assets/images/nubcat.png',
 } as const
 
 export const srcImages = Object.values(images)

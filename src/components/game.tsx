@@ -188,12 +188,16 @@ const Game = () => {
           <Button text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      {format === 'single' && (
+      {format === 'single' ? (
         <Revolver
           ref={revolverRefHandle}
           disabled={disabled || !(state === 'preparation')}
           beforeSlot={<>{showClick && <Click />}</>}
         />
+      ) : (
+        <div className='absolute right-0 bottom-7 left-0 mx-auto flex h-[370px] items-center justify-center'>
+          <img src={images.duelcharacter} alt='' className='max-h-full' />
+        </div>
       )}
       <div
         className={cn(
