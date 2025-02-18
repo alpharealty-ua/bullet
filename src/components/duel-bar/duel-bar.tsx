@@ -14,7 +14,9 @@ const DuelBar = () => {
       return
     }
 
+    wrapperDom.style.scrollBehavior = 'auto'
     wrapperDom.scrollLeft = wrapperDom.scrollWidth
+    wrapperDom.style.scrollBehavior = ''
   }, [])
 
   const handleLabelClick = (direction: 'start' | 'end') => {
