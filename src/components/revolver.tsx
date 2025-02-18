@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useRef } from 'react'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -21,7 +21,6 @@ const Revolver = React.forwardRef<
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
   const speedRef = useRef(0)
-  const [speed, setSpeed] = useState(false)
 
   useEffect(() => {
     if (disabled) {
@@ -107,8 +106,8 @@ const Revolver = React.forwardRef<
         speedRef.current = speedBoundary
 
         if (prevSpeed !== speedRef.current) {
-          // TODO: ADD CUSTOM EVENT TO UPDATE WITHOUT UPDATE STATE
-          setSpeed((p) => !p)
+          const dom = bulletDom.children[0] as HTMLDivElement
+          dom.dispatchEvent(new CustomEvent('speedchanged'))
         }
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
@@ -150,7 +149,6 @@ const Revolver = React.forwardRef<
     const stopSpin = () => {
       const roundedRotate = 60 * Math.round(speedRotateRef.current / 60)
       dom.style.rotate = `${roundedRotate}deg`
-      dom.removeEventListener('transitionend', startSpin)
     }
 
     const startSpin = () => {
@@ -167,12 +165,14 @@ const Revolver = React.forwardRef<
     }
 
     dom.addEventListener('transitionend', startSpin)
-    startSpin()
+    dom.addEventListener('speedchanged', startSpin)
 
     return () => {
       stopSpin()
+      dom.removeEventListener('transitionend', startSpin)
+      dom.removeEventListener('speedchanged', startSpin)
     }
-  }, [disabled, speed])
+  }, [disabled])
 
   const spin = async (interval: number): Promise<void> => {
     const bulletDom = bulletChambeRef.current
