@@ -40,7 +40,7 @@ const Footer = () => {
       className='relative flex h-[74px] bg-cover bg-[center_top] bg-no-repeat px-2 py-0.5'
       style={{ backgroundImage: `url(${images.footer})` }}
     >
-      <div className='flex w-[130px] shrink-0 flex-col justify-center'>
+      <div className='relative flex w-[130px] shrink-0 flex-col'>
         {format === 'single' ? (
           <Bet
             disabled={betDisabled}
