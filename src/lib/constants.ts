@@ -29,7 +29,7 @@ export const images = {
   moneybag: './assets/images/money-bag.svg',
   logo: './assets/images/logo.svg',
   wrapper: './assets/images/wrapper.png',
-  gameover: './assets/images/compressed/game-over.gif',
+  gameover: './assets/images/game-over.gif',
   blood: './assets/images/blood.svg',
   you: './assets/images/you.svg',
   died: './assets/images/died.svg',

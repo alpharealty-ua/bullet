@@ -45,3 +45,13 @@ export const getAudio = (key: keyof typeof audios): HTMLAudioElement => {
 
   return audio
 }
+
+export const preloadImage = async (src: string) => {
+  const image = new Image()
+  const imageSrc = `${src}`
+  image.src = imageSrc
+
+  return new Promise((resolve) => {
+    image.addEventListener('load', resolve)
+  })
+}

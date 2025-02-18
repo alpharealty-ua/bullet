@@ -1,17 +1,31 @@
-import React, { useCallback, useReducer, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 
 import { AppContext } from '@/context/context'
-import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
+import {
+  getAudio,
+  preloadImage,
+  randomIntFromInterval,
+  wait,
+} from '@/lib/utils'
 import {
   FormatGame,
   SettingsKeys,
   State,
   audios,
   getMultiplierValueByIndex,
+  images,
   multipliers,
 } from '@/lib/constants'
 import { Debug } from '@/components/debug'
 import { appReducer, initState } from './app-reducer'
+
+let gameOverImageVersion = Date.now()
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
@@ -39,6 +53,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const revolverRefHandle = useRef<{
     spin: (interval: number) => Promise<void>
   }>(null)
+  const [gameOverImage, setGameOverImage] = useState<string>(images.gameover)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -130,6 +145,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setActiveMultiplierIndex(-1)
     setShowJackpot(false)
     setShowOffer(false)
+    setGameOverImage(`${images.gameover}?v=${gameOverImageVersion++}`)
   }
 
   const getMultiplier = async (): Promise<number> => {
@@ -268,19 +284,23 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const gameOver = async () => {
+    await preloadImage(gameOverImage)
     const drumBeatAudio = await playAudio('drumbeat', false)
     const audio = await playAudio('gunshot')
 
     changeState('game-over')
     addRank(3)
 
-    audio.addEventListener(
-      'ended',
-      () => {
-        drumBeatAudio.play()
-      },
-      { once: true },
-    )
+    return new Promise<void>((resolve) => {
+      audio.addEventListener(
+        'ended',
+        async () => {
+          await drumBeatAudio.play()
+          resolve()
+        },
+        { once: true },
+      )
+    })
   }
 
   const winGame = async () => {
@@ -310,6 +330,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     winGame,
   }
 
+  useEffect(() => {
+    preloadImage(gameOverImage)
+  }, [gameOverImage])
+
   return (
     <AppContext.Provider
       value={{
@@ -335,6 +359,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         mouseClick,
         revolverRefHandle,
         game,
+        gameOverImage,
       }}
     >
       <Debug

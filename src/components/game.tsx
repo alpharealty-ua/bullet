@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
@@ -34,17 +34,12 @@ const Game = () => {
     game,
     mouseClick,
     revolverRefHandle,
+    gameOverImage,
   } = useAppContext()
 
   const nodeRef = useRef(null)
   const nodeRef2 = useRef(null)
   const modal = useCustomModal()
-
-  useEffect(() => {
-    const image = new Image()
-    const imageSrc = `${images.gameover}`
-    image.src = imageSrc
-  }, [])
 
   const handleStartSingle = async () => {
     await mouseClick()
@@ -275,7 +270,7 @@ const Game = () => {
           onClick={handleStartGame}
           onTimeout={handleGameOverTimeout}
           timeout={3000}
-          image={images.gameover}
+          image={gameOverImage}
           hideBlood={settings.blood}
         />
       )}

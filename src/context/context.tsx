@@ -29,6 +29,7 @@ interface ContextAppValue {
     deal: () => void
     winGame: () => void
   }
+  gameOverImage: string
   mouseClick: (callback?: () => void | Promise<void>) => Promise<void>
   revolverRefHandle: React.RefObject<{
     spin: (interval: number) => Promise<void>
