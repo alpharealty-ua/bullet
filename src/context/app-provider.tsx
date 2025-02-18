@@ -370,6 +370,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         {...{
           state,
           changeState,
+          changeFormat,
           balance,
           setBalance,
           countBullet,
