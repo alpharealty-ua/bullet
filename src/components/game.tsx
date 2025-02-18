@@ -15,7 +15,7 @@ import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
-import { Bet } from './bet'
+import { DuelBar } from './duel-bar/duel-bar'
 
 const Game = () => {
   const {
@@ -92,87 +92,7 @@ const Game = () => {
         />
       )}
       <Header />
-      {format === 'duel' && (
-        <div className='flex'>
-          <div className='relative grow rounded-xl border-2 border-black bg-[#ff0000] py-3 pl-10 text-white'>
-            <div className='absolute top-0 right-0 bottom-0 flex items-center'>
-              <div className='relative w-6'>
-                <div className='absolute top-1/2 left-1/2 -translate-1/2 rotate-90 font-bold whitespace-nowrap uppercase'>
-                  Chat
-                </div>
-              </div>
-              <div className='absolute top-1/2 left-0 w-0'></div>
-            </div>
-          </div>
-          <div className='relative grow rounded-xl border-2 border-black bg-[#006100] py-3 pl-10 text-white'>
-            <div className='absolute top-0 bottom-0 left-0 flex items-center'>
-              <div className='relative w-6'>
-                <div className='absolute top-1/2 left-1/2 -translate-1/2 -rotate-90 font-bold whitespace-nowrap uppercase'>
-                  SIDE BETS
-                </div>
-              </div>
-              <div className='absolute top-1/2 left-0 w-0'></div>
-            </div>
-            <div className='flex rounded-lg border-2 bg-white text-sm text-black'>
-              <div className='flex flex-col gap-2 p-2'>
-                <h3>PLACE WAGERS ON LIVE GAMES</h3>
-                <ul className='flex flex-col gap-0.5'>
-                  <li>
-                    BET ON: <span className='text-[#006100]'>YOKOZUNA</span>{' '}
-                    <button className='inline-flex h-4 w-4 rounded-full border-2 border-black bg-[#006100] align-middle'></button>
-                  </li>
-                  <li>Survival ODDS: 66.6%</li>
-                  <li>BETTING ODDS: -200</li>
-                </ul>
-                <div className='py-8'>
-                  <Bet label='' />
-                </div>
-                <div className='flex justify-end'>
-                  <button
-                    className={cn(
-                      'relative inline-flex cursor-pointer items-center justify-center rounded-sm border-2 border-black bg-[#006100] bg-contain bg-center bg-no-repeat px-3 py-1 transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
-                    )}
-                  >
-                    <span className='text-xl font-bold text-white uppercase'>
-                      Bet
-                    </span>
-                  </button>
-                </div>
-              </div>
-              <div className='w-0.5 shrink-0 bg-black'></div>
-              <div className='flex flex-col justify-between p-2'>
-                <table className='text-left text-xs'>
-                  <thead>
-                    <tr>
-                      <th className='py-0.5'>USER</th>
-                      <th className='py-0.5'>RISK</th>
-                    </tr>
-                  </thead>
-                  <tfoot>
-                    <tr>
-                      <td className='py-0.5'>BILL2</td>
-                      <td className='py-0.5 text-[#006100]'>$1000</td>
-                    </tr>
-                    <tr>
-                      <td className='py-0.5'>HARVY</td>
-                      <td className='py-0.5 text-[#ff0000]'>$500</td>
-                    </tr>
-                    <tr className=''>
-                      <td className='py-0.5'>SMART</td>
-                      <td className='py-0.5 text-[#ff0000]'>$1000</td>
-                    </tr>
-                    <tr>
-                      <td className='py-0.5'>FIREA</td>
-                      <td className='py-0.5 text-[#ff0000]'>$2000</td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <div>LIVE WAGERS</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {format === 'duel' && <DuelBar />}
       <Result
         title={'Jackpot'}
         price={jackpot}
