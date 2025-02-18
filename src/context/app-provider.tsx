@@ -170,11 +170,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       audio.addEventListener(
         'ended',
         async () => {
-          if (!callback) {
-            resolve()
-            return
+          if (callback) {
+            await callback()
           }
-          await callback()
           resolve()
         },
         { once: true },
