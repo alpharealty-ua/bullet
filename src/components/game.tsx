@@ -116,7 +116,7 @@ const Game = () => {
         />
       ) : (
         <div className='absolute right-0 bottom-7 left-0 mx-auto flex h-[370px] items-center justify-center'>
-          <img src={images.duelcharacter} alt='' className='max-h-full' />
+          <img src={images.duelcharacter1} alt='' className='max-h-full' />
         </div>
       )}
       <div
