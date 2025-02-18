@@ -26,13 +26,13 @@ const Button = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
+        'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
         className,
       )}
       {...props}
     >
       {text && (
-        <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center text-3xl font-bold'>
+        <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center'>
           {text}
         </span>
       )}
