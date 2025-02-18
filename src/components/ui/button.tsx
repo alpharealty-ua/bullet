@@ -20,24 +20,32 @@ const Button = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     image?: keyof typeof imagesMap
+    bg?: 'green' | 'red'
     text?: string
   }
->(({ className, image = 'button', text, ...props }, ref) => {
+>(({ className, image = 'button', bg, text, ...props }, ref) => {
   return (
     <button
       ref={ref}
       className={cn(
         'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
+        bg && 'rounded-sm border-2 border-black px-3 py-1 text-xl',
+        bg === 'green' && 'bg-[#006100] text-white',
+        bg === 'red' && 'bg-[#ff0000] text-white',
         className,
       )}
       {...props}
     >
       {text && (
-        <span className='absolute inset-0 inline-flex cursor-pointer items-center justify-center'>
+        <span
+          className={cn(
+            !bg && 'absolute inset-0 inline-flex items-center justify-center',
+          )}
+        >
           {text}
         </span>
       )}
-      <img src={imagesMap[image]} alt='' />
+      {!bg && <img src={imagesMap[image]} alt='' />}
     </button>
   )
 })
