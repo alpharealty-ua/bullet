@@ -1,7 +1,6 @@
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import { Logo } from './logo'
 import { Balance } from './balance'

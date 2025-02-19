@@ -12,7 +12,7 @@ const DuelBar = () => {
   }
 
   return (
-    <div className='relative z-3 mb-auto h-[260px] overflow-hidden'>
+    <div className='relative z-3 mb-auto h-[250px] overflow-hidden'>
       <BarSide
         side='left'
         label='Chat'
