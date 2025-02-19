@@ -4,20 +4,17 @@ import { cn } from '@/lib/utils'
 import { Header } from './header'
 import { Footer } from './footer'
 import { DuelBar } from './duel-bar/duel-bar'
-import { Logo } from './logo'
 
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
 
   return (
     <>
-      {/* TODO: REFACTOR  */}
-      {format === 'watch' && <Header />}
-      {format === 'duel' && (
-        <header className='flex items-center justify-between px-3 py-2'>
-          <Logo to='/' text='duel' />
-        </header>
-      )}
+      <Header
+        logoText={format === 'duel' ? 'duel' : ''}
+        hideBalance={format === 'duel'}
+      />
+
       <DuelBar />
       {format === 'duel' && (
         <div className='mt-7 mb-8 text-center'>
@@ -60,7 +57,6 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
           ))}
         </div>
       )}
-
       <Footer format={format} />
     </>
   )
