@@ -21,8 +21,7 @@ export const PlaceWager = () => {
         <li>BETTING ODDS: -200</li>
       </ul>
       <div className='py-6'>
-        {/* TODO: ENLARGE  */}
-        <Bet label='' />
+        <Bet />
       </div>
       <div className='flex justify-end'>
         <Button text='Bet' bg='green' />

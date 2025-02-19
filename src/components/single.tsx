@@ -3,7 +3,6 @@ import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { GameOver } from './game-over'
@@ -35,7 +34,6 @@ const Single = () => {
   } = useAppContext()
 
   const nodeRef = useRef(null)
-  const nodeRef2 = useRef(null)
   const modal = useCustomModal()
 
   const handlePull = async () => {
