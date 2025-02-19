@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { useAppContext } from '@/context/use-app-context'
@@ -9,15 +10,17 @@ import { Logo } from './logo'
 import { Rules } from './rules'
 import { CharacterSelector } from './character-selector'
 
-const Cover = () => {
+const Home = () => {
   const { game, mouseClick, characterIndex, setCharacterIndex } =
     useAppContext()
+  const nagigate = useNavigate()
   const modal = useCustomModal()
   const [showDuelCover, setShowDuelCover] = useState(false)
 
   const handleStartButton = async () => {
     await mouseClick()
     game.newGame('single')
+    nagigate('/single')
   }
 
   const handleDuelButton = async () => {
@@ -28,6 +31,7 @@ const Cover = () => {
   const handleWatchButton = async () => {
     await mouseClick()
     game.newGame('duel')
+    nagigate('/duel')
   }
 
   const handleGameRules = async () => {
@@ -48,7 +52,7 @@ const Cover = () => {
       )}
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
-      <Logo size='3xl' text={showDuelCover ? 'Duel' : ''} />
+      <Logo to='/' size='3xl' text={showDuelCover ? 'Duel' : ''} />
       <div className='flex flex-col items-center justify-center gap-6'>
         {!showDuelCover ? (
           <>
@@ -87,4 +91,4 @@ const Cover = () => {
   )
 }
 
-export { Cover }
+export { Home }

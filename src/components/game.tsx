@@ -10,7 +10,6 @@ import { GameOver } from './game-over'
 import { Revolver } from './revolver'
 import { Result } from './result'
 import { Click } from './click'
-import { Cover } from './cover'
 import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
@@ -67,7 +66,6 @@ const Game = () => {
 
   return (
     <>
-      {state === 'cover' && <Cover />}
       <Header />
       {format === 'duel' && <DuelBar />}
       <Result

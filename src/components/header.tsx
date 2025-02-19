@@ -8,7 +8,7 @@ import { Balance } from './balance'
 import { AddMoneyModal } from './add-money-modal'
 
 export const Header = () => {
-  const { changeState, balance, bet, state, playAudio } = useAppContext()
+  const { balance, bet, state, playAudio } = useAppContext()
   const modal = useCustomModal()
 
   const handleAddMoney = async () => {
@@ -18,14 +18,9 @@ export const Header = () => {
     })
   }
 
-  const handleClickLogo = async () => {
-    // TODO: CHANGE STATE TO ROUTE
-    changeState('cover')
-  }
-
   return (
     <header className='flex items-center justify-between px-3 py-2'>
-      <Logo onClick={handleClickLogo} />
+      <Logo to='/' />
       <Balance
         value={balance}
         increaseTime={state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined}

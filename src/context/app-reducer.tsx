@@ -75,8 +75,8 @@ type Actions =
   | ChangeSettingsAction
 
 export const initState: GameState = {
-  stateHistory: ['cover'],
-  state: 'cover',
+  stateHistory: ['preparation'],
+  state: 'preparation',
   format: 'single',
   rank: 30,
   countBullet: 5,

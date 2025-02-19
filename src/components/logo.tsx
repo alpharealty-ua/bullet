@@ -2,6 +2,7 @@ import React from 'react'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { Link, LinkProps } from 'react-router'
 
 type LogoSize = 'md' | 'lg' | '3xl'
 
@@ -17,11 +18,11 @@ interface LogoProps {
 }
 
 const Logo = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & LogoProps
+  HTMLAnchorElement,
+  React.RefAttributes<HTMLAnchorElement> & LinkProps & LogoProps
 >(({ size = 'md', text, ...props }, ref) => {
   return (
-    <div
+    <Link
       ref={ref}
       className={cn(
         'relative inline-flex bg-contain bg-center bg-no-repeat',
@@ -46,7 +47,7 @@ const Logo = React.forwardRef<
           {text}
         </div>
       )}
-    </div>
+    </Link>
   )
 })
 

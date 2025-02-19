@@ -11,13 +11,7 @@ export const multipliers: { value: number; color: `#${string}` }[] = [
 export const getMultiplierValueByIndex = (index: number) =>
   multipliers[index]?.value ?? 0
 
-export const states = [
-  'cover',
-  'preparation',
-  'running',
-  'win',
-  'game-over',
-] as const
+export const states = ['preparation', 'running', 'win', 'game-over'] as const
 
 export type State = (typeof states)[number]
 
