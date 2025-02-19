@@ -1,5 +1,7 @@
 import { Bet } from '@/components/bet'
 import { Button } from '@/components/ui/button'
+import { LiveWagers } from './live-wagers'
+import { mockWagerList } from '../../lib/mocks'
 
 const SideBets = () => {
   return (
@@ -22,35 +24,7 @@ const SideBets = () => {
         </div>
       </div>
       <div className='-my-1 w-0.5 shrink-0 bg-black'></div>
-      <div className='flex flex-col justify-between'>
-        <table className='text-left text-xs'>
-          <thead>
-            <tr>
-              <th className='text-base'>USER</th>
-              <th className='text-base'>RISK</th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <td className='py-0.5'>BILL2</td>
-              <td className='py-0.5 text-[#006100]'>$1000</td>
-            </tr>
-            <tr>
-              <td className='py-0.5'>HARVY</td>
-              <td className='py-0.5 text-[#ff0000]'>$500</td>
-            </tr>
-            <tr className=''>
-              <td className='py-0.5'>SMART</td>
-              <td className='py-0.5 text-[#ff0000]'>$1000</td>
-            </tr>
-            <tr>
-              <td className='py-0.5'>FIREA</td>
-              <td className='py-0.5 text-[#ff0000]'>$2000</td>
-            </tr>
-          </tfoot>
-        </table>
-        <div>LIVE WAGERS</div>
-      </div>
+      <LiveWagers list={mockWagerList} />
     </div>
   )
 }
