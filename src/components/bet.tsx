@@ -11,6 +11,7 @@ const Bet = ({
   disabled = false,
   showHelpers = false,
   label = 'Bet',
+  size = 'md',
 }: {
   maxBet?: number
   bet?: number
@@ -18,6 +19,7 @@ const Bet = ({
   disabled?: boolean
   showHelpers?: boolean
   label?: string
+  size?: 'sm' | 'md'
 }) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(bet)
@@ -243,8 +245,9 @@ const Bet = ({
           ></div>
           <button
             className={cn(
-              'absolute top-1/2 left-0 z-[3] h-4 w-4 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
+              'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
               disabled && 'cursor-not-allowed',
+              size === 'sm' && 'h-4 w-4',
             )}
             style={{
               backgroundImage: `url(${images.bullet})`,
@@ -260,14 +263,18 @@ const Bet = ({
                   $1000
                 </div>
                 <div className='absolute top-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                  <div>To win</div>
-                  $500
+                  <div>To win</div>$<span data-value>{value}</span>
                 </div>
               </>
             )}
           </button>
         </div>
-        <div className='text-red absolute -top-3.5 right-0 left-0 flex justify-between text-[12px] uppercase'>
+        <div
+          className={cn(
+            'text-red absolute -top-3.5 right-0 left-0 flex justify-between uppercase',
+            size === 'sm' && 'text-xs',
+          )}
+        >
           <div>0</div>
           <div>Max</div>
         </div>
