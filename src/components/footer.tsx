@@ -9,9 +9,8 @@ import { Rank } from './rank'
 import { Round } from './round'
 import { Jackpot } from './jackpot'
 
-const Footer = () => {
+const Footer = ({ format }: { format: 'single' | 'duel' }) => {
   const {
-    format,
     countBullet,
     activeMultiplierIndex,
     balance,

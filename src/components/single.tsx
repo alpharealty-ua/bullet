@@ -3,9 +3,9 @@ import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { CHARACTER_IMAGES, images } from '@/lib/constants'
+import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
 import { Result } from './result'
@@ -13,17 +13,14 @@ import { Click } from './click'
 import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
-import { DuelBar } from './duel-bar/duel-bar'
 
-const Game = () => {
+const Single = () => {
   const {
     state,
-    format,
     balance,
     bet,
     showHelpers,
     settings,
-    characterIndex,
     offer,
     showOffer,
     showJackpot,
@@ -67,7 +64,6 @@ const Game = () => {
   return (
     <>
       <Header />
-      {format === 'duel' && <DuelBar />}
       <Result
         title={'Jackpot'}
         price={jackpot}
@@ -83,21 +79,11 @@ const Game = () => {
           <Button text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      {format === 'single' ? (
-        <Revolver
-          ref={revolverRefHandle}
-          disabled={disabled || !(state === 'preparation')}
-          beforeSlot={<>{showClick && <Click />}</>}
-        />
-      ) : (
-        <div className='absolute right-0 bottom-7 left-0 mx-auto flex h-[370px] items-center justify-center'>
-          <img
-            src={CHARACTER_IMAGES[characterIndex]}
-            alt=''
-            className='max-h-full'
-          />
-        </div>
-      )}
+      <Revolver
+        ref={revolverRefHandle}
+        disabled={disabled || !(state === 'preparation')}
+        beforeSlot={<>{showClick && <Click />}</>}
+      />
       <div
         className={cn(
           'mx-4 mt-auto mb-4 flex h-[100px] items-center justify-between',
@@ -177,9 +163,9 @@ const Game = () => {
           hideBlood={settings.blood}
         />
       )}
-      <Footer />
+      <Footer format='single' />
     </>
   )
 }
 
-export { Game }
+export { Single }

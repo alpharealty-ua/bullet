@@ -4,9 +4,10 @@ import NiceModal from '@ebay/nice-modal-react'
 import { AppProvider } from '@/context/app-provider'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { images } from '@/lib/constants'
-import { Game } from '@/components/game'
+import { Single } from '@/components/single'
 import { Audios } from '@/components/audios'
 import { Home } from '@/components/home'
+import { Watch } from '@/components/watch'
 
 const App = () => {
   usePreloadImages()
@@ -22,8 +23,9 @@ const App = () => {
             <Audios />
             <Routes>
               <Route index element={<Home />} />
-              <Route path='/single' element={<Game />} />
-              <Route path='/duel' element={<Game />} />
+              <Route path='/single' element={<Single />} />
+              <Route path='/duel' element={<Watch />} />
+              <Route path='/watch' element={<Watch />} />
             </Routes>
           </NiceModal.Provider>
         </AppProvider>

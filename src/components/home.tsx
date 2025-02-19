@@ -28,10 +28,16 @@ const Home = () => {
     setShowDuelCover(true)
   }
 
-  const handleWatchButton = async () => {
+  const handleStartDuelButton = async () => {
     await mouseClick()
     game.newGame('duel')
     nagigate('/duel')
+  }
+
+  const handleWatchButton = async () => {
+    await mouseClick()
+    game.newGame('duel')
+    nagigate('/watch')
   }
 
   const handleGameRules = async () => {
@@ -70,7 +76,7 @@ const Home = () => {
               <Button
                 image='play'
                 className='w-30'
-                onClick={handleStartButton}
+                onClick={handleStartDuelButton}
               />
               <Button
                 image='watch'
