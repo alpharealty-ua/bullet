@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
 
@@ -26,9 +27,11 @@ export const CharacterSelector = ({
       <h3>{label}</h3>
       <div className='flex h-[200px] items-center'>
         <button
-          className='cursor-pointer border-25 border-r-30 border-l-0 border-[#ff0101] border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
+          className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex - 1)}
-        ></button>
+        >
+          <FaArrowAltCircleLeft />
+        </button>
         <div className='flex h-full w-[200px] shrink-0 items-center justify-center'>
           {images.map((el, i) => (
             <div
@@ -47,9 +50,11 @@ export const CharacterSelector = ({
           ))}
         </div>
         <button
-          className='cursor-pointer border-25 border-r-0 border-l-30 border-[#ff0101] border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
-          onClick={() => changeIndex(activeIndex - 1)}
-        ></button>
+          className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'
+          onClick={() => changeIndex(activeIndex + 1)}
+        >
+          <FaArrowAltCircleRight />
+        </button>
       </div>
     </>
   )
