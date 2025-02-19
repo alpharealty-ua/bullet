@@ -1,50 +1,31 @@
-import { useEffect, useRef } from 'react'
+import { useState } from 'react'
 
 import { BarSide } from './bar-side'
 import { SideBets } from './side-bets'
 import { SideChat } from './side-chat'
 
 const DuelBar = () => {
-  const ref = useRef<HTMLDivElement>(null)
+  const [openSide, setOpenSide] = useState<'left' | 'right' | null>(null)
 
-  useEffect(() => {
-    const wrapperDom = ref.current
-
-    if (wrapperDom === null) {
-      return
-    }
-
-    wrapperDom.style.scrollBehavior = 'auto'
-    wrapperDom.scrollLeft = wrapperDom.scrollWidth
-    wrapperDom.style.scrollBehavior = ''
-  }, [])
-
-  const handleLabelClick = (direction: 'start' | 'end') => {
-    const wrapperDom = ref.current
-
-    if (wrapperDom === null) {
-      return
-    }
-
-    wrapperDom.scrollLeft = direction === 'start' ? 0 : wrapperDom.scrollWidth
+  const handleLabelClick = (newSide: 'left' | 'right') => {
+    setOpenSide(newSide === openSide ? null : newSide)
   }
 
   return (
-    <div
-      ref={ref}
-      className='relative z-3 flex max-h-[260px] min-h-[200px] overflow-hidden scroll-smooth'
-    >
+    <div className='relative z-3 h-[260px] overflow-hidden'>
       <BarSide
         side='left'
         label='Chat'
-        onClickButton={() => handleLabelClick('start')}
+        onClickLabel={handleLabelClick}
+        open={openSide === 'left'}
       >
         <SideChat />
       </BarSide>
       <BarSide
         side='right'
         label=' SIDE BETS'
-        onClickButton={() => handleLabelClick('end')}
+        onClickLabel={handleLabelClick}
+        open={openSide === 'right'}
       >
         <SideBets />
       </BarSide>
