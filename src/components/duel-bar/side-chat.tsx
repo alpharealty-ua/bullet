@@ -1,19 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { mockMessageList } from '@/lib/mocks'
 import { Button } from '@/components/ui/button'
-
-const UTC = Date.now()
-
-const initMessages = [
-  {
-    author: 'WallStreetWhale',
-    message: "Fresh blood at the table. Let's see what you've got.",
-  },
-].map((m, i) => ({ id: String(UTC + i), ...m }))
 
 const SideChat = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [messages, setMessages] = useState(initMessages)
+  const [messages, setMessages] = useState(mockMessageList)
   const [message, setMessage] = useState('')
 
   const scorllToBottom = () => {
@@ -33,7 +25,7 @@ const SideChat = () => {
   }
 
   const addMessage = () => {
-    const newMessage = { id: String(Date.now()), author: 'John Doe', message }
+    const newMessage = { id: String(Date.now()), user: 'John Doe', message }
     setMessages((p) => [...p, newMessage])
     setMessage('')
   }
@@ -54,7 +46,7 @@ const SideChat = () => {
         {messages.map((message) => {
           return (
             <div key={message.id} className='flex gap-1 text-[10px]'>
-              <div>{message.author}:</div>
+              <div>{message.user}:</div>
               <div> {message.message}</div>
             </div>
           )

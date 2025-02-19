@@ -55,3 +55,8 @@ export const preloadImage = async (src: string) => {
     image.addEventListener('load', resolve)
   })
 }
+
+const UTC = Date.now()
+
+export const addId = <T>(list: T[]): Prettify<T & { id: string }>[] =>
+  list.map((m, i) => ({ id: String(UTC + i), ...m }))
