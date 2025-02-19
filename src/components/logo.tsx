@@ -36,7 +36,13 @@ const Logo = React.forwardRef<
       ></div>
       <img src={images.logo} alt='' />
       {text && (
-        <div className='animate-in fade-in text-red absolute top-full left-full -mt-8 -ml-8 text-4xl italic duration-500'>
+        <div
+          className={cn(
+            'animate-in fade-in text-red absolute top-full left-full -mt-[10%] -ml-[10%] text-lg italic duration-500',
+            size === 'lg' && 'text-xl',
+            size === '3xl' && 'text-4xl',
+          )}
+        >
           {text}
         </div>
       )}
