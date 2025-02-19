@@ -11,7 +11,7 @@ const LiveWagers = ({ list }: { list: Wager[] }) => {
           </tr>
         </thead>
         <tfoot>
-          {list.map(({ id, user, money, result }, i) => (
+          {list.map(({ id, user, money, result }) => (
             <tr key={id}>
               <td className='py-0.5'>{user}</td>
               <td
