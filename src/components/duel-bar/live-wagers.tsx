@@ -17,7 +17,7 @@ const LiveWagers = ({ list }: { list: Wager[] }) => {
               <td
                 className={cn(
                   'py-0.5',
-                  result === 'win' && 'text-[#006100]',
+                  result === 'win' && 'text-green',
                   result === 'lose' && 'text-[#ff0000]',
                 )}
               >

@@ -9,9 +9,7 @@ interface MultiplerProps {
 const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
   return (
     <div className={cn('flex flex-col items-center text-center')}>
-      <div className='text-xl font-bold text-[#006100] uppercase'>
-        MULTIPLIER
-      </div>
+      <div className='text-green text-xl font-bold uppercase'>MULTIPLIER</div>
       <div className='relative text-center text-3xl leading-[1] uppercase'>
         {activeIndex === -1 && <span className='text-[#ffbf00]'>?</span>}
         &nbsp;
@@ -22,7 +20,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
             <div
               key={i}
               className={cn(
-                'absolute top-1/2 left-1/2 -translate-1/2 text-[#ff0b0b] opacity-0 transition-opacity',
+                'text-red absolute top-1/2 left-1/2 -translate-1/2 opacity-0 transition-opacity',
                 i === activeIndex && 'opacity-100',
                 isJackpot && 'text-transparent drop-shadow-none',
               )}

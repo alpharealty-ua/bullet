@@ -223,9 +223,7 @@ const Bet = ({
         }}
       </CSSTransition>
       {label && (
-        <div className='text-xl font-bold text-[#006100] uppercase'>
-          {label}
-        </div>
+        <div className='text-green text-xl font-bold uppercase'>{label}</div>
       )}
 
       <div
@@ -269,7 +267,7 @@ const Bet = ({
             )}
           </button>
         </div>
-        <div className='absolute -top-3.5 right-0 left-0 flex justify-between text-[12px] text-[#ff0b0b] uppercase'>
+        <div className='text-red absolute -top-3.5 right-0 left-0 flex justify-between text-[12px] uppercase'>
           <div>0</div>
           <div>Max</div>
         </div>

@@ -23,7 +23,7 @@ const Checkbox = <Name extends string>({
         checked={checked}
         onChange={handleChange}
       />
-      <div className='absolute top-0 right-0 bottom-0 left-0 z-[-1] rounded-xl bg-[#FF9B2A]/20 transition-colors peer-checked:bg-[#FF9B2A]'></div>
+      <div className='bg-primary/20 peer-checked:bg-primary absolute top-0 right-0 bottom-0 left-0 z-[-1] rounded-xl transition-colors'></div>
     </label>
   )
 }

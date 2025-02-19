@@ -18,9 +18,9 @@ const BarSide = ({
       className={cn(
         'absolute top-0 bottom-0 flex w-full grow rounded-3xl border-2 border-black py-1 text-white transition-all duration-500',
         side === 'left' &&
-          'right-full translate-x-8 flex-row-reverse rounded-ss-none rounded-es-none border-l-0 bg-[#ff0000]',
+          'bg-red right-full translate-x-8 flex-row-reverse rounded-ss-none rounded-es-none border-l-0',
         side === 'right' &&
-          'left-full -translate-x-8 flex-row rounded-se-none rounded-ee-none border-r-0 bg-[#006100]',
+          'bg-green left-full -translate-x-8 flex-row rounded-se-none rounded-ee-none border-r-0',
         open && side === 'left' && 'right-0 -translate-x-8',
         open && side === 'right' && 'left-0 translate-x-8',
       )}
