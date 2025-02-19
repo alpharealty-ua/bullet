@@ -11,7 +11,7 @@ const Watch = () => {
     <>
       <Header />
       <DuelBar />
-      <div className='absolute right-0 bottom-7 left-0 mx-auto flex h-[370px] items-center justify-center'>
+      <div className='absolute right-0 bottom-10 left-0 mx-auto flex h-[370px] items-center justify-center'>
         <img
           src={CHARACTER_IMAGES[characterIndex]}
           alt=''
