@@ -47,7 +47,7 @@ export const CharacterSelector = ({
           ))}
         </div>
         <button
-          className='cursor-pointer border-25 border-r-0 border-l-30 border-[#ff0101] !border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
+          className='cursor-pointer border-25 border-r-0 border-l-30 border-[#ff0101] border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex - 1)}
         ></button>
       </div>
