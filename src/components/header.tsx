@@ -29,10 +29,7 @@ export const Header = () => {
             {/* TODO: ADD FLAG NO_MONEY  */}
             {state === 'preparation' && !(balance > 0 || bet > 0) ? (
               <span
-                className={cn(
-                  'cursor-pointer text-[40px]',
-                  'repeat-infinite animate-[wiggle] duration-1000 ease-linear',
-                )}
+                className='animate-wiggle cursor-pointer text-[40px]'
                 onClick={handleAddMoney}
               >
                 💀
