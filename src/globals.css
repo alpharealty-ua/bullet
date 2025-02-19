@@ -5,6 +5,9 @@
   --font-caveat: Caveat;
   --font-bullet: Bullet;
   --font-bullet-game: BulletGame;
+  --color-green: #006100;
+  --color-red: #ff0b0b;
+  --color-primary: #ff9b2a;
 }
 
 @font-face {
