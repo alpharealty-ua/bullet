@@ -13,12 +13,13 @@ const sizes = {
 
 interface LogoProps {
   size?: LogoSize
+  text?: string
 }
 
 const Logo = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & LogoProps
->(({ size = 'md', ...props }, ref) => {
+>(({ size = 'md', text, ...props }, ref) => {
   return (
     <div
       ref={ref}
@@ -34,6 +35,11 @@ const Logo = React.forwardRef<
         style={{ backgroundImage: `url(${images.bullet})` }}
       ></div>
       <img src={images.logo} alt='' />
+      {text && (
+        <div className='animate-in fade-in text-red absolute top-full left-full -mt-8 -ml-8 text-4xl italic duration-500'>
+          {text}
+        </div>
+      )}
     </div>
   )
 })

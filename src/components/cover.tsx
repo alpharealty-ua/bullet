@@ -48,14 +48,7 @@ const Cover = () => {
       )}
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
-      <div className='relative inline-flex'>
-        <Logo size='3xl' />
-        {showDuelCover && (
-          <div className='animate-in fade-in absolute top-full left-full -mt-8 -ml-8 text-4xl text-[#ff0101] italic duration-500'>
-            duel
-          </div>
-        )}
-      </div>
+      <Logo size='3xl' text={showDuelCover ? 'Duel' : ''} />
       <div className='flex flex-col items-center justify-center gap-6'>
         {!showDuelCover ? (
           <>
