@@ -58,7 +58,7 @@ const Home = () => {
       )}
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
-      <Logo to='/' size='3xl' text={showDuelCover ? 'Duel' : ''} />
+      <Logo to='/' size='xl' text={showDuelCover ? 'Duel' : ''} />
       <div className='flex flex-col items-center justify-center gap-6'>
         {!showDuelCover ? (
           <>

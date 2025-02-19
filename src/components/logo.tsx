@@ -4,12 +4,12 @@ import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Link, LinkProps } from 'react-router'
 
-type LogoSize = 'md' | 'lg' | '3xl'
+type LogoSize = 'md' | 'lg' | 'xl'
 
 const sizes = {
   md: ' w-[141px]',
   lg: ' w-[171px]',
-  '3xl': 'w-[270px]',
+  xl: 'w-[270px]',
 } satisfies Record<LogoSize, string>
 
 interface LogoProps {
@@ -39,9 +39,9 @@ const Logo = React.forwardRef<
       {text && (
         <div
           className={cn(
-            'animate-in fade-in text-red absolute top-full left-full -mt-[10%] -ml-[10%] text-lg italic duration-500',
-            size === 'lg' && 'text-xl',
-            size === '3xl' && 'text-4xl',
+            'fill-mode-both animate-in fade-in text-red absolute top-full left-full -mt-[15%] -ml-[15%] text-2xl italic duration-500',
+            size === 'lg' && 'text-3xl',
+            size === 'xl' && '-mt-[13%] text-4xl',
           )}
         >
           {text}
