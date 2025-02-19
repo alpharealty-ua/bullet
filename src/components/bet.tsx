@@ -1,30 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { CSSTransition } from 'react-transition-group'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+
+interface BetProps {
+  maxBet?: number
+  bet?: number
+  onBet?: (bet: number) => void
+  disabled?: boolean
+  valueInBottom?: boolean
+  size?: 'sm' | 'md'
+}
 
 const Bet = ({
   bet = 50,
   maxBet = 1000,
   onBet,
   disabled = false,
-  showHelpers = false,
-  label = 'Bet',
+  valueInBottom = false,
   size = 'md',
-}: {
-  maxBet?: number
-  bet?: number
-  onBet?: (bet: number) => void
-  disabled?: boolean
-  showHelpers?: boolean
-  label?: string
-  size?: 'sm' | 'md'
-}) => {
+}: BetProps) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(bet)
   const [percent, setPercent] = useState(0)
-  const nodeRef2 = useRef(null)
 
   const changeValue = useCallback(
     (bet: number, callOnBet = true) => {
@@ -199,91 +197,61 @@ const Bet = ({
   }
 
   return (
-    <div className='relative flex w-full flex-col items-center text-center'>
-      <CSSTransition
-        nodeRef={nodeRef2}
-        in={showHelpers && bet === 0}
-        unmountOnExit
-        timeout={400}
-      >
-        {(state) => {
-          const open = state === 'entering' || state === 'entered'
-          const close = state === 'exiting' || state === 'exited'
-          return (
-            <div
-              ref={nodeRef2}
-              key='helper'
-              className={cn(
-                'fill-mode-both absolute bottom-full left-4 w-[90px] origin-top bg-contain bg-center bg-no-repeat duration-400',
-                open && 'animate-in fade-in slide-in-from-top-4',
-                close && 'animate-out fade-out slide-out-to-top-4',
-              )}
-            >
-              <img src={images.wagerhere} alt='' />
-            </div>
-          )
-        }}
-      </CSSTransition>
-      {label && (
-        <div className='text-green text-xl font-bold uppercase'>{label}</div>
-      )}
-
-      <div
-        ref={sliderWrapperRef}
-        className='relative -mt-1.5 flex w-full flex-col'
-      >
-        <div className='relative z-[3]'>
-          <div
-            className={cn(
-              'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
-              disabled && 'cursor-not-allowed',
-            )}
-            style={{ backgroundImage: `url(${images.sliderbar})` }}
-            onClick={handleSliderClick}
-            onDoubleClick={handleSliderDbClick}
-            data-slider
-          ></div>
-          <button
-            className={cn(
-              'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
-              disabled && 'cursor-not-allowed',
-              size === 'sm' && 'h-4 w-4',
-            )}
-            style={{
-              backgroundImage: `url(${images.bullet})`,
-              left: `${percent}%`,
-            }}
-            data-button
-          >
-            {/* TODO: TEMPORARY SOLUTION  */}
-            {label === '' && (
-              <>
-                <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                  <div>Risk</div>
-                  $1000
-                </div>
-                <div className='absolute top-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                  <div>To win</div>$<span data-value>{value}</span>
-                </div>
-              </>
-            )}
-          </button>
-        </div>
+    <div
+      ref={sliderWrapperRef}
+      className='relative -mt-1.5 flex w-full flex-col text-center'
+    >
+      <div className='relative z-[3]'>
         <div
           className={cn(
-            'text-red absolute -top-3.5 right-0 left-0 flex justify-between uppercase',
-            size === 'sm' && 'text-xs',
+            'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
+            disabled && 'cursor-not-allowed',
           )}
+          style={{ backgroundImage: `url(${images.sliderbar})` }}
+          onClick={handleSliderClick}
+          onDoubleClick={handleSliderDbClick}
+          data-slider
+        ></div>
+        <button
+          className={cn(
+            'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
+            disabled && 'cursor-not-allowed',
+            size === 'sm' && 'h-4 w-4',
+          )}
+          style={{
+            backgroundImage: `url(${images.bullet})`,
+            left: `${percent}%`,
+          }}
+          data-button
         >
-          <div>0</div>
-          <div>Max</div>
-        </div>
-        {label && (
-          <div className='w-full text-2xl leading-[1] text-ellipsis'>
-            $<span data-value>{value}</span>
-          </div>
-        )}
+          {/* TODO: TEMPORARY SOLUTION  */}
+          {!valueInBottom && (
+            <>
+              <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
+                <div>Risk</div>
+                $1000
+              </div>
+              <div className='absolute top-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
+                <div>To win</div>$<span data-value>{value}</span>
+              </div>
+            </>
+          )}
+        </button>
       </div>
+      <div
+        className={cn(
+          'text-red absolute -top-3.5 right-0 left-0 flex justify-between uppercase',
+          size === 'sm' && 'text-xs',
+        )}
+      >
+        <div>0</div>
+        <div>Max</div>
+      </div>
+      {valueInBottom && (
+        <div className='w-full text-2xl leading-[1] text-ellipsis'>
+          $<span data-value>{value}</span>
+        </div>
+      )}
     </div>
   )
 }

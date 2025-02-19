@@ -8,34 +8,31 @@ interface MultiplerProps {
 
 const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
   return (
-    <div className={cn('flex flex-col items-center text-center')}>
-      <div className='text-green text-xl font-bold uppercase'>MULTIPLIER</div>
-      <div className='relative text-center text-3xl leading-[1] uppercase'>
-        {activeIndex === -1 && <span className='text-[#ffbf00]'>?</span>}
-        &nbsp;
-        {items.map(({ value, color }, i) => {
-          const isJackpot = value === 1000
+    <div className='relative text-center text-3xl leading-[1] uppercase'>
+      {activeIndex === -1 && <span className='text-[#ffbf00]'>?</span>}
+      &nbsp;
+      {items.map(({ value, color }, i) => {
+        const isJackpot = value === 1000
 
-          return (
-            <div
-              key={i}
-              className={cn(
-                'text-red absolute top-1/2 left-1/2 -translate-1/2 opacity-0 transition-opacity',
-                i === activeIndex && 'opacity-100',
-                isJackpot && 'text-transparent drop-shadow-none',
-              )}
-              style={{ color }}
-            >
-              {isJackpot && (
-                <div className='absolute inset-0 px-1'>
-                  <img src={images['1000x']} alt='' />
-                </div>
-              )}
-              {value}x
-            </div>
-          )
-        })}
-      </div>
+        return (
+          <div
+            key={i}
+            className={cn(
+              'text-red absolute top-1/2 left-1/2 -translate-1/2 opacity-0 transition-opacity',
+              i === activeIndex && 'opacity-100',
+              isJackpot && 'text-transparent drop-shadow-none',
+            )}
+            style={{ color }}
+          >
+            {isJackpot && (
+              <div className='absolute inset-0 px-1'>
+                <img src={images['1000x']} alt='' />
+              </div>
+            )}
+            {value}x
+          </div>
+        )
+      })}
     </div>
   )
 }
