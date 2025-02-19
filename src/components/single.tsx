@@ -13,6 +13,7 @@ import { Click } from './click'
 import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
+import { Helper } from './helper'
 
 const Single = () => {
   const {
@@ -122,30 +123,7 @@ const Single = () => {
           </CSSTransition>
         </div>
         <div className='relative'>
-          <CSSTransition
-            nodeRef={nodeRef2}
-            in={showHelpers && bet > 0}
-            unmountOnExit
-            timeout={400}
-          >
-            {(state) => {
-              const open = state === 'entering' || state === 'entered'
-              const close = state === 'exiting' || state === 'exited'
-              return (
-                <div
-                  ref={nodeRef2}
-                  key='helper'
-                  className={cn(
-                    'fill-mode-both absolute right-0 bottom-full w-[90px] origin-top bg-contain bg-center bg-no-repeat duration-400',
-                    open && 'animate-in fade-in slide-in-from-top-4',
-                    close && 'animate-out fade-out slide-out-to-top-4',
-                  )}
-                >
-                  <img src={images.startgame} alt='' />
-                </div>
-              )
-            }}
-          </CSSTransition>
+          <Helper image='startgame' show={showHelpers && bet > 0} />
           <Button
             disabled={disabled || bet === 0}
             className='w-24'
