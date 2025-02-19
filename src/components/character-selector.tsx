@@ -26,7 +26,7 @@ export const CharacterSelector = ({
       <h3>{label}</h3>
       <div className='flex h-[200px] items-center'>
         <button
-          className='cursor-pointer border-25 border-r-30 border-l-0 border-[#ff0101] !border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
+          className='cursor-pointer border-25 border-r-30 border-l-0 border-[#ff0101] border-t-transparent border-b-transparent transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex - 1)}
         ></button>
         <div className='flex h-full w-[200px] shrink-0 items-center justify-center'>
