@@ -29,7 +29,7 @@ const Button = React.forwardRef<
       ref={ref}
       className={cn(
         'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform active:scale-75 disabled:scale-100 disabled:cursor-not-allowed',
-        bg && 'rounded-sm border-2 border-black px-3 py-1 text-xl',
+        bg && 'rounded-md border-2 border-black px-4 py-1 text-2xl',
         bg === 'green' && 'bg-green text-white',
         bg === 'red' && 'bg-red text-white',
         className,
