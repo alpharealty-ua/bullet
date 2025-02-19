@@ -1,5 +1,6 @@
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { cn } from '@/lib/utils'
 import { images, MAX_BET, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
@@ -21,6 +22,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
     rank,
   } = useAppContext()
   const modal = useCustomModal()
+  const footerWithBg = format === 'single' || format === 'watch'
   // TODO: MOVE MAX BET TO CONTEXT
   const maxBet = Math.min(
     state === 'running' ? bet + balance : balance,
@@ -35,8 +37,12 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
 
   return (
     <footer
-      className='relative flex h-[74px] justify-between bg-cover bg-[center_top] bg-no-repeat px-2 py-0.5'
-      style={{ backgroundImage: `url(${images.footer})` }}
+      className={cn(
+        'relative flex h-[74px] justify-between px-2 py-0.5',
+        format === 'duel' && 'bg-[#f2f2f2]',
+        footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat',
+      )}
+      style={footerWithBg ? { backgroundImage: `url(${images.footer})` } : {}}
     >
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
@@ -68,11 +74,27 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
           )}
         </div>
       </div>
-      <div className='relative flex flex-1 flex-col items-center self-end'>
-        <div className='flex w-[114px] flex-col gap-0.5'>
-          <Rank value={rank} />
-          <Bullets countBullet={countBullet} />
-        </div>
+      <div
+        className={cn(
+          'relative flex flex-1 flex-col items-center',
+          footerWithBg && 'self-end',
+        )}
+      >
+        {(format === 'single' || format === 'watch') && (
+          <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
+            <Rank value={rank} />
+            <Bullets countBullet={countBullet} />
+          </div>
+        )}
+        {format === 'duel' && (
+          <div className='flex flex-col items-center text-center'>
+            <div className='text-green text-xl font-bold uppercase'>Round</div>
+            <div className='text-red relative text-center text-3xl leading-[1]'>
+              3
+            </div>
+          </div>
+        )}
+        <div className='flex flex-col items-center text-center'></div>
       </div>
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='flex flex-col items-center text-center'>
@@ -96,6 +118,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
             </div>
           )}
         </div>
+        {/* TODO: ADD BALANCE  */}
         <button
           className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
           style={{ backgroundImage: `url(${images.settings})` }}

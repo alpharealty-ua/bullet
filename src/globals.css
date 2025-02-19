@@ -97,3 +97,14 @@ img {
     @apply overflow-auto [&::-webkit-scrollbar]:h-[3px] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#000]/10;
   }
 }
+
+.gradient {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 13px,
+    #000 13px,
+    #000 15px
+  );
+  background-position: 2px 0;
+}

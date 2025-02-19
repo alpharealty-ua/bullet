@@ -24,8 +24,8 @@ const App = () => {
             <Routes>
               <Route index element={<Home />} />
               <Route path='/single' element={<Single />} />
-              <Route path='/duel' element={<Watch />} />
-              <Route path='/watch' element={<Watch />} />
+              <Route path='/duel' element={<Watch format='duel' />} />
+              <Route path='/watch' element={<Watch format='watch' />} />
             </Routes>
           </NiceModal.Provider>
         </AppProvider>
