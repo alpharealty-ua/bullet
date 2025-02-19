@@ -62,9 +62,7 @@ const Bet = ({
     const buttonDom = sliderWrapperDom.querySelector(
       '[data-button]',
     ) as HTMLButtonElement
-    const valueDom =
-      sliderWrapperDom.querySelector('[data-value]') ??
-      document.createTextNode('')
+    const valueDoms = sliderWrapperDom.querySelectorAll('[data-value]')
 
     if (sliderDom === null || buttonDom === null) {
       return
@@ -108,7 +106,9 @@ const Bet = ({
         )
 
         buttonDom.style.left = roundPercentX + '%'
-        valueDom.textContent = String(currentBet)
+        valueDoms.forEach(
+          (valueDom) => (valueDom.textContent = String(currentBet)),
+        )
       }
 
       const pointerUp = (_: PointerEvent) => {
