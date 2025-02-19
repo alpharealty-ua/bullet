@@ -18,7 +18,7 @@ const Watch = () => {
           className='max-h-full'
         />
       </div>
-      <Footer format='duel' />
+      <Footer format='watch' />
     </>
   )
 }
