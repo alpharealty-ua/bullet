@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 
 export const PlaceWager = () => {
   return (
-    <div className='flex w-[210px] shrink-0 flex-col gap-2'>
+    <div className='flex w-[220px] shrink-0 flex-col gap-2'>
       <h3>PLACE WAGERS ON LIVE GAMES</h3>
       <ul className='flex flex-col gap-0.5'>
         <li>
@@ -21,6 +21,7 @@ export const PlaceWager = () => {
         <li>BETTING ODDS: -200</li>
       </ul>
       <div className='py-6'>
+        {/* TODO: ENLARGE  */}
         <Bet label='' />
       </div>
       <div className='flex justify-end'>
