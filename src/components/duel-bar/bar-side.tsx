@@ -27,13 +27,13 @@ const BarSide = ({
     >
       <button
         className={cn(
-          'relative top-0 bottom-0 z-10 flex grow-0 cursor-pointer items-center rounded-[inherit] text-xl transition-colors hover:text-black',
+          'relative top-0 bottom-0 z-10 flex grow-0 cursor-pointer items-center rounded-[inherit] text-xl transition-colors hover:text-[#eee]',
           side === 'left' && 'right-0',
           side === 'right' && 'left-0',
         )}
         onClick={() => onClickLabel(side)}
       >
-        <div className='w-8'>
+        <div className={cn('relative w-7')}>
           <div
             className={cn(
               'absolute top-1/2 left-1/2 -translate-1/2 font-bold whitespace-nowrap uppercase',
@@ -48,8 +48,8 @@ const BarSide = ({
       <div
         className={cn(
           'flex grow rounded-md border-2 bg-white p-1 text-base leading-[1.1] text-black',
-          side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-8',
-          side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-8',
+          side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-7',
+          side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-7',
         )}
       >
         {children}
