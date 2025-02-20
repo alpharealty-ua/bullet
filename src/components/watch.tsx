@@ -14,7 +14,6 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         logoText={format === 'duel' ? 'duel' : ''}
         hideBalance={format === 'duel'}
       />
-
       <DuelBar />
       {format === 'duel' && (
         <div className='mt-7 mb-8 text-center'>
@@ -24,7 +23,12 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
       <div className='mt-auto flex flex-col gap-6'>
         <div className='relative mx-auto flex flex-col items-center justify-center gap-2'>
           {format === 'duel' && <div className='text-2xl'>BIGBALLS</div>}
-          <div className='flex h-[180px] w-[180px] items-center justify-center'>
+          <div
+            className={cn(
+              'flex h-[180px] w-[180px] items-center justify-center',
+              format === 'watch' && '-mb-7 h-[340px] w-[340px]',
+            )}
+          >
             <img
               src={CHARACTER_IMAGES[characterIndex]}
               alt=''
