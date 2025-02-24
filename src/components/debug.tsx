@@ -23,7 +23,6 @@ interface Props {
     deal: () => void
     winGame: () => void
   }
-  disabled: boolean
 }
 
 const Debug = (props: Props) => {
@@ -40,16 +39,10 @@ const Debug = (props: Props) => {
     activeMultiplierIndex,
     setActiveMultiplierIndex,
     game,
-    disabled,
   } = props
 
   const handleSetState = (s: State) => {
-    if (disabled) {
-      return
-    }
-    setTimeout(() => {
-      setState(s)
-    })
+    setState(s)
   }
 
   const handleResetAddMoney = () => {

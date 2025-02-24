@@ -10,7 +10,7 @@ import mergeRefs from 'merge-refs'
 
 import { cn } from '@/lib/utils'
 import { images } from '@/lib/constants'
-import { Button } from './ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 
 type Props = {
@@ -79,7 +79,11 @@ export const Modal = React.forwardRef<
       {!hideHeader && (
         <div className='flex items-center justify-between'>
           <Logo to='/' size='lg' />
-          <Button className='w-11' image='close' onClick={handleClose} />
+          <ButtonWithAudio
+            className='w-11'
+            image='close'
+            onClick={handleClose}
+          />
         </div>
       )}
       {children}

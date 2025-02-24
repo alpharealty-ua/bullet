@@ -4,7 +4,6 @@ import { CSSTransition } from 'react-transition-group'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
 import { Result } from './result'
@@ -13,6 +12,7 @@ import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
+import { ButtonWithAudio } from './ui/button-with-audio'
 
 const Single = () => {
   const {
@@ -25,36 +25,34 @@ const Single = () => {
     showOffer,
     showJackpot,
     showClick,
-    disabled,
     jackpot,
     game,
-    mouseClick,
     revolverRefHandle,
     gameOverImage,
   } = useAppContext()
+  // TODO: REMOVE
+  const disabled = false
 
   const nodeRef = useRef(null)
   const modal = useCustomModal()
 
   const handlePull = async () => {
-    await mouseClick(game.next)
+    await game.next()
   }
 
   const handleDeal = async () => {
-    await mouseClick(game.deal)
+    await game.deal()
   }
 
   const handleStartGame = async () => {
-    await mouseClick()
-    game.newGame()
+    await game.newGame()
   }
 
-  const handleGameOverTimeout = () => {
-    game.newGame()
+  const handleGameOverTimeout = async () => {
+    await game.newGame()
   }
 
   const handleAddMoney = async () => {
-    await mouseClick()
     modal.show({
       contentSlot: <AddMoneyModal />,
     })
@@ -75,7 +73,7 @@ const Single = () => {
       />
       {state === 'preparation' && !(balance > 0 || bet > 0) && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
-          <Button text='Add money' onClick={handleAddMoney} />
+          <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
       )}
       <div className='relative mt-auto'>
@@ -111,7 +109,7 @@ const Single = () => {
                       close && 'animate-out fade-out zoom-out-50 duration-400',
                     )}
                   >
-                    <Button
+                    <ButtonWithAudio
                       disabled={disabled}
                       className='w-24'
                       image='deal'
@@ -124,7 +122,7 @@ const Single = () => {
           </div>
           <div className='relative'>
             <Helper image='startgame' show={showHelpers && bet > 0} />
-            <Button
+            <ButtonWithAudio
               disabled={disabled || bet === 0}
               className='w-24'
               image='pull'

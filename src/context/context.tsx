@@ -18,23 +18,20 @@ interface ContextAppValue {
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
-  playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement | null>
+  playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement>
   offer: number
   showOffer: boolean
   showJackpot: boolean
   showClick: boolean
   jackpot: number
-  disabled: boolean
   game: {
-    next: () => void
-    gameOver: () => void
-    newGame: (format?: FormatGame) => void
-    deal: () => void
-    winGame: () => void
+    next: () => Promise<void>
+    gameOver: () => Promise<void>
+    newGame: (format?: FormatGame) => Promise<void>
+    deal: () => Promise<void>
+    winGame: () => Promise<void>
   }
   gameOverImage: string
-  // TODO: MOVE TO BUTTON COMPONENT
-  mouseClick: (callback?: () => void | Promise<void>) => Promise<void>
   revolverRefHandle: React.RefObject<{
     spin: (interval: number) => Promise<void>
   }>

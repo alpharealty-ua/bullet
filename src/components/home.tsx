@@ -5,43 +5,37 @@ import { useCustomModal } from '@/hooks/use-custom-modal'
 import { useAppContext } from '@/context/use-app-context'
 import { images, CHARACTER_IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Button } from './ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 import { Rules } from './rules'
 import { CharacterSelector } from './character-selector'
 
 const Home = () => {
-  const { game, mouseClick, characterIndex, setCharacterIndex } =
-    useAppContext()
+  const { game, characterIndex, setCharacterIndex } = useAppContext()
   const nagigate = useNavigate()
   const modal = useCustomModal()
   const [showDuelCover, setShowDuelCover] = useState(false)
 
   const handleStartButton = async () => {
-    await mouseClick()
     game.newGame('single')
     nagigate('/single')
   }
 
   const handleDuelButton = async () => {
-    await mouseClick()
     setShowDuelCover(true)
   }
 
   const handleStartDuelButton = async () => {
-    await mouseClick()
     game.newGame('duel')
     nagigate('/duel')
   }
 
   const handleWatchButton = async () => {
-    await mouseClick()
     game.newGame('duel')
     nagigate('/watch')
   }
 
   const handleGameRules = async () => {
-    await mouseClick()
     modal.show({
       contentSlot: <Rules />,
     })
@@ -62,9 +56,17 @@ const Home = () => {
       <div className='flex flex-col items-center justify-center gap-6'>
         {!showDuelCover ? (
           <>
-            <Button image='solo' className='w-30' onClick={handleStartButton} />
-            <Button image='duel' className='w-30' onClick={handleDuelButton} />
-            <Button
+            <ButtonWithAudio
+              image='solo'
+              className='w-30'
+              onClick={handleStartButton}
+            />
+            <ButtonWithAudio
+              image='duel'
+              className='w-30'
+              onClick={handleDuelButton}
+            />
+            <ButtonWithAudio
               image='gamerules'
               className='w-24'
               onClick={handleGameRules}
@@ -73,12 +75,12 @@ const Home = () => {
         ) : (
           <>
             <div className='flex gap-6'>
-              <Button
+              <ButtonWithAudio
                 image='play'
                 className='w-30'
                 onClick={handleStartDuelButton}
               />
-              <Button
+              <ButtonWithAudio
                 image='watch'
                 className='w-30 text-2xl'
                 onClick={handleWatchButton}

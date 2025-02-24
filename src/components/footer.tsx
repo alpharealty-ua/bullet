@@ -18,7 +18,6 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
     setBet,
     state,
     showHelpers,
-    disabled,
     rank,
   } = useAppContext()
   const modal = useCustomModal()
