@@ -35,6 +35,8 @@ export const images = {
   wagerhere: './assets/images/wager-here.svg',
   gunchamber: './assets/images/compressed/gun-chamber.png',
   gunbody: './assets/images/compressed/gun-body.png',
+  gunchambercharacter: './assets/images/gun-chamber-character.png',
+  gunbodycharacter: './assets/images/gun-body-character.png',
   play: './assets/images/play.svg',
   pull: './assets/images/pull.svg',
   footer: './assets/images/footer.svg',
