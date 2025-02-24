@@ -34,7 +34,7 @@ export const CharacterSelector = ({
           <FaArrowAltCircleLeft />
         </button>
         <div className='flex h-full w-[200px] shrink-0 items-center justify-center'>
-          {images.map((el, i) => (
+          {images.map((_, i) => (
             <div
               key={i}
               className={cn(
