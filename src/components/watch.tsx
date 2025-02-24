@@ -7,6 +7,7 @@ import { Footer } from './footer'
 import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
+import { PlayerInfo } from './player-info'
 
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
@@ -18,30 +19,44 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         hideBalance={format === 'duel'}
       />
       <Bar />
-      <div className='mt-auto flex flex-col gap-6'>
-        <div className='relative mx-12 flex grow-1 flex-col items-center justify-center gap-2'>
+      <div className='mt-5 flex flex-col gap-6'>
+        <div className='relative mt-6 flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
           <Character
             className={cn(
-              'ml-auto h-[250px]',
+              'mr-12 ml-auto h-[235px]',
               format === 'watch' && 'mx-auto -mb-7 h-[300px]',
             )}
             characterIndex={characterIndex}
           />
-          <div className='absolute bottom-0 left-0 text-center'>
-            <div className='text-4xl'>Ready</div>
-            <div className='text-4xl'>Set</div>
-            <div className='text-4xl'>Pull</div>
+          <PlayerInfo
+            className='absolute top-0 left-12'
+            side='left'
+            level={53}
+            login={'Suni7222'}
+            win={52}
+          />
+          <div className='absolute bottom-0 left-10 flex flex-col gap-1 text-[40px]'>
+            <div className=''>Ready</div>
+            <div className='pl-8'>Set</div>
+            <div className='pl-14'>Pull</div>
           </div>
         </div>
         {format === 'duel' && (
-          <div className='relative'>
+          <div className='relative mb-1'>
+            <PlayerInfo
+              className='absolute top-6 right-6'
+              side='right'
+              level={53}
+              login={'Suni7222'}
+              win={52}
+            />
             <div
-              className='relative mx-auto aspect-[190/220] w-[170px] items-end justify-center bg-contain bg-center bg-no-repeat'
+              className='relative ml-10 aspect-[190/220] w-[190px] items-end justify-center bg-contain bg-center bg-no-repeat'
               style={{ backgroundImage: `url(${images.opponent})` }}
             ></div>
             <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
               <div className='relative'>
-                <Button className='w-24' image='pull' />
+                <Button className='w-26' image='pull' />
               </div>
             </div>
           </div>
