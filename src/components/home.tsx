@@ -62,7 +62,7 @@ const Home = () => {
       <div className='flex flex-col items-center justify-center gap-6'>
         {!showDuelCover ? (
           <>
-            <Button image='play' className='w-30' onClick={handleStartButton} />
+            <Button image='solo' className='w-30' onClick={handleStartButton} />
             <Button image='duel' className='w-30' onClick={handleDuelButton} />
             <Button
               image='gamerules'

@@ -37,6 +37,7 @@ export const images = {
   gunbody: './assets/images/compressed/gun-body.png',
   gunchambercharacter: './assets/images/gun-chamber-character.png',
   gunbodycharacter: './assets/images/gun-body-character.png',
+  solo: './assets/images/solo.svg',
   play: './assets/images/play.svg',
   pull: './assets/images/pull.svg',
   footer: './assets/images/footer.svg',

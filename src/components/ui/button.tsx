@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 
 const imagesMap = {
   button: images.button,
+  solo: images.solo,
   play: images.play,
   pull: images.pull,
   deal: images.deal,
