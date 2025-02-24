@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { useAppContext } from '@/context/use-app-context'
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -8,9 +10,15 @@ import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
 import { PlayerInfo } from './player-info'
+import { StartGameText } from './start-game-text'
 
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
+  const [startGame, setStartGame] = useState(false)
+
+  const handlePull = () => {
+    setStartGame(true)
+  }
 
   return (
     <>
@@ -35,11 +43,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
             login={'Suni7222'}
             win={52}
           />
-          <div className='absolute bottom-0 left-10 flex flex-col gap-1 text-[40px]'>
-            <div className=''>Ready</div>
-            <div className='pl-8'>Set</div>
-            <div className='pl-14'>Pull</div>
-          </div>
+          {startGame && <StartGameText />}
         </div>
         {format === 'duel' && (
           <div className='relative mb-1'>
@@ -56,7 +60,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
             ></div>
             <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
               <div className='relative'>
-                <Button className='w-26' image='pull' />
+                <Button className='w-26' image='pull' onClick={handlePull} />
               </div>
             </div>
           </div>
