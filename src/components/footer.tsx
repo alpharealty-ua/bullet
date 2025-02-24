@@ -28,8 +28,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
     state === 'running' ? bet + balance : balance,
     MAX_BET,
   )
-  const betDisabled =
-    disabled || (state === 'running' && bet > 0) || balance === 0
+  const betDisabled = (state === 'running' && bet > 0) || balance === 0
 
   const handleSettings = () => {
     modal.show({ contentSlot: <Settings /> })
