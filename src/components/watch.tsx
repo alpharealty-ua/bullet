@@ -29,7 +29,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
           <div className={cn()}>
             <Character
               className={cn(
-                'h-[180px]',
+                'h-[170px]',
                 format === 'watch' && '-mb-7 h-[300px]',
               )}
               characterIndex={characterIndex}
@@ -39,10 +39,10 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         {format === 'duel' && (
           <div className='relative'>
             <div
-              className='relative mx-auto aspect-[190/220] w-[190px] items-end justify-center bg-contain bg-center bg-no-repeat'
+              className='relative mx-auto aspect-[190/220] w-[170px] items-end justify-center bg-contain bg-center bg-no-repeat'
               style={{ backgroundImage: `url(${images.opponent})` }}
             ></div>
-            <div className='absolute right-0 bottom-0 mb-5 flex items-center justify-between px-4'>
+            <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
               <div className='relative'>
                 <Button className='w-24' image='pull' />
               </div>
