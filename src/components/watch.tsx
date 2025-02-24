@@ -43,22 +43,34 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         )}
       </div>
       {format === 'duel' && (
-        <div className='relative flex h-10 justify-center border-t-3 border-b-3 border-black bg-[#f7f7c0]'>
-          <div className='gradient pointer-events-none absolute inset-0'></div>
-          {[5, 10, 20, 33, 50, 33, 20, 10, 5].map((num, i) => (
-            <div
-              key={i}
-              className={cn(
-                'flex h-full w-[15px] justify-center pt-4.5 text-[10px]',
-                num === 50 && 'bg-red pt-2',
-                num === 33 && 'bg-[#ff6c00] pt-2.5',
-                num === 20 && 'bg-[#ff9d10] pt-3',
-                num === 10 && 'bg-[#ffda10] pt-3.5',
-              )}
-            >
-              {num}
-            </div>
-          ))}
+        <div className='relative table h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0] [&_.table-cell]:border-2 [&_.table-cell]:border-black'>
+          <div className='table-row'>
+            {Array(23)
+              .fill(null)
+              .map((_, i, arr) => {
+                const center = arr.length >> 1
+                const index = Math.abs(center - i)
+                const range = [
+                  { number: 50, className: 'bg-red' },
+                  { number: 33, className: 'bg-[#ff6c00]' },
+                  { number: 20, className: 'bg-[#ff9d10]' },
+                  { number: 10, className: 'bg-[#ffda10]' },
+                  { number: 5, className: '' },
+                ][index] ?? { number: 0, className: '' }
+
+                return (
+                  <div
+                    key={i}
+                    className={cn(
+                      'table-cell cursor-pointer text-center align-middle text-[9px] transition-colors hover:bg-[#30ff00]',
+                      range.className,
+                    )}
+                  >
+                    {range.number > 0 && range.number}
+                  </div>
+                )
+              })}
+          </div>
         </div>
       )}
       <Footer format={format} />
