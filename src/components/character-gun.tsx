@@ -14,7 +14,7 @@ const GunCharacter = React.forwardRef<
       {...props}
     >
       <div
-        className='absolute top-[10%] right-0 left-0 aspect-square animate-spin bg-contain bg-center bg-no-repeat duration-5000'
+        className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
         style={{
           backgroundImage: `url(${images.gunchambercharacter})`,
         }}
