@@ -8,6 +8,7 @@ import { Multiplier } from './multiplier'
 import { Settings } from './settings'
 import { Rank } from './rank'
 import { Helper } from './helper'
+import { MoneyBagButton } from './money-bag-button'
 
 const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
   const {
@@ -117,12 +118,14 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
             </div>
           )}
         </div>
-        {/* TODO: ADD BALANCE  */}
-        <button
-          className='absolute right-0.5 bottom-0.5 h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
-          style={{ backgroundImage: `url(${images.settings})` }}
-          onClick={handleSettings}
-        ></button>
+        <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
+          <MoneyBagButton className='w-4' />
+          <button
+            className='h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
+            style={{ backgroundImage: `url(${images.settings})` }}
+            onClick={handleSettings}
+          ></button>
+        </div>
       </div>
     </footer>
   )
