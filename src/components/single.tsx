@@ -78,56 +78,59 @@ const Single = () => {
           <Button text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      <Revolver
-        ref={revolverRefHandle}
-        disabled={disabled || !(state === 'preparation')}
-        beforeSlot={<>{showClick && <Click />}</>}
-      />
-      <div
-        className={cn(
-          'mx-4 mt-auto mb-4 flex h-[100px] items-center justify-between',
-          settings.invertButtons && 'flex-row-reverse',
-        )}
-      >
-        <div className='relative'>
-          <CSSTransition
-            nodeRef={nodeRef}
-            in={showOffer}
-            unmountOnExit
-            timeout={400}
-          >
-            {(state) => {
-              const open = state === 'entering' || state === 'entered'
-              const close = state === 'exiting' || state === 'exited'
-              return (
-                <div
-                  ref={nodeRef}
-                  className={cn(
-                    'fill-mode-both relative -top-1 mt-auto',
-                    open &&
-                      'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
-                    close && 'animate-out fade-out zoom-out-50 duration-400',
-                  )}
-                >
-                  <Button
-                    disabled={disabled}
-                    className='w-24'
-                    image='deal'
-                    onClick={handleDeal}
-                  />
-                </div>
-              )
-            }}
-          </CSSTransition>
-        </div>
-        <div className='relative'>
-          <Helper image='startgame' show={showHelpers && bet > 0} />
-          <Button
-            disabled={disabled || bet === 0}
-            className='w-24'
-            image='pull'
-            onClick={handlePull}
-          />
+      <div className='relative mt-auto'>
+        <Revolver
+          ref={revolverRefHandle}
+          disabled={disabled || !(state === 'preparation')}
+          beforeSlot={<>{showClick && <Click />}</>}
+          className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
+        />
+        <div
+          className={cn(
+            'absolute right-0 bottom-4 left-0 flex items-center justify-between px-4',
+            settings.invertButtons && 'flex-row-reverse',
+          )}
+        >
+          <div className='relative'>
+            <CSSTransition
+              nodeRef={nodeRef}
+              in={showOffer}
+              unmountOnExit
+              timeout={400}
+            >
+              {(state) => {
+                const open = state === 'entering' || state === 'entered'
+                const close = state === 'exiting' || state === 'exited'
+                return (
+                  <div
+                    ref={nodeRef}
+                    className={cn(
+                      'fill-mode-both relative mt-auto',
+                      open &&
+                        'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
+                      close && 'animate-out fade-out zoom-out-50 duration-400',
+                    )}
+                  >
+                    <Button
+                      disabled={disabled}
+                      className='w-24'
+                      image='deal'
+                      onClick={handleDeal}
+                    />
+                  </div>
+                )
+              }}
+            </CSSTransition>
+          </div>
+          <div className='relative'>
+            <Helper image='startgame' show={showHelpers && bet > 0} />
+            <Button
+              disabled={disabled || bet === 0}
+              className='w-24'
+              image='pull'
+              onClick={handlePull}
+            />
+          </div>
         </div>
       </div>
       {state === 'game-over' && (

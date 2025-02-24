@@ -12,11 +12,11 @@ const Revolver = React.forwardRef<
   {
     spin: (interval: number) => Promise<void>
   },
-  {
+  React.HtmlHTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
     disabled: boolean
   }
->(({ beforeSlot, disabled }, ref) => {
+>(({ beforeSlot, disabled, className, ...props }, ref) => {
   const bulletChambeRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
@@ -205,7 +205,10 @@ const Revolver = React.forwardRef<
   })
 
   return (
-    <div className='animate-in fade-in-0 absolute right-0 bottom-7 left-0 mx-auto aspect-[1/1.881] w-[216px] duration-100 lg:w-[251px]'>
+    <div
+      className={cn('relative mx-auto aspect-[1/1.881] w-50', className)}
+      {...props}
+    >
       {beforeSlot}
       <div className='absolute inset-0 overflow-hidden'>
         <div
