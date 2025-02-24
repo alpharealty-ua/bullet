@@ -222,14 +222,14 @@ const Revolver = React.forwardRef<
           >
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-100 ease-linear'
-              style={{ backgroundImage: `url(${images.bulletchambe})` }}
+              style={{ backgroundImage: `url(${images.gunchamber})` }}
             ></div>
           </div>
         </div>
         <div
           className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
           style={{
-            backgroundImage: `url(${images.body})`,
+            backgroundImage: `url(${images.gunbody})`,
           }}
         ></div>
       </div>
