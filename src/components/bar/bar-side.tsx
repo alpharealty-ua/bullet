@@ -36,7 +36,7 @@ const BarSide = ({
         <div className={cn('relative w-7')}>
           <div
             className={cn(
-              'absolute top-1/2 left-1/2 -translate-1/2 font-bold whitespace-nowrap uppercase',
+              'absolute top-1/2 left-1/2 -translate-1/2 whitespace-nowrap uppercase',
               side === 'left' && 'rotate-90',
               side === 'right' && '-rotate-90',
             )}

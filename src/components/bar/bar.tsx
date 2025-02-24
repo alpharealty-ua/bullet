@@ -12,7 +12,7 @@ const Bar = () => {
   }
 
   return (
-    <div className='absolute top-[80px] right-0 left-0 mb-auto h-[250px] overflow-hidden'>
+    <div className='absolute top-[100px] right-0 left-0 mb-auto h-[250px] overflow-hidden'>
       <BarSide
         side='left'
         label='Chat'
