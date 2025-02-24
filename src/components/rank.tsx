@@ -13,7 +13,7 @@ const Rank = ({ value }: { value: number }) => {
           <div
             key={i}
             className='absolute h-full w-0.5 -skew-x-30 bg-black'
-            style={{ left: 8 + 10 * i }}
+            style={{ left: `${6 + 10 * i}%` }}
           ></div>
         ))}
     </div>
