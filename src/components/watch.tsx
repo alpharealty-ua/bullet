@@ -18,22 +18,19 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         hideBalance={format === 'duel'}
       />
       <DuelBar />
-      {format === 'duel' && (
-        <div className='mt-7 mb-8 text-center'>
-          <div className='text-6xl'>Ready</div>
-        </div>
-      )}
       <div className='mt-auto flex flex-col gap-6'>
-        <div className='relative mx-auto flex flex-col items-center justify-center gap-2'>
-          {format === 'duel' && <div className='text-2xl'>BIGBALLS</div>}
-          <div className={cn()}>
-            <Character
-              className={cn(
-                'h-[170px]',
-                format === 'watch' && '-mb-7 h-[300px]',
-              )}
-              characterIndex={characterIndex}
-            />
+        <div className='relative mx-12 flex grow-1 flex-col items-center justify-center gap-2'>
+          <Character
+            className={cn(
+              'ml-auto h-[250px]',
+              format === 'watch' && 'mx-auto -mb-7 h-[300px]',
+            )}
+            characterIndex={characterIndex}
+          />
+          <div className='absolute bottom-0 left-0 text-center'>
+            <div className='text-4xl'>Ready</div>
+            <div className='text-4xl'>Set</div>
+            <div className='text-4xl'>Pull</div>
           </div>
         </div>
         {format === 'duel' && (
