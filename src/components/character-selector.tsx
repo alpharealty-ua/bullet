@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
+import { Character } from './character'
 
 export const CharacterSelector = ({
   label,
@@ -41,11 +42,7 @@ export const CharacterSelector = ({
                 i === activeIndex && 'flex',
               )}
             >
-              <img
-                src={el}
-                alt=''
-                className='pointer-events-none max-h-full select-none'
-              />
+              <Character characterIndex={i} />
             </div>
           ))}
         </div>
