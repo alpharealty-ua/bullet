@@ -37,7 +37,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
   return (
     <footer
       className={cn(
-        'relative flex h-[74px] justify-between px-2 py-0.5',
+        'relative flex h-[74px] justify-between px-1 py-0.5',
         format === 'duel' && 'bg-[#f2f2f2]',
         footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat',
       )}
@@ -96,7 +96,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
         <div className='flex flex-col items-center text-center'></div>
       </div>
       <div className='relative flex flex-1 flex-col items-center'>
-        <div className='flex flex-col items-center text-center'>
+        <div className='flex flex-col items-center pr-5 text-center'>
           <div className='text-green text-xl font-bold uppercase'>
             {{ single: 'Multiplier', duel: 'Balance', watch: 'Round' }[format]}
           </div>
