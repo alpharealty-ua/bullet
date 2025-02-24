@@ -4,7 +4,7 @@ import { BarSide } from './bar-side'
 import { SideBets } from './side-bets'
 import { SideChat } from './side-chat'
 
-const DuelBar = () => {
+const Bar = () => {
   const [openSide, setOpenSide] = useState<'left' | 'right' | null>(null)
 
   const handleLabelClick = (newSide: 'left' | 'right') => {
@@ -12,7 +12,7 @@ const DuelBar = () => {
   }
 
   return (
-    <div className='absolute top-[80px] right-0 left-0 z-3 mb-auto h-[250px] overflow-hidden'>
+    <div className='absolute top-[80px] right-0 left-0 mb-auto h-[250px] overflow-hidden'>
       <BarSide
         side='left'
         label='Chat'
@@ -33,4 +33,4 @@ const DuelBar = () => {
   )
 }
 
-export { DuelBar }
+export { Bar }

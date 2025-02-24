@@ -16,7 +16,7 @@ const BarSide = ({
   return (
     <div
       className={cn(
-        'absolute top-0 bottom-0 flex w-full grow rounded-3xl border-2 border-black py-1 text-white transition-all duration-500',
+        'absolute top-0 bottom-0 z-[3] flex w-full grow rounded-3xl border-2 border-black py-1 text-white transition-all duration-500',
         side === 'left' &&
           'bg-red right-full translate-x-8 flex-row-reverse rounded-ss-none rounded-es-none border-l-0',
         side === 'right' &&

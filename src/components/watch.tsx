@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Header } from './header'
 import { Footer } from './footer'
-import { DuelBar } from './duel-bar/duel-bar'
+import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
 
@@ -17,7 +17,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         logoText={format === 'duel' ? 'duel' : ''}
         hideBalance={format === 'duel'}
       />
-      <DuelBar />
+      <Bar />
       <div className='mt-auto flex flex-col gap-6'>
         <div className='relative mx-12 flex grow-1 flex-col items-center justify-center gap-2'>
           <Character
