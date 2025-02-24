@@ -118,9 +118,9 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
           )}
         </div>
         <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
-          <MoneyBagButton className='w-4' />
+          {format === 'duel' && <MoneyBagButton className='w-4' />}
           <button
-            className='h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
+            className='mt-auto h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
             style={{ backgroundImage: `url(${images.settings})` }}
             onClick={handleSettings}
           ></button>
