@@ -2,9 +2,6 @@
 @plugin 'tailwindcss-animate';
 
 @theme {
-  --font-caveat: Caveat;
-  --font-bullet: Bullet;
-  --font-bullet-game: BulletGame;
   --font-bullet-official: BulletOfficial;
   --color-green: #006100;
   --color-red: #ff0b0b;
@@ -42,34 +39,6 @@
       transform: scale(1);
     }
   }
-}
-
-@font-face {
-  font-family: Bullet;
-  src: url('/assets/fonts/Bullet-Regular.woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Bullet;
-  src: url('/assets/fonts/Bullet-Regular-Italic.woff2');
-  font-weight: 400;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: BulletGame;
-  src: url('/assets/fonts/BulletGame-Regular-v2.woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: BulletGame;
-  src: url('/assets/fonts/BulletGame-Bold.woff2');
-  font-weight: 700;
-  font-style: normal;
 }
 
 @font-face {
