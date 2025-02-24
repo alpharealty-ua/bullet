@@ -17,6 +17,7 @@ const DuelGameBar = () => {
     let active = cells[activeIndex]
     let direction = 1
     const activeClassList = ['!bg-[#30ff00]', '!text-black']
+    // TODO: USE DELEGATION
     const next = () => {
       if (activeIndex === 0) direction = 1
       else if (activeIndex === cells.length - 1) direction = -1
