@@ -65,6 +65,9 @@ export const audios = {
   mouseclick: './assets/audios/click.wav',
   chaching: './assets/audios/chaching.mp3',
   winsound: './assets/audios/winsound.mp3',
+  ready: './assets/audios/ready.mp3',
+  set: './assets/audios/set.mp3',
+  pull: './assets/audios/pull.mp3',
 } as const
 
 export const audiosEntries = Object.entries(audios)
