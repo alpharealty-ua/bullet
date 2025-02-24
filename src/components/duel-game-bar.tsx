@@ -16,7 +16,7 @@ const DuelGameBar = () => {
     let activeIndex = 0
     let active = cells[activeIndex]
     let direction = 1
-    const activeClassList = ['!bg-[#30ff00]']
+    const activeClassList = ['!bg-[#30ff00]', '!text-black']
     const next = () => {
       if (activeIndex === 0) direction = 1
       else if (activeIndex === cells.length - 1) direction = -1
@@ -61,9 +61,10 @@ const DuelGameBar = () => {
                   className={cn(
                     'border-2 border-black text-center align-middle text-[9px] transition-colors duration-150',
                     range.className,
+                    range.number === 0 && 'text-transparent',
                   )}
                 >
-                  {range.number > 0 && range.number}
+                  {range.number || 5}
                 </td>
               )
             })}
