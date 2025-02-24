@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Header } from './header'
 import { Footer } from './footer'
 import { DuelBar } from './duel-bar/duel-bar'
-import { Range } from './range'
+import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
 
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
@@ -50,7 +50,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
           </div>
         )}
       </div>
-      {format === 'duel' && <Range />}
+      {format === 'duel' && <DuelGameBar />}
       <Footer format={format} />
     </>
   )
