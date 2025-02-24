@@ -23,7 +23,7 @@ const Bar = () => {
       </BarSide>
       <BarSide
         side='right'
-        label=' SIDE BETS'
+        label='Live bet'
         onClickLabel={handleLabelClick}
         open={openSide === 'right'}
       >
