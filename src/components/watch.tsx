@@ -1,6 +1,7 @@
 import { useAppContext } from '@/context/use-app-context'
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { Header } from './header'
 import { Footer } from './footer'
 import { DuelBar } from './duel-bar/duel-bar'
@@ -36,8 +37,16 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
           </div>
         </div>
         {format === 'duel' && (
-          <div className='relative mx-auto flex h-[220px] w-[190px] items-end justify-center'>
-            <img src={images.opponent} alt='' className='max-h-full' />
+          <div className='relative'>
+            <div
+              className='relative mx-auto aspect-[190/220] w-[190px] items-end justify-center bg-contain bg-center bg-no-repeat'
+              style={{ backgroundImage: `url(${images.opponent})` }}
+            ></div>
+            <div className='absolute right-0 bottom-0 mb-5 flex items-center justify-between px-4'>
+              <div className='relative'>
+                <Button className='w-24' image='pull' />
+              </div>
+            </div>
           </div>
         )}
       </div>
