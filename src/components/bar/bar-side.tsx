@@ -53,7 +53,7 @@ const BarSide = ({
       </button>
       <div
         className={cn(
-          'flex grow rounded-md border-2 bg-white p-1 text-base leading-[1.1] text-black',
+          'flex grow rounded-md border-2 bg-white p-1 text-xs leading-[1.1] text-black',
           side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-7',
           side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-7',
         )}
