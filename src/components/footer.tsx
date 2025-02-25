@@ -56,7 +56,6 @@ const Footer = ({ format }: { format: 'solo' | 'duel' | 'watch' }) => {
                 maxBet={maxBet}
                 bet={bet}
                 onBet={setBet}
-                valueInBottom
                 size='sm'
               />
             </>

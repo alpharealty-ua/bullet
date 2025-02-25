@@ -8,7 +8,8 @@ interface BetProps {
   bet?: number
   onBet?: (bet: number) => void
   disabled?: boolean
-  valueInBottom?: boolean
+  topButtonSlot?: (value: number) => React.ReactNode
+  bottomSlot?: (value: number) => React.ReactNode
   size?: 'sm' | 'md'
 }
 
@@ -17,7 +18,8 @@ const Bet = ({
   maxBet = 1000,
   onBet,
   disabled = false,
-  valueInBottom = false,
+  topButtonSlot,
+  bottomSlot,
   size = 'md',
 }: BetProps) => {
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
@@ -224,18 +226,13 @@ const Bet = ({
           }}
           data-button
         >
-          {/* TODO: TEMPORARY SOLUTION  */}
-          {!valueInBottom && (
-            <>
+          <>
+            {topButtonSlot && (
               <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                <div>Risk</div>
-                $1000
+                {topButtonSlot(value)}
               </div>
-              <div className='absolute top-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                <div>To win</div>$<span data-value>{value}</span>
-              </div>
-            </>
-          )}
+            )}
+          </>
         </button>
       </div>
       <div
@@ -247,8 +244,10 @@ const Bet = ({
         <div>0</div>
         <div>Max</div>
       </div>
-      {valueInBottom && (
-        <div className='w-full text-2xl leading-[1] text-ellipsis'>
+      {bottomSlot ? (
+        bottomSlot(value)
+      ) : (
+        <div className='grow text-2xl leading-[1] text-ellipsis'>
           $<span data-value>{value}</span>
         </div>
       )}
