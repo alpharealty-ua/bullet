@@ -57,14 +57,14 @@ const Home = () => {
         {!showDuelCover ? (
           <>
             <ButtonWithAudio
-              image='solo'
-              className='w-30'
-              onClick={handleStartButton}
-            />
-            <ButtonWithAudio
               image='duel'
               className='w-30'
               onClick={handleDuelButton}
+            />
+            <ButtonWithAudio
+              image='solo'
+              className='w-30'
+              onClick={handleStartButton}
             />
             <ButtonWithAudio
               image='gamerules'
