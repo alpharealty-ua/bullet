@@ -34,6 +34,7 @@ const DuelGameBar = () => {
     return () => {
       active.classList.remove(...activeClassList)
       active.removeEventListener('transitionend', next)
+      active.offsetWidth // need for force layout -> for remove class
     }
   }, [])
 
@@ -57,22 +58,23 @@ const DuelGameBar = () => {
                   { number: 10, className: 'bg-[#ffda10]' },
                 ][index] ?? { number: 0, className: '' }
 
-              return (
-                <td
-                  key={i}
-                  className={cn(
-                    'border-2 border-black text-center align-middle text-[9px] transition-colors duration-150',
-                    range.className,
-                    range.number === 0 && 'text-transparent',
-                  )}
-                >
-                  {range.number || 5}
-                </td>
-              )
-            })}
-        </tr>
-      </thead>
-    </table>
+                return (
+                  <td
+                    key={i}
+                    className={cn(
+                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-150',
+                      range.className,
+                      range.number === 0 && 'text-transparent',
+                    )}
+                  >
+                    {range.number || 5}
+                  </td>
+                )
+              })}
+          </tr>
+        </thead>
+      </table>
+    </div>
   )
 }
 
