@@ -8,16 +8,16 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ onClick, ...props }, ref) => {
     const { playAudio } = useAppContext()
     const [disabled, setDisabled] = useState(false)
-    const disabledRef = useRef(disabled)
     const buttonRef = useRef<HTMLButtonElement>(null)
 
     const mouseClick = async (): Promise<void> => {
-      const disabled = disabledRef.current
       const buttonDom = buttonRef.current
 
       if (buttonDom === null) {
         return
       }
+
+      setDisabled(true)
 
       buttonDom.classList.add('animate-button-click')
 
@@ -41,7 +41,6 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )
       })
       setDisabled(false)
-      disabledRef.current = false
     }
 
     const handleClick = async (
