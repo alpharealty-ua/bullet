@@ -18,7 +18,7 @@ const imagesMap = {
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   image?: keyof typeof imagesMap
-  bg?: 'green' | 'red'
+  bg?: 'green' | 'red' | 'primary'
   text?: string
 }
 
@@ -33,6 +33,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           bg && 'rounded-md border-2 border-black px-4 py-1 text-2xl',
           bg === 'green' && 'bg-green text-white',
           bg === 'red' && 'bg-red text-white',
+          bg === 'primary' && 'bg-primary',
           className,
         )}
         {...props}
