@@ -36,53 +36,55 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
       <Bar />
       <div className='mt-auto flex flex-col pt-6'>
         <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
+          {/* MOVE TO CHARACTER  */}
+          <PlayerInfo
+            className='absolute top-0 left-12'
+            side='left'
+            level={53}
+            login={'Suni7222'}
+            win={52}
+            visible={visiblePlayerInfo}
+          />
           <Character
             className={cn(
-              'mr-12 ml-auto h-[235px] cursor-pointer',
+              '',
               format === 'watch' && 'mx-auto -mb-7 h-[300px]',
+              format === 'duel' && 'mr-12 ml-auto h-[235px]',
             )}
             characterIndex={characterIndex}
-            onClick={handlePlayerClick}
+            onClick={format === 'duel' ? handlePlayerClick : undefined}
           />
-          {format === 'duel' && (
-            <PlayerInfo
-              className='absolute top-0 left-12'
-              side='left'
-              level={53}
-              login={'Suni7222'}
-              win={52}
-              visible={visiblePlayerInfo}
-            />
-          )}
           {startGame && <ReadySetPull />}
         </div>
         {format === 'duel' && (
-          <div className='relative mb-1'>
-            <PlayerInfo
-              className='absolute top-6 right-6'
-              side='right'
-              level={53}
-              login={'Suni7222'}
-              win={52}
-              visible={visiblePlayerInfo}
-            />
-            <div
-              className='relative ml-10 aspect-[190/220] w-[190px] cursor-pointer items-end justify-center bg-contain bg-center bg-no-repeat'
-              style={{ backgroundImage: `url(${images.opponent})` }}
-              onClick={handlePlayerClick}
-            ></div>
-            <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
-              <div className='relative'>
-                <ButtonWithAudio
-                  className='w-26'
-                  image='pull'
-                  onClick={handlePull}
-                />
+          <>
+            <div className='relative mb-1'>
+              <PlayerInfo
+                className='absolute top-6 right-6'
+                side='right'
+                level={53}
+                login={'Suni7222'}
+                win={52}
+                visible={visiblePlayerInfo}
+              />
+              <div
+                className='relative ml-10 aspect-[190/220] w-[190px] cursor-pointer items-end justify-center bg-contain bg-center bg-no-repeat'
+                style={{ backgroundImage: `url(${images.opponent})` }}
+                onClick={handlePlayerClick}
+              ></div>
+              <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
+                <div className='relative'>
+                  <ButtonWithAudio
+                    className='w-26'
+                    image='pull'
+                    onClick={handlePull}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+            <DuelGameBar />
+          </>
         )}
-        {format === 'duel' && <DuelGameBar />}
       </div>
       <Footer format={format} />
     </>
