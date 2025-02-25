@@ -27,8 +27,8 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         hideBalance={format === 'duel'}
       />
       <Bar />
-      <div className='mt-5 flex flex-col gap-6'>
-        <div className='relative mt-6 flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
+      <div className='mt-auto flex flex-col pt-6'>
+        <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
           <Character
             className={cn(
               'mr-12 ml-auto h-[235px]',
@@ -69,8 +69,8 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
             </div>
           </div>
         )}
+        {format === 'duel' && <DuelGameBar />}
       </div>
-      {format === 'duel' && <DuelGameBar />}
       <Footer format={format} />
     </>
   )
