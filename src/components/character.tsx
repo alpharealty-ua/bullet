@@ -15,6 +15,7 @@ const Character = React.forwardRef<
         'relative h-50 bg-contain bg-bottom bg-no-repeat',
         characterIndex === 0 && 'aspect-[1855/calc(1830*1.25)]',
         characterIndex === 1 && 'aspect-[1123/1415]',
+        props.onClick && 'cursor-pointer',
         className,
       )}
       style={{
