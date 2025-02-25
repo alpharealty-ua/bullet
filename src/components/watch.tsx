@@ -36,13 +36,15 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
             )}
             characterIndex={characterIndex}
           />
-          <PlayerInfo
-            className='absolute top-0 left-12'
-            side='left'
-            level={53}
-            login={'Suni7222'}
-            win={52}
-          />
+          {format === 'duel' && (
+            <PlayerInfo
+              className='absolute top-0 left-12'
+              side='left'
+              level={53}
+              login={'Suni7222'}
+              win={52}
+            />
+          )}
           {startGame && <StartGameText />}
         </div>
         {format === 'duel' && (
