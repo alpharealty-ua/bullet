@@ -63,33 +63,36 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'undo-state' })
   }, [])
 
-  const playAudio = async (
-    key: keyof typeof audios,
-    play = true,
-  ): Promise<HTMLAudioElement> => {
-    const audio = getAudio(key)
+  const playAudio = useCallback(
+    async (
+      key: keyof typeof audios,
+      play = true,
+    ): Promise<HTMLAudioElement> => {
+      const audio = getAudio(key)
 
-    audio.addEventListener(
-      'ended',
-      () => {
-        console.log('Play audio - ' + audio.src)
-      },
-      { once: true },
-    )
+      audio.addEventListener(
+        'ended',
+        () => {
+          console.log('Play audio - ' + audio.src)
+        },
+        { once: true },
+      )
 
-    try {
-      audio.muted = !settings.soundEffects
-      if (play) {
-        await audio.play()
+      try {
+        audio.muted = !settings.soundEffects
+        if (play) {
+          await audio.play()
+        }
+
+        return audio
+      } catch (error) {
+        console.log(error)
       }
 
       return audio
-    } catch (error) {
-      console.log(error)
-    }
-
-    return audio
-  }
+    },
+    [settings],
+  )
 
   const addRank = useCallback((payload: number) => {
     dispatch({ type: 'add-rank', payload })
