@@ -7,13 +7,25 @@ interface PlayerInfoProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   side: 'left' | 'right'
   level: number
   login: string
-  win: 52
+  win: number
+  visible: boolean
 }
 
 const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
-  ({ side, level, login, win, className, ...props }, ref) => {
+  ({ side, level, login, win, className, visible, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn('relative w-[145px]', className)} {...props}>
+      <div
+        ref={ref}
+        className={cn(
+          'relative w-[145px]',
+          'fill-mode-both fade-out fade-in duration-500',
+          side === 'left' && 'slide-in-from-right-20 slide-out-to-right-20',
+          side === 'right' && 'slide-in-from-left-20 slide-out-to-left-20',
+          visible ? 'animate-in' : 'animate-out',
+          className,
+        )}
+        {...props}
+      >
         <div
           className={cn(
             'bg-primary absolute top-full h-4 -translate-y-3 rounded-sm',

@@ -15,12 +15,17 @@ import { ReadySetPull } from './ready-set-pull'
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
   const [startGame, setStartGame] = useState(false)
+  const [showPlayerInfo, setShowPlaerInfo] = useState(false)
+  const visiblePlayerInfo = !startGame || showPlayerInfo
 
   const handlePull = () => {
     setStartGame(false)
+    setShowPlaerInfo(false)
 
     requestAnimationFrame(() => setStartGame(true))
   }
+
+  const handlePlayerClick = () => setShowPlaerInfo((p) => !p)
 
   return (
     <>
@@ -33,10 +38,11 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
         <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
           <Character
             className={cn(
-              'mr-12 ml-auto h-[235px]',
+              'mr-12 ml-auto h-[235px] cursor-pointer',
               format === 'watch' && 'mx-auto -mb-7 h-[300px]',
             )}
             characterIndex={characterIndex}
+            onClick={handlePlayerClick}
           />
           {format === 'duel' && (
             <PlayerInfo
@@ -45,6 +51,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
               level={53}
               login={'Suni7222'}
               win={52}
+              visible={visiblePlayerInfo}
             />
           )}
           {startGame && <ReadySetPull />}
@@ -57,10 +64,12 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
               level={53}
               login={'Suni7222'}
               win={52}
+              visible={visiblePlayerInfo}
             />
             <div
-              className='relative ml-10 aspect-[190/220] w-[190px] items-end justify-center bg-contain bg-center bg-no-repeat'
+              className='relative ml-10 aspect-[190/220] w-[190px] cursor-pointer items-end justify-center bg-contain bg-center bg-no-repeat'
               style={{ backgroundImage: `url(${images.opponent})` }}
+              onClick={handlePlayerClick}
             ></div>
             <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
               <div className='relative'>
