@@ -5,6 +5,10 @@ export const mockMessageList = addId([
     user: 'WallStreetWhale',
     message: "Fresh blood at the table. Let's see what you've got.",
   },
+  {
+    user: 'DeucesDive',
+    message: 'This should be interesting.',
+  },
 ]) satisfies Message[] as Message[]
 
 export const mockWagerList = addId([
