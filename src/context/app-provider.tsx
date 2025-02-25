@@ -32,7 +32,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     {
       countBullet,
       state,
-      format,
       rank,
       balance,
       bet,
@@ -120,9 +119,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     },
     [],
   )
-  const changeFormat = useCallback((payload: FormatGame) => {
-    dispatch({ type: 'change-format', payload })
-  }, [])
 
   const addBalance = useCallback((payload: number) => {
     dispatch({ type: 'add-balance', payload })
@@ -132,10 +128,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'set-bet', payload })
   }, [])
 
-  const newGame = async (format?: FormatGame) => {
-    if (format) {
-      changeFormat(format)
-    }
+  const newGame = async () => {
     await wait(0) // need for update states
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
@@ -301,7 +294,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         state,
         changeState,
-        format,
         rank,
         countBullet,
         balance,
@@ -329,7 +321,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         {...{
           state,
           changeState,
-          changeFormat,
           balance,
           setBalance,
           countBullet,

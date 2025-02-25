@@ -124,8 +124,6 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
         state: newState,
       }
     }
-    case 'change-format':
-      return { ...state, format: payload }
     case 'add-rank':
       return {
         ...state,

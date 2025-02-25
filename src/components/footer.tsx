@@ -1,7 +1,7 @@
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { images, MAX_BET, multipliers } from '@/lib/constants'
+import { FormatGame, images, MAX_BET, multipliers } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -10,7 +10,7 @@ import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
 
-const Footer = ({ format }: { format: 'solo' | 'duel' | 'watch' }) => {
+const Footer = ({ format }: { format: FormatGame }) => {
   const {
     countBullet,
     activeMultiplierIndex,

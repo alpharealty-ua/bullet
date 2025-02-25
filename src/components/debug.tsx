@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
 
-import { State, states, multipliers, FormatGame } from '@/lib/constants'
+import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 interface Props {
   state: State
   changeState: React.Dispatch<State>
-  changeFormat: React.Dispatch<FormatGame>
   balance: number
   setBalance: React.Dispatch<number>
   countBullet: number
@@ -29,7 +28,6 @@ const Debug = (props: Props) => {
   const {
     state,
     changeState: setState,
-    changeFormat,
     countBullet,
     setCountBullet,
     balance,
@@ -47,10 +45,6 @@ const Debug = (props: Props) => {
 
   const handleResetAddMoney = () => {
     localStorage.removeItem('endTime')
-  }
-
-  const changeChangeFormat = (format: FormatGame) => {
-    changeFormat(format)
   }
 
   useEffect(() => {
@@ -79,16 +73,6 @@ const Debug = (props: Props) => {
         text='Reset add money'
         className='text-base'
         onClick={handleResetAddMoney}
-      />
-      <ButtonWithAudio
-        text='solo'
-        className='text-base'
-        onClick={() => changeChangeFormat('solo')}
-      />
-      <ButtonWithAudio
-        text='duel'
-        className='text-base'
-        onClick={() => changeChangeFormat('duel')}
       />
       {states.map((el, i) => (
         <ButtonWithAudio

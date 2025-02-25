@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { audios, FormatGame, SettingsKeys, State } from '@/lib/constants'
+import { audios, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
   changeState: React.Dispatch<State>
-  format: FormatGame
   rank: number
   countBullet: number
   balance: number
@@ -27,7 +26,7 @@ interface ContextAppValue {
   game: {
     next: () => Promise<void>
     gameOver: () => Promise<void>
-    newGame: (format?: FormatGame) => Promise<void>
+    newGame: () => Promise<void>
     deal: () => Promise<void>
     winGame: () => Promise<void>
   }
