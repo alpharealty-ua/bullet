@@ -38,23 +38,24 @@ const DuelGameBar = () => {
   }, [])
 
   return (
-    <table
-      ref={ref}
-      className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
-    >
-      <thead>
-        <tr>
-          {Array(23)
-            .fill(null)
-            .map((_, i, arr) => {
-              const center = arr.length >> 1
-              const index = Math.abs(center - i)
-              const range = [
-                { number: 50, className: 'bg-red' },
-                { number: 33, className: 'bg-[#ff6c00]' },
-                { number: 20, className: 'bg-[#ff9d10]' },
-                { number: 10, className: 'bg-[#ffda10]' },
-              ][index] ?? { number: 0, className: '' }
+    <div className='overflow-hidden'>
+      <table
+        ref={ref}
+        className='relative -mx-0.5 h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
+      >
+        <thead>
+          <tr>
+            {Array(23)
+              .fill(null)
+              .map((_, i, arr) => {
+                const center = arr.length >> 1
+                const index = Math.abs(center - i)
+                const range = [
+                  { number: 50, className: 'bg-red' },
+                  { number: 33, className: 'bg-[#ff6c00]' },
+                  { number: 20, className: 'bg-[#ff9d10]' },
+                  { number: 10, className: 'bg-[#ffda10]' },
+                ][index] ?? { number: 0, className: '' }
 
               return (
                 <td
