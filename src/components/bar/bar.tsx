@@ -6,7 +6,7 @@ import { SideBets } from './side-bets'
 import { SideChat } from './side-chat'
 
 const Bar = () => {
-  const [openSide, setOpenSide] = useState<'left' | 'right' | null>('left')
+  const [openSide, setOpenSide] = useState<'left' | 'right' | null>(null)
 
   const handleLabelClick = (newSide: 'left' | 'right') => {
     setOpenSide(newSide === openSide ? null : newSide)

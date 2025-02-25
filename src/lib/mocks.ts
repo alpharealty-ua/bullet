@@ -1,6 +1,6 @@
 import { addId } from './utils'
 
-export const mockMessageList = addId([
+export const mockMessageUSAList = addId([
   {
     user: 'WallStreetWhale',
     message: "Fresh blood at the table. Let's see what you've got.",
@@ -10,6 +10,26 @@ export const mockMessageList = addId([
     message: 'This should be interesting.',
   },
 ]) satisfies Message[] as Message[]
+
+export const mockMessageChinaList = addId([
+  {
+    user: 'ChinaUser',
+    message: '',
+  },
+]) satisfies Message[] as Message[]
+
+export const mockMessageMexicoList = addId([
+  {
+    user: 'MexicoUser',
+    message: '',
+  },
+]) satisfies Message[] as Message[]
+
+export const mockRooms = {
+  usa: mockMessageUSAList,
+  china: mockMessageChinaList,
+  mexico: mockMessageMexicoList,
+}
 
 export const mockWagerList = addId([
   {

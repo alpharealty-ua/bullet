@@ -98,3 +98,20 @@ export const settingsEntries = Object.entries(settings) as [
 ][]
 
 export type SettingsKeys = keyof typeof settings
+
+export const LANGUAGE_LIST = [
+  {
+    language: 'usa',
+    flag: images.flagusa,
+  },
+  {
+    language: 'china',
+    flag: images.flagchina,
+  },
+  {
+    language: 'mexico',
+    flag: images.flagmexico,
+  },
+] as const
+
+export type Language = (typeof LANGUAGE_LIST)[number]['language']

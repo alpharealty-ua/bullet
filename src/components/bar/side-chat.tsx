@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { mockMessageList } from '@/lib/mocks'
-import { images } from '@/lib/constants'
+import { Language, LANGUAGE_LIST } from '@/lib/constants'
+import { mockRooms } from '@/lib/mocks'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+
+const DEFAULT_ROOM = 'usa'
+
+const rooms = mockRooms
 
 const SideChat = ({
   languageProps: { className, ...languageProps } = {},
@@ -11,7 +15,9 @@ const SideChat = ({
   languageProps?: React.HtmlHTMLAttributes<HTMLDivElement>
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [messages, setMessages] = useState(mockMessageList)
+  const [selectedLanguage, setSelectedLanguage] =
+    useState<Language>(DEFAULT_ROOM)
+  const [messages, setMessages] = useState<Message[]>([])
   const [message, setMessage] = useState('')
 
   const scorllToBottom = () => {
@@ -36,6 +42,14 @@ const SideChat = ({
     setMessage('')
   }
 
+  const handleChangeLanguage = (language: Language) => {
+    setSelectedLanguage(language)
+  }
+
+  useEffect(() => {
+    setMessages(rooms[selectedLanguage])
+  }, [selectedLanguage])
+
   useEffect(() => {
     scorllToBottom()
   }, [messages])
@@ -52,11 +66,15 @@ const SideChat = ({
         )}
         {...languageProps}
       >
-        {[images.flagchina, images.flagmexico, images.flagusa].map((el, i) => (
+        {LANGUAGE_LIST.map(({ language, flag }, i) => (
           <div
             key={i}
-            className='aspect-[10/7] w-7 cursor-pointer border bg-gray-100 bg-cover bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${el})` }}
+            className={cn(
+              'aspect-[10/7] w-7 cursor-pointer border bg-gray-100 bg-cover bg-center bg-no-repeat transition-all',
+              selectedLanguage === language && 'border-white',
+            )}
+            onClick={() => handleChangeLanguage(language)}
+            style={{ backgroundImage: `url(${flag})` }}
           ></div>
         ))}
       </div>
