@@ -124,7 +124,7 @@ const Footer = ({ format }: { format: 'solo' | 'duel' | 'watch' }) => {
           ></button>
         </div>
         {format === 'duel' && (
-          <div className='py-1'>
+          <div className='py-1 pl-2'>
             <MoneyBagButton className='w-4' />
           </div>
         )}
