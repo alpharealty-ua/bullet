@@ -95,8 +95,8 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
         )}
         <div className='flex flex-col items-center text-center'></div>
       </div>
-      <div className='relative flex flex-1 flex-col items-center'>
-        <div className='flex flex-col items-center pr-5 text-center'>
+      <div className='relative flex flex-1 flex-row justify-center'>
+        <div className='flex flex-col items-center text-center'>
           <div className='text-green text-xl font-bold uppercase'>
             {{ single: 'Multiplier', duel: 'Balance', watch: 'Round' }[format]}
           </div>
@@ -118,13 +118,17 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
           )}
         </div>
         <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
-          {format === 'duel' && <MoneyBagButton className='w-4' />}
           <button
             className='mt-auto h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
             style={{ backgroundImage: `url(${images.settings})` }}
             onClick={handleSettings}
           ></button>
         </div>
+        {format === 'duel' && (
+          <div className='py-1'>
+            <MoneyBagButton className='w-4' />
+          </div>
+        )}
       </div>
     </footer>
   )
