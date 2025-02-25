@@ -1,11 +1,12 @@
 import { useState } from 'react'
 
+import { cn } from '@/lib/utils'
 import { BarSide } from './bar-side'
 import { SideBets } from './side-bets'
 import { SideChat } from './side-chat'
 
 const Bar = () => {
-  const [openSide, setOpenSide] = useState<'left' | 'right' | null>(null)
+  const [openSide, setOpenSide] = useState<'left' | 'right' | null>('left')
 
   const handleLabelClick = (newSide: 'left' | 'right') => {
     setOpenSide(newSide === openSide ? null : newSide)
@@ -19,7 +20,14 @@ const Bar = () => {
         onClickLabel={handleLabelClick}
         open={openSide === 'left'}
       >
-        <SideChat />
+        <SideChat
+          languageProps={{
+            className: cn(
+              'top-auto bottom-0 opacity-0 transition-all duration-1000',
+              openSide === 'left' && 'translate-x-full opacity-100',
+            ),
+          }}
+        />
       </BarSide>
       <BarSide
         side='right'

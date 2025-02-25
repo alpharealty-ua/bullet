@@ -49,6 +49,8 @@ export const images = {
   duelcharacter2: './assets/images/character-2.png',
   opponent: './assets/images/opponent.png',
   flagusa: './assets/images/flag-usa.png',
+  flagchina: './assets/images/flag-china.png',
+  flagmexico: './assets/images/flag-mexico.png',
 } as const
 
 export const srcImages = Object.values(images)

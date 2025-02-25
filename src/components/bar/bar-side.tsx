@@ -27,7 +27,7 @@ const BarSide = ({
     >
       <button
         className={cn(
-          'relative top-0 bottom-0 z-10 flex grow-0 cursor-pointer items-center rounded-[inherit] text-xl transition-colors hover:text-[#eee]',
+          'relative top-0 bottom-0 flex grow-0 cursor-pointer items-center rounded-[inherit] text-xl transition-colors hover:text-[#eee]',
           side === 'left' && 'right-0',
           side === 'right' && 'left-0',
         )}
@@ -54,8 +54,8 @@ const BarSide = ({
       <div
         className={cn(
           'flex grow rounded-md border-2 bg-white p-1 text-xs leading-[1.1] text-black',
-          side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-7',
-          side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-7',
+          side === 'left' && 'rounded-ss-none rounded-es-none border-l-0 pl-9',
+          side === 'right' && 'rounded-se-none rounded-ee-none border-r-0 pr-9',
         )}
       >
         {children}

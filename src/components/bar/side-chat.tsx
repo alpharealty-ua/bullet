@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { mockMessageList } from '@/lib/mocks'
+import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-const SideChat = () => {
+const SideChat = ({
+  languageProps: { className, ...languageProps } = {},
+}: {
+  languageProps?: React.HtmlHTMLAttributes<HTMLDivElement>
+}) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const [messages, setMessages] = useState(mockMessageList)
   const [message, setMessage] = useState('')
@@ -37,8 +43,23 @@ const SideChat = () => {
   return (
     <div
       ref={wrapperRef}
-      className='flex h-full grow-1 flex-col justify-between gap-2 px-4'
+      className='relative flex h-full grow-1 flex-col justify-between gap-2'
     >
+      <div
+        className={cn(
+          'absolute top-0 right-0 flex flex-col gap-1 p-2',
+          className,
+        )}
+        {...languageProps}
+      >
+        {[images.flagchina, images.flagmexico, images.flagusa].map((el, i) => (
+          <div
+            key={i}
+            className='aspect-[10/7] w-7 cursor-pointer border bg-gray-100 bg-cover bg-center bg-no-repeat'
+            style={{ backgroundImage: `url(${el})` }}
+          ></div>
+        ))}
+      </div>
       <div
         className='custom-scroll flex grow flex-col gap-1 overflow-auto scroll-smooth'
         data-messages
