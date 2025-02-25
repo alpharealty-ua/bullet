@@ -9,6 +9,7 @@
 
   --animate-wiggle: wiggle 1s linear infinite;
   --animate-click: click 0.2s linear both;
+  --animate-button-click: button-click 0.2s linear both;
 
   @keyframes wiggle {
     0% {
@@ -37,6 +38,16 @@
     50% {
       opacity: 1;
       transform: scale(1);
+    }
+  }
+
+  @keyframes button-click {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.75);
     }
   }
 }

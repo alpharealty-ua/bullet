@@ -15,18 +15,16 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       const disabled = disabledRef.current
       const buttonDom = buttonRef.current
 
-      if (disabled || buttonDom === null) {
+      if (buttonDom === null) {
         return
       }
 
-      disabledRef.current = true
+      buttonDom.classList.add('animate-button-click')
 
       buttonDom.addEventListener(
         'transitionend',
         () => {
-          if (disabledRef.current) {
-            setDisabled(true)
-          }
+          buttonDom.classList.remove('animate-button-click')
         },
         { once: true },
       )
