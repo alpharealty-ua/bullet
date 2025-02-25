@@ -4,7 +4,7 @@ import NiceModal from '@ebay/nice-modal-react'
 import { AppProvider } from '@/context/app-provider'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { images } from '@/lib/constants'
-import { Single } from '@/components/single'
+import { Solo } from '@/components/solo'
 import { Audios } from '@/components/audios'
 import { Home } from '@/components/home'
 import { Watch } from '@/components/watch'
@@ -23,7 +23,7 @@ const App = () => {
             <Audios />
             <Routes>
               <Route index element={<Home />} />
-              <Route path='/single' element={<Single />} />
+              <Route path='/solo' element={<Solo />} />
               <Route path='/duel' element={<Watch format='duel' />} />
               <Route path='/watch' element={<Watch format='watch' />} />
             </Routes>

@@ -17,8 +17,8 @@ const Home = () => {
   const [showDuelCover, setShowDuelCover] = useState(false)
 
   const handleStartButton = async () => {
-    game.newGame('single')
-    nagigate('/single')
+    game.newGame('solo')
+    nagigate('/solo')
   }
 
   const handleDuelButton = async () => {

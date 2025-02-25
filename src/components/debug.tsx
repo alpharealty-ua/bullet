@@ -81,9 +81,9 @@ const Debug = (props: Props) => {
         onClick={handleResetAddMoney}
       />
       <ButtonWithAudio
-        text='single'
+        text='solo'
         className='text-base'
-        onClick={() => changeChangeFormat('single')}
+        onClick={() => changeChangeFormat('solo')}
       />
       <ButtonWithAudio
         text='duel'

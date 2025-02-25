@@ -77,7 +77,7 @@ type Actions =
 export const initState: GameState = {
   stateHistory: ['preparation'],
   state: 'preparation',
-  format: 'single',
+  format: 'solo',
   rank: 30,
   countBullet: 5,
   balance: INIT_BALANCE,

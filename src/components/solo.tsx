@@ -14,7 +14,7 @@ import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
 import { ButtonWithAudio } from './ui/button-with-audio'
 
-const Single = () => {
+const Solo = () => {
   const {
     state,
     balance,
@@ -60,7 +60,7 @@ const Single = () => {
 
   return (
     <>
-      <Header />
+      <Header logoText={'Solo'} />
       <Result
         title={'Jackpot'}
         price={jackpot}
@@ -140,9 +140,9 @@ const Single = () => {
           hideBlood={settings.blood}
         />
       )}
-      <Footer format='single' />
+      <Footer format='solo' />
     </>
   )
 }
 
-export { Single }
+export { Solo }

@@ -10,7 +10,7 @@ import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
 
-const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
+const Footer = ({ format }: { format: 'solo' | 'duel' | 'watch' }) => {
   const {
     countBullet,
     activeMultiplierIndex,
@@ -22,7 +22,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
     rank,
   } = useAppContext()
   const modal = useCustomModal()
-  const footerWithBg = format === 'single' || format === 'watch'
+  const footerWithBg = format === 'solo' || format === 'watch'
   // TODO: MOVE MAX BET TO CONTEXT
   const maxBet = Math.min(
     state === 'running' ? bet + balance : balance,
@@ -46,9 +46,9 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
           <div className='text-green text-xl font-bold uppercase'>
-            {{ single: 'Bet', duel: 'Prizepool', watch: 'Jackpot' }[format]}
+            {{ solo: 'Bet', duel: 'Prizepool', watch: 'Jackpot' }[format]}
           </div>
-          {format === 'single' && (
+          {format === 'solo' && (
             <>
               <Helper image='wagehere' show={showHelpers && bet === 0} />
               <Bet
@@ -79,7 +79,7 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
           footerWithBg && 'self-end',
         )}
       >
-        {(format === 'single' || format === 'watch') && (
+        {(format === 'solo' || format === 'watch') && (
           <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
             <Rank value={rank} />
             <Bullets countBullet={countBullet} />
@@ -98,9 +98,9 @@ const Footer = ({ format }: { format: 'single' | 'duel' | 'watch' }) => {
       <div className='relative flex flex-1 flex-row justify-center'>
         <div className='flex flex-col items-center text-center'>
           <div className='text-green text-xl font-bold uppercase'>
-            {{ single: 'Multiplier', duel: 'Balance', watch: 'Round' }[format]}
+            {{ solo: 'Multiplier', duel: 'Balance', watch: 'Round' }[format]}
           </div>
-          {format === 'single' && (
+          {format === 'solo' && (
             <Multiplier
               items={multipliers}
               activeIndex={activeMultiplierIndex}
