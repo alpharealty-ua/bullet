@@ -2,6 +2,7 @@
 @plugin 'tailwindcss-animate';
 
 @theme {
+  --font-roboto: Roboto;
   --font-bullet-official: BulletOfficial;
   --color-green: #006100;
   --color-red: #ff0b0b;
