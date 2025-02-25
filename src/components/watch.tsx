@@ -10,14 +10,16 @@ import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
 import { PlayerInfo } from './player-info'
-import { StartGameText } from './start-game-text'
+import { ReadySetPull } from './ready-set-pull'
 
 const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
   const [startGame, setStartGame] = useState(false)
 
   const handlePull = () => {
-    setStartGame(true)
+    setStartGame(false)
+
+    requestAnimationFrame(() => setStartGame(true))
   }
 
   return (
@@ -45,7 +47,7 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
               win={52}
             />
           )}
-          {startGame && <StartGameText />}
+          {startGame && <ReadySetPull />}
         </div>
         {format === 'duel' && (
           <div className='relative mb-1'>
