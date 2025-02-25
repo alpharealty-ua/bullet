@@ -33,7 +33,13 @@ const BarSide = ({
         )}
         onClick={() => onClickLabel(side)}
       >
-        <div className={cn('relative w-7')}>
+        <div
+          className={cn(
+            'relative w-8',
+            side === 'left' && 'left-0.5',
+            side === 'right' && '-left-0.5',
+          )}
+        >
           <div
             className={cn(
               'absolute top-1/2 left-1/2 -translate-1/2 whitespace-nowrap uppercase',
