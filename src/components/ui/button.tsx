@@ -30,7 +30,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform disabled:scale-100 disabled:cursor-not-allowed',
-          bg && 'rounded-md border-2 border-black px-4 py-1 text-2xl',
+          bg && 'rounded-md border-1 border-black px-4 py-1 text-2xl',
           bg === 'green' && 'bg-green text-white',
           bg === 'red' && 'bg-red text-white',
           bg === 'primary' && 'bg-primary',
