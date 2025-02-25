@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { State, states, multipliers, FormatGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 interface Props {
   state: State
@@ -75,23 +75,23 @@ const Debug = (props: Props) => {
       <h1 className='text-xs'>
         Current state - <strong className='block'>{state}</strong>
       </h1>
-      <Button
+      <ButtonWithAudio
         text='Reset add money'
         className='text-base'
         onClick={handleResetAddMoney}
       />
-      <Button
+      <ButtonWithAudio
         text='single'
         className='text-base'
         onClick={() => changeChangeFormat('single')}
       />
-      <Button
+      <ButtonWithAudio
         text='duel'
         className='text-base'
         onClick={() => changeChangeFormat('duel')}
       />
       {states.map((el, i) => (
-        <Button
+        <ButtonWithAudio
           key={i}
           className={cn('text-base', el === state && 'text-white')}
           onClick={() => handleSetState(el)}

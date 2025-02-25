@@ -1,7 +1,7 @@
 import { FaPlay } from 'react-icons/fa'
 
 import { Bet } from '@/components/bet'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 export const PlaceWager = () => {
   return (
@@ -24,7 +24,7 @@ export const PlaceWager = () => {
         <Bet />
       </div>
       <div className='flex justify-end'>
-        <Button text='Bet' bg='green' />
+        <ButtonWithAudio text='Bet' bg='green' />
       </div>
     </div>
   )

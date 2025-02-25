@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { mockMessageList } from '@/lib/mocks'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const SideChat = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -59,7 +59,7 @@ const SideChat = () => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder='Type your message here'
         />
-        <Button
+        <ButtonWithAudio
           className='absolute top-1/2 right-2 -translate-y-1/2 text-lg'
           text='Send'
           bg='red'

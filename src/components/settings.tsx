@@ -1,7 +1,7 @@
 import { useAppContext } from '@/context/use-app-context'
 import { settingsEntries, SettingsKeys } from '@/lib/constants'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const Settings = () => {
   const { settings, changeSettings } = useAppContext()
@@ -25,8 +25,8 @@ const Settings = () => {
             />
           ))}
         </div>
-        <Button text='Login' image='button' />
-        <Button text='Register' image='button' />
+        <ButtonWithAudio text='Login' image='button' />
+        <ButtonWithAudio text='Register' image='button' />
       </div>
     </div>
   )

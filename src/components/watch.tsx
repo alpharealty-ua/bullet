@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useAppContext } from '@/context/use-app-context'
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Bar } from '@/components/bar/bar'
@@ -60,7 +60,11 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
             ></div>
             <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
               <div className='relative'>
-                <Button className='w-26' image='pull' onClick={handlePull} />
+                <ButtonWithAudio
+                  className='w-26'
+                  image='pull'
+                  onClick={handlePull}
+                />
               </div>
             </div>
           </div>
