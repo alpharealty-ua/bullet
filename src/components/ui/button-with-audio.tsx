@@ -53,7 +53,7 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Button
         ref={mergeRefs(buttonRef, ref)}
-        onClick={handleClick}
+        onMouseDown={handleClick}
         disabled={disabled}
         {...props}
       />
