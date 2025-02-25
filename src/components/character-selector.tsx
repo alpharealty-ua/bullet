@@ -1,50 +1,82 @@
 import { useState } from 'react'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
+import { IoLockClosed } from 'react-icons/io5'
 
 import { cn } from '@/lib/utils'
 import { Character } from './character'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 export const CharacterSelector = ({
   label,
   images,
+  disabledImages,
   onSelect,
   defaultIndex = 0,
 }: {
   label: string
   images: string[]
+  disabledImages: number[]
   onSelect: (index: number) => void
   defaultIndex?: number
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
+  const [selectedIndex, setSelectedIndex] = useState(-1)
 
   const changeIndex = (index: number) => {
     const newIndex = index < 0 ? images.length - 1 : index % images.length
     setActiveIndex(newIndex)
+  }
+
+  const handleClick = (index: number) => {
+    const newIndex = selectedIndex === index ? -1 : index
     onSelect(newIndex)
+    setSelectedIndex(newIndex)
   }
 
   return (
     <>
-      <h3>{label}</h3>
-      <div className='flex h-[200px] items-center'>
+      <h3 className='text-center text-xl'>{label}</h3>
+      <div className='flex h-[250px] items-center gap-2'>
         <button
           className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex - 1)}
         >
           <FaArrowAltCircleLeft />
         </button>
-        <div className='flex h-full w-[200px] shrink-0 items-center justify-center'>
-          {images.map((_, i) => (
-            <div
-              key={i}
-              className={cn(
-                'animate-in fade-in zoom-in-50 hidden h-full items-center',
-                i === activeIndex && 'flex',
-              )}
-            >
-              <Character characterIndex={i} />
-            </div>
-          ))}
+        <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
+          {images.map((_, i) => {
+            const disabled = disabledImages.includes(i)
+
+            return (
+              <div
+                key={i}
+                className={cn(
+                  'hidden h-full w-full items-center justify-center rounded-full border-4 p-8',
+                  i === activeIndex && 'flex',
+                  i === selectedIndex && 'border-green bg-green/10',
+                )}
+              >
+                <Character
+                  characterIndex={i}
+                  className='animate-in fade-in zoom-in-150 h-full'
+                />
+                <button
+                  key={i}
+                  className={cn(
+                    'absolute inset-0 cursor-pointer p-8 disabled:cursor-not-allowed',
+                  )}
+                  onClick={() => handleClick(i)}
+                  disabled={disabled}
+                ></button>
+                {disabled && (
+                  <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-full bg-black/30 text-7xl text-white duration-500'>
+                    <IoLockClosed />
+                    <ButtonWithAudio bg='primary' text='Unlock' />
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
         <button
           className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'

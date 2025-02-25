@@ -10,14 +10,19 @@ import { Logo } from './logo'
 import { Rules } from './rules'
 import { CharacterSelector } from './character-selector'
 
+// TODO: TEMPORARY SOLUTION
+const disabledImages = [1]
+
 const Home = () => {
   const { game, characterIndex, setCharacterIndex } = useAppContext()
   const nagigate = useNavigate()
   const modal = useCustomModal()
-  const [showDuelCover, setShowDuelCover] = useState(false)
+  const [showDuelCover, setShowDuelCover] = useState(true)
+  const [selectedCharacter, setSelectedCharaceter] = useState(false)
 
   const handleStartButton = async () => {
-    game.newGame('solo')
+    // MOVE TO COMPONENT
+    game.newGame()
     nagigate('/solo')
   }
 
@@ -26,12 +31,12 @@ const Home = () => {
   }
 
   const handleStartDuelButton = async () => {
-    game.newGame('duel')
+    game.newGame()
     nagigate('/duel')
   }
 
   const handleWatchButton = async () => {
-    game.newGame('duel')
+    game.newGame()
     nagigate('/watch')
   }
 
@@ -43,6 +48,7 @@ const Home = () => {
 
   const handleSelectCharacter = (index: number) => {
     setCharacterIndex(index)
+    setSelectedCharaceter(index !== -1)
   }
 
   return (
@@ -74,21 +80,25 @@ const Home = () => {
           </>
         ) : (
           <>
+            {/* TODO: MOVE TO DUEL  */}
             <div className='flex gap-6'>
               <ButtonWithAudio
                 image='play'
                 className='w-30'
                 onClick={handleStartDuelButton}
+                disabled={!selectedCharacter}
               />
               <ButtonWithAudio
                 image='watch'
                 className='w-30 text-2xl'
                 onClick={handleWatchButton}
+                disabled={!selectedCharacter}
               />
             </div>
             <CharacterSelector
               label='Choose your character'
               images={CHARACTER_IMAGES}
+              disabledImages={disabledImages}
               onSelect={handleSelectCharacter}
               defaultIndex={characterIndex}
             />

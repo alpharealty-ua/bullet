@@ -14,7 +14,6 @@ import {
   wait,
 } from '@/lib/utils'
 import {
-  FormatGame,
   SettingsKeys,
   State,
   audios,
