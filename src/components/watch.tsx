@@ -36,23 +36,26 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
       <Bar />
       <div className='mt-auto flex flex-col pt-6'>
         <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
-          {/* MOVE TO CHARACTER  */}
-          <PlayerInfo
-            className='absolute top-0 left-12'
-            side='left'
-            level={53}
-            login={'Suni7222'}
-            win={52}
-            visible={visiblePlayerInfo}
-          />
           <Character
             className={cn(
-              '',
-              format === 'watch' && 'mx-auto -mb-7 h-[300px]',
-              format === 'duel' && 'mr-12 ml-auto h-[235px]',
+              'mx-auto',
+              format === 'watch' && '-mb-7 h-[300px]',
+              format === 'duel' && 'mr-12 h-[235px]',
             )}
             characterIndex={characterIndex}
-            onClick={format === 'duel' ? handlePlayerClick : undefined}
+            onClick={
+              format === 'duel' && startGame ? handlePlayerClick : undefined
+            }
+            beforeSlot={
+              <PlayerInfo
+                className='absolute top-0 right-full translate-x-5'
+                side='left'
+                level={53}
+                login={'Suni7222'}
+                win={52}
+                visible={visiblePlayerInfo}
+              />
+            }
           />
           {startGame && <ReadySetPull />}
         </div>
