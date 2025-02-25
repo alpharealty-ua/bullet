@@ -1,59 +1,65 @@
 import React, { useRef, useState } from 'react'
-import { Button, ButtonProps } from './button'
+import mergeRefs from 'merge-refs'
+
 import { useAppContext } from '@/context/use-app-context'
+import { Button, ButtonProps } from './button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ onClick, ...props }, ref) => {
     const { playAudio } = useAppContext()
     const [disabled, setDisabled] = useState(false)
     const disabledRef = useRef(disabled)
+    const buttonRef = useRef<HTMLButtonElement>(null)
 
-    const mouseClick = async (
-      callback?: () => void | Promise<void>,
-    ): Promise<void> => {
+    const mouseClick = async (): Promise<void> => {
       const disabled = disabledRef.current
+      const buttonDom = buttonRef.current
 
-      if (disabled) {
+      if (disabled || buttonDom === null) {
         return
       }
 
       disabledRef.current = true
 
-      const BTN_TRANSITION_DURATION = 200
-      setTimeout(() => {
-        if (disabledRef.current) {
-          setDisabled(true)
-        }
-      }, BTN_TRANSITION_DURATION)
+      buttonDom.addEventListener(
+        'transitionend',
+        () => {
+          if (disabledRef.current) {
+            setDisabled(true)
+          }
+        },
+        { once: true },
+      )
 
       const audio = await playAudio('mouseclick')
 
-      const promise = new Promise<void>((resolve) => {
+      await new Promise<void>((resolve) => {
         audio.addEventListener(
           'ended',
-          async () => {
-            if (callback) {
-              await callback()
-            }
+          () => {
             resolve()
           },
           { once: true },
         )
       })
-
-      return promise.then((result) => {
-        setDisabled(false)
-        disabledRef.current = false
-        return result
-      })
+      setDisabled(false)
+      disabledRef.current = false
     }
 
     const handleClick = async (
       event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     ) => {
-      await mouseClick(() => onClick && onClick(event))
+      await mouseClick()
+      onClick && onClick(event)
     }
 
-    return <Button onClick={handleClick} {...props} ref={ref} />
+    return (
+      <Button
+        ref={mergeRefs(buttonRef, ref)}
+        onClick={handleClick}
+        disabled={disabled}
+        {...props}
+      />
+    )
   },
 )
