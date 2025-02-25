@@ -92,7 +92,7 @@ export const useIncreaseNumber = ({
       totalValueDom.textContent = `${value}`
       winValueDom.textContent = '0'
       winDom.classList.remove('is-in', 'is-out', state)
-      winDom.offsetWidth // need for force layout -> for rmeove class
+      winDom.offsetWidth // need for force layout -> for remove class
     }
   }, [value, increaseTime, decreaseTime])
 
