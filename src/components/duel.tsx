@@ -15,7 +15,7 @@ import { ReadySetPull } from './ready-set-pull'
 const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex, game } = useAppContext()
   const [startGame, setStartGame] = useState(false)
-  const [showPlayerInfo, setShowPlaerInfo] = useState(false)
+  const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !startGame || showPlayerInfo
 
   const handlePull = () => {
@@ -24,12 +24,12 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
       return
     }
     setStartGame(false)
-    setShowPlaerInfo(false)
+    setShowPlayerInfo(false)
 
     requestAnimationFrame(() => setStartGame(true))
   }
 
-  const handlePlayerClick = () => setShowPlaerInfo((p) => !p)
+  const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
 
   return (
     <>
