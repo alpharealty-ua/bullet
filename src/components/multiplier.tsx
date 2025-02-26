@@ -20,7 +20,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
             className={cn(
               'text-red absolute top-1/2 left-1/2 -translate-1/2 opacity-0 transition-opacity',
               i === activeIndex && 'opacity-100',
-              isJackpot && 'text-transparent drop-shadow-none',
+              isJackpot && '!text-transparent drop-shadow-none',
             )}
             style={{ color }}
           >
