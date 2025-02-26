@@ -11,6 +11,7 @@ import { DuelGameBar } from './duel-game-bar'
 import { Character } from './character'
 import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
+import { GameOver } from './game-over'
 
 const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex, game } = useAppContext()
@@ -93,6 +94,7 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
           </>
         )}
       </div>
+      <GameOver hasImage={false} />
       <Footer format={format} />
     </>
   )
