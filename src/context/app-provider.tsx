@@ -176,6 +176,17 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     disabledRef.current = true
+
+    if (format === 'solo') {
+      await nextSolo()
+    } else {
+      await nextDeal()
+    }
+
+    disabledRef.current = false
+  }
+
+  const nextSolo = async () => {
     setShowHelpers(false)
     setShowOffer(false)
 
@@ -217,19 +228,25 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (isGameOver) {
       await gameOver()
-      disabledRef.current = false
       return
     }
     if (isWin) {
       await winGame()
-      disabledRef.current = false
       return
     }
     if (!settings.declineAllDeals) {
       setOffer(100)
       setShowOffer(true)
     }
-    disabledRef.current = false
+  }
+
+  const nextDeal = async () => {
+    if (state === 'preparation') {
+      changeState('running')
+      return
+    }
+
+    await gameOver()
   }
 
   const gameOver = async () => {

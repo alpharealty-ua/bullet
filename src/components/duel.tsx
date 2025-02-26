@@ -14,20 +14,13 @@ import { ReadySetPull } from './ready-set-pull'
 import { GameOver } from './game-over'
 
 const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
-  const { characterIndex, game } = useAppContext()
-  const [startGame, setStartGame] = useState(false)
+  const { characterIndex, game, state } = useAppContext()
+  const startGame = state === 'running'
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !startGame || showPlayerInfo
 
   const handlePull = () => {
-    if (startGame) {
-      game.next('duel')
-      return
-    }
-    setStartGame(false)
-    setShowPlayerInfo(false)
-
-    requestAnimationFrame(() => setStartGame(true))
+    game.next('duel')
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
