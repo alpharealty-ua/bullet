@@ -242,6 +242,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  // TODO: TEMPORARY SOLUTION
   const nextDeal = async () => {
     if (state === 'preparation') {
       changeState('running')

@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useRef } from 'react'
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
 import { images } from '@/lib/constants'
@@ -8,6 +8,7 @@ export interface GunCharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   gunHandleRef?: React.ForwardedRef<{
     spin: (duration?: number) => Promise<void>
+    shot: () => void
   }>
 }
 
@@ -31,8 +32,10 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       }
     }, [])
 
+    const [shot, setShot] = useState(false)
+
     const handleClick = () => {
-      spin(200)
+      setShot((p) => !p)
     }
 
     const spin = async (duration = 200): Promise<void> => {
@@ -70,6 +73,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     useImperativeHandle(gunHandleRef, () => {
       return {
         spin,
+        shot: handleClick,
       }
     })
 
@@ -77,7 +81,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       <div
         ref={mergeRefs(ref, gunRef)}
         className={cn('relative aspect-[1/1.95]', className)}
-        onClick={handleClick}
+        // onClick={handleClick}
         {...props}
       >
         <div
@@ -94,6 +98,36 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           }}
           data-body
         ></div>
+        {shot && (
+          <>
+            <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>
+              <div
+                className={cn(
+                  'absolute inset-0 scale-200 opacity-0',
+                  'zoom-in-50 fade-in fill-mode-backwards animate-[shot] duration-200 ease-linear',
+                )}
+              >
+                <img src={images.shot1} alt='' />
+              </div>
+              <div
+                className={cn(
+                  'absolute inset-0 scale-600 opacity-0',
+                  'zoom-in fade-in fill-mode-backwards animate-[shot] delay-150 duration-200 ease-linear',
+                )}
+              >
+                <img src={images.shot2} alt='' />
+              </div>
+            </div>
+            <div
+              className={cn(
+                'fixed inset-0 z-50 opacity-0',
+                'fill-mode-both fade-in animate-[shot] delay-300 duration-200 ease-linear',
+              )}
+            >
+              <img src={images.shot3} alt='' />
+            </div>
+          </>
+        )}
       </div>
     )
   },

@@ -55,6 +55,9 @@ export const images = {
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
   texture: '/assets/images/texture.png',
+  shot1: '/assets/images/shot-1.png',
+  shot2: '/assets/images/shot-2.png',
+  shot3: '/assets/images/shot-3.png',
 } as const
 
 export const srcImages = Object.values(images)

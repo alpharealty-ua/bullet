@@ -21,10 +21,20 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   // TODO: MOVE TO CONTEXT
   const gunHandleRef = useRef<{
     spin: (duration?: number) => Promise<void>
+    shot: () => void
   }>(null)
 
   const handlePull = async () => {
-    await gunHandleRef.current?.spin()
+    // TODO: TEMPORARY SOLUTION
+    if (startGame) {
+      await gunHandleRef.current?.spin()
+      gunHandleRef.current?.shot()
+      setTimeout(async () => {
+        await game.next('duel')
+        gunHandleRef.current?.shot()
+      }, 700)
+      return
+    }
     game.next('duel')
   }
 

@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <div
-      className='relative mx-auto flex h-full min-h-[600px] max-w-[405px] flex-col justify-between bg-cover bg-[right_center] lg:min-h-[733px]'
+      className='relative mx-auto flex h-full min-h-[600px] max-w-[405px] translate-0 flex-col justify-between bg-cover bg-[right_center] lg:min-h-[733px]'
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
       <BrowserRouter>

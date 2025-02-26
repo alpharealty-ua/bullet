@@ -53,6 +53,16 @@
   }
 }
 
+@keyframes shot {
+  0% {
+    opacity: var(--tw-enter-opacity);
+    scale: var(--tw-enter-scale);
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @font-face {
   font-family: BulletOfficial;
   src: url('/assets/fonts/BulletOfficial-Regular.woff2');
