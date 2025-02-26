@@ -239,18 +239,28 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const winGame = async () => {
     changeState('win')
     addRank(5)
-
-    await playAudio('chaching')
-    await wait(1000)
-    const audio = await playAudio('winsound')
-
     // TODO: REMOVE 1000. ONLY FOR TEST
     addBalance(jackpot || 1000)
 
+    const winSoundAudio = await playAudio('winsound', false)
+    const chachingAudio = await playAudio('chaching')
+
+    const winSoundEnded = (resolve: () => void) => () => {
+      newGame()
+      resolve()
+    }
+
+    const chachingEnded = (resolve: () => void) => async () => {
+      winSoundAudio.play()
+
+      winSoundAudio.addEventListener('ended', winSoundEnded(resolve), {
+        once: true,
+      })
+    }
+
     return new Promise<void>((resolve) => {
-      audio.addEventListener('ended', () => {
-        newGame()
-        resolve()
+      chachingAudio.addEventListener('ended', chachingEnded(resolve), {
+        once: true,
       })
     })
   }
