@@ -43,14 +43,6 @@ const Solo = () => {
     await game.deal()
   }
 
-  const handleStartGame = async () => {
-    await game.newGame()
-  }
-
-  const handleGameOverTimeout = async () => {
-    await game.newGame()
-  }
-
   const handleAddMoney = async () => {
     modal.show({
       contentSlot: <AddMoneyModal />,
