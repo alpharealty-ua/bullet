@@ -23,8 +23,8 @@ const Bar = () => {
         <SideChat
           languageProps={{
             className: cn(
-              'top-auto bottom-0 opacity-0 transition-all duration-1000',
-              openSide === 'left' && 'translate-x-full opacity-100',
+              'top-auto bottom-2 opacity-0 transition-all duration-1000',
+              openSide === 'left' && 'translate-x-full pl-[7px] opacity-100',
             ),
           }}
         />

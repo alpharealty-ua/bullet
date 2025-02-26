@@ -60,10 +60,7 @@ const SideChat = ({
       className='relative flex h-full grow-1 flex-col justify-between gap-2'
     >
       <div
-        className={cn(
-          'absolute top-0 right-0 flex flex-col gap-1 p-2',
-          className,
-        )}
+        className={cn('absolute top-0 right-0 flex flex-col gap-1', className)}
         {...languageProps}
       >
         {LANGUAGE_LIST.map(({ language, flag }, i) => (
