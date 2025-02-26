@@ -28,7 +28,6 @@ const Solo = () => {
     jackpot,
     game,
     revolverRefHandle,
-    gameOverImage,
   } = useAppContext()
   // TODO: REMOVE
   const disabled = false
@@ -131,15 +130,13 @@ const Solo = () => {
           </div>
         </div>
       </div>
-      {state === 'game-over' && (
-        <GameOver
-          onClick={handleStartGame}
-          onTimeout={handleGameOverTimeout}
-          timeout={3000}
-          image={gameOverImage}
-          hideBlood={settings.blood}
-        />
-      )}
+      <GameOver
+        onClick={handleStartGame}
+        onTimeout={handleGameOverTimeout}
+        timeout={3000}
+        hideBlood={settings.blood}
+        show={state === 'game-over'}
+      />
       <Footer format='solo' />
     </>
   )

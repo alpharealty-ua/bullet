@@ -1,47 +1,72 @@
 import { useEffect, useState } from 'react'
 
 import { images } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, preloadImage } from '@/lib/utils'
+
+let imageVersion = Date.now()
 
 const GameOver = ({
   onClick,
   onTimeout,
   timeout,
-  image,
   hideBlood,
+  show,
 }: {
   onClick: () => void
   onTimeout: () => void
   timeout: number
-  image: string
   hideBlood?: boolean
+  show: boolean
 }) => {
   const [disabled, setDisabled] = useState(true)
+  const [image, setImage] = useState<string>(images.gameover)
 
   const handleClick = () => {
     onClick()
   }
 
   useEffect(() => {
+    if (show) {
+      return
+    }
+
+    setImage(`${images.gameover}?v=${imageVersion++}`)
+  }, [show])
+
+  useEffect(() => {
+    if (!show) {
+      return
+    }
+
     const timeoutId = setTimeout(onTimeout, timeout)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [onTimeout, timeout])
+  }, [onTimeout, timeout, show])
 
   useEffect(() => {
+    if (!show) {
+      return
+    }
+
+    setDisabled(true)
     const TIME_ANIMATION = 1100
     const timeoutId = setTimeout(() => setDisabled(false), TIME_ANIMATION)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [])
+  }, [show])
+
+  useEffect(() => {
+    preloadImage(image)
+  }, [image])
 
   return (
     <button
       className={cn(
-        'fill-mode-both absolute inset-0 z-50 duration-200',
+        'fill-mode-both absolute inset-0 z-50 hidden duration-200',
         !disabled && 'cursor-pointer',
+        show && 'flex',
       )}
       onClick={handleClick}
       disabled={disabled}

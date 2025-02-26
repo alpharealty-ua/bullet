@@ -1,30 +1,16 @@
-import React, {
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useReducer, useRef, useState } from 'react'
 
 import { AppContext } from '@/context/context'
-import {
-  getAudio,
-  preloadImage,
-  randomIntFromInterval,
-  wait,
-} from '@/lib/utils'
+import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
   SettingsKeys,
   State,
   audios,
   getMultiplierValueByIndex,
-  images,
   multipliers,
 } from '@/lib/constants'
 import { Debug } from '@/components/debug'
 import { appReducer, initState } from './app-reducer'
-
-let gameOverImageVersion = Date.now()
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
@@ -49,7 +35,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const revolverRefHandle = useRef<{
     spin: (interval: number) => Promise<void>
   }>(null)
-  const [gameOverImage, setGameOverImage] = useState<string>(images.gameover)
   const [characterIndex, setCharacterIndex] = useState(0)
 
   const changeState = useCallback((payload: State) => {
@@ -139,7 +124,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setActiveMultiplierIndex(-1)
     setShowJackpot(false)
     setShowOffer(false)
-    setGameOverImage(`${images.gameover}?v=${gameOverImageVersion++}`)
   }
 
   const getMultiplier = async (): Promise<number> => {
@@ -238,7 +222,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const gameOver = async () => {
-    await preloadImage(gameOverImage)
+    // await preloadImage(gameOverImage)
     const drumBeatAudio = await playAudio('drumbeat', false)
     const audio = await playAudio('gunshot')
 
@@ -284,10 +268,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     winGame,
   }
 
-  useEffect(() => {
-    preloadImage(gameOverImage)
-  }, [gameOverImage])
-
   return (
     <AppContext.Provider
       value={{
@@ -313,7 +293,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         jackpot,
         revolverRefHandle,
         game,
-        gameOverImage,
       }}
     >
       <Debug

@@ -30,7 +30,6 @@ interface ContextAppValue {
     deal: () => Promise<void>
     winGame: () => Promise<void>
   }
-  gameOverImage: string
   revolverRefHandle: React.RefObject<{
     spin: (interval: number) => Promise<void>
   }>
