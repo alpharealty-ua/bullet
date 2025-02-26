@@ -36,6 +36,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     spin: (interval: number) => Promise<void>
   }>(null)
   const [characterIndex, setCharacterIndex] = useState(0)
+  const disabledRef = useRef(false)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -169,6 +170,11 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const next = async () => {
+    if (disabledRef.current) {
+      return
+    }
+
+    disabledRef.current = true
     setShowHelpers(false)
     setShowOffer(false)
 
@@ -180,6 +186,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setOffer(0)
       setShowJackpot(true)
 
+      disabledRef.current = false
       return
     }
 
@@ -209,16 +216,19 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (isGameOver) {
       await gameOver()
+      disabledRef.current = false
       return
     }
     if (isWin) {
       await winGame()
+      disabledRef.current = false
       return
     }
     if (!settings.declineAllDeals) {
       setOffer(100)
       setShowOffer(true)
     }
+    disabledRef.current = false
   }
 
   const gameOver = async () => {
