@@ -19,10 +19,6 @@ const GameOver = ({
   const [disabled, setDisabled] = useState(true)
 
   const handleClick = () => {
-    if (disabled) {
-      return
-    }
-
     onClick()
   }
 
@@ -42,12 +38,13 @@ const GameOver = ({
   }, [])
 
   return (
-    <div
+    <button
       className={cn(
         'fill-mode-both absolute inset-0 z-50 duration-200',
         !disabled && 'cursor-pointer',
       )}
       onClick={handleClick}
+      disabled={disabled}
     >
       <div
         className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-800 duration-0 lg:bg-bottom'
@@ -72,7 +69,7 @@ const GameOver = ({
           Died
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
