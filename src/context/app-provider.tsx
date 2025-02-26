@@ -3,6 +3,7 @@ import React, { useCallback, useReducer, useRef, useState } from 'react'
 import { AppContext } from '@/context/context'
 import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
+  FormatGame,
   SettingsKeys,
   State,
   audios,
@@ -169,7 +170,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     newGame()
   }
 
-  const next = async () => {
+  const next = async (format: FormatGame) => {
     if (disabledRef.current) {
       return
     }
@@ -268,9 +269,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const game = {
     deal,
     newGame,
-    gameOver,
     next,
-    winGame,
   }
 
   return (

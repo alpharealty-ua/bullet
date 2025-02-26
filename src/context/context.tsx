@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { audios, SettingsKeys, State } from '@/lib/constants'
+import { audios, FormatGame, SettingsKeys, State } from '@/lib/constants'
 
 interface ContextAppValue {
   state: State
@@ -27,11 +27,9 @@ interface ContextAppValue {
   showClick: boolean
   jackpot: number
   game: {
-    next: () => Promise<void>
-    gameOver: () => Promise<void>
+    next: (format: FormatGame) => Promise<void>
     newGame: () => Promise<void>
     deal: () => Promise<void>
-    winGame: () => Promise<void>
   }
   revolverRefHandle: React.RefObject<{
     spin: (interval: number) => Promise<void>

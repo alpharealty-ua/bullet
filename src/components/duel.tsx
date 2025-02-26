@@ -13,12 +13,16 @@ import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
 
 const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
-  const { characterIndex } = useAppContext()
+  const { characterIndex, game } = useAppContext()
   const [startGame, setStartGame] = useState(false)
   const [showPlayerInfo, setShowPlaerInfo] = useState(false)
   const visiblePlayerInfo = !startGame || showPlayerInfo
 
   const handlePull = () => {
+    if (startGame) {
+      game.next('duel')
+      return
+    }
     setStartGame(false)
     setShowPlaerInfo(false)
 

@@ -36,7 +36,7 @@ const Solo = () => {
   const modal = useCustomModal()
 
   const handlePull = async () => {
-    await game.next()
+    await game.next('solo')
   }
 
   const handleDeal = async () => {
