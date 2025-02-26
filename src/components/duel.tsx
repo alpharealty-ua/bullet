@@ -12,7 +12,7 @@ import { Character } from './character'
 import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
 
-const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
+const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
   const { characterIndex } = useAppContext()
   const [startGame, setStartGame] = useState(false)
   const [showPlayerInfo, setShowPlaerInfo] = useState(false)
@@ -94,4 +94,4 @@ const Watch = ({ format }: { format: 'duel' | 'watch' }) => {
   )
 }
 
-export { Watch }
+export { Duel }
