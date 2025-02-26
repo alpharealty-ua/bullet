@@ -63,41 +63,33 @@ const GameOver = ({
       const drumBeatAudio = await playAudio('drumbeat', false)
       const gunShotAudio = await playAudio('gunshot', false)
 
-      gunShotAudio.addEventListener(
-        'ended',
-        async () => {
-          if (isUnmounted) {
-            return
-          }
+      const gunShowPlay = async () => {
+        if (isUnmounted) {
+          return
+        }
 
-          await drumBeatAudio.play()
-        },
-        { once: true },
-      )
+        setRunAnimation(true)
+      }
 
-      gunShotAudio.addEventListener(
-        'play',
-        async () => {
-          if (isUnmounted) {
-            return
-          }
+      const gunShotEnded = async () => {
+        if (isUnmounted) {
+          return
+        }
 
-          setRunAnimation(true)
-        },
-        { once: true },
-      )
+        await drumBeatAudio.play()
+      }
 
-      drumBeatAudio.addEventListener(
-        'ended',
-        () => {
-          if (isUnmounted) {
-            return
-          }
+      const drumBeatEnded = () => {
+        if (isUnmounted) {
+          return
+        }
 
-          setDisabled(false)
-        },
-        { once: true },
-      )
+        setDisabled(false)
+      }
+
+      gunShotAudio.addEventListener('ended', gunShotEnded, { once: true })
+      gunShotAudio.addEventListener('play', gunShowPlay, { once: true })
+      drumBeatAudio.addEventListener('ended', drumBeatEnded, { once: true })
 
       if (hasImage) {
         await gunShotAudio.play()
