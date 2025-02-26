@@ -15,7 +15,9 @@ export const states = ['preparation', 'running', 'win', 'game-over'] as const
 
 export type State = (typeof states)[number]
 
-export type FormatGame = 'solo' | 'duel' | 'watch'
+export type FormatGame = 'solo' | 'duel'
+
+export type VariantGame = 'play' | 'watch'
 
 // TODO: CHANGE TO UPPERCASE
 export const images = {

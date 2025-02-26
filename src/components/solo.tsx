@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group'
 
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
@@ -14,7 +15,7 @@ import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
 import { ButtonWithAudio } from './ui/button-with-audio'
 
-const Solo = () => {
+const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
     state,
     balance,
@@ -123,7 +124,7 @@ const Solo = () => {
         </div>
       </div>
       <GameOver />
-      <Footer format='solo' />
+      <Footer format='solo' variant={variant} />
     </>
   )
 }

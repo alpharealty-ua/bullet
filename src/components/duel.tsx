@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { useAppContext } from '@/context/use-app-context'
-import { images } from '@/lib/constants'
+import { images, VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from './header'
@@ -13,7 +13,7 @@ import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
 import { GameOver } from './game-over'
 
-const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
+const Duel = ({ variant }: { variant: VariantGame }) => {
   const { characterIndex, game, state } = useAppContext()
   const startGame = state === 'running'
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
@@ -28,8 +28,8 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
   return (
     <>
       <Header
-        logoText={format === 'duel' ? 'duel' : ''}
-        hideBalance={format === 'duel'}
+        logoText={variant === 'play' ? 'duel' : ''}
+        hideBalance={variant === 'play'}
       />
       <Bar />
       <div className='mt-auto flex flex-col pt-6'>
@@ -37,12 +37,12 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
           <Character
             className={cn(
               'mx-auto',
-              format === 'watch' && '-mb-7 h-[300px]',
-              format === 'duel' && 'mr-12 h-[235px]',
+              variant === 'watch' && '-mb-7 h-[300px]',
+              variant === 'play' && 'mr-12 h-[235px]',
             )}
             characterIndex={characterIndex}
             onClick={
-              format === 'duel' && startGame ? handlePlayerClick : undefined
+              variant === 'play' && startGame ? handlePlayerClick : undefined
             }
             beforeSlot={
               <PlayerInfo
@@ -57,7 +57,7 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
           />
           {startGame && <ReadySetPull />}
         </div>
-        {format === 'duel' && (
+        {variant === 'play' && (
           <>
             <div className='relative mb-1'>
               <PlayerInfo
@@ -88,7 +88,7 @@ const Duel = ({ format }: { format: 'duel' | 'watch' }) => {
         )}
       </div>
       <GameOver hasImage={false} />
-      <Footer format={format} />
+      <Footer format='duel' variant={variant} />
     </>
   )
 }

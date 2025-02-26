@@ -1,7 +1,13 @@
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { FormatGame, images, MAX_BET, multipliers } from '@/lib/constants'
+import {
+  FormatGame,
+  images,
+  MAX_BET,
+  multipliers,
+  VariantGame,
+} from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -10,7 +16,13 @@ import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
 
-const Footer = ({ format }: { format: FormatGame }) => {
+const Footer = ({
+  format,
+  variant,
+}: {
+  format: FormatGame
+  variant: VariantGame
+}) => {
   const {
     countBullet,
     activeMultiplierIndex,
@@ -22,7 +34,7 @@ const Footer = ({ format }: { format: FormatGame }) => {
     rank,
   } = useAppContext()
   const modal = useCustomModal()
-  const footerWithBg = format === 'solo' || format === 'watch'
+  const footerWithBg = format === 'solo' || variant === 'watch'
   // TODO: MOVE MAX BET TO CONTEXT
   const maxBet = Math.min(
     state === 'running' ? bet + balance : balance,
@@ -37,8 +49,7 @@ const Footer = ({ format }: { format: FormatGame }) => {
   return (
     <footer
       className={cn(
-        'relative flex h-[74px] justify-between px-1 py-0.5',
-        format === 'duel' && 'bg-[#f2f2f2]',
+        'relative flex h-[74px] justify-between bg-[#f2f2f2] px-1 py-0.5',
         footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat',
       )}
       style={footerWithBg ? { backgroundImage: `url(${images.footer})` } : {}}
@@ -46,7 +57,9 @@ const Footer = ({ format }: { format: FormatGame }) => {
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
           <div className='text-green text-xl font-bold uppercase'>
-            {{ solo: 'Bet', duel: 'Prizepool', watch: 'Jackpot' }[format]}
+            {format === 'solo' || variant === 'play'
+              ? { solo: 'Bet', duel: 'Prizepool' }[format]
+              : 'Jackpot'}
           </div>
           {format === 'solo' && (
             <>
@@ -60,12 +73,12 @@ const Footer = ({ format }: { format: FormatGame }) => {
               />
             </>
           )}
-          {format === 'duel' && (
+          {format === 'duel' && variant === 'play' && (
             <div className='relative text-center text-3xl leading-[1]'>
               $2000
             </div>
           )}
-          {format === 'watch' && (
+          {format === 'duel' && variant === 'watch' && (
             <div className='relative text-center text-3xl leading-[1]'>
               $2000
             </div>
@@ -78,13 +91,13 @@ const Footer = ({ format }: { format: FormatGame }) => {
           footerWithBg && 'self-end',
         )}
       >
-        {(format === 'solo' || format === 'watch') && (
+        {(format === 'solo' || variant === 'watch') && (
           <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
             <Rank value={rank} />
             <Bullets countBullet={countBullet} />
           </div>
         )}
-        {format === 'duel' && (
+        {format === 'duel' && variant === 'play' && (
           <div className='flex flex-col items-center text-center'>
             <div className='text-green text-xl font-bold uppercase'>Round</div>
             <div className='text-red relative text-center text-3xl leading-[1]'>
@@ -97,7 +110,9 @@ const Footer = ({ format }: { format: FormatGame }) => {
       <div className='relative flex flex-1 flex-row justify-center'>
         <div className='flex flex-col items-center text-center'>
           <div className='text-green text-xl font-bold uppercase'>
-            {{ solo: 'Multiplier', duel: 'Balance', watch: 'Round' }[format]}
+            {format === 'solo' || variant === 'play'
+              ? { solo: 'Multiplier', duel: 'Balance' }[format]
+              : 'Round'}
           </div>
           {format === 'solo' && (
             <Multiplier
@@ -105,12 +120,12 @@ const Footer = ({ format }: { format: FormatGame }) => {
               activeIndex={activeMultiplierIndex}
             />
           )}
-          {format === 'duel' && (
+          {format === 'duel' && variant === 'play' && (
             <div className='relative text-center text-3xl leading-[1]'>
               $2000
             </div>
           )}
-          {format === 'watch' && (
+          {format === 'duel' && variant === 'watch' && (
             <div className='text-red relative text-center text-3xl leading-[1]'>
               3
             </div>
@@ -123,7 +138,7 @@ const Footer = ({ format }: { format: FormatGame }) => {
             onClick={handleSettings}
           ></button>
         </div>
-        {format === 'duel' && (
+        {format === 'duel' && variant === 'play' && (
           <div className='py-1 pl-2'>
             <MoneyBagButton className='w-4' />
           </div>
