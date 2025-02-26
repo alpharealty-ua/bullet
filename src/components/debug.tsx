@@ -15,13 +15,6 @@ interface Props {
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number
   setActiveMultiplierIndex: React.Dispatch<number>
-  game: {
-    next: () => void
-    gameOver: () => void
-    newGame: () => void
-    deal: () => void
-    winGame: () => void
-  }
 }
 
 const Debug = (props: Props) => {
@@ -36,7 +29,6 @@ const Debug = (props: Props) => {
     setBet,
     activeMultiplierIndex,
     setActiveMultiplierIndex,
-    game,
   } = props
 
   const handleSetState = (s: State) => {
@@ -46,19 +38,6 @@ const Debug = (props: Props) => {
   const handleResetAddMoney = () => {
     localStorage.removeItem('endTime')
   }
-
-  useEffect(() => {
-    // TODO: REFACTOR
-    if (state === 'game-over') {
-      game.gameOver()
-      return
-    }
-    if (state === 'win') {
-      game.winGame()
-      return
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state])
 
   if (!localStorage.getItem('showDebug') === true) {
     return null

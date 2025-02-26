@@ -1,19 +1,15 @@
 import { useNavigate } from 'react-router'
 
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { useAppContext } from '@/context/use-app-context'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 import { Rules } from './rules'
 
 const Home = () => {
-  const { game } = useAppContext()
   const nagigate = useNavigate()
   const modal = useCustomModal()
 
   const handleStartButton = async () => {
-    // MOVE TO COMPONENT
-    game.newGame()
     nagigate('/solo')
   }
 

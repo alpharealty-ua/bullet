@@ -14,8 +14,6 @@ const ReadySetPull = () => {
       return
     }
 
-    console.log('call')
-
     const [ready, set, pull] =
       wrapperDom.children as HTMLCollectionOf<HTMLDivElement>
 
