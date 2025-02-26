@@ -17,6 +17,7 @@ export type State = (typeof states)[number]
 
 export type FormatGame = 'solo' | 'duel' | 'watch'
 
+// TODO: CHANGE TO UPPERCASE
 export const images = {
   gamerules: '/assets/images/game-rules.svg',
   close: '/assets/images/close.svg',
@@ -51,7 +52,7 @@ export const images = {
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
-  textrure: '/assets/images/texture.jpg',
+  texture: '/assets/images/texture.jpg',
 } as const
 
 export const srcImages = Object.values(images)
