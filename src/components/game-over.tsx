@@ -63,7 +63,7 @@ const GameOver = ({
       const drumBeatAudio = await playAudio('drumbeat', false)
       const gunShotAudio = await playAudio('gunshot', false)
 
-      const gunShowPlay = async () => {
+      const gunShotPlay = async () => {
         if (isUnmounted) {
           return
         }
@@ -88,13 +88,13 @@ const GameOver = ({
       }
 
       gunShotAudio.addEventListener('ended', gunShotEnded, { once: true })
-      gunShotAudio.addEventListener('play', gunShowPlay, { once: true })
+      gunShotAudio.addEventListener('play', gunShotPlay, { once: true })
       drumBeatAudio.addEventListener('ended', drumBeatEnded, { once: true })
 
       if (hasImage) {
         await gunShotAudio.play()
       } else {
-        gunShotAudio.dispatchEvent(new Event('started'))
+        gunShotAudio.dispatchEvent(new Event('play'))
         gunShotAudio.dispatchEvent(new Event('ended'))
       }
     }
