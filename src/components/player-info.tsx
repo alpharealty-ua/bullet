@@ -35,7 +35,10 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
               'right-0 left-1 origin-top-right -skew-x-45 -skew-y-2',
           )}
         ></div>
-        <div className='relative flex min-h-[70px] flex-col justify-between gap-4 rounded-md border-2 border-black bg-white p-1 text-xs'>
+        <div
+          className='relative flex min-h-[70px] flex-col justify-between gap-4 rounded-md border-2 border-black bg-white bg-cover bg-center bg-no-repeat p-1 text-xs'
+          style={{ backgroundImage: `url(${images.textrure})` }}
+        >
           <div className='flex justify-between gap-2'>
             <div>
               <strong>{login}</strong>
