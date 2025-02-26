@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'

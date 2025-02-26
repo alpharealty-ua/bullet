@@ -55,6 +55,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     ): Promise<HTMLAudioElement> => {
       const audio = getAudio(key)
 
+      // TODO: MOVE TO ADUIO
       audio.addEventListener(
         'ended',
         () => {
@@ -64,6 +65,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       )
 
       try {
+        // TODO: MOVE TO ADUIO
         audio.muted = !settings.soundEffects
         if (play) {
           await audio.play()
