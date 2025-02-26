@@ -10,6 +10,7 @@ const Balance = ({
   increaseTime?: number
   beforeSlot?: React.ReactNode
 }) => {
+  // TODO: MAYBE TRANSFORM TO COMPONENT
   const { totalRef, winRef } = useIncreaseNumber({
     value,
     increaseTime,
@@ -32,7 +33,8 @@ const Balance = ({
         <div
           ref={winRef}
           className={cn(
-            'fill-mode-both absolute top-full right-0 left-0 hidden justify-center text-center text-3xl leading-[1] tracking-tight duration-500',
+            'd absolute top-full right-0 left-0 hidden justify-center text-center text-3xl leading-[1] tracking-tight',
+            'fill-mode-both duration-500',
             '[&.is-in]:animate-in [&.is-in]:fade-in [&.is-in]:slide-in-from-bottom-10 [&.is-in]:flex [&.is-in]:delay-200',
             '[&.is-out]:animate-out [&.is-out]:fade-out [&.is-out]:flex',
             '[&.is-increase]:text-green',

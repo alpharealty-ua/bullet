@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { useAppContext } from '@/context/use-app-context'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { Logo } from './logo'
@@ -12,13 +14,34 @@ export const Header = ({
   hideBalance?: boolean
 }) => {
   const { balance, state } = useAppContext()
+  const [balanceWithDelay, setBalanceWithDelay] = useState(balance)
+
+  useEffect(() => {
+    if (balance === balanceWithDelay) {
+      return
+    }
+
+    const changeBalance = () => setBalanceWithDelay(balance)
+
+    if (state !== 'win') {
+      changeBalance()
+      return
+    }
+
+    // TODO: ADD SUBSCRIPT WINSOUND
+    const timeoutID = setTimeout(changeBalance, 1000)
+
+    return () => {
+      clearTimeout(timeoutID)
+    }
+  }, [balance, state, balanceWithDelay])
 
   return (
     <header className='flex items-center justify-between px-3 py-2'>
       <Logo to='/' text={logoText} />
       {!hideBalance && (
         <Balance
-          value={balance}
+          value={balanceWithDelay}
           increaseTime={state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined}
           beforeSlot={<MoneyBagButton />}
         />
