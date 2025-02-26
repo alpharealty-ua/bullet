@@ -7,28 +7,21 @@ import { useAppContext } from '@/context/use-app-context'
 let imageVersion = Date.now()
 
 const GameOver = ({
-  onClick,
-  onTimeout,
-  timeout,
-  hideBlood,
-  show,
+  timeout = 3000,
   hasImage = true,
 }: {
-  onClick: () => void
-  onTimeout: () => void
-  timeout: number
-  hideBlood?: boolean
-  show: boolean
+  timeout?: number
   hasImage?: boolean
 }) => {
-  // TODO: NOT USE CONTEXT
-  const { playAudio } = useAppContext()
+  const { playAudio, game, settings, state } = useAppContext()
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(images.gameover)
   const [runAnimation, setRunAnimation] = useState(false)
+  const hideBlood = settings.blood
+  const show = state === 'game-over'
 
   const handleClick = () => {
-    onClick()
+    game.newGame()
   }
 
   useEffect(() => {
@@ -45,11 +38,11 @@ const GameOver = ({
       return
     }
 
-    const timeoutId = setTimeout(onTimeout, timeout)
+    const timeoutId = setTimeout(game.newGame, timeout)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [onTimeout, timeout, show])
+  }, [timeout, show])
 
   useEffect(() => {
     if (!show) {

@@ -130,13 +130,7 @@ const Solo = () => {
           </div>
         </div>
       </div>
-      <GameOver
-        onClick={handleStartGame}
-        onTimeout={handleGameOverTimeout}
-        timeout={3000}
-        hideBlood={settings.blood}
-        show={state === 'game-over'}
-      />
+      <GameOver />
       <Footer format='solo' />
     </>
   )
