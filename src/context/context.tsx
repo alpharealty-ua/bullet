@@ -32,7 +32,7 @@ interface ContextAppValue {
     deal: () => Promise<void>
   }
   revolverRefHandle: React.RefObject<{
-    spin: (interval: number) => Promise<void>
+    spin: (duration?: number) => Promise<void>
   }>
 }
 

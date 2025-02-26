@@ -2,6 +2,7 @@ import React, { useEffect, useImperativeHandle, useRef } from 'react'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import mergeRefs from 'merge-refs'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
@@ -9,15 +10,16 @@ const MAX_ADD_SPEED = 100
 const MAX_SPEED = 100
 
 const Revolver = React.forwardRef<
-  {
-    spin: (interval: number) => Promise<void>
-  },
+  HTMLDivElement,
   React.HtmlHTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
     disabled: boolean
+    gunHandleRef?: React.ForwardedRef<{
+      spin: (duration?: number) => Promise<void>
+    }>
   }
->(({ beforeSlot, disabled, className, ...props }, ref) => {
-  const bulletChambeRef = useRef<HTMLDivElement>(null)
+>(({ beforeSlot, disabled, className, gunHandleRef, ...props }, ref) => {
+  const gunRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
   const speedRef = useRef(0)
@@ -27,13 +29,25 @@ const Revolver = React.forwardRef<
       return
     }
 
-    const bulletDom = bulletChambeRef.current
+    const gunDom = gunRef.current
 
-    if (bulletDom === null) {
+    if (gunDom === null) {
       return
     }
 
-    bulletDom.ondragstart = () => false
+    const chamberRotateDom = gunDom.querySelector(
+      '[data-chamber-rotate]',
+    ) as HTMLDivElement
+
+    const chamberSpeedDom = gunDom.querySelector(
+      '[data-chamber-speed]',
+    ) as HTMLDivElement
+
+    if (!(chamberRotateDom && chamberSpeedDom)) {
+      return
+    }
+
+    chamberRotateDom.ondragstart = () => false
 
     let clickStartTime = 0
 
@@ -43,15 +57,16 @@ const Revolver = React.forwardRef<
       const startX = event.clientX
       const startY = event.clientY
 
-      const { left, width, top, height } = bulletDom.getBoundingClientRect()
+      const { left, width, top, height } =
+        chamberRotateDom.getBoundingClientRect()
 
-      bulletDom.setPointerCapture(event.pointerId)
+      chamberRotateDom.setPointerCapture(event.pointerId)
 
       const startRotate = rotateRef.current
       let prevX = startX
       let prevY = startY
 
-      bulletDom.style.transitionDuration = `0s`
+      chamberRotateDom.style.transitionDuration = `0s`
 
       const pointerMove = (event: PointerEvent) => {
         const currentX = event.clientX
@@ -78,7 +93,7 @@ const Revolver = React.forwardRef<
         const deltaRotate = deltaY * directionY + deltaX * directionX
 
         rotateRef.current += deltaRotate
-        bulletDom.style.rotate = `${rotateRef.current}deg`
+        chamberRotateDom.style.rotate = `${rotateRef.current}deg`
       }
 
       const poinerUp = (event: PointerEvent) => {
@@ -106,26 +121,25 @@ const Revolver = React.forwardRef<
         speedRef.current = speedBoundary
 
         if (prevSpeed !== speedRef.current) {
-          const dom = bulletDom.children[0] as HTMLDivElement
-          dom.dispatchEvent(new CustomEvent('speedchanged'))
+          chamberSpeedDom.dispatchEvent(new CustomEvent('speedchanged'))
         }
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
-        bulletDom.style.transitionDuration = ``
-        bulletDom.style.rotate = `${rotateRef.current}deg`
+        chamberRotateDom.style.transitionDuration = ``
+        chamberRotateDom.style.rotate = `${rotateRef.current}deg`
 
-        bulletDom.removeEventListener('pointermove', pointerMove)
-        bulletDom.removeEventListener('pointerup', poinerUp)
+        chamberRotateDom.removeEventListener('pointermove', pointerMove)
+        chamberRotateDom.removeEventListener('pointerup', poinerUp)
       }
 
-      bulletDom.addEventListener('pointermove', pointerMove)
-      bulletDom.addEventListener('pointerup', poinerUp)
+      chamberRotateDom.addEventListener('pointermove', pointerMove)
+      chamberRotateDom.addEventListener('pointerup', poinerUp)
     }
 
-    bulletDom.addEventListener('pointerdown', pointerDown)
+    chamberRotateDom.addEventListener('pointerdown', pointerDown)
 
     return () => {
-      bulletDom.removeEventListener('pointerdown', pointerDown)
+      chamberRotateDom.removeEventListener('pointerdown', pointerDown)
     }
   }, [disabled])
 
@@ -134,21 +148,27 @@ const Revolver = React.forwardRef<
       return
     }
 
-    const bulletDom = bulletChambeRef.current
+    const gunDom = gunRef.current
 
-    if (bulletDom === null) {
+    if (gunDom === null) {
       return
     }
 
-    const dom = bulletDom.children[0] as HTMLDivElement
+    const chamberRotateDom = gunDom.querySelector(
+      '[data-chamber-rotate]',
+    ) as HTMLDivElement
 
-    if (dom === null) {
+    const chamberSpeedDom = chamberRotateDom.querySelector(
+      '[data-chamber-speed]',
+    ) as HTMLDivElement
+
+    if (!(chamberRotateDom && chamberSpeedDom)) {
       return
     }
 
     const stopSpin = () => {
       const roundedRotate = 60 * Math.round(speedRotateRef.current / 60)
-      dom.style.rotate = `${roundedRotate}deg`
+      chamberSpeedDom.style.rotate = `${roundedRotate}deg`
     }
 
     const startSpin = () => {
@@ -161,23 +181,31 @@ const Revolver = React.forwardRef<
       }
 
       speedRef.current -= 5 * sign
-      dom.style.rotate = `${(speedRotateRef.current += speed)}deg`
+      chamberSpeedDom.style.rotate = `${(speedRotateRef.current += speed)}deg`
     }
 
-    dom.addEventListener('transitionend', startSpin)
-    dom.addEventListener('speedchanged', startSpin)
+    chamberSpeedDom.addEventListener('transitionend', startSpin)
+    chamberSpeedDom.addEventListener('speedchanged', startSpin)
 
     return () => {
       stopSpin()
-      dom.removeEventListener('transitionend', startSpin)
-      dom.removeEventListener('speedchanged', startSpin)
+      chamberSpeedDom.removeEventListener('transitionend', startSpin)
+      chamberSpeedDom.removeEventListener('speedchanged', startSpin)
     }
   }, [disabled])
 
-  const spin = async (interval: number): Promise<void> => {
-    const bulletDom = bulletChambeRef.current
+  const spin = async (duration = 200): Promise<void> => {
+    const gunDom = gunRef.current
 
-    if (bulletDom === null) {
+    if (gunDom === null) {
+      return
+    }
+
+    const chamberRotateDom = gunDom.querySelector(
+      '[data-chamber-rotate]',
+    ) as HTMLDivElement
+
+    if (chamberRotateDom === null) {
       return
     }
 
@@ -187,18 +215,18 @@ const Revolver = React.forwardRef<
           return
         }
 
-        bulletDom.style.transitionDuration = ``
-        bulletDom.removeEventListener('transitionend', transitionend)
+        chamberRotateDom.style.transitionDuration = ``
+        chamberRotateDom.removeEventListener('transitionend', transitionend)
         resolve()
       }
 
-      bulletDom.style.rotate = (rotateRef.current += 60) + 'deg'
-      bulletDom.style.transitionDuration = `${interval}ms`
-      bulletDom.addEventListener('transitionend', transitionend)
+      chamberRotateDom.style.rotate = (rotateRef.current += 60) + 'deg'
+      chamberRotateDom.style.transitionDuration = `${duration}ms`
+      chamberRotateDom.addEventListener('transitionend', transitionend)
     })
   }
 
-  useImperativeHandle(ref, () => {
+  useImperativeHandle(gunHandleRef, () => {
     return {
       spin,
     }
@@ -206,6 +234,7 @@ const Revolver = React.forwardRef<
 
   return (
     <div
+      ref={mergeRefs(gunRef, ref)}
       className={cn('relative mx-auto aspect-[1/1.881] w-50', className)}
       {...props}
     >
@@ -217,15 +246,17 @@ const Revolver = React.forwardRef<
             disabled && 'cursor-auto',
           )}
           style={{ rotate: `${START_ROTATE}deg` }}
+          data-chamber
         >
           <div
-            ref={bulletChambeRef}
             className='absolute inset-0 touch-none bg-contain bg-center bg-no-repeat duration-200 ease-linear'
             style={{ rotate: `${rotateRef.current}deg` }}
+            data-chamber-rotate
           >
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-100 ease-linear'
               style={{ backgroundImage: `url(${images.gunchamber})` }}
+              data-chamber-speed
             ></div>
           </div>
         </div>

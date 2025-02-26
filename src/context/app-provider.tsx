@@ -34,7 +34,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [showClick, setShowClick] = useState(false)
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const revolverRefHandle = useRef<{
-    spin: (interval: number) => Promise<void>
+    spin: (duration?: number) => Promise<void>
   }>(null)
   const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
@@ -224,7 +224,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setShowClick(false)
 
     await playAudio('triggerpull')
-    await revolverHandle.spin(200)
+    await revolverHandle.spin()
 
     setShowClick(true)
 

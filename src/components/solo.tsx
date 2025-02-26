@@ -70,7 +70,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       )}
       <div className='relative mt-auto'>
         <Revolver
-          ref={revolverRefHandle}
+          gunHandleRef={revolverRefHandle}
           disabled={disabled || !(state === 'preparation')}
           beforeSlot={<>{showClick && <Click />}</>}
           className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
