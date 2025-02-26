@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { useAppContext } from '@/context/use-app-context'
 import { images, VariantGame } from '@/lib/constants'
@@ -18,8 +18,13 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   const startGame = state === 'running'
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !startGame || showPlayerInfo
+  // TODO: MOVE TO CONTEXT
+  const gunHandleRef = useRef<{
+    spin: (duration?: number) => Promise<void>
+  }>(null)
 
-  const handlePull = () => {
+  const handlePull = async () => {
+    await gunHandleRef.current?.spin()
     game.next('duel')
   }
 
@@ -44,6 +49,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
             onClick={
               variant === 'play' && startGame ? handlePlayerClick : undefined
             }
+            gunHandleRef={gunHandleRef}
             beforeSlot={
               <PlayerInfo
                 className='absolute top-0 right-full translate-x-5'

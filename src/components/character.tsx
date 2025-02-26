@@ -2,15 +2,17 @@ import React from 'react'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_IMAGES } from '@/lib/constants'
-import { GunCharacter } from './character-gun'
+import { GunCharacter, GunCharacterProps } from './character-gun'
 
-interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+interface CharacterProps
+  extends React.HtmlHTMLAttributes<HTMLDivElement>,
+    Pick<GunCharacterProps, 'gunHandleRef'> {
   characterIndex: number
   beforeSlot?: React.ReactNode
 }
 
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
-  ({ characterIndex, className, beforeSlot, ...props }, ref) => {
+  ({ characterIndex, className, beforeSlot, gunHandleRef, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -37,6 +39,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             characterIndex === 1 &&
               'top-[15%] left-[7%] aspect-[1/1.7] w-[30%]',
           )}
+          gunHandleRef={gunHandleRef}
         />
       </div>
     )
