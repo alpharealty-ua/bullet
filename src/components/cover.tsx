@@ -51,7 +51,7 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
         {isDuel && (
           <CharacterSelector
             label='Choose your character'
-            images={CHARACTER_IMAGES}
+            characterImages={CHARACTER_IMAGES}
             disabledImages={disabledImages}
             onSelect={handleSelectCharacter}
             defaultIndex={characterIndex}

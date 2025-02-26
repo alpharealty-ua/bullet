@@ -57,6 +57,7 @@ export const images = {
 
 export const srcImages = Object.values(images)
 
+// TODO: ADD NAMES CARACTER -> nubcat and mickey
 export const CHARACTER_IMAGES = [images.duelcharacter1, images.duelcharacter2]
 
 export const audios = {

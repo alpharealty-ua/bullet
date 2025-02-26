@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
 import { IoLockClosed } from 'react-icons/io5'
+import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
+import { images } from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 export const CharacterSelector = ({
   label,
-  images,
+  characterImages,
   disabledImages,
   onSelect,
   defaultIndex = 0,
 }: {
   label: string
-  images: string[]
+  characterImages: string[]
   disabledImages: number[]
   onSelect: (index: number) => void
   defaultIndex?: number
@@ -23,7 +24,8 @@ export const CharacterSelector = ({
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
   const changeIndex = (index: number) => {
-    const newIndex = index < 0 ? images.length - 1 : index % images.length
+    const newIndex =
+      index < 0 ? characterImages.length - 1 : index % characterImages.length
     setActiveIndex(newIndex)
   }
 
@@ -38,23 +40,24 @@ export const CharacterSelector = ({
       <h3 className='text-center text-xl'>{label}</h3>
       <div className='flex h-[250px] items-center gap-2'>
         <button
-          className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'
+          className='bg-red flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-xl text-white transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex - 1)}
         >
-          <FaArrowAltCircleLeft />
+          <PiArrowFatLeftFill />
         </button>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
-          {images.map((_, i) => {
+          {characterImages.map((_, i) => {
             const disabled = disabledImages.includes(i)
 
             return (
               <div
                 key={i}
                 className={cn(
-                  'hidden h-full w-full items-center justify-center rounded-full border-4 p-8',
+                  'hidden h-full w-full items-center justify-center rounded-full border-4 bg-white bg-cover bg-center bg-no-repeat p-8',
                   i === activeIndex && 'flex',
                   i === selectedIndex && 'border-green bg-green/10',
                 )}
+                style={{ backgroundImage: `url(${images.texture})` }}
               >
                 <Character
                   characterIndex={i}
@@ -79,10 +82,10 @@ export const CharacterSelector = ({
           })}
         </div>
         <button
-          className='text-red cursor-pointer text-4xl transition-all hover:scale-90 active:scale-75'
+          className='bg-red flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-xl text-white transition-all hover:scale-90 active:scale-75'
           onClick={() => changeIndex(activeIndex + 1)}
         >
-          <FaArrowAltCircleRight />
+          <PiArrowFatRightFill />
         </button>
       </div>
     </>
