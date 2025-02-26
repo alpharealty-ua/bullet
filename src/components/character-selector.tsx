@@ -48,29 +48,32 @@ export const CharacterSelector = ({
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
           {characterImages.map((_, i) => {
             const disabled = disabledImages.includes(i)
+            const selected = i === selectedIndex
+            const active = i === activeIndex
 
             return (
               <div
                 key={i}
                 className={cn(
-                  'hidden h-full w-full items-center justify-center rounded-full border-4 bg-white bg-cover bg-center bg-no-repeat p-8',
-                  i === activeIndex && 'flex',
-                  i === selectedIndex && 'border-green bg-green/10',
+                  'hidden h-full w-full items-center justify-center rounded-full bg-white bg-cover bg-center bg-no-repeat p-8',
+                  active && 'flex',
                 )}
                 style={{ backgroundImage: `url(${images.texture})` }}
               >
-                <Character
-                  characterIndex={i}
-                  className='animate-in fade-in zoom-in-150 h-full'
-                />
                 <button
                   key={i}
                   className={cn(
-                    'absolute inset-0 cursor-pointer p-8 disabled:cursor-not-allowed',
+                    'absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] border-4 p-8 transition-all disabled:cursor-not-allowed',
+                    selected && 'bg-green/10 border-green',
                   )}
                   onClick={() => handleClick(i)}
                   disabled={disabled}
-                ></button>
+                >
+                  <Character
+                    characterIndex={i}
+                    className='animate-in fade-in zoom-in-150 h-full'
+                  />
+                </button>
                 {disabled && (
                   <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-full bg-black/30 text-7xl text-white duration-500'>
                     <IoLockClosed />
