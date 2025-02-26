@@ -17,7 +17,7 @@ const Home = () => {
   const { game, characterIndex, setCharacterIndex } = useAppContext()
   const nagigate = useNavigate()
   const modal = useCustomModal()
-  const [showDuelCover, setShowDuelCover] = useState(true)
+  const [showDuelCover, setShowDuelCover] = useState(false)
   const [selectedCharacter, setSelectedCharaceter] = useState(false)
 
   const handleStartButton = async () => {
