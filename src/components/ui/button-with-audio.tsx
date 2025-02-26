@@ -5,9 +5,9 @@ import { useAppContext } from '@/context/use-app-context'
 import { Button, ButtonProps } from './button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ onClick, ...props }, ref) => {
+  ({ onClick, disabled, ...props }, ref) => {
     const { playAudio } = useAppContext()
-    const [disabled, setDisabled] = useState(false)
+    const [startedAnimation, setStartedAnimation] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
 
     const mouseClick = async (): Promise<void> => {
@@ -17,30 +17,17 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return
       }
 
-      setDisabled(true)
-
+      setStartedAnimation(true)
       buttonDom.classList.add('animate-button-click')
-
-      buttonDom.addEventListener(
-        'transitionend',
-        () => {
-          buttonDom.classList.remove('animate-button-click')
-        },
-        { once: true },
-      )
 
       const audio = await playAudio('mouseclick')
 
-      await new Promise<void>((resolve) => {
-        audio.addEventListener(
-          'ended',
-          () => {
-            resolve()
-          },
-          { once: true },
-        )
+      await new Promise<Event>((resolve) => {
+        audio.addEventListener('ended', resolve, { once: true })
       })
-      setDisabled(false)
+
+      buttonDom.classList.remove('animate-button-click')
+      setStartedAnimation(false)
     }
 
     const handleClick = async (
@@ -54,7 +41,7 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Button
         ref={mergeRefs(buttonRef, ref)}
         onMouseDown={handleClick}
-        disabled={disabled}
+        disabled={disabled || startedAnimation}
         {...props}
       />
     )
