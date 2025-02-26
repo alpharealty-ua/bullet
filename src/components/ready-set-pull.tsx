@@ -28,7 +28,11 @@ const ReadySetPull = () => {
       set.classList.remove(...activeClassList)
       pull.classList.remove(...activeClassList)
 
-      await wait(100)
+      await wait(0)
+
+      if (isUnmounted) {
+        return
+      }
 
       const readyAudio = await playAudio('ready')
       ready.classList.add(...activeClassList)
@@ -42,8 +46,12 @@ const ReadySetPull = () => {
       pull.classList.add(...activeClassList)
       await waitEndAudio(pullAudio)
     }
-
+    let isUnmounted = false
     runAnimation()
+
+    return () => {
+      isUnmounted = true
+    }
   }, [playAudio])
 
   return (
