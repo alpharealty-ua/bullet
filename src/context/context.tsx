@@ -17,7 +17,10 @@ interface ContextAppValue {
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
-  playAudio: (key: keyof typeof audios) => Promise<HTMLAudioElement>
+  playAudio: (
+    key: keyof typeof audios,
+    play?: boolean,
+  ) => Promise<HTMLAudioElement>
   offer: number
   showOffer: boolean
   showJackpot: boolean

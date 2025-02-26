@@ -222,29 +222,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const gameOver = async () => {
-    // await preloadImage(gameOverImage)
-    const drumBeatAudio = await playAudio('drumbeat', false)
-    const audio = await playAudio('gunshot')
-
     changeState('game-over')
     addRank(3)
-
-    return new Promise<void>((resolve) => {
-      audio.addEventListener(
-        'ended',
-        async () => {
-          await drumBeatAudio.play()
-          resolve()
-        },
-        { once: true },
-      )
-    })
   }
 
   const winGame = async () => {
     changeState('win')
-
     addRank(5)
+
     await playAudio('chaching')
     await wait(1000)
     const audio = await playAudio('winsound')

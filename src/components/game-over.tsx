@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { images } from '@/lib/constants'
 import { cn, preloadImage } from '@/lib/utils'
+import { useAppContext } from '@/context/use-app-context'
 
 let imageVersion = Date.now()
 
@@ -18,8 +19,11 @@ const GameOver = ({
   hideBlood?: boolean
   show: boolean
 }) => {
+  // TODO: NOT USE CONTEXT
+  const { playAudio } = useAppContext()
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(images.gameover)
+  const [runAnimation, setRunAnimation] = useState(false)
 
   const handleClick = () => {
     onClick()
@@ -30,6 +34,7 @@ const GameOver = ({
       return
     }
 
+    setRunAnimation(false)
     setImage(`${images.gameover}?v=${imageVersion++}`)
   }, [show])
 
@@ -49,13 +54,43 @@ const GameOver = ({
       return
     }
 
+    let isUnmounted = false
     setDisabled(true)
-    const TIME_ANIMATION = 1100
-    const timeoutId = setTimeout(() => setDisabled(false), TIME_ANIMATION)
-    return () => {
-      clearTimeout(timeoutId)
+
+    const runAnimation = async () => {
+      const drumBeatAudio = await playAudio('drumbeat', false)
+      const audio = await playAudio('gunshot')
+
+      setRunAnimation(true)
+
+      audio.addEventListener(
+        'ended',
+        async () => {
+          if (isUnmounted) {
+            return
+          }
+          await drumBeatAudio.play()
+        },
+        { once: true },
+      )
+
+      drumBeatAudio.addEventListener(
+        'ended',
+        () => {
+          if (isUnmounted) {
+            return
+          }
+          setDisabled(false)
+        },
+        { once: true },
+      )
     }
-  }, [show])
+    runAnimation()
+
+    return () => {
+      isUnmounted = true
+    }
+  }, [show, playAudio])
 
   useEffect(() => {
     preloadImage(image)
@@ -66,29 +101,45 @@ const GameOver = ({
       className={cn(
         'fill-mode-both absolute inset-0 z-50 hidden duration-200',
         !disabled && 'cursor-pointer',
-        show && 'flex',
+        show && runAnimation && 'flex',
       )}
       onClick={handleClick}
       disabled={disabled}
     >
+      {image && (
+        <div
+          className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-800 duration-0 lg:bg-bottom'
+          style={{
+            backgroundImage: `url(${image})`,
+          }}
+        ></div>
+      )}
       <div
-        className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-800 duration-0 lg:bg-bottom'
-        style={{
-          backgroundImage: `url(${image})`,
-        }}
-      ></div>
-      <div
-        className='animate-in fade-in fill-mode-both absolute inset-0 bg-cover bg-center delay-800 duration-100'
+        className={cn(
+          'absolute inset-0 bg-cover bg-center',
+          'animate-in fade-in fill-mode-both duration-100',
+          image && 'delay-800',
+        )}
         style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
         <div
-          className='animate-in fade-in fill-mode-both w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center text-5xl text-transparent uppercase delay-900 duration-100 select-none'
+          className={cn(
+            'w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center text-5xl text-transparent uppercase select-none',
+            'animate-in fade-in fill-mode-both duration-100',
+            image && 'delay-900',
+            !image && 'delay-100',
+          )}
           style={{ backgroundImage: `url(${images.you})` }}
         >
           You
         </div>
         <div
-          className='animate-in fade-in fill-mode-both uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent delay-1000 duration-100 select-none'
+          className={cn(
+            'uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent select-none',
+            'animate-in fade-in fill-mode-both duration-100',
+            image && 'delay-1000',
+            !image && 'delay-200',
+          )}
           style={{ backgroundImage: `url(${images.died})` }}
         >
           Died
