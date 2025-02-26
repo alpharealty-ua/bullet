@@ -8,6 +8,7 @@ import { Solo } from '@/components/solo'
 import { Audios } from '@/components/audios'
 import { Home } from '@/components/home'
 import { Watch } from '@/components/watch'
+import { Cover } from './components/cover'
 
 const App = () => {
   usePreloadImages()
@@ -23,9 +24,12 @@ const App = () => {
             <Audios />
             <Routes>
               <Route index element={<Home />} />
-              <Route path='/solo' element={<Solo />} />
-              <Route path='/duel' element={<Watch format='duel' />} />
-              <Route path='/watch' element={<Watch format='watch' />} />
+              <Route path='/solo' element={<Cover format='solo' />} />
+              <Route path='/solo/play' element={<Solo />} />
+              <Route path='/solo/watch' element={<Solo />} />
+              <Route path='/duel' element={<Cover format='duel' />} />
+              <Route path='/duel/play' element={<Watch format='duel' />} />
+              <Route path='/duel/watch' element={<Watch format='watch' />} />
             </Routes>
           </NiceModal.Provider>
         </AppProvider>
