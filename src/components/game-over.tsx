@@ -12,12 +12,14 @@ const GameOver = ({
   timeout,
   hideBlood,
   show,
+  hasImage = true,
 }: {
   onClick: () => void
   onTimeout: () => void
   timeout: number
   hideBlood?: boolean
   show: boolean
+  hasImage?: boolean
 }) => {
   // TODO: NOT USE CONTEXT
   const { playAudio } = useAppContext()
@@ -59,17 +61,28 @@ const GameOver = ({
 
     const runAnimation = async () => {
       const drumBeatAudio = await playAudio('drumbeat', false)
-      const audio = await playAudio('gunshot')
+      const gunShotAudio = await playAudio('gunshot', false)
 
-      setRunAnimation(true)
-
-      audio.addEventListener(
+      gunShotAudio.addEventListener(
         'ended',
         async () => {
           if (isUnmounted) {
             return
           }
+
           await drumBeatAudio.play()
+        },
+        { once: true },
+      )
+
+      gunShotAudio.addEventListener(
+        'play',
+        async () => {
+          if (isUnmounted) {
+            return
+          }
+
+          setRunAnimation(true)
         },
         { once: true },
       )
@@ -80,21 +93,33 @@ const GameOver = ({
           if (isUnmounted) {
             return
           }
+
           setDisabled(false)
         },
         { once: true },
       )
+
+      if (hasImage) {
+        await gunShotAudio.play()
+      } else {
+        gunShotAudio.dispatchEvent(new Event('started'))
+        gunShotAudio.dispatchEvent(new Event('ended'))
+      }
     }
     runAnimation()
 
     return () => {
       isUnmounted = true
     }
-  }, [show, playAudio])
+  }, [show, playAudio, hasImage])
 
   useEffect(() => {
+    if (!hasImage) {
+      return
+    }
+
     preloadImage(image)
-  }, [image])
+  }, [image, hasImage])
 
   return (
     <button
@@ -106,7 +131,7 @@ const GameOver = ({
       onClick={handleClick}
       disabled={disabled}
     >
-      {image && (
+      {hasImage && (
         <div
           className='animate-out fade-out fill-mode-both absolute inset-0 flex items-end bg-[center_calc(100%+60px)] bg-no-repeat delay-800 duration-0 lg:bg-bottom'
           style={{
@@ -118,7 +143,7 @@ const GameOver = ({
         className={cn(
           'absolute inset-0 bg-cover bg-center',
           'animate-in fade-in fill-mode-both duration-100',
-          image && 'delay-800',
+          hasImage && 'delay-800',
         )}
         style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
@@ -126,8 +151,8 @@ const GameOver = ({
           className={cn(
             'w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center text-5xl text-transparent uppercase select-none',
             'animate-in fade-in fill-mode-both duration-100',
-            image && 'delay-900',
-            !image && 'delay-100',
+            hasImage && 'delay-900',
+            !hasImage && 'delay-100',
           )}
           style={{ backgroundImage: `url(${images.you})` }}
         >
@@ -137,8 +162,8 @@ const GameOver = ({
           className={cn(
             'uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent select-none',
             'animate-in fade-in fill-mode-both duration-100',
-            image && 'delay-1000',
-            !image && 'delay-200',
+            hasImage && 'delay-1000',
+            !hasImage && 'delay-200',
           )}
           style={{ backgroundImage: `url(${images.died})` }}
         >
