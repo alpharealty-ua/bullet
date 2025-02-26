@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Button as ButtonWithAudio } from '@/components/ui/button'
 
 interface Props {
   state: State
