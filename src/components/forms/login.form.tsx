@@ -1,7 +1,10 @@
-import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router'
 
+import { useLogin } from '@/api/auth.api'
+import { ROUTES } from '@/routes/path'
 import { loginSchema, LoginSchema } from '@/lib/schemas/login.schema'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,28 +19,21 @@ import {
 } from '@/components/ui/form'
 
 export const Login = () => {
-  const [isPending] = useTransition()
+  const queryClient = useQueryClient()
+  const { mutateAsync: loginMutation, error, isPending } = useLogin(queryClient)
+  const navigate = useNavigate()
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: import.meta.env.BULLET_TEST_LOGIN,
-      password: import.meta.env.BULLET_TEST_PASSWORD,
+      email: import.meta.env.BULLET_TEST_LOGIN ?? '',
+      password: import.meta.env.BULLET_TEST_PASSWORD ?? '',
     },
   })
 
   const onSubmit = async (values: LoginSchema) => {
-    console.log(values)
-
-    fetch('https://api-dev.bullet.game/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values),
-    }).catch((e) => {
-      console.log(e)
-    })
+    await loginMutation(values)
+    navigate(ROUTES.index)
   }
 
   return (
@@ -85,6 +81,11 @@ export const Login = () => {
             )}
           />
           <Button text='Login' type='submit' />
+          {error && (
+            <div className='text-red-500'>
+              An error has occurred: {error.message}
+            </div>
+          )}
         </form>
       </Form>
     </div>

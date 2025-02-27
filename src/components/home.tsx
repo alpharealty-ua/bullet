@@ -5,10 +5,12 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 import { Rules } from './rules'
 import { ROUTES } from '@/routes/path'
+import { useProfile } from '@/api/auth.api'
 
 const Home = () => {
   const nagigate = useNavigate()
   const modal = useCustomModal()
+  const { data } = useProfile()
 
   const handleSoloButton = async () => {
     nagigate(ROUTES.solo.index)
@@ -33,12 +35,10 @@ const Home = () => {
     nagigate(ROUTES.resiter)
   }
 
-  const isLogin = false
-
   return (
     <div className='relative flex grow-1 flex-col items-center justify-center gap-10 px-3 py-12'>
       <Logo to='/' size='xl' />
-      {isLogin ? (
+      {data ? (
         <div className='flex flex-col items-center justify-center gap-6'>
           <ButtonWithAudio
             image='duel'
