@@ -21,8 +21,8 @@ export const Login = () => {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: import.meta.env.BULLET_TEST_LOGIN,
+      password: import.meta.env.BULLET_TEST_PASSWORD,
     },
   })
 
