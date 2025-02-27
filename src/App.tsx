@@ -1,23 +1,10 @@
-import { Navigate, Outlet, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 
-import { Providers } from '@/providers'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
-
-type ProtectedRouteProps = {
-  isLogin: boolean
-  children?: React.ReactNode
-}
-
-const ProtectedRoute = ({ isLogin, children }: ProtectedRouteProps) => {
-  if (isLogin) {
-    return children ?? <Outlet />
-  }
-
-  return <Navigate to='/' replace />
-}
+import { ProtectedRoute } from '@/routes/protected-route'
 
 const App = () => {
   usePreloadImages()
