@@ -37,7 +37,7 @@ const Debug = (props: Props) => {
     localStorage.removeItem('endTime')
   }
 
-  if (!localStorage.getItem('showDebug') === true) {
+  if (!localStorage.getItem('showDebug')) {
     return null
   }
 
