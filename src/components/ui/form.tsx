@@ -171,7 +171,7 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
         type={showPassword ? 'text' : 'password'}
         afterSlot={
           <button
-            className='text-green absolute top-1/2 right-6 -translate-y-1/2'
+            className='absolute top-1/2 right-4 -translate-y-1/2 text-black'
             onMouseUp={handleMouseUpPassword}
             onMouseDown={handleMouseDownPassword}
             type='button'

@@ -41,7 +41,8 @@ export const Login = () => {
   }
 
   return (
-    <div className='relative flex grow-1 flex-col items-center justify-center p-10'>
+    <div className='relative flex grow-1 flex-col items-center justify-center gap-3 p-10'>
+      <h3 className='text-5xl'>Login</h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -83,7 +84,7 @@ export const Login = () => {
               </FormItem>
             )}
           />
-          <Button type='submit' text='submit' />
+          <Button text='Login' type='submit' />
         </form>
       </Form>
     </div>
