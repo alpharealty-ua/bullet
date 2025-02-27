@@ -1,14 +1,24 @@
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router'
 import NiceModal from '@ebay/nice-modal-react'
 
 import { AppProvider } from '@/context/app-provider'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { images } from '@/lib/constants'
-import { Solo } from '@/components/solo'
 import { Audios } from '@/components/audios'
-import { Home } from '@/components/home'
-import { Duel } from '@/components/duel'
-import { Cover } from '@/components/cover'
+import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
+
+type ProtectedRouteProps = {
+  isLogin: boolean
+  children?: React.ReactNode
+}
+
+const ProtectedRoute = ({ isLogin, children }: ProtectedRouteProps) => {
+  if (isLogin) {
+    return children ?? <Outlet />
+  }
+
+  return <Navigate to='/' replace />
+}
 
 const App = () => {
   usePreloadImages()
@@ -23,13 +33,14 @@ const App = () => {
           <NiceModal.Provider>
             <Audios />
             <Routes>
-              <Route index element={<Home />} />
-              <Route path='/solo' element={<Cover format='solo' />} />
-              <Route path='/solo/play' element={<Solo variant='play' />} />
-              <Route path='/solo/watch' element={<Solo variant='watch' />} />
-              <Route path='/duel' element={<Cover format='duel' />} />
-              <Route path='/duel/play' element={<Duel variant='play' />} />
-              <Route path='/duel/watch' element={<Duel variant='watch' />} />
+              {PUBLIC_ROUTES.map(({ path, element }, i) => (
+                <Route key={i} path={path} element={element} />
+              ))}
+              <Route element={<ProtectedRoute isLogin={false} />}>
+                {PRIVATE_ROUTES.map(({ path, element }, i) => (
+                  <Route key={i} path={path} element={element} />
+                ))}
+              </Route>
             </Routes>
           </NiceModal.Provider>
         </AppProvider>
