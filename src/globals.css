@@ -70,27 +70,23 @@
   font-style: normal;
 }
 
-html,
-body {
-  min-height: 100vh;
-}
+@layer base {
+  html,
+  body {
+    @apply min-h-screen;
+  }
 
-body {
-  display: flex;
-}
+  body {
+    @apply font-bullet-official flex leading-[1.3] text-black uppercase;
+  }
 
-#root {
-  flex-grow: 1;
-}
+  #root {
+    @apply grow-1;
+  }
 
-body {
-  font-family: BulletOfficial;
-  line-height: 1.3;
-  text-transform: uppercase;
-}
-
-img {
-  max-width: 100%;
+  img {
+    @apply max-w-full;
+  }
 }
 
 @layer components {
