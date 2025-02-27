@@ -1,8 +1,8 @@
 import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
+import { loginSchema, LoginSchema } from '@/lib/schemas/login.schema'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -14,21 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-
-const loginSchema = z.object({
-  email: z
-    .string({ required_error: 'Email is required' })
-    .min(1, 'Email is required')
-    .email('Invalid email'),
-  password: z
-    .string({ required_error: 'Password is required' })
-    .min(1, 'Password is required')
-    .min(8, 'Password must be more than 8 characters')
-    .max(32, 'Password must be less than 32 characters'),
-  code: z.string().optional(),
-})
-
-type LoginSchema = z.infer<typeof loginSchema>
 
 export const Login = () => {
   const [isPending] = useTransition()
