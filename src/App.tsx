@@ -6,11 +6,11 @@ import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
 import { ProtectedRoute } from '@/routes/protected-route'
-import { useProfile } from '@/api/auth.api'
+import { useUser } from '@/api/auth.api'
 import { AppProvider } from '@/context/app-provider'
 
 const App = () => {
-  const { data } = useProfile()
+  const user = useUser()
   usePreloadImages()
 
   return (
@@ -25,7 +25,7 @@ const App = () => {
             {PUBLIC_ROUTES.map(({ path, element }, i) => (
               <Route key={i} path={path} element={element} />
             ))}
-            <Route element={<ProtectedRoute isAuth={Boolean(data)} />}>
+            <Route element={<ProtectedRoute isAuth={Boolean(user)} />}>
               {PRIVATE_ROUTES.map(({ path, element }, i) => (
                 <Route key={i} path={path} element={element} />
               ))}

@@ -1,54 +1,66 @@
+import { useEffect } from 'react'
+import axios from 'axios'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
 import { LoginSchema } from '@/lib/schemas/login.schema'
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
+import { api } from '@/api/api'
+import { QUERY_KEY } from '@/lib/constants'
+import { getToken, saveToken } from '@/lib/localstorage'
 
 interface ILoginResponse {
   accessToken: string
   user: User
 }
 
-type User = {
-  id: string
-  email: string
-  name: string
-  status: 'ACTIVE'
-  username: string
+export const login = async (values: LoginSchema) => {
+  try {
+    const { data } = await api.post<ILoginResponse>('auth/login', values)
+    return data
+  } catch (e) {
+    if (axios.isAxiosError(e) && e.response && e.response.data) {
+      throw new Error(e.response.data.message)
+    }
+    throw e
+  }
 }
 
-const login = async (values: LoginSchema) => {
-  const { accessToken } = (await fetch('/api/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(values),
-  }).then((response) => response.json())) as ILoginResponse
+export const useLogin = () => {
+  const queryClient = useQueryClient()
 
-  localStorage.setItem('accessToken', accessToken)
-}
-
-interface IProfileResponse {
-  accessToken: string
-  user: User
-}
-
-const fetchProfile = async () => {
-  const accessToken = localStorage.getItem('accessToken')
-
-  return fetch('/api/auth/profile', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  }).then((response) => response.json()) as Promise<IProfileResponse>
-}
-
-export const useLogin = (queryClient: QueryClient) =>
-  useMutation({
+  return useMutation({
     mutationFn: login,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] }),
+    onSuccess: ({ accessToken }) => {
+      saveToken(accessToken)
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
   })
+}
 
-export const useProfile = () =>
-  useQuery({
-    queryKey: ['profile'],
+export const fetchProfile = async (): Promise<User | null> => {
+  const accessToken = getToken()
+
+  if (!accessToken) {
+    return null
+  }
+
+  const { data, status } = await api.get<User>('/auth/profile')
+
+  if (!(status === 200)) {
+    throw new Error('Failed on get user request')
+  }
+
+  return data
+}
+
+export const useUser = () => {
+  const { data: user, isError } = useQuery({
+    queryKey: [QUERY_KEY.profile],
     queryFn: fetchProfile,
   })
+
+  useEffect(() => {
+    isError
+  })
+
+  return user ?? null
+}

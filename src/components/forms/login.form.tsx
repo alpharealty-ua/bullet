@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
 import { useLogin } from '@/api/auth.api'
@@ -19,8 +18,7 @@ import {
 } from '@/components/ui/form'
 
 export const Login = () => {
-  const queryClient = useQueryClient()
-  const { mutateAsync: loginMutation, error, isPending } = useLogin(queryClient)
+  const { mutateAsync: loginMutation, error, isPending } = useLogin()
   const navigate = useNavigate()
 
   const form = useForm<LoginSchema>({
@@ -82,9 +80,7 @@ export const Login = () => {
           />
           <Button text='Login' type='submit' />
           {error && (
-            <div className='text-red-500'>
-              An error has occurred: {error.message}
-            </div>
+            <div className='text-center text-red-500'>{error.message}</div>
           )}
         </form>
       </Form>

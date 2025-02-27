@@ -1,3 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query'
+
+import { removeToken } from '@/lib/localstorage'
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
@@ -28,6 +31,7 @@ const Debug = (props: Props) => {
     activeMultiplierIndex,
     setActiveMultiplierIndex,
   } = props
+  const queryClient = useQueryClient()
 
   const handleSetState = (s: State) => {
     setState(s)
@@ -35,6 +39,11 @@ const Debug = (props: Props) => {
 
   const handleResetAddMoney = () => {
     localStorage.removeItem('endTime')
+  }
+
+  const handleLogout = async () => {
+    removeToken()
+    await queryClient.setQueryData(['profile'], null)
   }
 
   if (!localStorage.getItem('showDebug')) {
@@ -46,6 +55,11 @@ const Debug = (props: Props) => {
       <h1 className='text-xs'>
         Current state - <strong className='block'>{state}</strong>
       </h1>
+      <ButtonWithAudio
+        text='Logout'
+        className='text-base'
+        onClick={handleLogout}
+      />
       <ButtonWithAudio
         text='Reset add money'
         className='text-base'

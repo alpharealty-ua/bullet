@@ -123,3 +123,7 @@ export const LANGUAGE_LIST = [
 ] as const
 
 export type Language = (typeof LANGUAGE_LIST)[number]['language']
+
+export const QUERY_KEY = {
+  profile: 'profile',
+}

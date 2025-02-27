@@ -1,16 +1,16 @@
 import { useNavigate } from 'react-router'
 
+import { useUser } from '@/api/auth.api'
+import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 import { Rules } from './rules'
-import { ROUTES } from '@/routes/path'
-import { useProfile } from '@/api/auth.api'
 
 const Home = () => {
   const nagigate = useNavigate()
   const modal = useCustomModal()
-  const { data } = useProfile()
+  const user = useUser()
 
   const handleSoloButton = async () => {
     nagigate(ROUTES.solo.index)
@@ -25,7 +25,6 @@ const Home = () => {
       contentSlot: <Rules />,
     })
   }
-  handleSoloButton
 
   const handleLoginClick = () => {
     nagigate(ROUTES.login)
@@ -38,7 +37,7 @@ const Home = () => {
   return (
     <div className='relative flex grow-1 flex-col items-center justify-center gap-10 px-3 py-12'>
       <Logo to='/' size='xl' />
-      {data ? (
+      {user ? (
         <div className='flex flex-col items-center justify-center gap-6'>
           <ButtonWithAudio
             image='duel'
