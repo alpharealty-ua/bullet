@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/postcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/react-query": "^5.66.9",
     "@types/react-transition-group": "^4.4.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -1,7 +1,6 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router'
-import NiceModal from '@ebay/nice-modal-react'
+import { Navigate, Outlet, Route, Routes } from 'react-router'
 
-import { AppProvider } from '@/context/app-provider'
+import { Providers } from '@/providers'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
@@ -28,23 +27,19 @@ const App = () => {
       className='relative mx-auto flex h-full min-h-[600px] max-w-[405px] translate-0 flex-col justify-between bg-cover bg-[right_center] lg:min-h-[733px]'
       style={{ backgroundImage: `url(${images.wrapper})` }}
     >
-      <BrowserRouter>
-        <AppProvider>
-          <NiceModal.Provider>
-            <Audios />
-            <Routes>
-              {PUBLIC_ROUTES.map(({ path, element }, i) => (
-                <Route key={i} path={path} element={element} />
-              ))}
-              <Route element={<ProtectedRoute isLogin={false} />}>
-                {PRIVATE_ROUTES.map(({ path, element }, i) => (
-                  <Route key={i} path={path} element={element} />
-                ))}
-              </Route>
-            </Routes>
-          </NiceModal.Provider>
-        </AppProvider>
-      </BrowserRouter>
+      <Providers>
+        <Audios />
+        <Routes>
+          {PUBLIC_ROUTES.map(({ path, element }, i) => (
+            <Route key={i} path={path} element={element} />
+          ))}
+          <Route element={<ProtectedRoute isLogin={false} />}>
+            {PRIVATE_ROUTES.map(({ path, element }, i) => (
+              <Route key={i} path={path} element={element} />
+            ))}
+          </Route>
+        </Routes>
+      </Providers>
     </div>
   )
 }
