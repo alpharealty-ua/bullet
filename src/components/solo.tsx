@@ -31,8 +31,6 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
     revolverRefHandle,
   } = useAppContext()
   const { data: balance } = useBalance()
-  // TODO: REMOVE
-  const disabled = false
 
   const nodeRef = useRef(null)
   const modal = useCustomModal()
@@ -72,7 +70,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       <div className='relative mt-auto'>
         <Revolver
           gunHandleRef={revolverRefHandle}
-          disabled={disabled || !(state === 'preparation')}
+          disabled={!(state === 'preparation')}
           beforeSlot={<>{showClick && <Click />}</>}
           className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
         />
@@ -103,7 +101,6 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
                     )}
                   >
                     <ButtonWithAudio
-                      disabled={disabled}
                       className='w-24'
                       image='deal'
                       onClick={handleDeal}
@@ -116,7 +113,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
           <div className='relative'>
             <Helper image='startgame' show={showHelpers && bet > 0} />
             <ButtonWithAudio
-              disabled={disabled || bet === 0}
+              disabled={bet === 0}
               className='w-24'
               image='pull'
               onClick={handlePull}
