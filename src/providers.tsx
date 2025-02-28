@@ -7,6 +7,7 @@ import 'react-toastify/ReactToastify.css'
 
 import { AppProvider } from '@/context/app-provider'
 import { images } from '@/lib/constants'
+import { Audios } from '@/components/audios'
 
 const queryClient = new QueryClient()
 
@@ -24,7 +25,10 @@ export function Providers({
           style={{ backgroundImage: `url(${images.wrapper})` }}
         >
           <AppProvider>
-            <NiceModal.Provider>{children}</NiceModal.Provider>
+            <NiceModal.Provider>
+              <Audios />
+              {children}
+            </NiceModal.Provider>
           </AppProvider>
         </div>
       </BrowserRouter>
