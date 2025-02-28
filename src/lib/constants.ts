@@ -82,7 +82,7 @@ export const audios = {
 
 export const audiosEntries = Object.entries(audios)
 
-export const INIT_BALANCE = 1000
+export const INIT_BALANCE = 0
 
 export const MAX_BET = 1000
 
@@ -123,7 +123,3 @@ export const LANGUAGE_LIST = [
 ] as const
 
 export type Language = (typeof LANGUAGE_LIST)[number]['language']
-
-export const QUERY_KEY = {
-  profile: 'profile',
-}

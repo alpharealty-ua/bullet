@@ -5,6 +5,11 @@ import { ENV } from '@/lib/env'
 
 const { API_URL } = ENV
 
+export const QUERY_KEYS = {
+  profile: 'profile',
+  balance: 'balance',
+}
+
 export const api = axios.create({
   baseURL: API_URL,
   withCredentials: false,
