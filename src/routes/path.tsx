@@ -1,5 +1,9 @@
 export const ROUTES = {
   index: '/',
+  auth: {
+    resiter: '/resiter',
+    login: '/login',
+  },
   solo: {
     index: '/solo',
     play: '/solo/play',
@@ -10,7 +14,4 @@ export const ROUTES = {
     play: '/duel/play',
     watch: '/duel/watch',
   },
-  // TODO: ADD AUTH
-  resiter: '/resiter',
-  login: '/login',
 } as const

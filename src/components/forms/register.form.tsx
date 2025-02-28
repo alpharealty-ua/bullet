@@ -41,7 +41,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (values: RegisterSchema) => {
     await registerMutation(values)
-    setTimeout(() => navigate(ROUTES.login), 1000)
+    setTimeout(() => navigate(ROUTES.auth.login), 1000)
   }
 
   return (

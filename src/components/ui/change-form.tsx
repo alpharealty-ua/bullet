@@ -9,7 +9,7 @@ const ChangeForm = ({ type }: { type: 'login' | 'register' }) => {
         {isLogin ? "Don't have an account yet?" : 'Already have an account?'}
       </span>
       <Link
-        to={isLogin ? ROUTES.resiter : ROUTES.login}
+        to={isLogin ? ROUTES.auth.resiter : ROUTES.auth.login}
         className='text-primary'
       >
         {isLogin ? 'Sign up' : ' Sign in'}

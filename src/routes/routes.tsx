@@ -12,11 +12,11 @@ export const PUBLIC_ROUTES = [
     element: <Home />,
   },
   {
-    path: ROUTES.login,
+    path: ROUTES.auth.login,
     element: <LoginPage />,
   },
   {
-    path: ROUTES.resiter,
+    path: ROUTES.auth.resiter,
     element: <RegisterPage />,
   },
 ]

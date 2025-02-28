@@ -27,11 +27,11 @@ const Home = () => {
   }
 
   const handleLoginClick = () => {
-    nagigate(ROUTES.login)
+    nagigate(ROUTES.auth.login)
   }
 
   const handleRegisterClick = () => {
-    nagigate(ROUTES.resiter)
+    nagigate(ROUTES.auth.resiter)
   }
 
   return (
