@@ -6,11 +6,12 @@ import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
 import { ProtectedRoute } from '@/routes/protected-route'
-import { useUser } from '@/api/auth.api'
+import { useProfile } from '@/api/auth.api'
 import { AppProvider } from '@/context/app-provider'
+import { Loading } from '@/components/loading'
 
 const App = () => {
-  const user = useUser()
+  const { data: user, isLoading } = useProfile()
   usePreloadImages()
 
   return (
@@ -21,16 +22,20 @@ const App = () => {
       <AppProvider>
         <NiceModal.Provider>
           <Audios />
-          <Routes>
-            {PUBLIC_ROUTES.map(({ path, element }, i) => (
-              <Route key={i} path={path} element={element} />
-            ))}
-            <Route element={<ProtectedRoute isAuth={Boolean(user)} />}>
-              {PRIVATE_ROUTES.map(({ path, element }, i) => (
+          {isLoading ? (
+            <Loading className='absolute inset-0' />
+          ) : (
+            <Routes>
+              {PUBLIC_ROUTES.map(({ path, element }, i) => (
                 <Route key={i} path={path} element={element} />
               ))}
-            </Route>
-          </Routes>
+              <Route element={<ProtectedRoute isAuth={Boolean(user)} />}>
+                {PRIVATE_ROUTES.map(({ path, element }, i) => (
+                  <Route key={i} path={path} element={element} />
+                ))}
+              </Route>
+            </Routes>
+          )}
         </NiceModal.Provider>
       </AppProvider>
     </div>
