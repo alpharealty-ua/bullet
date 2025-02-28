@@ -1,14 +1,16 @@
 import { useProfile } from '@/api/auth.api'
+import { useBalance } from '@/api/wallet.api'
 import { Loading } from '@/components/loading'
 
-const AuthMiddleare = ({ children }: { children: React.ReactElement }) => {
-  const { isLoading } = useProfile()
+const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
+  const { isLoading: profileIsLoading, data: user } = useProfile()
+  const { isLoading: balanceIsLoading } = useBalance(Boolean(user))
 
-  if (isLoading) {
+  if (profileIsLoading || balanceIsLoading) {
     return <Loading className='absolute inset-0' />
   }
 
   return children
 }
 
-export { AuthMiddleare }
+export { AuthMiddleware }

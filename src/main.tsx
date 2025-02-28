@@ -3,15 +3,15 @@ import { createRoot } from 'react-dom/client'
 
 import App from '@/App.tsx'
 import { Providers } from '@/providers'
-import { AuthMiddleare } from '@/middleware/auth.middleware'
+import { AuthMiddleware } from '@/middleware/auth.middleware'
 import './globals.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Providers>
-      <AuthMiddleare>
+      <AuthMiddleware>
         <App />
-      </AuthMiddleare>
+      </AuthMiddleware>
     </Providers>
   </StrictMode>,
 )

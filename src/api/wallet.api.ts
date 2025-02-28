@@ -1,5 +1,4 @@
 import { api, QUERY_KEYS } from '@/api/api'
-import { getToken } from '@/lib/localstorage'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface FetchBalanceResponse {
