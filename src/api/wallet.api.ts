@@ -1,5 +1,6 @@
 import { api, QUERY_KEYS } from '@/api/api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useProfile } from './auth.api'
 
 interface FetchBalanceResponse {
   balance: {
@@ -13,6 +14,14 @@ interface AddBalanceResponse {
   amount: string
 }
 
+interface AddBalancePayload {
+  userId: string
+  networkId: string
+  coinId: string
+  amount: string
+  description: string
+}
+
 const routes = {
   balance: '/wallet/balance',
   addBalance: '/wallet/add-balance',
@@ -24,15 +33,12 @@ export const fetchBalance = async (): Promise<FetchBalanceResponse> => {
 }
 
 export const addBalance = async (
-  amount: number,
+  payload: AddBalancePayload,
 ): Promise<AddBalanceResponse> => {
-  const { data } = await api.post<AddBalanceResponse>(routes.addBalance, {
-    userId: 'cm7eddum70000o601x9syudxe',
-    networkId: 'local',
-    coinId: 'usd',
-    amount: String(amount),
-    description: 'TEST BALANCE',
-  })
+  const { data } = await api.post<AddBalanceResponse>(
+    routes.addBalance,
+    payload,
+  )
   return data
 }
 
@@ -42,17 +48,28 @@ export const useBalance = (enabled = true) => {
     queryKey: [QUERY_KEYS.balance],
     queryFn: fetchBalance,
     select: (data) => Number(data.balance.amount),
-    // placeholderData: { balance: { amount: '0', formattedAmount: '0' } },
-    // initialData: { balance: { amount: '0', formattedAmount: '0' } },
   })
   return { ...data, data: data.data ?? 0 }
 }
 
 export const useAddBalance = () => {
   const queryClient = useQueryClient()
+  const { data: profile } = useProfile()
 
   return useMutation({
-    mutationFn: addBalance,
+    mutationFn: async (amount: number) => {
+      if (!profile) {
+        return
+      }
+
+      return addBalance({
+        userId: profile.id,
+        networkId: 'local',
+        coinId: 'usd',
+        amount: String(amount),
+        description: 'TEST BALANCE',
+      })
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     },
