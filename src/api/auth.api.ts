@@ -11,31 +11,31 @@ interface LoginResponse {
   user: User
 }
 
-const authRoutes = {
-  login: '/auth/login',
-  register: '/auth/register',
-  profile: '/auth/profile',
-}
-
-export const login = async (values: LoginSchema): Promise<LoginResponse> => {
-  const { data } = await api.post<LoginResponse>(authRoutes.login, values)
-  return data
-}
-
 interface RegisterResponse {
   accessToken: string
   user: User
 }
 
+const routes = {
+  login: '/auth/login',
+  register: '/auth/register',
+  profile: '/auth/profile',
+} as const
+
+export const login = async (values: LoginSchema): Promise<LoginResponse> => {
+  const { data } = await api.post<LoginResponse>(routes.login, values)
+  return data
+}
+
 export const register = async (
   values: RegisterSchema,
 ): Promise<LoginResponse> => {
-  const { data } = await api.post<RegisterResponse>(authRoutes.register, values)
+  const { data } = await api.post<RegisterResponse>(routes.register, values)
   return data
 }
 
 export const fetchProfile = async (): Promise<User> => {
-  const { data } = await api.get<User>(authRoutes.profile)
+  const { data } = await api.get<User>(routes.profile)
   return data
 }
 
