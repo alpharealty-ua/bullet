@@ -19,7 +19,6 @@ const authRoutes = {
 
 export const login = async (values: LoginSchema): Promise<LoginResponse> => {
   const { data } = await api.post<LoginResponse>(authRoutes.login, values)
-  saveToken(data.accessToken)
   return data
 }
 
@@ -45,7 +44,8 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: ({ accessToken }) => {
+      saveToken(accessToken)
       queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
   })
