@@ -1,5 +1,6 @@
 import { api, QUERY_KEYS } from '@/api/api'
-import { useQuery } from '@tanstack/react-query'
+import { getToken } from '@/lib/localstorage'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface FetchBalanceResponse {
   balance: {
@@ -23,21 +24,38 @@ export const fetchBalance = async (): Promise<FetchBalanceResponse> => {
   return data
 }
 
-export const addBalance = async (): Promise<AddBalanceResponse> => {
+export const addBalance = async (
+  amount: number,
+): Promise<AddBalanceResponse> => {
   const { data } = await api.post<AddBalanceResponse>(routes.addBalance, {
     userId: 'cm7eddum70000o601x9syudxe',
     networkId: 'local',
     coinId: 'usd',
-    amount: '100',
+    amount: String(amount),
     description: 'TEST BALANCE',
   })
   return data
 }
 
-export const useBalance = () =>
-  useQuery({
+export const useBalance = (enabled = true) => {
+  const data = useQuery({
+    enabled,
     queryKey: [QUERY_KEYS.balance],
     queryFn: fetchBalance,
     select: (data) => Number(data.balance.amount),
-    initialData: { balance: { amount: '0', formattedAmount: '0' } },
+    // placeholderData: { balance: { amount: '0', formattedAmount: '0' } },
+    // initialData: { balance: { amount: '0', formattedAmount: '0' } },
   })
+  return { ...data, data: data.data ?? 0 }
+}
+
+export const useAddBalance = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: addBalance,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+    },
+  })
+}

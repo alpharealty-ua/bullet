@@ -1,5 +1,6 @@
 import React, { useCallback, useReducer, useRef, useState } from 'react'
 
+import { useAddBalance } from '@/api/wallet.api'
 import { AppContext } from '@/context/context'
 import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
@@ -38,6 +39,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }>(null)
   const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
+  const { mutateAsync: addBalanceMutation } = useAddBalance()
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -108,10 +110,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     [],
   )
 
-  const addBalance = useCallback((payload: number) => {
-    dispatch({ type: 'add-balance', payload })
-  }, [])
-
   const setBet = useCallback((payload: number) => {
     dispatch({ type: 'set-bet', payload })
   }, [])
@@ -165,7 +163,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const deal = async () => {
     if (offer > 0) {
       await playAudio('chaching')
-      addBalance(offer + bet)
+      await addBalanceMutation(offer + bet)
       setOffer(0)
       addRank(2)
     }
@@ -195,7 +193,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (state === 'preparation') {
       changeState('running')
       setShowJackpot(false)
-      addBalance(-bet)
+      await addBalanceMutation(-bet)
       await getMultiplier()
       setOffer(0)
       setShowJackpot(true)
@@ -261,7 +259,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     changeState('win')
     addRank(5)
     // TODO: REMOVE 1000. ONLY FOR TEST
-    addBalance(jackpot || 1000)
+    await addBalanceMutation(jackpot || 1000)
 
     const winSoundAudio = await playAudio('winsound', false)
     const chachingAudio = await playAudio('chaching')
@@ -300,7 +298,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         rank,
         countBullet,
         balance,
-        addBalance,
         bet,
         setBet,
         activeMultiplierIndex,

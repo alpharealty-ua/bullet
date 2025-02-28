@@ -8,7 +8,7 @@ const { API_URL } = ENV
 export const QUERY_KEYS = {
   profile: 'profile',
   balance: 'balance',
-}
+} as const
 
 export const api = axios.create({
   baseURL: API_URL,

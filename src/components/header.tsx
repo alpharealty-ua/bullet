@@ -13,12 +13,12 @@ export const Header = ({
   hideBalance?: boolean
 }) => {
   const { state } = useAppContext()
-  const { data: balance, isLoading, isFetching } = useBalance()
+  const { data: balance, isLoading } = useBalance()
 
   return (
     <header className='flex items-center justify-between px-3 py-2'>
       <Logo to='/' text={logoText} />
-      {!hideBalance && !(isLoading || isFetching) && (
+      {!hideBalance && !isLoading && (
         <BalanceWithDelay
           hasDelay={state === 'win'}
           value={balance}

@@ -8,7 +8,6 @@ interface ContextAppValue {
   rank: number
   countBullet: number
   balance: number
-  addBalance: React.Dispatch<number>
   bet: number
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number

@@ -1,21 +1,12 @@
 import { AddMoney } from './add-money'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { addBalance, useBalance } from '@/api/wallet.api'
-import { QUERY_KEYS } from '@/api/api'
+import { useAddBalance, useBalance } from '@/api/wallet.api'
 
 export const AddMoneyModal = () => {
-  const queryClient = useQueryClient()
   const { data: balance } = useBalance()
-
-  const { mutateAsync: addBalanceMutation } = useMutation({
-    mutationFn: addBalance,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-    },
-  })
+  const { mutateAsync: addBalanceMutation } = useAddBalance()
 
   const handleAddMoney = async () => {
-    await addBalanceMutation()
+    await addBalanceMutation(100)
   }
 
   return <AddMoney balance={balance} onAddMoney={handleAddMoney} />

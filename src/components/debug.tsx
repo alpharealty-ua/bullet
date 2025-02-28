@@ -4,6 +4,7 @@ import { removeToken } from '@/lib/localstorage'
 import { State, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
+import { QUERY_KEYS } from '@/api/api'
 
 interface Props {
   state: State
@@ -43,7 +44,7 @@ const Debug = (props: Props) => {
 
   const handleLogout = async () => {
     removeToken()
-    await queryClient.setQueryData(['profile'], null)
+    await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 
   if (!localStorage.getItem('showDebug')) {

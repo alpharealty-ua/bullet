@@ -45,7 +45,7 @@ export const useLogin = () => {
     mutationFn: login,
     onSuccess: ({ accessToken }) => {
       saveToken(accessToken)
-      queryClient.invalidateQueries({ queryKey: ['profile'] })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.profile] })
     },
   })
 }
