@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
-import axios from 'axios'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { LoginSchema } from '@/lib/schemas/login.schema'
 import { api } from '@/api/api'
@@ -12,16 +11,15 @@ interface ILoginResponse {
   user: User
 }
 
-export const login = async (values: LoginSchema) => {
-  try {
-    const { data } = await api.post<ILoginResponse>('auth/login', values)
-    return data
-  } catch (e) {
-    if (axios.isAxiosError(e) && e.response && e.response.data) {
-      throw new Error(e.response.data.message)
-    }
-    throw e
-  }
+export const login = async (values: LoginSchema): Promise<ILoginResponse> => {
+  const { data } = await api.post<ILoginResponse>('auth/login', values)
+  saveToken(data.accessToken)
+  return data
+}
+
+export const fetchProfile = async (): Promise<User | null> => {
+  const { data } = await api.get<User>('/auth/profile')
+  return data
 }
 
 export const useLogin = () => {
@@ -29,38 +27,18 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: login,
-    onSuccess: ({ accessToken }) => {
-      saveToken(accessToken)
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+    onError: (error) => {
+      toast.error(error.message)
     },
   })
 }
 
-export const fetchProfile = async (): Promise<User | null> => {
-  const accessToken = getToken()
-
-  if (!accessToken) {
-    return null
-  }
-
-  const { data, status } = await api.get<User>('/auth/profile')
-
-  if (!(status === 200)) {
-    throw new Error('Failed on get user request')
-  }
-
-  return data
-}
-
-export const useUser = () => {
-  const { data: user, isError } = useQuery({
+export const useProfile = () =>
+  useQuery({
+    enabled: Boolean(getToken()),
     queryKey: [QUERY_KEY.profile],
     queryFn: fetchProfile,
   })
-
-  useEffect(() => {
-    isError
-  })
-
-  return user ?? null
-}
