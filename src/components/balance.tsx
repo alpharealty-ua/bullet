@@ -1,3 +1,4 @@
+import { ComponentProps, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
@@ -51,4 +52,34 @@ const Balance = ({
   )
 }
 
-export { Balance }
+const BalanceWithDelay = ({
+  hasDelay,
+  value,
+  ...props
+}: ComponentProps<typeof Balance> & { hasDelay: boolean }) => {
+  const [balanceWithDelay, setBalanceWithDelay] = useState(value)
+
+  useEffect(() => {
+    if (value === balanceWithDelay) {
+      return
+    }
+
+    const changeBalance = () => setBalanceWithDelay(value)
+
+    if (!hasDelay) {
+      changeBalance()
+      return
+    }
+
+    // TODO: ADD SUBSCRIPT WINSOUND
+    const timeoutID = setTimeout(changeBalance, 1000)
+
+    return () => {
+      clearTimeout(timeoutID)
+    }
+  }, [value, hasDelay, balanceWithDelay])
+
+  return <Balance {...props} value={balanceWithDelay} />
+}
+
+export { Balance, BalanceWithDelay }

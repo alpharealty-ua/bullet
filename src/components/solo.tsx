@@ -14,11 +14,11 @@ import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
 import { ButtonWithAudio } from './ui/button-with-audio'
+import { useBalance } from '@/api/wallet.api'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
     state,
-    balance,
     bet,
     showHelpers,
     settings,
@@ -30,6 +30,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
     game,
     revolverRefHandle,
   } = useAppContext()
+  const { data: balance } = useBalance()
   // TODO: REMOVE
   const disabled = false
 

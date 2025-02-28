@@ -4,8 +4,11 @@ import { ButtonProps } from '@/components/ui/button'
 import { AddMoneyModal } from './add-money-modal'
 import { useAppContext } from '@/context/use-app-context'
 
-const MoneyBagButton = (props: ButtonProps) => {
-  const { balance, bet, state } = useAppContext()
+const MoneyBagButton = ({
+  balance,
+  ...props
+}: ButtonProps & { balance: number }) => {
+  const { bet, state } = useAppContext()
   const modal = useCustomModal()
   /* TODO: ADD FLAG NO_MONEY  */
   const noMoney = state === 'preparation' && !(balance > 0 || bet > 0)

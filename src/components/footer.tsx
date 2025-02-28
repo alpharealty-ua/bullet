@@ -15,6 +15,7 @@ import { Settings } from './settings'
 import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
+import { useBalance } from '@/api/wallet.api'
 
 const Footer = ({
   format,
@@ -26,13 +27,13 @@ const Footer = ({
   const {
     countBullet,
     activeMultiplierIndex,
-    balance,
     bet,
     setBet,
     state,
     showHelpers,
     rank,
   } = useAppContext()
+  const { data: balance } = useBalance()
   const modal = useCustomModal()
   const footerWithBg = format === 'solo' || variant === 'watch'
   // TODO: MOVE MAX BET TO CONTEXT
@@ -140,7 +141,7 @@ const Footer = ({
         </div>
         {format === 'duel' && variant === 'play' && (
           <div className='py-1 pl-2'>
-            <MoneyBagButton className='w-4' />
+            <MoneyBagButton balance={balance} className='w-4' />
           </div>
         )}
       </div>
