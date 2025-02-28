@@ -4,8 +4,8 @@ import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from './logo'
-import { Rules } from './rules'
+import { Logo } from '../components/logo'
+import { Rules } from '../components/rules'
 
 const Home = () => {
   const nagigate = useNavigate()

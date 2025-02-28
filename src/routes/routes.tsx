@@ -1,9 +1,10 @@
 import { ROUTES } from './path'
-import { Home } from '@/components/home'
+import { Home } from '@/pages/home.page'
+import { LoginPage } from '@/pages/login.page'
+import { RegisterPage } from '@/pages/register.page'
 import { Solo } from '@/components/solo'
 import { Cover } from '@/components/cover'
 import { Duel } from '@/components/duel'
-import { Login } from '@/components/forms/login.form'
 
 export const PUBLIC_ROUTES = [
   {
@@ -12,11 +13,11 @@ export const PUBLIC_ROUTES = [
   },
   {
     path: ROUTES.login,
-    element: <Login />,
+    element: <LoginPage />,
   },
   {
     path: ROUTES.resiter,
-    element: <Login />,
+    element: <RegisterPage />,
   },
 ]
 
