@@ -1,12 +1,14 @@
+import { useProfile } from '@/api/auth.api'
 import { Navigate, Outlet } from 'react-router'
 
 type ProtectedRouteProps = {
-  isAuth: boolean
   children?: React.ReactNode
 }
 
-export const ProtectedRoute = ({ isAuth, children }: ProtectedRouteProps) => {
-  if (isAuth) {
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { data: user } = useProfile()
+
+  if (user) {
     return children ?? <Outlet />
   }
 
