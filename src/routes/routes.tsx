@@ -31,6 +31,10 @@ export const PRIVATE_ROUTES = [
     element: <Solo variant='play' />,
   },
   {
+    path: `${ROUTES.solo.play}/:gameId`,
+    element: <Solo variant='play' />,
+  },
+  {
     path: ROUTES.solo.watch,
     element: <Solo variant='watch' />,
   },

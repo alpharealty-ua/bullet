@@ -1,6 +1,10 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { CSSTransition } from 'react-transition-group'
+import { useNavigate, useParams } from 'react-router'
 
+import { useBalance } from '@/api/wallet.api'
+import { useAllGames, useGameDetails } from '@/api/game.api'
+import { ROUTES } from '@/routes/path'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
@@ -14,12 +18,9 @@ import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
 import { ButtonWithAudio } from './ui/button-with-audio'
-import { useBalance } from '@/api/wallet.api'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
-    state,
-    bet,
     showHelpers,
     settings,
     offer,
@@ -27,20 +28,28 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
     showJackpot,
     showClick,
     jackpot,
-    game,
+    next,
+    deal,
     revolverRefHandle,
+    bet: betClient,
   } = useAppContext()
   const { data: balance } = useBalance()
+  const { data: gameDetails } = useGameDetails()
+  const { data: allGames = [] } = useAllGames()
+  const { gameId } = useParams<{ gameId: string }>()
+  const isStartedGame = Boolean(gameId)
+  const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
+  const navigate = useNavigate()
 
   const nodeRef = useRef(null)
   const modal = useCustomModal()
 
   const handlePull = async () => {
-    await game.next('solo')
+    await next('solo', gameId)
   }
 
   const handleDeal = async () => {
-    await game.deal()
+    await deal()
   }
 
   const handleAddMoney = async () => {
@@ -48,6 +57,13 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       contentSlot: <AddMoneyModal />,
     })
   }
+
+  useEffect(() => {
+    const activeGame = allGames.find((game) => game.status === 'ACTIVE')
+    if (activeGame) {
+      navigate(`${ROUTES.solo.play}/${activeGame.id}`)
+    }
+  }, [allGames, navigate])
 
   return (
     <>
@@ -62,7 +78,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
         price={offer}
         open={showOffer && Boolean(offer)}
       />
-      {state === 'preparation' && !(balance > 0 || bet > 0) && (
+      {isStartedGame && !(balance > 0 || bet > 0) && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
@@ -70,7 +86,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       <div className='relative mt-auto'>
         <Revolver
           gunHandleRef={revolverRefHandle}
-          disabled={!(state === 'preparation')}
+          disabled={!isStartedGame}
           beforeSlot={<>{showClick && <Click />}</>}
           className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
         />
@@ -111,7 +127,10 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
             </CSSTransition>
           </div>
           <div className='relative'>
-            <Helper image='startgame' show={showHelpers && bet > 0} />
+            <Helper
+              image='startgame'
+              show={showHelpers && bet > 0 && !isStartedGame}
+            />
             <ButtonWithAudio
               disabled={bet === 0}
               className='w-24'

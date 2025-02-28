@@ -1,5 +1,6 @@
 import React, { useCallback, useReducer, useRef, useState } from 'react'
 
+import { useGamePull, useStartGame } from '@/api/game.api'
 import { useAddBalance } from '@/api/wallet.api'
 import { AppContext } from '@/context/context'
 import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
@@ -40,6 +41,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
   const { mutateAsync: addBalanceMutation } = useAddBalance()
+  const { mutateAsync: startGameMutation } = useStartGame()
+  const { mutateAsync: gamePullMutation } = useGamePull()
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -170,27 +173,32 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     newGame()
   }
 
-  const next = async (format: FormatGame) => {
+  const next = async (format: FormatGame, gameId?: string) => {
     if (disabledRef.current) {
       return
     }
 
     disabledRef.current = true
 
-    if (format === 'solo') {
-      await nextSolo()
-    } else {
-      await nextDeal()
+    try {
+      if (format === 'solo') {
+        await nextSolo(gameId)
+      } else {
+        await nextDeal()
+      }
+    } catch (e) {
+      console.log(e)
     }
 
     disabledRef.current = false
   }
 
-  const nextSolo = async () => {
+  const nextSolo = async (gameId?: string) => {
     setShowHelpers(false)
     setShowOffer(false)
 
-    if (state === 'preparation') {
+    if (!gameId) {
+      await startGameMutation({ betAmount: '10' })
       changeState('running')
       setShowJackpot(false)
       await addBalanceMutation(-bet)
@@ -198,7 +206,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       setOffer(0)
       setShowJackpot(true)
 
-      disabledRef.current = false
       return
     }
 
@@ -208,17 +215,15 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
+    const { success, position } = await gamePullMutation(gameId)
     setOffer(0)
     setShowJackpot(true)
     setShowOffer(false)
 
-    const random = randomIntFromInterval(1, 6)
-    const newCountBullet = countBullet - 1
+    const isGameOver = !success
+    const isWin = !isGameOver && position === 5
 
-    const isGameOver = random === 1
-    const isWin = !isGameOver && newCountBullet === 0
-
-    setCountBullet(newCountBullet)
+    setCountBullet(5 - position)
     setShowClick(false)
 
     await playAudio('triggerpull')
@@ -284,12 +289,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
-  const game = {
-    deal,
-    newGame,
-    next,
-  }
-
   return (
     <AppContext.Provider
       value={{
@@ -313,7 +312,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         playAudio,
         jackpot,
         revolverRefHandle,
-        game,
+        deal,
+        next,
       }}
     >
       <Debug
@@ -328,7 +328,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           setBet,
           activeMultiplierIndex,
           setActiveMultiplierIndex,
-          game,
         }}
       />
       {children}

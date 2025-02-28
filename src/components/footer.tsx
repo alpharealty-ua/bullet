@@ -1,3 +1,7 @@
+import { useParams } from 'react-router'
+
+import { useBalance } from '@/api/wallet.api'
+import { useGameDetails } from '@/api/game.api'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
@@ -15,7 +19,6 @@ import { Settings } from './settings'
 import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
-import { useBalance } from '@/api/wallet.api'
 
 const Footer = ({
   format,
@@ -27,21 +30,22 @@ const Footer = ({
   const {
     countBullet,
     activeMultiplierIndex,
-    bet,
+    bet: betClient,
     setBet,
-    state,
     showHelpers,
     rank,
   } = useAppContext()
   const { data: balance } = useBalance()
+  const { data: gameDetails } = useGameDetails()
+  const { gameId } = useParams<{ gameId: string }>()
+  const isStartedGame = Boolean(gameId)
+  const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
+
   const modal = useCustomModal()
   const footerWithBg = format === 'solo' || variant === 'watch'
   // TODO: MOVE MAX BET TO CONTEXT
-  const maxBet = Math.min(
-    state === 'running' ? bet + balance : balance,
-    MAX_BET,
-  )
-  const betDisabled = (state === 'running' && bet > 0) || balance === 0
+  const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
+  const betDisabled = isStartedGame
 
   const handleSettings = () => {
     modal.show({ contentSlot: <Settings /> })
@@ -64,7 +68,10 @@ const Footer = ({
           </div>
           {format === 'solo' && (
             <>
-              <Helper image='wagehere' show={showHelpers && bet === 0} />
+              <Helper
+                image='wagehere'
+                show={showHelpers && bet === 0 && !isStartedGame}
+              />
               <Bet
                 disabled={betDisabled}
                 maxBet={maxBet}

@@ -8,6 +8,8 @@ const { API_URL } = ENV
 export const QUERY_KEYS = {
   profile: 'profile',
   balance: 'balance',
+  allGames: 'allGames',
+  gameDetails: 'gameDetails',
 } as const
 
 export const api = axios.create({

@@ -25,11 +25,8 @@ interface ContextAppValue {
   showJackpot: boolean
   showClick: boolean
   jackpot: number
-  game: {
-    next: (format: FormatGame) => Promise<void>
-    newGame: () => Promise<void>
-    deal: () => Promise<void>
-  }
+  next: (format: FormatGame, gameId?: string) => Promise<void>
+  deal: () => Promise<void>
   revolverRefHandle: React.RefObject<{
     spin: (duration?: number) => Promise<void>
   }>

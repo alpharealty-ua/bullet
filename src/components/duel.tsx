@@ -14,7 +14,7 @@ import { ReadySetPull } from './ready-set-pull'
 import { GameOver } from './game-over'
 
 const Duel = ({ variant }: { variant: VariantGame }) => {
-  const { characterIndex, game, state } = useAppContext()
+  const { characterIndex, state, next } = useAppContext()
   const startGame = state === 'running'
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !startGame || showPlayerInfo
@@ -30,12 +30,12 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
       await gunHandleRef.current?.spin()
       gunHandleRef.current?.shot()
       setTimeout(async () => {
-        await game.next('duel')
+        await next('duel')
         gunHandleRef.current?.shot()
       }, 700)
       return
     }
-    game.next('duel')
+    next('duel')
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
