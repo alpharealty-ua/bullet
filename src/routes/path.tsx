@@ -10,6 +10,7 @@ export const ROUTES = {
     play: '/duel/play',
     watch: '/duel/watch',
   },
+  // TODO: ADD AUTH
   resiter: '/resiter',
   login: '/login',
 } as const

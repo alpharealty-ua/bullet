@@ -1,23 +1,35 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
 
 import { LoginSchema } from '@/lib/schemas/login.schema'
 import { api } from '@/api/api'
 import { QUERY_KEY } from '@/lib/constants'
 import { getToken, saveToken } from '@/lib/localstorage'
+import { RegisterSchema } from '@/lib/schemas/register.schema'
 
-interface ILoginResponse {
+interface LoginResponse {
   accessToken: string
   user: User
 }
 
-export const login = async (values: LoginSchema): Promise<ILoginResponse> => {
-  const { data } = await api.post<ILoginResponse>('auth/login', values)
+export const login = async (values: LoginSchema): Promise<LoginResponse> => {
+  const { data } = await api.post<LoginResponse>('/auth/login', values)
   saveToken(data.accessToken)
   return data
 }
 
-export const fetchProfile = async (): Promise<User | null> => {
+interface RegisterResponse {
+  accessToken: string
+  user: User
+}
+
+export const register = async (
+  values: RegisterSchema,
+): Promise<LoginResponse> => {
+  const { data } = await api.post<RegisterResponse>('/auth/register', values)
+  return data
+}
+
+export const fetchProfile = async (): Promise<User> => {
   const { data } = await api.get<User>('/auth/profile')
   return data
 }
@@ -30,9 +42,12 @@ export const useLogin = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
-    onError: (error) => {
-      toast.error(error.message)
-    },
+  })
+}
+
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: register,
   })
 }
 
