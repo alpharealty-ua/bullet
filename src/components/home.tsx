@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 
-import { useUser } from '@/api/auth.api'
+import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -10,7 +10,7 @@ import { Rules } from './rules'
 const Home = () => {
   const nagigate = useNavigate()
   const modal = useCustomModal()
-  const user = useUser()
+  const { data: user } = useProfile()
 
   const handleSoloButton = async () => {
     nagigate(ROUTES.solo.index)
