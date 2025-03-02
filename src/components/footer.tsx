@@ -148,7 +148,11 @@ const Footer = ({
         </div>
         {format === 'duel' && variant === 'play' && (
           <div className='py-1 pl-2'>
-            <MoneyBagButton balance={balance} className='w-4' />
+            <MoneyBagButton
+              className='w-4'
+              balance={balance}
+              isStartedGame={isStartedGame}
+            />
           </div>
         )}
       </div>

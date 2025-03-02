@@ -1,3 +1,6 @@
+import { useParams } from 'react-router'
+
+import { useBalance } from '@/api/wallet.api'
 import { useAppContext } from '@/context/use-app-context'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { Logo } from './logo'
@@ -13,6 +16,8 @@ export const Header = ({
 }) => {
   const { state } = useAppContext()
   const { data: balance, isLoading } = useBalance()
+  const { gameId } = useParams<{ gameId: string }>()
+  const isStartedGame = Boolean(gameId)
 
   return (
     <header className='flex items-center justify-between px-3 py-2'>
@@ -22,7 +27,9 @@ export const Header = ({
           hasDelay={state === 'win'}
           value={balance}
           increaseTime={state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined}
-          beforeSlot={<MoneyBagButton balance={balance} />}
+          beforeSlot={
+            <MoneyBagButton balance={balance} isStartedGame={isStartedGame} />
+          }
         />
       )}
     </header>

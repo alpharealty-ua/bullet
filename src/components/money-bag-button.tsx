@@ -6,12 +6,13 @@ import { useAppContext } from '@/context/use-app-context'
 
 const MoneyBagButton = ({
   balance,
+  isStartedGame,
   ...props
-}: ButtonProps & { balance: number }) => {
-  const { bet, state } = useAppContext()
+}: ButtonProps & { balance: number; isStartedGame: boolean }) => {
+  const { bet } = useAppContext()
   const modal = useCustomModal()
   /* TODO: ADD FLAG NO_MONEY  */
-  const noMoney = state === 'preparation' && !(balance > 0 || bet > 0)
+  const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
 
   const handleAddMoney = async () => {
     modal.show({
