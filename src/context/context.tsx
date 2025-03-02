@@ -1,17 +1,15 @@
 import React from 'react'
 
 import { audios, FormatGame, SettingsKeys, State } from '@/lib/constants'
+import { GunHandle } from '@/components/revolver'
 
 interface ContextAppValue {
   state: State
   changeState: React.Dispatch<State>
-  rank: number
   countBullet: number
-  balance: number
   bet: number
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number
-  showHelpers: boolean
   settings: Record<SettingsKeys, boolean>
   changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   characterIndex: number
@@ -21,15 +19,10 @@ interface ContextAppValue {
     play?: boolean,
   ) => Promise<HTMLAudioElement>
   offer: number
-  showOffer: boolean
-  showJackpot: boolean
-  showClick: boolean
   jackpot: number
   next: (format: FormatGame, gameId?: string) => Promise<void>
   deal: () => Promise<void>
-  revolverRefHandle: React.RefObject<{
-    spin: (duration?: number) => Promise<void>
-  }>
+  revolverRefHandle: React.RefObject<GunHandle>
 }
 
 export const AppContext = React.createContext<ContextAppValue | null>(null)

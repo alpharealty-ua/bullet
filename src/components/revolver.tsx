@@ -1,22 +1,30 @@
-import React, { useEffect, useImperativeHandle, useRef } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react'
+import mergeRefs from 'merge-refs'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import mergeRefs from 'merge-refs'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
 const MAX_ADD_SPEED = 100
 const MAX_SPEED = 100
 
+export type GunHandle = {
+  spin: (duration?: number) => Promise<void>
+  click: () => void
+}
+
 const Revolver = React.forwardRef<
   HTMLDivElement,
   React.HtmlHTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
     disabled: boolean
-    gunHandleRef?: React.ForwardedRef<{
-      spin: (duration?: number) => Promise<void>
-    }>
+    gunHandleRef: React.ForwardedRef<GunHandle>
   }
 >(({ beforeSlot, disabled, className, gunHandleRef, ...props }, ref) => {
   const gunRef = useRef<HTMLDivElement>(null)
@@ -194,7 +202,7 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
-  const spin = async (duration = 200): Promise<void> => {
+  const spin = useCallback(async (duration = 200): Promise<void> => {
     const gunDom = gunRef.current
 
     if (gunDom === null) {
@@ -224,11 +232,32 @@ const Revolver = React.forwardRef<
       chamberRotateDom.style.transitionDuration = `${duration}ms`
       chamberRotateDom.addEventListener('transitionend', transitionend)
     })
-  }
+  }, [])
+
+  const click = useCallback(() => {
+    const gunDom = gunRef.current
+    if (gunDom === null) {
+      return
+    }
+
+    const clicks = gunDom.querySelectorAll('[data-click]')
+
+    clicks.forEach((click) => {
+      click.classList.add('animate-click')
+      click.addEventListener(
+        'animationend',
+        () => {
+          click.classList.remove('animate-click')
+        },
+        { once: true },
+      )
+    })
+  }, [])
 
   useImperativeHandle(gunHandleRef, () => {
     return {
       spin,
+      click,
     }
   })
 
@@ -238,7 +267,18 @@ const Revolver = React.forwardRef<
       className={cn('relative mx-auto aspect-[1/1.881] w-50', className)}
       {...props}
     >
-      {beforeSlot}
+      <div
+        className='absolute top-[65px] left-[-50px] -rotate-[45deg] text-[32px] font-bold tracking-wide opacity-0'
+        data-click
+      >
+        click!
+      </div>
+      <div
+        className='absolute top-[65px] right-[-45px] rotate-[45deg] text-[32px] font-bold tracking-wider opacity-0'
+        data-click
+      >
+        click!
+      </div>
       <div className='absolute inset-0 overflow-hidden'>
         <div
           className={cn(

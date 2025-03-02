@@ -84,9 +84,6 @@ export const useStartGame = () => {
 
   return useMutation({
     mutationFn: startGame,
-    onSuccess: ({ gameId }) => {
-      navigate(`${ROUTES.solo.play}/${gameId}`)
-    },
     onError: (error) => {
       if (
         axios.isAxiosError(error) &&

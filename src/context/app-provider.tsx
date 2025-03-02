@@ -1,7 +1,9 @@
 import React, { useCallback, useReducer, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { useGamePull, useStartGame } from '@/api/game.api'
-import { useAddBalance } from '@/api/wallet.api'
+import { useAddBalance, useBalance } from '@/api/wallet.api'
+import { ROUTES } from '@/routes/path'
 import { AppContext } from '@/context/context'
 import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
@@ -14,43 +16,34 @@ import {
 } from '@/lib/constants'
 import { Debug } from '@/components/debug'
 import { appReducer, initState } from './app-reducer'
+import { GunHandle } from '@/components/revolver'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [
     {
       countBullet,
       state,
-      rank,
-      balance,
       bet,
       activeMultiplierIndex,
+      // TODO: USE ZUSTAND
       settings,
-      showHelpers,
     },
     dispatch,
   ] = useReducer(appReducer, initState)
   // TODO: MOVE TO REDUCER
   const [offer, setOffer] = useState(0)
-  const [showJackpot, setShowJackpot] = useState(false)
-  const [showOffer, setShowOffer] = useState(false)
-  const [showClick, setShowClick] = useState(false)
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
-  const revolverRefHandle = useRef<{
-    spin: (duration?: number) => Promise<void>
-  }>(null)
+  const revolverRefHandle = useRef<GunHandle>(null)
   const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
   const { mutateAsync: addBalanceMutation } = useAddBalance()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { mutateAsync: gamePullMutation } = useGamePull()
+  const { data: balance } = useBalance()
+  const navigate = useNavigate()
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
-  }, [])
-
-  // @ts-ignore
-  const undoState = useCallback(() => {
-    dispatch({ type: 'undo-state' })
   }, [])
 
   const playAudio = useCallback(
@@ -86,24 +79,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     [settings],
   )
 
-  const addRank = useCallback((payload: number) => {
-    dispatch({ type: 'add-rank', payload })
-  }, [])
-
   const setCountBullet = useCallback((payload: number) => {
     dispatch({ type: 'set-bullet', payload })
   }, [])
 
-  const setBalance = useCallback((payload: number) => {
-    dispatch({ type: 'set-balance', payload })
-  }, [])
-
   const setActiveMultiplierIndex = useCallback((payload: number) => {
     dispatch({ type: 'set-multiplier-index', payload })
-  }, [])
-
-  const setShowHelpers = useCallback((payload: boolean) => {
-    dispatch({ type: 'set-show-helpers', payload })
   }, [])
 
   const changeSettings = useCallback(
@@ -127,8 +108,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setOffer(0)
     setCountBullet(5)
     setActiveMultiplierIndex(-1)
-    setShowJackpot(false)
-    setShowOffer(false)
   }
 
   const getMultiplier = async (): Promise<number> => {
@@ -168,7 +147,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       await playAudio('chaching')
       await addBalanceMutation(offer + bet)
       setOffer(0)
-      addRank(2)
     }
     newGame()
   }
@@ -194,17 +172,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const nextSolo = async (gameId?: string) => {
-    setShowHelpers(false)
-    setShowOffer(false)
-
     if (!gameId) {
-      await startGameMutation({ betAmount: '10' })
+      const { gameId } = await startGameMutation({ betAmount: '10' })
       changeState('running')
-      setShowJackpot(false)
       await addBalanceMutation(-bet)
       await getMultiplier()
+      navigate(`${ROUTES.solo.play}/${gameId}`)
       setOffer(0)
-      setShowJackpot(true)
 
       return
     }
@@ -217,19 +191,15 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     const { success, position } = await gamePullMutation(gameId)
     setOffer(0)
-    setShowJackpot(true)
-    setShowOffer(false)
 
     const isGameOver = !success
     const isWin = !isGameOver && position === 5
 
     setCountBullet(5 - position)
-    setShowClick(false)
 
     await playAudio('triggerpull')
     await revolverHandle.spin()
-
-    setShowClick(true)
+    await revolverHandle.click()
 
     if (isGameOver) {
       await gameOver()
@@ -241,7 +211,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
     if (!settings.declineAllDeals) {
       setOffer(100)
-      setShowOffer(true)
     }
   }
 
@@ -257,12 +226,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const gameOver = async () => {
     changeState('game-over')
-    addRank(3)
   }
 
   const winGame = async () => {
     changeState('win')
-    addRank(5)
     // TODO: REMOVE 1000. ONLY FOR TEST
     await addBalanceMutation(jackpot || 1000)
 
@@ -294,21 +261,15 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         state,
         changeState,
-        rank,
         countBullet,
-        balance,
         bet,
         setBet,
         activeMultiplierIndex,
-        showHelpers,
         characterIndex,
         setCharacterIndex,
         settings,
         changeSettings,
         offer,
-        showJackpot,
-        showOffer,
-        showClick,
         playAudio,
         jackpot,
         revolverRefHandle,
@@ -321,11 +282,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           state,
           changeState,
           balance,
-          setBalance,
           countBullet,
           setCountBullet,
-          bet,
-          setBet,
           activeMultiplierIndex,
           setActiveMultiplierIndex,
         }}

@@ -9,12 +9,8 @@ import { QUERY_KEYS } from '@/api/api'
 interface Props {
   state: State
   changeState: React.Dispatch<State>
-  balance: number
-  setBalance: React.Dispatch<number>
   countBullet: number
   setCountBullet: React.Dispatch<number>
-  bet: number
-  setBet: React.Dispatch<number>
   activeMultiplierIndex: number
   setActiveMultiplierIndex: React.Dispatch<number>
 }
@@ -25,10 +21,6 @@ const Debug = (props: Props) => {
     changeState: setState,
     countBullet,
     setCountBullet,
-    balance,
-    setBalance,
-    bet,
-    setBet,
     activeMultiplierIndex,
     setActiveMultiplierIndex,
   } = props
@@ -89,24 +81,7 @@ const Debug = (props: Props) => {
             ))}
           </select>
         </label>
-        <label>
-          <div className=''>Balance</div>
-          <input
-            type='text'
-            value={balance}
-            onChange={(e) => setBalance(Number(e.target.value))}
-            className='h-10 w-full bg-white px-2 uppercase'
-          />
-        </label>
-        <label>
-          <div className=''>Bet</div>
-          <input
-            type='number'
-            value={bet}
-            onChange={(e) => setBet(Number(e.target.value))}
-            className='h-10 w-full bg-white px-2 uppercase'
-          />
-        </label>
+
         <label>
           <div className=''>Multiplier</div>
           <select

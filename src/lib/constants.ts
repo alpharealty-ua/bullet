@@ -82,8 +82,6 @@ export const audios = {
 
 export const audiosEntries = Object.entries(audios)
 
-export const INIT_BALANCE = 0
-
 export const MAX_BET = 1000
 
 const TIME_WIN_AUDIO = 3500

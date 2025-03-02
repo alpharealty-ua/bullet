@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import { useNavigate, useParams } from 'react-router'
 
@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
 import { Result } from './result'
-import { Click } from './click'
 import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
@@ -21,18 +20,15 @@ import { ButtonWithAudio } from './ui/button-with-audio'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
-    showHelpers,
     settings,
     offer,
-    showOffer,
-    showJackpot,
-    showClick,
     jackpot,
     next,
     deal,
     revolverRefHandle,
     bet: betClient,
   } = useAppContext()
+  const [showHelpers, setShowHelpers] = useState(true)
   const { data: balance } = useBalance()
   const { data: gameDetails } = useGameDetails()
   const { data: allGames = [] } = useAllGames()
@@ -45,6 +41,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
   const modal = useCustomModal()
 
   const handlePull = async () => {
+    setShowHelpers(false)
     await next('solo', gameId)
   }
 
@@ -71,12 +68,12 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       <Result
         title={'Jackpot'}
         price={jackpot}
-        open={showJackpot && Boolean(jackpot)}
+        open={isStartedGame && Boolean(jackpot)}
       />
       <Result
         title={'the banker offers...'}
         price={offer}
-        open={showOffer && Boolean(offer)}
+        open={isStartedGame && Boolean(offer)}
       />
       {isStartedGame && !(balance > 0 || bet > 0) && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
@@ -87,7 +84,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
         <Revolver
           gunHandleRef={revolverRefHandle}
           disabled={!isStartedGame}
-          beforeSlot={<>{showClick && <Click />}</>}
+          beforeSlot={<>{}</>}
           className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
         />
         <div
@@ -99,7 +96,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
           <div className='relative'>
             <CSSTransition
               nodeRef={nodeRef}
-              in={showOffer}
+              in={isStartedGame && Boolean(offer)}
               unmountOnExit
               timeout={400}
             >
@@ -141,7 +138,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <GameOver />
-      <Footer format='solo' variant={variant} />
+      <Footer format='solo' variant={variant} showHelpers={showHelpers} />
     </>
   )
 }

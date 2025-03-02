@@ -23,17 +23,17 @@ import { MoneyBagButton } from './money-bag-button'
 const Footer = ({
   format,
   variant,
+  showHelpers = false,
 }: {
   format: FormatGame
   variant: VariantGame
+  showHelpers?: boolean
 }) => {
   const {
     countBullet,
     activeMultiplierIndex,
     bet: betClient,
     setBet,
-    showHelpers,
-    rank,
   } = useAppContext()
   const { data: balance } = useBalance()
   const { data: gameDetails } = useGameDetails()
@@ -101,7 +101,7 @@ const Footer = ({
       >
         {(format === 'solo' || variant === 'watch') && (
           <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
-            <Rank value={rank} />
+            <Rank value={30} />
             <Bullets countBullet={countBullet} />
           </div>
         )}
