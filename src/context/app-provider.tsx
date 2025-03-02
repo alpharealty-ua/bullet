@@ -6,14 +6,8 @@ import { useGameDetails, useGamePull, useStartGame } from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { AppContext } from '@/context/context'
-import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
-import {
-  FormatGame,
-  State,
-  audios,
-  getMultiplierValueByIndex,
-  multipliers,
-} from '@/lib/constants'
+import { randomIntFromInterval, wait } from '@/lib/utils'
+import { FormatGame, State, multipliers } from '@/lib/constants'
 import { Debug } from '@/components/debug'
 import { appReducer, initState } from './app-reducer'
 import { GunHandle } from '@/components/revolver'
@@ -23,10 +17,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     useReducer(appReducer, initState)
   // TODO: MOVE TO REDUCER
   const [offer, setOffer] = useState(0)
-  const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
   const revolverRefHandle = useRef<GunHandle>(null)
   const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
+  const { data: gameDetails } = useGameDetails()
   const { mutateAsync: addBalanceMutation } = useAddBalance()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { mutateAsync: gamePullMutation } = useGamePull()
@@ -34,6 +28,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const playAudio = useSettings(({ playAudio }) => playAudio)
   const declineAllDeals = useSettings(({ declineAllDeals }) => declineAllDeals)
   const navigate = useNavigate()
+
+  const jackpot = Number(gameDetails?.potentialWin ?? 0)
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
@@ -221,8 +217,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         characterIndex,
         setCharacterIndex,
         offer,
-        playAudio,
-        jackpot,
         revolverRefHandle,
         deal,
         next,

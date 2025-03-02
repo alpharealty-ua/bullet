@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { audios, FormatGame, SettingsKeys, State } from '@/lib/constants'
+import { FormatGame, State } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
 interface ContextAppValue {
@@ -13,7 +13,6 @@ interface ContextAppValue {
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
   offer: number
-  jackpot: number
   next: (format: FormatGame, gameId?: string) => Promise<void>
   deal: () => Promise<void>
   revolverRefHandle: React.RefObject<GunHandle>

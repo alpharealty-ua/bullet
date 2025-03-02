@@ -22,7 +22,6 @@ import { ButtonWithAudio } from './ui/button-with-audio'
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
     offer,
-    jackpot,
     next,
     deal,
     revolverRefHandle,
@@ -35,6 +34,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
   const { gameId } = useParams<{ gameId: string }>()
   const isStartedGame = Boolean(gameId)
   const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
+  const jackpot = Number(gameDetails?.potentialWin ?? 0)
   const navigate = useNavigate()
   const invertButtons = useSettings(({ invertButtons }) => invertButtons)
 

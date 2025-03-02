@@ -3,7 +3,6 @@ import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { Logo } from './logo'
 import { BalanceWithDelay } from './balance'
 import { MoneyBagButton } from './money-bag-button'
-import { useBalance } from '@/api/wallet.api'
 
 export const Header = ({
   logoText,
