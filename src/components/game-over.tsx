@@ -16,7 +16,8 @@ const GameOver = ({
   timeout?: number
   hasImage?: boolean
 }) => {
-  const { playAudio, state } = useAppContext()
+  const { state } = useAppContext()
+  const playAudio = useSettings(({ playAudio }) => playAudio)
   const blood = useSettings(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(images.gameover)

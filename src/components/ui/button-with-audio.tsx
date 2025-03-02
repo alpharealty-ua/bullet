@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
-import { useAppContext } from '@/context/use-app-context'
+import { useSettings } from '@/store/settings.store'
 import { Button, ButtonProps } from './button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ onClick, disabled, ...props }, ref) => {
-    const { playAudio } = useAppContext()
+    const playAudio = useSettings(({ playAudio }) => playAudio)
     const [startedAnimation, setStartedAnimation] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
 

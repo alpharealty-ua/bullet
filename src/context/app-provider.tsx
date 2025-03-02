@@ -1,7 +1,8 @@
 import React, { useCallback, useReducer, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useGamePull, useStartGame } from '@/api/game.api'
+import { useSettings } from '@/store/settings.store'
+import { useGameDetails, useGamePull, useStartGame } from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { AppContext } from '@/context/context'
@@ -18,17 +19,8 @@ import { appReducer, initState } from './app-reducer'
 import { GunHandle } from '@/components/revolver'
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const [
-    {
-      countBullet,
-      state,
-      bet,
-      activeMultiplierIndex,
-      // TODO: USE ZUSTAND
-      settings,
-    },
-    dispatch,
-  ] = useReducer(appReducer, initState)
+  const [{ countBullet, state, bet, activeMultiplierIndex }, dispatch] =
+    useReducer(appReducer, initState)
   // TODO: MOVE TO REDUCER
   const [offer, setOffer] = useState(0)
   const jackpot = bet * getMultiplierValueByIndex(activeMultiplierIndex)
@@ -39,44 +31,13 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const { mutateAsync: startGameMutation } = useStartGame()
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
+  const playAudio = useSettings(({ playAudio }) => playAudio)
+  const declineAllDeals = useSettings(({ declineAllDeals }) => declineAllDeals)
   const navigate = useNavigate()
 
   const changeState = useCallback((payload: State) => {
     dispatch({ type: 'change-state', payload })
   }, [])
-
-  const playAudio = useCallback(
-    async (
-      key: keyof typeof audios,
-      play = true,
-    ): Promise<HTMLAudioElement> => {
-      const audio = getAudio(key)
-
-      // TODO: MOVE TO ADUIO
-      audio.addEventListener(
-        'ended',
-        () => {
-          console.log('Play audio - ' + audio.src)
-        },
-        { once: true },
-      )
-
-      try {
-        // TODO: MOVE TO ADUIO
-        audio.muted = !settings.soundEffects
-        if (play) {
-          await audio.play()
-        }
-
-        return audio
-      } catch (error) {
-        console.log(error)
-      }
-
-      return audio
-    },
-    [settings],
-  )
 
   const setCountBullet = useCallback((payload: number) => {
     dispatch({ type: 'set-bullet', payload })
@@ -201,7 +162,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       await winGame()
       return
     }
-    if (!settings.declineAllDeals) {
+    if (!declineAllDeals) {
       setOffer(100)
     }
   }

@@ -1,4 +1,4 @@
-import { State, SettingsKeys } from '@/lib/constants'
+import { State } from '@/lib/constants'
 
 interface SetBulletAction {
   type: 'set-bullet'
@@ -24,7 +24,6 @@ interface GameState {
   countBullet: number
   bet: number
   activeMultiplierIndex: number
-  settings: Record<SettingsKeys, boolean>
 }
 type Actions =
   | SetBulletAction
@@ -38,13 +37,6 @@ export const initState: GameState = {
   countBullet: 5,
   bet: 0,
   activeMultiplierIndex: -1,
-  settings: {
-    music: true,
-    soundEffects: true,
-    invertButtons: false,
-    blood: false,
-    declineAllDeals: false,
-  },
 }
 
 export const appReducer = (state: GameState, action: Actions): GameState => {

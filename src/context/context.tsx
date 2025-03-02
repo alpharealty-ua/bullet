@@ -12,10 +12,6 @@ interface ContextAppValue {
   activeMultiplierIndex: number
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
-  playAudio: (
-    key: keyof typeof audios,
-    play?: boolean,
-  ) => Promise<HTMLAudioElement>
   offer: number
   jackpot: number
   next: (format: FormatGame, gameId?: string) => Promise<void>
