@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { CSSTransition } from 'react-transition-group'
 import { useNavigate, useParams } from 'react-router'
 
 import { useBalance } from '@/api/wallet.api'
 import { useAllGames, useGameDetails } from '@/api/game.api'
 import { useSettings } from '@/store/settings.store'
-import { ROUTES } from '@/routes/path'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
@@ -17,7 +15,8 @@ import { Header } from './header'
 import { Footer } from './footer'
 import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
-import { ButtonWithAudio } from './ui/button-with-audio'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { AnimationInOut } from '@/components/animation-in-out'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
@@ -38,7 +37,6 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
   const invertButtons = useSettings(({ invertButtons }) => invertButtons)
 
-  const nodeRef = useRef(null)
   const modal = useCustomModal()
 
   const handlePull = async () => {
@@ -95,34 +93,21 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
           )}
         >
           <div className='relative'>
-            <CSSTransition
-              nodeRef={nodeRef}
+            <AnimationInOut
               in={isStartedGame && Boolean(offer)}
-              unmountOnExit
               timeout={400}
+              className={cn(
+                'zoom-in-50 zoom-out-50 mt-auto',
+                'data-open:delay-1200 data-open:duration-1000',
+                'data-close:duration-400',
+              )}
             >
-              {(state) => {
-                const open = state === 'entering' || state === 'entered'
-                const close = state === 'exiting' || state === 'exited'
-                return (
-                  <div
-                    ref={nodeRef}
-                    className={cn(
-                      'fill-mode-both relative mt-auto',
-                      open &&
-                        'animate-in fade-in zoom-in-50 delay-1200 duration-1000',
-                      close && 'animate-out fade-out zoom-out-50 duration-400',
-                    )}
-                  >
-                    <ButtonWithAudio
-                      className='w-24'
-                      image='deal'
-                      onClick={handleDeal}
-                    />
-                  </div>
-                )
-              }}
-            </CSSTransition>
+              <ButtonWithAudio
+                className='w-24'
+                image='deal'
+                onClick={handleDeal}
+              />
+            </AnimationInOut>
           </div>
           <div className='relative'>
             <Helper
