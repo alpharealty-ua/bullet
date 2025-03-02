@@ -18,10 +18,6 @@ interface SetMultiplierIndexAction {
   payload: number
 }
 
-interface ChangeSettingsAction {
-  type: 'change-settings'
-  payload: Partial<Record<SettingsKeys, boolean>>
-}
 interface GameState {
   stateHistory: State[]
   state: State
@@ -35,7 +31,6 @@ type Actions =
   | ChangeStateAction
   | SetBetAction
   | SetMultiplierIndexAction
-  | ChangeSettingsAction
 
 export const initState: GameState = {
   stateHistory: ['preparation'],
@@ -77,8 +72,6 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
       return { ...state, bet: payload }
     case 'set-multiplier-index':
       return { ...state, activeMultiplierIndex: payload }
-    case 'change-settings':
-      return { ...state, settings: { ...state.settings, ...payload } }
     default:
       return state
   }

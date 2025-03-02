@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import { useSettings } from '@/store/settings.store'
 import { images } from '@/lib/constants'
 import { cn, preloadImage } from '@/lib/utils'
 import { useAppContext } from '@/context/use-app-context'
@@ -15,12 +16,12 @@ const GameOver = ({
   timeout?: number
   hasImage?: boolean
 }) => {
-  const { playAudio, settings, state } = useAppContext()
+  const { playAudio, state } = useAppContext()
+  const blood = useSettings(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(images.gameover)
   const [runAnimation, setRunAnimation] = useState(false)
   const navigate = useNavigate()
-  const hideBlood = settings.blood
   const show = state === 'game-over'
 
   const handleClick = () => {
@@ -135,7 +136,7 @@ const GameOver = ({
           'animate-in fade-in fill-mode-both duration-100',
           hasImage && 'delay-800',
         )}
-        style={!hideBlood ? { backgroundImage: `url(${images.blood})` } : {}}
+        style={!blood ? { backgroundImage: `url(${images.blood})` } : {}}
       >
         <div
           className={cn(

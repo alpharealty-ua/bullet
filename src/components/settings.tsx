@@ -1,12 +1,12 @@
-import { useAppContext } from '@/context/use-app-context'
 import { settingsEntries, SettingsKeys } from '@/lib/constants'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useSettings } from '@/store/settings.store'
 
 const Settings = () => {
-  const { settings, changeSettings } = useAppContext()
+  const { change, ...settings } = useSettings()
 
   const handleChange = (name: SettingsKeys, value: boolean) => {
-    changeSettings({ [name]: value })
+    change({ [name]: value })
   }
 
   return (

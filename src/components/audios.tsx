@@ -1,8 +1,8 @@
-import { useAppContext } from '@/context/use-app-context'
+import { useSettings } from '@/store/settings.store'
 import { audiosEntries } from '@/lib/constants'
 
 const Audios = () => {
-  const { settings } = useAppContext()
+  const soundEffects = useSettings(({ soundEffects }) => soundEffects)
 
   return (
     <div id='audios' className='absolute'>
@@ -10,7 +10,7 @@ const Audios = () => {
         <audio
           key={i}
           src={src}
-          muted={settings.soundEffects}
+          muted={soundEffects}
           data-audio={`${key}`}
         ></audio>
       ))}

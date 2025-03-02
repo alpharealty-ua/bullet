@@ -10,8 +10,6 @@ interface ContextAppValue {
   bet: number
   setBet: React.Dispatch<number>
   activeMultiplierIndex: number
-  settings: Record<SettingsKeys, boolean>
-  changeSettings: React.Dispatch<Partial<Record<SettingsKeys, boolean>>>
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
   playAudio: (

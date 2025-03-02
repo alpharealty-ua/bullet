@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { useBalance } from '@/api/wallet.api'
 import { useAllGames, useGameDetails } from '@/api/game.api'
+import { useSettings } from '@/store/settings.store'
 import { ROUTES } from '@/routes/path'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
@@ -20,7 +21,6 @@ import { ButtonWithAudio } from './ui/button-with-audio'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const {
-    settings,
     offer,
     jackpot,
     next,
@@ -36,6 +36,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
   const isStartedGame = Boolean(gameId)
   const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
   const navigate = useNavigate()
+  const invertButtons = useSettings(({ invertButtons }) => invertButtons)
 
   const nodeRef = useRef(null)
   const modal = useCustomModal()
@@ -90,7 +91,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
         <div
           className={cn(
             'absolute right-0 bottom-4 left-0 flex items-center justify-between px-4',
-            settings.invertButtons && 'flex-row-reverse',
+            invertButtons && 'flex-row-reverse',
           )}
         >
           <div className='relative'>

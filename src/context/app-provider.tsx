@@ -8,7 +8,6 @@ import { AppContext } from '@/context/context'
 import { getAudio, randomIntFromInterval, wait } from '@/lib/utils'
 import {
   FormatGame,
-  SettingsKeys,
   State,
   audios,
   getMultiplierValueByIndex,
@@ -86,13 +85,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const setActiveMultiplierIndex = useCallback((payload: number) => {
     dispatch({ type: 'set-multiplier-index', payload })
   }, [])
-
-  const changeSettings = useCallback(
-    (payload: Partial<Record<SettingsKeys, boolean>>) => {
-      dispatch({ type: 'change-settings', payload })
-    },
-    [],
-  )
 
   const setBet = useCallback((payload: number) => {
     dispatch({ type: 'set-bet', payload })
@@ -267,8 +259,6 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         activeMultiplierIndex,
         characterIndex,
         setCharacterIndex,
-        settings,
-        changeSettings,
         offer,
         playAudio,
         jackpot,
