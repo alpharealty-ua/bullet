@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 import { api, QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
@@ -85,6 +86,7 @@ export const useStartGame = () => {
   return useMutation({
     mutationFn: startGame,
     onError: (error) => {
+      toast.error(error.message)
       if (
         axios.isAxiosError(error) &&
         error.response &&
@@ -104,7 +106,8 @@ export const useGamePull = () => {
   return useMutation({
     mutationFn: gamePull,
     onSuccess: () => {},
-    onError: () => {
+    onError: (error) => {
+      toast.error(error.message)
       navigate(ROUTES.solo.play)
     },
   })
