@@ -6,7 +6,7 @@ export const AddMoneyModal = () => {
   const { mutateAsync: addBalanceMutation } = useAddBalance()
 
   const handleAddMoney = async () => {
-    await addBalanceMutation(100)
+    await addBalanceMutation(1000)
   }
 
   return <AddMoney balance={balance} onAddMoney={handleAddMoney} />
