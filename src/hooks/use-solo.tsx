@@ -11,7 +11,7 @@ import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval, wait } from '@/lib/utils'
+import { randomIntFromInterval } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
@@ -112,17 +112,34 @@ const useSolo = () => {
   }
 
   const nextSolo = async () => {
-    if (!gameId) {
-      const { gameId, multiplier } = await startGameMutation({
-        betAmount: String(bet),
-      })
-      console.log('call')
-      setState('running')
-      await addBalanceMutation(-bet)
-      await getMultiplier(Number(multiplier))
-      navigate(`${ROUTES.solo.play}/${gameId}`)
-      setOffer(0)
+    if (state === 'preparation') {
+      await startGame()
+      return
+    }
 
+    pullGame()
+  }
+
+  const startGame = async () => {
+    if (state !== 'preparation') {
+      return
+    }
+
+    const { gameId, multiplier } = await startGameMutation({
+      betAmount: String(bet),
+    })
+    setState('running')
+    await addBalanceMutation(-bet)
+    await getMultiplier(Number(multiplier))
+    navigate(`${ROUTES.solo.play}/${gameId}`)
+  }
+
+  const pullGame = async () => {
+    if (state !== 'running') {
+      return
+    }
+
+    if (!gameId) {
       return
     }
 
@@ -133,7 +150,6 @@ const useSolo = () => {
     }
 
     const { success, position } = await gamePullMutation(gameId)
-    setOffer(0)
 
     const isGameOver = !success
     const isWin = !isGameOver && position === 5
@@ -193,7 +209,6 @@ const useSolo = () => {
     if (isStartedGame) {
       return
     }
-    console.log('call')
     newGame(balance)
   }, [newGame, isStartedGame, balance])
 
