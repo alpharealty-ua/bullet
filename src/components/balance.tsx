@@ -18,6 +18,8 @@ const Balance = ({
     decreaseTime: 500,
   })
 
+  const length = String(value).length
+
   return (
     <div className='flex gap-1'>
       {beforeSlot}
@@ -27,17 +29,24 @@ const Balance = ({
         </div>
         <div
           ref={totalRef}
-          className='relative flex max-w-[140px] justify-center text-center text-3xl leading-[1] tracking-tight'
+          className={cn(
+            'relative flex justify-center text-center text-3xl leading-[1] tracking-tight',
+            [
+              'text-[28px]',
+              'text-[26px]',
+              'text-[24px]',
+              'text-[22px]',
+              'text-[20px]',
+              'text-[18px]',
+              'text-[16px]',
+              'text-[14px]',
+              'text-[12px]',
+            ][length - 6],
+          )}
         >
-          <div className='opacity-0'>
-            ${Number('9'.repeat(String(value).length))}
-          </div>
-          <div className='absolute top-0 left-0 flex'>
-            $
-            <div
-              data-value
-              className='overflow-hidden text-nowrap text-ellipsis'
-            ></div>
+          <div className='opacity-0'>${value}</div>
+          <div className={cn('absolute top-0 left-0 flex w-full')}>
+            $<div data-value></div>
           </div>
         </div>
         <div
