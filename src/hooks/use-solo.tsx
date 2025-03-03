@@ -184,7 +184,7 @@ const useSolo = () => {
   }
 
   useEffect(() => {
-    if (!isStartedGame) {
+    if (isStartedGame) {
       return
     }
     newGame(balance)
