@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useAppContext } from '@/context/use-app-context'
+import { ROUTES } from '@/routes/path'
 import { CHARACTER_IMAGES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
@@ -22,7 +22,7 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
   }
 
   const handleWatchButton = async () => {
-    navigate(isSolo ? '/solo/watch' : '/duel/watch')
+    navigate(isSolo ? ROUTES.solo.watch : ROUTES.duel.watch)
   }
 
   const handleSelectCharacter = (index: number) => {
