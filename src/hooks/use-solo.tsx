@@ -214,11 +214,20 @@ const useSolo = () => {
   }, [isStartedGame, balance, bet, gameId, setMaxBet])
 
   useEffect(() => {
-    const jackpot = Number(gameDetails?.potentialWin ?? 0)
-    const bet = Number(gameDetails?.betAmount ?? 0)
+    if (!(isStartedGame && gameDetails)) {
+      return
+    }
+
+    const jackpot = Number(gameDetails.potentialWin ?? 0)
+    const bet = Number(gameDetails.betAmount ?? 0)
+    const isActive = gameDetails.status === 'ACTIVE'
+    const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
+
     setJackpot(jackpot)
     setBet(bet)
-  }, [gameDetails, setJackpot, setBet])
+    isActive && setState('running')
+    isGameOver && setState('game-over')
+  }, [gameDetails, isStartedGame, setState, setJackpot, setBet])
 
   useEffect(() => {
     const noMoney = !isStartedGame && !(balance > 0 || bet > 0)

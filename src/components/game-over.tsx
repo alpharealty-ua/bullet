@@ -98,7 +98,9 @@ const GameOver = ({
         gunShotAudio.dispatchEvent(new Event('ended'))
       }
     }
-    runAnimation()
+    runAnimation().catch(() => {
+      setRunAnimation(true)
+    })
 
     return () => {
       isUnmounted = true

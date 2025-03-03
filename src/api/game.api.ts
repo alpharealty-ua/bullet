@@ -28,7 +28,7 @@ type Game = {
   multiplier: string
   potentialWin: string
   currentPosition: string
-  status: 'ACTIVE'
+  status: 'ACTIVE' | 'COMPLETED_LOSE'
 }
 
 type GameDetailsResponse = Game
@@ -106,7 +106,7 @@ export const useGamePull = () => {
   return useMutation({
     mutationFn: gamePull,
     onSuccess: () => {},
-    onError: (error) => {
+    onError: () => {
       navigate(ROUTES.solo.play)
     },
   })
