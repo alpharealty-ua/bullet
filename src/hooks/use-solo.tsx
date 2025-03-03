@@ -101,9 +101,14 @@ const useSolo = () => {
       return
     }
 
-    disabledRef.current = true
-    await nextSolo()
-    disabledRef.current = false
+    try {
+      disabledRef.current = true
+      await nextSolo()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      disabledRef.current = false
+    }
   }
 
   const nextSolo = async () => {
@@ -111,9 +116,10 @@ const useSolo = () => {
       const { gameId, multiplier } = await startGameMutation({
         betAmount: String(bet),
       })
+      console.log('call')
       setState('running')
       await addBalanceMutation(-bet)
-      await getMultiplier(multiplier)
+      await getMultiplier(Number(multiplier))
       navigate(`${ROUTES.solo.play}/${gameId}`)
       setOffer(0)
 
@@ -187,13 +193,14 @@ const useSolo = () => {
     if (isStartedGame) {
       return
     }
+    console.log('call')
     newGame(balance)
   }, [newGame, isStartedGame, balance])
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !isStartedGame) {
-      navigate(`${ROUTES.solo.play}/${activeGame.id}`)
+      // navigate(`${ROUTES.solo.play}/${activeGame.id}`)
     }
   }, [allGames, navigate, isStartedGame])
 
@@ -208,8 +215,10 @@ const useSolo = () => {
 
   useEffect(() => {
     const jackpot = Number(gameDetails?.potentialWin ?? 0)
+    const bet = Number(gameDetails?.betAmount ?? 0)
     setJackpot(jackpot)
-  }, [gameDetails, setJackpot])
+    setBet(bet)
+  }, [gameDetails, setJackpot, setBet])
 
   useEffect(() => {
     const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
