@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
-import { useSettings } from '@/store/settings.store'
-import { Button, ButtonProps } from './button'
+import { useSettingsStore } from '@/store/settings.store'
+import { Button, ButtonProps } from '@/components/ui/button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ onClick, disabled, ...props }, ref) => {
-    const playAudio = useSettings(({ playAudio }) => playAudio)
+    const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const [startedAnimation, setStartedAnimation] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
 

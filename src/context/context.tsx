@@ -1,15 +1,11 @@
 import React from 'react'
 
-import { FormatGame, State } from '@/lib/constants'
+import { FormatGame, StateGame } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
 interface ContextAppValue {
-  state: State
-  changeState: React.Dispatch<State>
-  countBullet: number
-  bet: number
-  setBet: React.Dispatch<number>
-  activeMultiplierIndex: number
+  state: StateGame
+  changeState: React.Dispatch<StateGame>
   characterIndex: number
   setCharacterIndex: React.Dispatch<number>
   offer: number

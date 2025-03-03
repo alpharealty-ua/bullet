@@ -1,32 +1,24 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { removeToken } from '@/lib/localstorage'
-import { State, states, multipliers } from '@/lib/constants'
+import { StateGame, states, multipliers } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
 import { QUERY_KEYS } from '@/api/api'
+import { useSoloStore } from '@/store/solo.store'
 
-interface Props {
-  state: State
-  changeState: React.Dispatch<State>
-  countBullet: number
-  setCountBullet: React.Dispatch<number>
-  activeMultiplierIndex: number
-  setActiveMultiplierIndex: React.Dispatch<number>
-}
-
-const Debug = (props: Props) => {
-  const {
-    state,
-    changeState: setState,
-    countBullet,
-    setCountBullet,
-    activeMultiplierIndex,
-    setActiveMultiplierIndex,
-  } = props
+const Debug = () => {
   const queryClient = useQueryClient()
+  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
+  const setState = useSoloStore(({ setState }) => setState)
+  const setMultiplierIndex = useSoloStore(
+    ({ setMultiplierIndex }) => setMultiplierIndex,
+  )
+  const state = useSoloStore(({ state }) => state)
+  const countBullet = useSoloStore(({ countBullet }) => countBullet)
+  const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
 
-  const handleSetState = (s: State) => {
+  const handleSetState = (s: StateGame) => {
     setState(s)
   }
 
@@ -72,7 +64,7 @@ const Debug = (props: Props) => {
           <select
             className='h-10 w-full bg-white px-2 uppercase'
             value={state}
-            onChange={(e) => handleSetState(e.target.value as State)}
+            onChange={(e) => handleSetState(e.target.value as StateGame)}
           >
             {states.map((state, i) => (
               <option key={i} value={state}>
@@ -86,8 +78,8 @@ const Debug = (props: Props) => {
           <div className=''>Multiplier</div>
           <select
             className='h-10 w-full bg-white px-2 uppercase'
-            value={activeMultiplierIndex}
-            onChange={(e) => setActiveMultiplierIndex(Number(e.target.value))}
+            value={multiplierIndex}
+            onChange={(e) => setMultiplierIndex(Number(e.target.value))}
           >
             <option value='-1'>-1</option>
             {multipliers.map(({ value }, i) => (

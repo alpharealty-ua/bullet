@@ -1,9 +1,9 @@
 import { settingsEntries, SettingsKeys } from '@/lib/constants'
+import { useSettingsStore } from '@/store/settings.store'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useSettings } from '@/store/settings.store'
 
 const Settings = () => {
-  const { change, ...settings } = useSettings()
+  const { change, ...settings } = useSettingsStore()
 
   const handleChange = (name: SettingsKeys, value: boolean) => {
     change({ [name]: value })

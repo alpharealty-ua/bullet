@@ -1,17 +1,8 @@
-import { useParams } from 'react-router'
-
 import { useBalance } from '@/api/wallet.api'
-import { useGameDetails } from '@/api/game.api'
-import { useAppContext } from '@/context/use-app-context'
+import { useSoloStore } from '@/store/solo.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import {
-  FormatGame,
-  images,
-  MAX_BET,
-  multipliers,
-  VariantGame,
-} from '@/lib/constants'
+import { FormatGame, images, multipliers, VariantGame } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -29,23 +20,17 @@ const Footer = ({
   variant: VariantGame
   showHelpers?: boolean
 }) => {
-  const {
-    countBullet,
-    activeMultiplierIndex,
-    bet: betClient,
-    setBet,
-  } = useAppContext()
   const { data: balance } = useBalance()
-  const { data: gameDetails } = useGameDetails()
-  const { gameId } = useParams<{ gameId: string }>()
-  const isStartedGame = Boolean(gameId)
-  const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
 
+  const setBet = useSoloStore(({ setBet }) => setBet)
+  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
+  const noMoney = useSoloStore(({ noMoney }) => noMoney)
+  const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
+  const bet = useSoloStore(({ bet }) => bet)
+  const maxBet = useSoloStore(({ maxBet }) => maxBet)
+  const countBullet = useSoloStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
   const footerWithBg = format === 'solo' || variant === 'watch'
-  // TODO: MOVE MAX BET TO CONTEXT
-  const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
-  const betDisabled = isStartedGame
 
   const handleSettings = () => {
     modal.show({ contentSlot: <Settings /> })
@@ -73,7 +58,7 @@ const Footer = ({
                 show={showHelpers && bet === 0 && !isStartedGame}
               />
               <Bet
-                disabled={betDisabled}
+                disabled={isStartedGame}
                 maxBet={maxBet}
                 bet={bet}
                 onBet={setBet}
@@ -123,10 +108,7 @@ const Footer = ({
               : 'Round'}
           </div>
           {format === 'solo' && (
-            <Multiplier
-              items={multipliers}
-              activeIndex={activeMultiplierIndex}
-            />
+            <Multiplier items={multipliers} activeIndex={multiplierIndex} />
           )}
           {format === 'duel' && variant === 'play' && (
             <div className='relative text-center text-3xl leading-[1]'>
@@ -151,7 +133,7 @@ const Footer = ({
             <MoneyBagButton
               className='w-4'
               balance={balance}
-              isStartedGame={isStartedGame}
+              noMoney={noMoney}
             />
           </div>
         )}

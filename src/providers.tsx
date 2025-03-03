@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify'
 import NiceModal from '@ebay/nice-modal-react'
 import 'react-toastify/ReactToastify.css'
 
-import { AppProvider } from '@/context/app-provider'
 import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
 

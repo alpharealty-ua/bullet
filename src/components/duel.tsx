@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 
-import { useAppContext } from '@/context/use-app-context'
 import { images, VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -12,12 +11,20 @@ import { Character } from './character'
 import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
 import { GameOver } from './game-over'
+import { useDuelStore } from '@/store/duel.store'
+import { Navigate, useNavigate, useParams } from 'react-router'
+import { useSoloStore } from '@/store/solo.store'
+import { ROUTES } from '@/routes/path'
 
 const Duel = ({ variant }: { variant: VariantGame }) => {
-  const { characterIndex, state, next } = useAppContext()
-  const startGame = state === 'running'
+  const navigate = useNavigate()
+  // TODO: USE DUEL STORE
+  const setState = useSoloStore(({ setState }) => setState)
+  const characterIndex = useDuelStore(({ characterIndex }) => characterIndex)
+  const { gameId } = useParams<{ gameId: string }>()
+  const startedGame = Boolean(gameId)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
-  const visiblePlayerInfo = !startGame || showPlayerInfo
+  const visiblePlayerInfo = !startedGame || showPlayerInfo
   // TODO: MOVE TO CONTEXT
   const gunHandleRef = useRef<{
     spin: (duration?: number) => Promise<void>
@@ -26,19 +33,23 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
 
   const handlePull = async () => {
     // TODO: TEMPORARY SOLUTION
-    if (startGame) {
+    if (startedGame) {
       await gunHandleRef.current?.spin()
       gunHandleRef.current?.shot()
       setTimeout(async () => {
-        await next('duel')
+        setState('game-over')
         gunHandleRef.current?.shot()
       }, 700)
       return
     }
-    next('duel')
+    navigate(`${ROUTES.duel.play}/1`)
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
+
+  if (characterIndex === -1) {
+    return <Navigate to={ROUTES.duel.index} />
+  }
 
   return (
     <>
@@ -57,7 +68,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
             )}
             characterIndex={characterIndex}
             onClick={
-              variant === 'play' && startGame ? handlePlayerClick : undefined
+              variant === 'play' && startedGame ? handlePlayerClick : undefined
             }
             gunHandleRef={gunHandleRef}
             beforeSlot={
@@ -71,7 +82,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               />
             }
           />
-          {startGame && <ReadySetPull />}
+          {startedGame && <ReadySetPull />}
         </div>
         {variant === 'play' && (
           <>

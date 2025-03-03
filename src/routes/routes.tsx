@@ -47,6 +47,10 @@ export const PRIVATE_ROUTES = [
     element: <Duel variant='play' />,
   },
   {
+    path: `${ROUTES.duel.play}/:gameId`,
+    element: <Duel variant='play' />,
+  },
+  {
     path: ROUTES.duel.watch,
     element: <Duel variant='watch' />,
   },

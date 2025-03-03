@@ -1,18 +1,14 @@
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { ButtonProps } from '@/components/ui/button'
-import { AddMoneyModal } from './add-money-modal'
-import { useAppContext } from '@/context/use-app-context'
+import { AddMoneyModal } from '@/components/add-money-modal'
 
 const MoneyBagButton = ({
   balance,
-  isStartedGame,
+  noMoney,
   ...props
-}: ButtonProps & { balance: number; isStartedGame: boolean }) => {
-  const { bet } = useAppContext()
+}: ButtonProps & { balance: number; noMoney: boolean }) => {
   const modal = useCustomModal()
-  /* TODO: ADD FLAG NO_MONEY  */
-  const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
 
   const handleAddMoney = async () => {
     modal.show({

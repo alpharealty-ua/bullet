@@ -3,11 +3,12 @@ import { useNavigate, useParams } from 'react-router'
 
 import { useBalance } from '@/api/wallet.api'
 import { useAllGames, useGameDetails } from '@/api/game.api'
+import { useSettingsStore } from '@/store/settings.store'
+import { useSoloStore } from '@/store/solo.store'
+import { useSolo } from '@/context/use-solo'
 import { ROUTES } from '@/routes/path'
-import { useSettings } from '@/store/settings.store'
-import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { VariantGame } from '@/lib/constants'
+import { MAX_BET, VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
@@ -18,31 +19,35 @@ import { AddMoneyModal } from './add-money-modal'
 import { Helper } from './helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
+import { Debug } from '@/components/debug'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
-  const {
-    offer,
-    next,
-    deal,
-    revolverRefHandle,
-    bet: betClient,
-  } = useAppContext()
+  const { next, deal, revolverRefHandle } = useSolo()
+  const navigate = useNavigate()
   const [showHelpers, setShowHelpers] = useState(true)
   const { data: balance } = useBalance()
   const { data: gameDetails } = useGameDetails()
   const { data: allGames = [] } = useAllGames()
   const { gameId } = useParams<{ gameId: string }>()
-  const isStartedGame = Boolean(gameId)
-  const bet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : betClient
+  const setIsStartedGame = useSoloStore(
+    ({ setIsStartedGame }) => setIsStartedGame,
+  )
+  const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
+  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
+  const setBet = useSoloStore(({ setBet }) => setBet)
+  const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
+  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
+  const noMoney = useSoloStore(({ noMoney }) => noMoney)
+  const bet = useSoloStore(({ bet }) => bet)
+  const offer = useSoloStore(({ offer }) => offer)
   const jackpot = Number(gameDetails?.potentialWin ?? 0)
-  const navigate = useNavigate()
-  const invertButtons = useSettings(({ invertButtons }) => invertButtons)
+  const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
 
   const modal = useCustomModal()
 
   const handlePull = async () => {
     setShowHelpers(false)
-    await next('solo', gameId)
+    await next()
   }
 
   const handleDeal = async () => {
@@ -57,30 +62,45 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
-    if (activeGame) {
+    if (activeGame && !isStartedGame) {
       navigate(`${ROUTES.solo.play}/${activeGame.id}`)
     }
-  }, [allGames, navigate])
+  }, [allGames, navigate, isStartedGame])
+
+  useEffect(() => {
+    setIsStartedGame(Boolean(gameId))
+  }, [gameId, setIsStartedGame])
+
+  useEffect(() => {
+    const syncedBet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : bet
+    setBet(syncedBet)
+  }, [isStartedGame, bet, gameDetails, gameId, setBet])
+
+  useEffect(() => {
+    const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
+    setMaxBet(maxBet)
+  }, [isStartedGame, balance, bet, gameId, setMaxBet])
+
+  useEffect(() => {
+    const jackpot = Number(gameDetails?.potentialWin ?? 0)
+    setJackpot(jackpot)
+  }, [gameDetails, setJackpot])
+
+  useEffect(() => {
+    const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
+    setNoMoney(noMoney)
+  }, [setNoMoney, isStartedGame, balance, bet])
 
   return (
     <>
+      <Debug />
       <Header logoText={'Solo'} />
-      <Result
-        title={'Jackpot'}
-        price={jackpot}
-        open={isStartedGame && Boolean(jackpot)}
-      />
-      <Result
-        title={'the banker offers...'}
-        price={offer}
-        open={isStartedGame && Boolean(offer)}
-      />
-      {!isStartedGame && !(balance > 0 || bet > 0) && (
+      {noMoney && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      <div className='relative mt-auto'>
+      <div className='relative'>
         <Revolver
           gunHandleRef={revolverRefHandle}
           disabled={!isStartedGame}

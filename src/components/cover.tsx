@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import { useDuelStore } from '@/store/duel.store'
 import { ROUTES } from '@/routes/path'
 import { CHARACTER_IMAGES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -11,14 +12,17 @@ import { CharacterSelector } from './character-selector'
 const disabledImages = [1]
 
 const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
-  const { characterIndex, setCharacterIndex } = useAppContext()
+  const setCharacterIndex = useDuelStore(
+    ({ setCharacterIndex }) => setCharacterIndex,
+  )
+  const characterIndex = useDuelStore(({ characterIndex }) => characterIndex)
   const [characterSelected, setCharacterSelected] = useState(false)
   const navigate = useNavigate()
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
 
   const handlePlayButton = async () => {
-    navigate(isSolo ? '/solo/play' : '/duel/play')
+    navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
   }
 
   const handleWatchButton = async () => {

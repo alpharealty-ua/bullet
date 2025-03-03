@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useSettings } from '@/store/settings.store'
+import { ROUTES } from '@/routes/path'
+import { useSettingsStore } from '@/store/settings.store'
+import { useSoloStore } from '@/store/solo.store'
 import { images } from '@/lib/constants'
 import { cn, preloadImage } from '@/lib/utils'
-import { useAppContext } from '@/context/use-app-context'
-import { ROUTES } from '@/routes/path'
 
 let imageVersion = Date.now()
 
@@ -16,9 +16,9 @@ const GameOver = ({
   timeout?: number
   hasImage?: boolean
 }) => {
-  const { state } = useAppContext()
-  const playAudio = useSettings(({ playAudio }) => playAudio)
-  const blood = useSettings(({ blood }) => blood)
+  const state = useSoloStore(({ state }) => state)
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const blood = useSettingsStore(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(images.gameover)
   const [runAnimation, setRunAnimation] = useState(false)

@@ -13,7 +13,7 @@ export const getMultiplierValueByIndex = (index: number) =>
 
 export const states = ['preparation', 'running', 'win', 'game-over'] as const
 
-export type State = (typeof states)[number]
+export type StateGame = (typeof states)[number]
 
 export type FormatGame = 'solo' | 'duel'
 

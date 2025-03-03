@@ -1,62 +1,49 @@
-import React, { useCallback, useReducer, useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useRef } from 'react'
+import { useNavigate, useParams } from 'react-router'
 
-import { useSettings } from '@/store/settings.store'
-import { useGameDetails, useGamePull, useStartGame } from '@/api/game.api'
+import { useGamePull, useStartGame } from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
+import { useSettingsStore } from '@/store/settings.store'
+import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
-import { AppContext } from '@/context/context'
 import { randomIntFromInterval, wait } from '@/lib/utils'
-import { FormatGame, State, multipliers } from '@/lib/constants'
-import { Debug } from '@/components/debug'
-import { appReducer, initState } from './app-reducer'
+import { multipliers } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
-const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const [{ countBullet, state, bet, activeMultiplierIndex }, dispatch] =
-    useReducer(appReducer, initState)
-  // TODO: MOVE TO REDUCER
-  const [offer, setOffer] = useState(0)
+const useSolo = () => {
+  const navigate = useNavigate()
+  const { gameId } = useParams<{ gameId: string }>()
   const revolverRefHandle = useRef<GunHandle>(null)
-  const [characterIndex, setCharacterIndex] = useState(0)
   const disabledRef = useRef(false)
-  const { data: gameDetails } = useGameDetails()
   const { mutateAsync: addBalanceMutation } = useAddBalance()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
-  const playAudio = useSettings(({ playAudio }) => playAudio)
-  const declineAllDeals = useSettings(({ declineAllDeals }) => declineAllDeals)
-  const navigate = useNavigate()
-
-  const jackpot = Number(gameDetails?.potentialWin ?? 0)
-
-  const changeState = useCallback((payload: State) => {
-    dispatch({ type: 'change-state', payload })
-  }, [])
-
-  const setCountBullet = useCallback((payload: number) => {
-    dispatch({ type: 'set-bullet', payload })
-  }, [])
-
-  const setActiveMultiplierIndex = useCallback((payload: number) => {
-    dispatch({ type: 'set-multiplier-index', payload })
-  }, [])
-
-  const setBet = useCallback((payload: number) => {
-    dispatch({ type: 'set-bet', payload })
-  }, [])
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const declineAllDeals = useSettingsStore(
+    ({ declineAllDeals }) => declineAllDeals,
+  )
+  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
+  const setOffer = useSoloStore(({ setOffer }) => setOffer)
+  const setBet = useSoloStore(({ setBet }) => setBet)
+  const setState = useSoloStore(({ setState }) => setState)
+  const setMultiplierIndex = useSoloStore(
+    ({ setMultiplierIndex }) => setMultiplierIndex,
+  )
+  const offer = useSoloStore(({ offer }) => offer)
+  const bet = useSoloStore(({ bet }) => bet)
+  const jackpot = useSoloStore(({ jackpot }) => jackpot)
 
   const newGame = async () => {
     await wait(0) // need for update states
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
-    changeState('preparation')
+    setState('preparation')
     setBet(prevBet)
     setOffer(0)
     setCountBullet(5)
-    setActiveMultiplierIndex(-1)
+    setMultiplierIndex(-1)
   }
 
   const getMultiplier = async (): Promise<number> => {
@@ -80,7 +67,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         if (count-- > 0) {
           await revolverHandle.spin(interval)
           const newIndex = index++ % multipliers.length
-          setActiveMultiplierIndex(newIndex)
+          setMultiplierIndex(newIndex)
           spin()
         } else {
           resolve(index)
@@ -100,30 +87,20 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     newGame()
   }
 
-  const next = async (format: FormatGame, gameId?: string) => {
+  const next = async () => {
     if (disabledRef.current) {
       return
     }
 
     disabledRef.current = true
-
-    try {
-      if (format === 'solo') {
-        await nextSolo(gameId)
-      } else {
-        await nextDeal()
-      }
-    } catch (e) {
-      console.log(e)
-    }
-
+    await nextSolo()
     disabledRef.current = false
   }
 
-  const nextSolo = async (gameId?: string) => {
+  const nextSolo = async () => {
     if (!gameId) {
-      const { gameId } = await startGameMutation({ betAmount: '10' })
-      changeState('running')
+      const { gameId } = await startGameMutation({ betAmount: String(bet) })
+      setState('running')
       await addBalanceMutation(-bet)
       await getMultiplier()
       navigate(`${ROUTES.solo.play}/${gameId}`)
@@ -148,7 +125,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     await playAudio('triggerpull')
     await revolverHandle.spin()
-    await revolverHandle.click()
+    revolverHandle.click()
 
     if (isGameOver) {
       await gameOver()
@@ -163,22 +140,12 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  // TODO: TEMPORARY SOLUTION
-  const nextDeal = async () => {
-    if (state === 'preparation') {
-      changeState('running')
-      return
-    }
-
-    await gameOver()
-  }
-
   const gameOver = async () => {
-    changeState('game-over')
+    setState('game-over')
   }
 
   const winGame = async () => {
-    changeState('win')
+    setState('win')
     // TODO: REMOVE 1000. ONLY FOR TEST
     await addBalanceMutation(jackpot || 1000)
 
@@ -205,37 +172,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
-  return (
-    <AppContext.Provider
-      value={{
-        state,
-        changeState,
-        countBullet,
-        bet,
-        setBet,
-        activeMultiplierIndex,
-        characterIndex,
-        setCharacterIndex,
-        offer,
-        revolverRefHandle,
-        deal,
-        next,
-      }}
-    >
-      <Debug
-        {...{
-          state,
-          changeState,
-          balance,
-          countBullet,
-          setCountBullet,
-          activeMultiplierIndex,
-          setActiveMultiplierIndex,
-        }}
-      />
-      {children}
-    </AppContext.Provider>
-  )
+  return { next, deal, revolverRefHandle }
 }
 
-export { AppProvider }
+export { useSolo }

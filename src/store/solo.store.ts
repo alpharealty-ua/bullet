@@ -1,0 +1,49 @@
+import { create } from 'zustand'
+
+import { StateGame } from '@/lib/constants'
+
+type SoloState = {
+  state: StateGame
+  multiplierIndex: number
+  prevState: StateGame
+  isStartedGame: boolean
+  noMoney: boolean
+  jackpot: number
+  bet: number
+  maxBet: number
+  countBullet: number
+  offer: number
+  setState: (state: StateGame) => void
+  setMultiplierIndex: (multiplierIndex: number) => void
+  setIsStartedGame: (isStartedGame: boolean) => void
+  setNoMoney: (noMoney: boolean) => void
+  setJackpot: (jackpot: number) => void
+  setBet: (setBet: number) => void
+  setMaxBet: (setBet: number) => void
+  setCountBullet: (setBet: number) => void
+  setOffer: (offer: number) => void
+}
+
+const useSoloStore = create<SoloState>()((set) => ({
+  state: 'preparation',
+  prevState: 'preparation',
+  multiplierIndex: 1,
+  isStartedGame: false,
+  noMoney: false,
+  jackpot: 0,
+  bet: 0,
+  maxBet: 0,
+  countBullet: 5,
+  offer: 0,
+  setState: (state: StateGame) => set({ state }),
+  setMultiplierIndex: (multiplierIndex: number) => set({ multiplierIndex }),
+  setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
+  setNoMoney: (noMoney: boolean) => set({ noMoney }),
+  setJackpot: (jackpot: number) => set({ jackpot }),
+  setBet: (bet: number) => set({ bet }),
+  setMaxBet: (maxBet: number) => set({ maxBet }),
+  setCountBullet: (countBullet: number) => set({ countBullet }),
+  setOffer: (offer: number) => set({ offer }),
+}))
+
+export { useSoloStore }

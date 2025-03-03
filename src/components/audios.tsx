@@ -1,8 +1,8 @@
-import { useSettings } from '@/store/settings.store'
+import { useSettingsStore } from '@/store/settings.store'
 import { audiosEntries } from '@/lib/constants'
 
 const Audios = () => {
-  const soundEffects = useSettings(({ soundEffects }) => soundEffects)
+  const soundEffects = useSettingsStore(({ soundEffects }) => soundEffects)
 
   return (
     <div id='audios' className='absolute'>

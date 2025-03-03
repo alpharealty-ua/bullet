@@ -1,4 +1,4 @@
-import { State } from '@/lib/constants'
+import { StateGame } from '@/lib/constants'
 
 interface SetBulletAction {
   type: 'set-bullet'
@@ -6,7 +6,7 @@ interface SetBulletAction {
 }
 interface ChangeStateAction {
   type: 'change-state'
-  payload: State
+  payload: StateGame
 }
 
 interface SetBetAction {
@@ -19,11 +19,9 @@ interface SetMultiplierIndexAction {
 }
 
 interface GameState {
-  stateHistory: State[]
-  state: State
-  countBullet: number
+  stateHistory: StateGame[]
+  state: StateGame
   bet: number
-  activeMultiplierIndex: number
 }
 type Actions =
   | SetBulletAction
@@ -34,20 +32,13 @@ type Actions =
 export const initState: GameState = {
   stateHistory: ['preparation'],
   state: 'preparation',
-  countBullet: 5,
   bet: 0,
-  activeMultiplierIndex: -1,
 }
 
 export const appReducer = (state: GameState, action: Actions): GameState => {
   const { type, payload } = action
 
   switch (type) {
-    case 'set-bullet':
-      return {
-        ...state,
-        countBullet: payload,
-      }
     case 'change-state': {
       const stateHistory = state.stateHistory
       if (stateHistory[stateHistory.length - 1] === payload) {
@@ -62,8 +53,7 @@ export const appReducer = (state: GameState, action: Actions): GameState => {
     }
     case 'set-bet':
       return { ...state, bet: payload }
-    case 'set-multiplier-index':
-      return { ...state, activeMultiplierIndex: payload }
+
     default:
       return state
   }

@@ -11,7 +11,7 @@ type SettingsState = Record<SettingsKeys, boolean> & {
   ) => Promise<HTMLAudioElement>
 }
 
-const useSettings = create<SettingsState>()((set, get) => ({
+const useSettingsStore = create<SettingsState>()((set, get) => ({
   music: true,
   soundEffects: true,
   invertButtons: false,
@@ -50,4 +50,4 @@ const useSettings = create<SettingsState>()((set, get) => ({
   },
 }))
 
-export { useSettings }
+export { useSettingsStore }

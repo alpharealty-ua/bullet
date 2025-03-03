@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 
-import { useSettings } from '@/store/settings.store'
+import { useSettingsStore } from '@/store/settings.store'
 import { wait, waitEndAudio } from '@/lib/utils'
 
 const ReadySetPull = () => {
-  const playAudio = useSettings(({ playAudio }) => playAudio)
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
