@@ -12,6 +12,7 @@ interface StartGamePayload {
 
 interface StartGameResponse {
   gameId: string
+  multiplier: string
 }
 
 interface GamePullResponse {

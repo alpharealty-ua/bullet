@@ -2,7 +2,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useSoloStore } from '@/store/solo.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { FormatGame, images, multipliers, VariantGame } from '@/lib/constants'
+import { FormatGame, images, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -108,7 +108,7 @@ const Footer = ({
               : 'Round'}
           </div>
           {format === 'solo' && (
-            <Multiplier items={multipliers} activeIndex={multiplierIndex} />
+            <Multiplier items={MULTIPLIERS} activeIndex={multiplierIndex} />
           )}
           {format === 'duel' && variant === 'play' && (
             <div className='relative text-center text-3xl leading-[1]'>

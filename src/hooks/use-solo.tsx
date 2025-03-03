@@ -12,7 +12,7 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait } from '@/lib/utils'
-import { MAX_BET, multipliers } from '@/lib/constants'
+import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
 const useSolo = () => {
@@ -43,32 +43,27 @@ const useSolo = () => {
   const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
   const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
+  const newGame = useSoloStore(({ newGame }) => newGame)
+  const state = useSoloStore(({ state }) => state)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const offer = useSoloStore(({ offer }) => offer)
   const bet = useSoloStore(({ bet }) => bet)
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
 
-  const newGame = async () => {
-    await wait(0) // need for update states
-    const hasPrevBet = bet !== 0
-    const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
-
-    setState('preparation')
-    setBet(prevBet)
-    setOffer(0)
-    setCountBullet(5)
-    setMultiplierIndex(-1)
-  }
-
-  const getMultiplier = async (): Promise<number> => {
+  const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
 
     if (revolverHandle === null) {
-      return -1
+      return
     }
 
-    const AMOUNT_CHAMBER = randomIntFromInterval(18, 30)
-    const DURATION_AUDIO = 1500
+    const length = MULTIPLIERS.length
+    const AMOUNT_CHAMBER =
+      length * Math.round(randomIntFromInterval(20, 30) / length) +
+      multiplierIndex
+
+    const END_DELAY = 400
+    const DURATION_AUDIO = 1500 - END_DELAY
     const interval = DURATION_AUDIO / AMOUNT_CHAMBER
 
     let count = AMOUNT_CHAMBER
@@ -76,15 +71,15 @@ const useSolo = () => {
 
     await playAudio('spin')
 
-    return new Promise<number>((resolve) => {
+    return new Promise<void>((resolve) => {
       const spin = async () => {
         if (count-- > 0) {
           await revolverHandle.spin(interval)
-          const newIndex = index++ % multipliers.length
+          const newIndex = ++index % MULTIPLIERS.length
           setMultiplierIndex(newIndex)
           spin()
         } else {
-          resolve(index)
+          resolve()
         }
       }
 
@@ -98,7 +93,7 @@ const useSolo = () => {
       await addBalanceMutation(offer + bet)
       setOffer(0)
     }
-    newGame()
+    newGame(balance)
   }
 
   const next = async () => {
@@ -113,10 +108,12 @@ const useSolo = () => {
 
   const nextSolo = async () => {
     if (!gameId) {
-      const { gameId } = await startGameMutation({ betAmount: String(bet) })
+      const { gameId, multiplier } = await startGameMutation({
+        betAmount: String(bet),
+      })
       setState('running')
       await addBalanceMutation(-bet)
-      await getMultiplier()
+      await getMultiplier(multiplier)
       navigate(`${ROUTES.solo.play}/${gameId}`)
       setOffer(0)
 
@@ -167,7 +164,7 @@ const useSolo = () => {
     const chachingAudio = await playAudio('chaching')
 
     const winSoundEnded = (resolve: () => void) => () => {
-      newGame()
+      newGame(balance)
       resolve()
     }
 
@@ -185,6 +182,13 @@ const useSolo = () => {
       })
     })
   }
+
+  useEffect(() => {
+    if (!isStartedGame) {
+      return
+    }
+    newGame(balance)
+  }, [newGame, isStartedGame, balance])
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')

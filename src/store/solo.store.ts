@@ -22,9 +22,10 @@ type SoloState = {
   setMaxBet: (setBet: number) => void
   setCountBullet: (setBet: number) => void
   setOffer: (offer: number) => void
+  newGame: (balance: number) => void
 }
 
-const useSoloStore = create<SoloState>()((set) => ({
+const useSoloStore = create<SoloState>()((set, get) => ({
   state: 'preparation',
   prevState: 'preparation',
   multiplierIndex: 1,
@@ -44,6 +45,25 @@ const useSoloStore = create<SoloState>()((set) => ({
   setMaxBet: (maxBet: number) => set({ maxBet }),
   setCountBullet: (countBullet: number) => set({ countBullet }),
   setOffer: (offer: number) => set({ offer }),
+  newGame: (balance: number) => {
+    const {
+      setState,
+      setBet,
+      setOffer,
+      setCountBullet,
+      setMultiplierIndex,
+      bet,
+    } = get()
+
+    const hasPrevBet = bet !== 0
+    const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
+
+    setState('preparation')
+    setBet(prevBet)
+    setOffer(0)
+    setCountBullet(5)
+    setMultiplierIndex(-1)
+  },
 }))
 
 export { useSoloStore }

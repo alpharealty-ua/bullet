@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { removeToken } from '@/lib/localstorage'
-import { StateGame, states, multipliers } from '@/lib/constants'
+import { StateGame, states, MULTIPLIERS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
 import { QUERY_KEYS } from '@/api/api'
@@ -82,7 +82,7 @@ const Debug = () => {
             onChange={(e) => setMultiplierIndex(Number(e.target.value))}
           >
             <option value='-1'>-1</option>
-            {multipliers.map(({ value }, i) => (
+            {MULTIPLIERS.map(({ value }, i) => (
               <option key={i} value={i}>
                 {value}
               </option>
