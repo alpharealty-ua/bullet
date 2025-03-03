@@ -27,9 +27,13 @@ export const useIncreaseNumber = ({
     const prevVal = valueRef.current
     valueRef.current = value
 
+    const setValues = (total = value, win = 0) => {
+      totalValueDom.textContent = `${total}`
+      winValueDom.textContent = `${win}`
+    }
+
     if (prevVal === value) {
-      totalValueDom.textContent = `${value}`
-      winValueDom.textContent = '0'
+      setValues()
       return
     }
 
@@ -47,7 +51,7 @@ export const useIncreaseNumber = ({
     const intervalValue = deltaValue / COUNT
 
     const winValue = deltaValue
-    winValueDom.textContent = `${Math.abs(winValue)}`
+    setValues(prevVal, Math.abs(winValue))
 
     const state = sign === 1 ? 'is-increase' : 'is-decrease'
 
@@ -66,15 +70,13 @@ export const useIncreaseNumber = ({
         requestID = requestAnimationFrame(function addNumber() {
           currentValue += intervalValue
           if (currentValue * sign >= value * sign) {
-            totalValueDom.textContent = `${value}`
-            winValueDom.textContent = '0'
+            setValues()
             winDom.classList.remove('is-in')
             winDom.classList.add('is-out')
             return
           }
           const rounedValue = Math.round(currentValue)
-          totalValueDom.textContent = `${rounedValue}`
-          winValueDom.textContent = `${Math.abs(value - rounedValue)}`
+          setValues(rounedValue, Math.abs(value - rounedValue))
           requestID = requestAnimationFrame(addNumber)
         })
       }
@@ -89,8 +91,7 @@ export const useIncreaseNumber = ({
       isUnmounted = true
       winDom.removeEventListener('animationend', animationend)
       cancelAnimationFrame(requestID)
-      totalValueDom.textContent = `${value}`
-      winValueDom.textContent = '0'
+      setValues()
       winDom.classList.remove('is-in', 'is-out', state)
       winDom.offsetWidth // need for force layout -> for remove class
     }
