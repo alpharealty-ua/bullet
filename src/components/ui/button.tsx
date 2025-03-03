@@ -17,7 +17,7 @@ const imagesMap = {
 }
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  image?: keyof typeof imagesMap
+  image?: keyof typeof imagesMap | ''
   bg?: 'green' | 'red' | 'primary'
   text?: string
 }
@@ -42,12 +42,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span
             className={cn(
               !bg && 'absolute inset-0 inline-flex items-center justify-center',
+              image === '' && 'relative',
             )}
           >
             {text}
           </span>
         )}
-        {!bg && <img src={imagesMap[image]} alt='' />}
+        {!bg && image && <img src={imagesMap[image]} alt='' />}
       </button>
     )
   },

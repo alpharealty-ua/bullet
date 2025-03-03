@@ -2,10 +2,12 @@ import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { ButtonProps } from '@/components/ui/button'
 import { AddMoneyModal } from '@/components/add-money-modal'
+import { cn } from '@/lib/utils'
 
 const MoneyBagButton = ({
   balance,
   noMoney,
+  className,
   ...props
 }: ButtonProps & { balance: number; noMoney: boolean }) => {
   const modal = useCustomModal()
@@ -18,21 +20,18 @@ const MoneyBagButton = ({
 
   return (
     <>
-      {noMoney ? (
-        <span
-          className='animate-wiggle cursor-pointer text-[40px]'
-          onClick={handleAddMoney}
-        >
-          💀
-        </span>
-      ) : (
-        <ButtonWithAudio
-          className='w-8'
-          image='moneybag'
-          onClick={handleAddMoney}
-          {...props}
-        />
-      )}
+      <ButtonWithAudio
+        className={cn(
+          '',
+          !noMoney && 'w-8',
+          noMoney && 'animate-wiggle text-4xl',
+          className,
+        )}
+        image={noMoney ? '' : 'moneybag'}
+        onClick={handleAddMoney}
+        text={noMoney ? '💀' : ''}
+        {...props}
+      />
     </>
   )
 }
