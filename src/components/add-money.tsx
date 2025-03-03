@@ -67,10 +67,16 @@ const AddMoney = ({
         <span className='absolute inset-0 inline-flex items-center justify-center text-lg uppercase'>
           {endTime ? time : 'add $1000'}
         </span>
-        <svg width='110' height='76' viewBox='0 0 110 76' fill='none'>
+        <svg
+          width='110'
+          height='76'
+          viewBox='0 0 110 76'
+          fill='none'
+          className={cn(endTime && 'text-[#ccc]', !endTime && 'text-primary')}
+        >
           <path
             d='M2.14062 4.1084H104.641L103.641 72.1084L4.14062 69.6084L2.14062 4.1084Z'
-            fill={endTime ? '#ccc' : '#FF9B2A'}
+            fill='currentColor'
           />
           <path
             d='M2.72656 2.99121C36.4439 2.99121 70.1713 3.32183 103.895 3.32183'
