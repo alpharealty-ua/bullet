@@ -18,6 +18,7 @@ const GameOver = ({
   hasImage?: boolean
   backRouter: string
 }) => {
+  const setState = useSoloStore(({ setState }) => setState)
   const state = useSoloStore(({ state }) => state)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
@@ -28,6 +29,7 @@ const GameOver = ({
   const show = state === 'game-over'
 
   const handleClick = () => {
+    setState('preparation')
     navigate(backRouter)
   }
 
@@ -46,12 +48,13 @@ const GameOver = ({
     }
 
     const timeoutId = setTimeout(() => {
+      setState('preparation')
       navigate(backRouter)
     }, timeout)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [timeout, show, navigate, backRouter])
+  }, [timeout, show, navigate, backRouter, setState])
 
   useEffect(() => {
     if (!show) {
