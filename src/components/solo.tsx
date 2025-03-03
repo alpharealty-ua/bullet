@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { useBalance } from '@/api/wallet.api'
 import { useAllGames, useGameDetails } from '@/api/game.api'
+import { ROUTES } from '@/routes/path'
 import { useSettings } from '@/store/settings.store'
 import { useAppContext } from '@/context/use-app-context'
 import { useCustomModal } from '@/hooks/use-custom-modal'
@@ -74,7 +75,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
         price={offer}
         open={isStartedGame && Boolean(offer)}
       />
-      {isStartedGame && !(balance > 0 || bet > 0) && (
+      {!isStartedGame && !(balance > 0 || bet > 0) && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
