@@ -28,7 +28,7 @@ type SoloState = {
 const useSoloStore = create<SoloState>()((set, get) => ({
   state: 'preparation',
   prevState: 'preparation',
-  multiplierIndex: 1,
+  multiplierIndex: -1,
   isStartedGame: false,
   noMoney: false,
   jackpot: 0,
