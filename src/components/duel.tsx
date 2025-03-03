@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
@@ -6,12 +6,12 @@ import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { useSolo } from '@/hooks/use-solo'
 import { images, VariantGame } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, randomIntFromInterval } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from './header'
 import { Footer } from './footer'
 import { Bar } from '@/components/bar/bar'
-import { DuelGameBar } from './duel-game-bar'
+import { DuelGameBar, GameBarHandle } from './duel-game-bar'
 import { Character } from './character'
 import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
@@ -33,6 +33,9 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
     spin: (duration?: number) => Promise<void>
     shot: () => void
   }>(null)
+  const gameBarRefHandle = useRef<GameBarHandle>(null)
+  const [runReadySetPull, setRunReadySetPull] = useState(false)
+  const startRef = useRef(false)
 
   const handlePull = async () => {
     // TODO: TEMPORARY SOLUTION
@@ -45,10 +48,37 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
       }, 700)
       return
     }
-    navigate(`${ROUTES.duel.play}/1`)
+    setRunReadySetPull(false)
+    setTimeout(() => setRunReadySetPull(true))
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
+
+  const handleStartReadySetPull = useCallback(() => {
+    startRef.current = true
+    const duration = randomIntFromInterval(25, 50)
+
+    const next = async () => {
+      if (!startRef.current) {
+        return
+      }
+
+      const gameBarHandle = gameBarRefHandle.current
+
+      if (gameBarHandle === null) {
+        return
+      }
+
+      await gameBarHandle.next(duration)
+      next()
+    }
+    next()
+  }, [])
+
+  const handleEndReadySetPull = useCallback(() => {
+    startRef.current = false
+    navigate(`${ROUTES.duel.play}/1`)
+  }, [navigate])
 
   if (characterIndex === -1) {
     return <Navigate to={ROUTES.duel.index} />
@@ -85,7 +115,12 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               />
             }
           />
-          {startedGame && <ReadySetPull />}
+          {runReadySetPull && (
+            <ReadySetPull
+              onStart={handleStartReadySetPull}
+              onEnd={handleEndReadySetPull}
+            />
+          )}
         </div>
         {variant === 'play' && (
           <>
@@ -113,7 +148,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
                 </div>
               </div>
             </div>
-            <DuelGameBar />
+            <DuelGameBar gameBarRef={gameBarRefHandle} />
           </>
         )}
       </div>

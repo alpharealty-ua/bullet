@@ -3,7 +3,13 @@ import { useEffect, useRef } from 'react'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait, waitEndAudio } from '@/lib/utils'
 
-const ReadySetPull = () => {
+const ReadySetPull = ({
+  onStart,
+  onEnd,
+}: {
+  onStart: () => void
+  onEnd: () => void
+}) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -21,12 +27,10 @@ const ReadySetPull = () => {
       return
     }
 
-    const activeClassList = ['opacity-100', 'left-0']
-
     const runAnimation = async () => {
-      ready.classList.remove(...activeClassList)
-      set.classList.remove(...activeClassList)
-      pull.classList.remove(...activeClassList)
+      ready.classList.remove('is-show')
+      set.classList.remove('is-show')
+      pull.classList.remove('is-show')
 
       await wait(0)
 
@@ -34,17 +38,21 @@ const ReadySetPull = () => {
         return
       }
 
+      onStart()
+
       const readyAudio = await playAudio('ready')
-      ready.classList.add(...activeClassList)
+      ready.classList.add('is-show')
       await waitEndAudio(readyAudio)
 
       const setAudio = await playAudio('set')
-      set.classList.add(...activeClassList)
+      set.classList.add('is-show')
       await waitEndAudio(setAudio)
 
       const pullAudio = await playAudio('pull')
-      pull.classList.add(...activeClassList)
+      pull.classList.add('is-show')
       await waitEndAudio(pullAudio)
+
+      onEnd()
     }
     let isUnmounted = false
     runAnimation()
@@ -52,16 +60,22 @@ const ReadySetPull = () => {
     return () => {
       isUnmounted = true
     }
-  }, [playAudio])
+  }, [playAudio, onStart, onEnd])
 
   return (
     <div
       ref={wrapperRef}
       className='absolute bottom-0 left-10 flex flex-col gap-1 text-[40px]'
     >
-      <div className='relative -left-4 opacity-0 duration-500'>Ready</div>
-      <div className='relative -left-4 pl-8 opacity-0 duration-500'>Set</div>
-      <div className='relative -left-4 pl-14 opacity-0 duration-500'>Pull</div>
+      <div className='relative -left-4 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+        Ready
+      </div>
+      <div className='relative -left-4 pl-8 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+        Set
+      </div>
+      <div className='relative -left-4 pl-14 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+        Pull
+      </div>
     </div>
   )
 }

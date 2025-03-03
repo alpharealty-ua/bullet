@@ -1,10 +1,20 @@
 import { cn } from '@/lib/utils'
-import { useEffect, useRef } from 'react'
+import { useImperativeHandle, useRef } from 'react'
 
-const DuelGameBar = () => {
+export type GameBarHandle = {
+  next: (duration: number) => Promise<void>
+}
+
+const DuelGameBar = ({
+  gameBarRef,
+}: {
+  gameBarRef: React.ForwardedRef<GameBarHandle>
+}) => {
   const ref = useRef<HTMLTableElement>(null)
+  const directionRef = useRef(1)
+  const activeIndexRef = useRef(-1)
 
-  useEffect(() => {
+  const next = async (duration: number) => {
     const barDom = ref.current
 
     if (barDom === null) {
@@ -13,30 +23,37 @@ const DuelGameBar = () => {
 
     const cells = barDom.rows[0].cells
 
-    let activeIndex = 0
-    let active = cells[activeIndex]
-    let direction = 1
-    const activeClassList = ['!bg-[#30ff00]', '!text-black']
-    // TODO: USE DELEGATION
-    const next = () => {
-      if (activeIndex === 0) direction = 1
-      else if (activeIndex === cells.length - 1) direction = -1
+    const prevActiveIndex = activeIndexRef.current
+    let direction = directionRef.current
+    if (prevActiveIndex === 0) direction = 1
+    else if (prevActiveIndex === cells.length - 1) direction = -1
 
-      active.classList.remove(...activeClassList)
-      active = cells[activeIndex]
-      active.classList.add(...activeClassList)
-      activeIndex += direction
+    const nextActiveIndex = prevActiveIndex + direction
+    directionRef.current = direction
+    activeIndexRef.current = nextActiveIndex
 
-      active.addEventListener('transitionend', next, { once: true })
-    }
-    next()
+    const prevActive = cells[prevActiveIndex] ?? document.createElement('td')
+    const nextActive = cells[nextActiveIndex]
 
-    return () => {
-      active.classList.remove(...activeClassList)
-      active.removeEventListener('transitionend', next)
-      active.offsetWidth // need for force layout -> for remove class
-    }
-  }, [])
+    prevActive.classList.remove('is-active')
+    nextActive.classList.add('is-active')
+    nextActive.style.transitionDuration = `${duration}ms`
+
+    return new Promise<void>((resolve) => {
+      nextActive.addEventListener(
+        'transitionend',
+        () => {
+          nextActive.style.transitionDuration = ''
+          resolve()
+        },
+        { once: true },
+      )
+    })
+  }
+
+  useImperativeHandle(gameBarRef, () => ({
+    next,
+  }))
 
   return (
     <div className='overflow-hidden'>
@@ -62,7 +79,8 @@ const DuelGameBar = () => {
                   <td
                     key={i}
                     className={cn(
-                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-150',
+                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-10',
+                      '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
                       range.className,
                       range.number === 0 && 'text-transparent',
                     )}
