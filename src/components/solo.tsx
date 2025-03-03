@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
-import { useSolo } from '@/context/use-solo'
+import { useSolo } from '@/hooks/use-solo'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
