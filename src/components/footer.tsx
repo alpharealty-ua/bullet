@@ -112,7 +112,7 @@ const Footer = ({
           )}
           {format === 'duel' && variant === 'play' && (
             <div className='relative text-center text-3xl leading-[1]'>
-              $2000
+              ${balance}
             </div>
           )}
           {format === 'duel' && variant === 'watch' && (
