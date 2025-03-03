@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 import { getToken, removeToken } from '@/lib/localstorage'
 import { ENV } from '@/lib/env'
@@ -35,6 +36,7 @@ api.interceptors.response.use(undefined, (error: unknown) => {
   }
   if (axios.isAxiosError(error) && error.response && error.response.data) {
     error.message = error.response.data.message
+    toast.error(error.message)
   }
   throw error
 })

@@ -87,7 +87,6 @@ export const useStartGame = () => {
   return useMutation({
     mutationFn: startGame,
     onError: (error) => {
-      toast.error(error.message)
       if (
         axios.isAxiosError(error) &&
         error.response &&
@@ -108,7 +107,6 @@ export const useGamePull = () => {
     mutationFn: gamePull,
     onSuccess: () => {},
     onError: (error) => {
-      toast.error(error.message)
       navigate(ROUTES.solo.play)
     },
   })
