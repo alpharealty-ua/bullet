@@ -1,13 +1,18 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { useGamePull, useStartGame } from '@/api/game.api'
+import {
+  useAllGames,
+  useGameDetails,
+  useGamePull,
+  useStartGame,
+} from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait } from '@/lib/utils'
-import { multipliers } from '@/lib/constants'
+import { MAX_BET, multipliers } from '@/lib/constants'
 import { GunHandle } from '@/components/revolver'
 
 const useSolo = () => {
@@ -15,8 +20,10 @@ const useSolo = () => {
   const { gameId } = useParams<{ gameId: string }>()
   const revolverRefHandle = useRef<GunHandle>(null)
   const disabledRef = useRef(false)
+  const { data: gameDetails } = useGameDetails()
   const { mutateAsync: addBalanceMutation } = useAddBalance()
   const { mutateAsync: startGameMutation } = useStartGame()
+  const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -30,6 +37,13 @@ const useSolo = () => {
   const setMultiplierIndex = useSoloStore(
     ({ setMultiplierIndex }) => setMultiplierIndex,
   )
+  const setIsStartedGame = useSoloStore(
+    ({ setIsStartedGame }) => setIsStartedGame,
+  )
+  const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
+  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
+  const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
+  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const offer = useSoloStore(({ offer }) => offer)
   const bet = useSoloStore(({ bet }) => bet)
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
@@ -171,6 +185,32 @@ const useSolo = () => {
       })
     })
   }
+
+  useEffect(() => {
+    const activeGame = allGames.find((game) => game.status === 'ACTIVE')
+    if (activeGame && !isStartedGame) {
+      navigate(`${ROUTES.solo.play}/${activeGame.id}`)
+    }
+  }, [allGames, navigate, isStartedGame])
+
+  useEffect(() => {
+    setIsStartedGame(Boolean(gameId))
+  }, [gameId, setIsStartedGame])
+
+  useEffect(() => {
+    const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
+    setMaxBet(maxBet)
+  }, [isStartedGame, balance, bet, gameId, setMaxBet])
+
+  useEffect(() => {
+    const jackpot = Number(gameDetails?.potentialWin ?? 0)
+    setJackpot(jackpot)
+  }, [gameDetails, setJackpot])
+
+  useEffect(() => {
+    const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
+    setNoMoney(noMoney)
+  }, [setNoMoney, isStartedGame, balance, bet])
 
   return { next, deal, revolverRefHandle }
 }

@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useState } from 'react'
 
-import { useBalance } from '@/api/wallet.api'
-import { useAllGames, useGameDetails } from '@/api/game.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { useSolo } from '@/context/use-solo'
-import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { MAX_BET, VariantGame } from '@/lib/constants'
+import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from './game-over'
 import { Revolver } from './revolver'
@@ -23,24 +19,12 @@ import { Debug } from '@/components/debug'
 
 const Solo = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle } = useSolo()
-  const navigate = useNavigate()
   const [showHelpers, setShowHelpers] = useState(true)
-  const { data: balance } = useBalance()
-  const { data: gameDetails } = useGameDetails()
-  const { data: allGames = [] } = useAllGames()
-  const { gameId } = useParams<{ gameId: string }>()
-  const setIsStartedGame = useSoloStore(
-    ({ setIsStartedGame }) => setIsStartedGame,
-  )
-  const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
-  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
-  const setBet = useSoloStore(({ setBet }) => setBet)
-  const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useSoloStore(({ noMoney }) => noMoney)
   const bet = useSoloStore(({ bet }) => bet)
   const offer = useSoloStore(({ offer }) => offer)
-  const jackpot = Number(gameDetails?.potentialWin ?? 0)
+  const jackpot = useSoloStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
 
   const modal = useCustomModal()
@@ -59,37 +43,6 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
       contentSlot: <AddMoneyModal />,
     })
   }
-
-  useEffect(() => {
-    const activeGame = allGames.find((game) => game.status === 'ACTIVE')
-    if (activeGame && !isStartedGame) {
-      navigate(`${ROUTES.solo.play}/${activeGame.id}`)
-    }
-  }, [allGames, navigate, isStartedGame])
-
-  useEffect(() => {
-    setIsStartedGame(Boolean(gameId))
-  }, [gameId, setIsStartedGame])
-
-  useEffect(() => {
-    const syncedBet = isStartedGame ? Number(gameDetails?.betAmount ?? 0) : bet
-    setBet(syncedBet)
-  }, [isStartedGame, bet, gameDetails, gameId, setBet])
-
-  useEffect(() => {
-    const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
-    setMaxBet(maxBet)
-  }, [isStartedGame, balance, bet, gameId, setMaxBet])
-
-  useEffect(() => {
-    const jackpot = Number(gameDetails?.potentialWin ?? 0)
-    setJackpot(jackpot)
-  }, [gameDetails, setJackpot])
-
-  useEffect(() => {
-    const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
-    setNoMoney(noMoney)
-  }, [setNoMoney, isStartedGame, balance, bet])
 
   return (
     <>
