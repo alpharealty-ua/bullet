@@ -1,5 +1,10 @@
 import { useRef, useState } from 'react'
+import { Navigate, useNavigate, useParams } from 'react-router'
 
+import { useDuelStore } from '@/store/duel.store'
+import { useSoloStore } from '@/store/solo.store'
+import { ROUTES } from '@/routes/path'
+import { useSolo } from '@/hooks/use-solo'
 import { images, VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -11,13 +16,11 @@ import { Character } from './character'
 import { PlayerInfo } from './player-info'
 import { ReadySetPull } from './ready-set-pull'
 import { GameOver } from './game-over'
-import { useDuelStore } from '@/store/duel.store'
-import { Navigate, useNavigate, useParams } from 'react-router'
-import { useSoloStore } from '@/store/solo.store'
-import { ROUTES } from '@/routes/path'
 
 const Duel = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
+  // TODO: USE DUEL
+  useSolo()
   // TODO: USE DUEL STORE
   const setState = useSoloStore(({ setState }) => setState)
   const characterIndex = useDuelStore(({ characterIndex }) => characterIndex)
