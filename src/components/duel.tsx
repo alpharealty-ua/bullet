@@ -34,8 +34,15 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const startRef = useRef(false)
+  const disabledRef = useRef(false)
 
   const handlePull = async () => {
+    if (disabledRef.current) {
+      return
+    }
+
+    disabledRef.current = true
+
     const gunHandle = gunHandleRef.current
     const readySetPullHandle = readySetPullHandleRef.current
 
@@ -44,12 +51,14 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
     }
 
     if (startedGame) {
-      await gunHandleRef.current.spin()
-      await gunHandleRef.current.shot()
+      await gunHandle.spin()
+      await gunHandle.shot()
       setState('game-over')
-      return
+    } else {
+      await readySetPullHandle.start()
     }
-    readySetPullHandleRef.current.start()
+
+    disabledRef.current = false
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
