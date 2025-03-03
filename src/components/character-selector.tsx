@@ -21,18 +21,17 @@ export const CharacterSelector = ({
   defaultIndex?: number
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
-  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [selectedIndex, setSelectedIndex] = useState(defaultIndex)
 
   const handleArrowClick = (index: number) => {
     const newIndex =
       index < 0 ? characterImages.length - 1 : index % characterImages.length
     setActiveIndex(newIndex)
-  }
-
-  const handleClick = (index: number) => {
-    const newIndex = selectedIndex === index ? -1 : index
-    onSelect(newIndex)
-    setSelectedIndex(newIndex)
+    const disabled = disabledImages.includes(index)
+    if (!disabled) {
+      setSelectedIndex(newIndex)
+      onSelect(newIndex)
+    }
   }
 
   return (
@@ -66,7 +65,6 @@ export const CharacterSelector = ({
                     'absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] border-4 p-8 transition-all disabled:cursor-not-allowed',
                     selected && 'bg-green/10 border-green',
                   )}
-                  onClick={() => handleClick(i)}
                   disabled={disabled}
                 >
                   <Character
