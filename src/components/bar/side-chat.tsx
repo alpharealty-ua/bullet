@@ -83,14 +83,14 @@ const SideChat = ({
           return (
             <div key={message.id} className='flex flex-col gap-1 text-[10px]'>
               <div className='font-bold'>{message.user}:</div>
-              <div className='font-roboto normal-case'>{message.message}</div>
+              <div className='font-verdana normal-case'>{message.message}</div>
             </div>
           )
         })}
       </div>
       <div className='relative shrink-0'>
         <textarea
-          className='h-8 w-full resize-none overflow-hidden rounded-sm border border-gray-300 px-2 py-2.5 pr-13 align-top text-[10px] uppercase placeholder:text-gray-300'
+          className='font-verdana h-8 w-full resize-none overflow-hidden rounded-sm border border-gray-300 px-2 py-2.5 pr-13 align-top text-[10px] uppercase placeholder:text-gray-300'
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder='Type your message here'

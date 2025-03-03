@@ -3,6 +3,7 @@
 
 @theme {
   --font-roboto: Roboto;
+  --font-verdana: Verdana;
   --font-bullet-official: BulletOfficial;
   --color-green: #006100;
   --color-red: #ff0b0b;
@@ -61,6 +62,34 @@
   100% {
     opacity: 1;
   }
+}
+
+@font-face {
+  font-family: Verdana;
+  src: url('/assets/fonts/Verdana.woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Verdana;
+  src: url('/assets/fonts/VerdanaItalic.woff2');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Verdana;
+  src: url('/assets/fonts/Verdana-Bold.woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Verdana;
+  src: url('/assets/fonts/Verdana-BoldItalic.woff2');
+  font-weight: 700;
+  font-style: italic;
 }
 
 @font-face {
