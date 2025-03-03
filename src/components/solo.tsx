@@ -48,24 +48,22 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
     <>
       <Debug />
       <Header logoText={'Solo'} />
-      <div className='mb-auto flex flex-col gap-1 pt-2'>
-        <Result
-          title={'Jackpot'}
-          price={jackpot}
-          open={isStartedGame && Boolean(jackpot)}
-        />
-        <Result
-          title={'the banker offers...'}
-          price={offer}
-          open={isStartedGame && Boolean(offer)}
-        />
-      </div>
+      <Result
+        title={'Jackpot'}
+        price={jackpot}
+        open={isStartedGame && Boolean(jackpot)}
+      />
+      <Result
+        title={'the banker offers...'}
+        price={offer}
+        open={isStartedGame && Boolean(offer)}
+      />
       {noMoney && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      <div className='relative'>
+      <div className='relative mt-auto'>
         <Revolver
           gunHandleRef={revolverRefHandle}
           disabled={!isStartedGame}
