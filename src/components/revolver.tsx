@@ -254,12 +254,10 @@ const Revolver = React.forwardRef<
     })
   }, [])
 
-  useImperativeHandle(gunHandleRef, () => {
-    return {
-      spin,
-      click,
-    }
-  })
+  useImperativeHandle(gunHandleRef, () => ({
+    spin,
+    click,
+  }))
 
   return (
     <div
