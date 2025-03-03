@@ -58,7 +58,7 @@ const Footer = ({
                 show={showHelpers && bet === 0 && !isStartedGame}
               />
               <Bet
-                disabled={isStartedGame}
+                disabled={isStartedGame || noMoney}
                 maxBet={maxBet}
                 bet={bet}
                 onBet={setBet}
