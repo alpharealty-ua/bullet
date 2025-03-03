@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
@@ -16,7 +15,6 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
     ({ setCharacterIndex }) => setCharacterIndex,
   )
   const characterIndex = useDuelStore(({ characterIndex }) => characterIndex)
-  const [characterSelected, setCharacterSelected] = useState(false)
   const navigate = useNavigate()
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
@@ -31,7 +29,6 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
 
   const handleSelectCharacter = (index: number) => {
     setCharacterIndex(index)
-    setCharacterSelected(index !== -1)
   }
 
   return (
@@ -43,13 +40,11 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
             image='play'
             className='w-30'
             onClick={handlePlayButton}
-            disabled={isDuel && !characterSelected}
           />
           <ButtonWithAudio
             image='watch'
             className='w-30 text-2xl'
             onClick={handleWatchButton}
-            disabled={isDuel && !characterSelected}
           />
         </div>
         {isDuel && (
