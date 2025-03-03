@@ -62,6 +62,7 @@ export const useAddBalance = () => {
         return
       }
 
+      // TODO: CHANGE
       return addBalance({
         userId: profile.id,
         networkId: 'local',
