@@ -161,8 +161,18 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ type, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
 
-    const handleMouseDownPassword = () => setShowPassword(!showPassword)
-    const handleMouseUpPassword = () => setShowPassword(!showPassword)
+    const handleMouseDownPassword = (event: React.PointerEvent) => {
+      const { nativeEvent } = event
+      const button = nativeEvent.target as HTMLButtonElement
+
+      if (button === null) {
+        return
+      }
+
+      button.setPointerCapture(nativeEvent.pointerId)
+      setShowPassword(true)
+    }
+    const handleMouseUpPassword = () => setShowPassword(false)
 
     return (
       <FormInput
@@ -172,14 +182,20 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
         afterSlot={
           <button
             className='absolute top-1/2 right-4 -translate-y-1/2 text-black'
-            onMouseUp={handleMouseUpPassword}
-            onMouseDown={handleMouseDownPassword}
+            onPointerDown={handleMouseDownPassword}
+            onPointerUp={handleMouseUpPassword}
+            onClick={() => {
+              console.log('click')
+            }}
             type='button'
           >
             {showPassword ? (
-              <MdOutlineVisibility size={28} />
+              <MdOutlineVisibility className='pointer-events-none' size={28} />
             ) : (
-              <MdOutlineVisibilityOff size={28} />
+              <MdOutlineVisibilityOff
+                className='pointer-events-none'
+                size={28}
+              />
             )}
           </button>
         }
