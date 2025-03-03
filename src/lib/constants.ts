@@ -50,7 +50,7 @@ export const images = {
   '1000x': '/assets/images/compressed/1000x.png',
   duelcharacter1: '/assets/images/character-1.png',
   duelcharacter2: '/assets/images/character-2.png',
-  opponent: '/assets/images/opponent.png',
+  player1: '/assets/images/player1.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',

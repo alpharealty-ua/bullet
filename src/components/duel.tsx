@@ -100,7 +100,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               />
               <div
                 className='relative ml-10 aspect-[190/220] w-[190px] cursor-pointer items-end justify-center bg-contain bg-center bg-no-repeat'
-                style={{ backgroundImage: `url(${images.opponent})` }}
+                style={{ backgroundImage: `url(${images.player1})` }}
                 onClick={handlePlayerClick}
               ></div>
               <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
