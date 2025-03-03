@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { useSolo } from '@/hooks/use-solo'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { ROUTES } from '@/routes/path'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from './game-over'
@@ -107,7 +108,7 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       </div>
-      <GameOver />
+      <GameOver backRouter={ROUTES.solo.play} />
       <Footer format='solo' variant={variant} showHelpers={showHelpers} />
     </>
   )

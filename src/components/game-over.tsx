@@ -12,9 +12,11 @@ let imageVersion = Date.now()
 const GameOver = ({
   timeout = 3000,
   hasImage = true,
+  backRouter,
 }: {
   timeout?: number
   hasImage?: boolean
+  backRouter: string
 }) => {
   const state = useSoloStore(({ state }) => state)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -26,7 +28,7 @@ const GameOver = ({
   const show = state === 'game-over'
 
   const handleClick = () => {
-    navigate(ROUTES.solo.play)
+    navigate(backRouter)
   }
 
   useEffect(() => {
@@ -44,12 +46,12 @@ const GameOver = ({
     }
 
     const timeoutId = setTimeout(() => {
-      navigate(ROUTES.solo.play)
+      navigate(backRouter)
     }, timeout)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [timeout, show, navigate])
+  }, [timeout, show, navigate, backRouter])
 
   useEffect(() => {
     if (!show) {

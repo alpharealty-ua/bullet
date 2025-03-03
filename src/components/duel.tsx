@@ -152,7 +152,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
           </>
         )}
       </div>
-      <GameOver hasImage={false} />
+      <GameOver hasImage={false} backRouter={ROUTES.duel.play} />
       <Footer format='duel' variant={variant} />
     </>
   )
