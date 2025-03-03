@@ -14,8 +14,9 @@ import { Bar } from '@/components/bar/bar'
 import { DuelGameBar, GameBarHandle } from './duel-game-bar'
 import { Character } from './character'
 import { PlayerInfo } from './player-info'
-import { ReadySetPull } from './ready-set-pull'
+import { ReadySetPull, ReadySetPullHandle } from './ready-set-pull'
 import { GameOver } from './game-over'
+import { GunHandle } from './character-gun'
 
 const Duel = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
@@ -29,27 +30,26 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !startedGame || showPlayerInfo
   // TODO: MOVE TO CONTEXT
-  const gunHandleRef = useRef<{
-    spin: (duration?: number) => Promise<void>
-    shot: () => void
-  }>(null)
+  const gunHandleRef = useRef<GunHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
-  const [runReadySetPull, setRunReadySetPull] = useState(false)
+  const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const startRef = useRef(false)
 
   const handlePull = async () => {
-    // TODO: TEMPORARY SOLUTION
-    if (startedGame) {
-      await gunHandleRef.current?.spin()
-      gunHandleRef.current?.shot()
-      setTimeout(async () => {
-        setState('game-over')
-        gunHandleRef.current?.shot()
-      }, 700)
+    const gunHandle = gunHandleRef.current
+    const readySetPullHandle = readySetPullHandleRef.current
+
+    if (!(gunHandle && readySetPullHandle)) {
       return
     }
-    setRunReadySetPull(false)
-    setTimeout(() => setRunReadySetPull(true))
+
+    if (startedGame) {
+      await gunHandleRef.current.spin()
+      await gunHandleRef.current.shot()
+      setState('game-over')
+      return
+    }
+    readySetPullHandleRef.current.start()
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
@@ -115,12 +115,14 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               />
             }
           />
-          {runReadySetPull && (
+          {
             <ReadySetPull
+              show={startedGame}
               onStart={handleStartReadySetPull}
               onEnd={handleEndReadySetPull}
+              readySetPullHandle={readySetPullHandleRef}
             />
-          )}
+          }
         </div>
         {variant === 'play' && (
           <>

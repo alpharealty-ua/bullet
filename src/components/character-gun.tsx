@@ -1,44 +1,43 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 import mergeRefs from 'merge-refs'
 
 import { images } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, waitEndAudio } from '@/lib/utils'
+import { useSettingsStore } from '@/store/settings.store'
+
+export type GunHandle = {
+  spin: (duration?: number) => Promise<void>
+  shot: () => Promise<void>
+}
 
 export interface GunCharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  gunHandleRef?: React.ForwardedRef<{
-    spin: (duration?: number) => Promise<void>
-    shot: () => void
-  }>
+  gunHandleRef?: React.ForwardedRef<GunHandle>
 }
 
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
   ({ className, gunHandleRef, ...props }, ref) => {
+    const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
+    const [showShot, setShowShot] = useState(false)
 
-    useEffect(() => {
-      const gunDom = gunRef.current
+    const shot = useCallback(async () => {
+      const gunShotAudio = await playAudio('gunshot')
 
-      if (gunDom === null) {
-        return
-      }
+      setShowShot(true)
 
-      const chamberDom = gunDom.querySelector('[data-chamber]')
-      const bodyDom = gunDom.querySelector('[data-body]')
+      await waitEndAudio(gunShotAudio)
 
-      if (!(chamberDom && bodyDom)) {
-        return
-      }
-    }, [])
+      setShowShot(false)
+    }, [playAudio])
 
-    const [shot, setShot] = useState(false)
-
-    const handleClick = () => {
-      setShot((p) => !p)
-    }
-
-    const spin = async (duration = 200): Promise<void> => {
+    const spin = useCallback(async (duration = 200): Promise<void> => {
       const gunDom = gunRef.current
 
       if (gunDom === null) {
@@ -68,20 +67,17 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
         chamberDom.style.transitionDuration = `${duration}ms`
         chamberDom.addEventListener('transitionend', transitionend)
       })
-    }
+    }, [])
 
-    useImperativeHandle(gunHandleRef, () => {
-      return {
-        spin,
-        shot: handleClick,
-      }
-    })
+    useImperativeHandle(gunHandleRef, () => ({
+      spin,
+      shot,
+    }))
 
     return (
       <div
         ref={mergeRefs(ref, gunRef)}
         className={cn('relative aspect-[1/1.95]', className)}
-        // onClick={handleClick}
         {...props}
       >
         <div
@@ -98,34 +94,31 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           }}
           data-body
         ></div>
-        {shot && (
+        {showShot && (
           <>
             <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>
               <div
                 className={cn(
                   'absolute inset-0 scale-200 opacity-0',
-                  'zoom-in-50 fade-in fill-mode-backwards animate-[shot] duration-200 ease-linear',
+                  'zoom-in-50 fade-in fill-mode-backwards bg-no-repea animate-[shot] bg-cover bg-center duration-200 ease-linear',
                 )}
-              >
-                <img src={images.shot1} alt='' />
-              </div>
+                style={{ backgroundImage: `url(${images.shot1})` }}
+              ></div>
               <div
                 className={cn(
                   'absolute inset-0 scale-600 opacity-0',
-                  'zoom-in fade-in fill-mode-backwards animate-[shot] delay-150 duration-200 ease-linear',
+                  'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
                 )}
-              >
-                <img src={images.shot2} alt='' />
-              </div>
+                style={{ backgroundImage: `url(${images.shot2})` }}
+              ></div>
             </div>
             <div
               className={cn(
                 'fixed inset-0 z-50 opacity-0',
-                'fill-mode-both fade-in animate-[shot] delay-300 duration-200 ease-linear',
+                'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
               )}
-            >
-              <img src={images.shot3} alt='' />
-            </div>
+              style={{ backgroundImage: `url(${images.shot3})` }}
+            ></div>
           </>
         )}
       </div>

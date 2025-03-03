@@ -1,19 +1,27 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useImperativeHandle, useRef } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { wait, waitEndAudio } from '@/lib/utils'
+import { cn, waitEndAudio } from '@/lib/utils'
+
+export type ReadySetPullHandle = {
+  start: () => Promise<void>
+}
 
 const ReadySetPull = ({
+  show,
   onStart,
   onEnd,
+  readySetPullHandle,
 }: {
+  show: boolean
   onStart: () => void
   onEnd: () => void
+  readySetPullHandle: React.ForwardedRef<ReadySetPullHandle>
 }) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  const start = useCallback(async () => {
     const wrapperDom = wrapperRef.current
 
     if (wrapperDom === null) {
@@ -27,53 +35,58 @@ const ReadySetPull = ({
       return
     }
 
-    const runAnimation = async () => {
-      ready.classList.remove('is-show')
-      set.classList.remove('is-show')
-      pull.classList.remove('is-show')
+    ready.classList.remove('is-show')
+    set.classList.remove('is-show')
+    pull.classList.remove('is-show')
 
-      await wait(0)
+    onStart()
 
-      if (isUnmounted) {
-        return
-      }
+    const readyAudio = await playAudio('ready')
+    ready.classList.add('is-show')
+    await waitEndAudio(readyAudio)
 
-      onStart()
+    const setAudio = await playAudio('set')
+    set.classList.add('is-show')
+    await waitEndAudio(setAudio)
 
-      const readyAudio = await playAudio('ready')
-      ready.classList.add('is-show')
-      await waitEndAudio(readyAudio)
+    const pullAudio = await playAudio('pull')
+    pull.classList.add('is-show')
+    await waitEndAudio(pullAudio)
 
-      const setAudio = await playAudio('set')
-      set.classList.add('is-show')
-      await waitEndAudio(setAudio)
+    onEnd()
+  }, [onStart, onEnd, playAudio])
 
-      const pullAudio = await playAudio('pull')
-      pull.classList.add('is-show')
-      await waitEndAudio(pullAudio)
-
-      onEnd()
-    }
-    let isUnmounted = false
-    runAnimation()
-
-    return () => {
-      isUnmounted = true
-    }
-  }, [playAudio, onStart, onEnd])
+  useImperativeHandle(readySetPullHandle, () => ({
+    start,
+  }))
 
   return (
     <div
       ref={wrapperRef}
       className='absolute bottom-0 left-10 flex flex-col gap-1 text-[40px]'
     >
-      <div className='relative -left-4 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+      <div
+        className={cn(
+          'relative -left-4 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
+          show && 'is-show',
+        )}
+      >
         Ready
       </div>
-      <div className='relative -left-4 pl-8 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+      <div
+        className={cn(
+          'relative -left-4 pl-8 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
+          show && 'is-show',
+        )}
+      >
         Set
       </div>
-      <div className='relative -left-4 pl-14 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100'>
+      <div
+        className={cn(
+          'relative -left-4 pl-14 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
+          show && 'is-show',
+        )}
+      >
         Pull
       </div>
     </div>
