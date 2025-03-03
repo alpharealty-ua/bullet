@@ -1,7 +1,7 @@
 export const ROUTES = {
   index: '/',
   auth: {
-    resiter: '/resiter',
+    register: '/register',
     login: '/login',
   },
   solo: {

@@ -31,7 +31,7 @@ const Home = () => {
   }
 
   const handleRegisterClick = () => {
-    nagigate(ROUTES.auth.resiter)
+    nagigate(ROUTES.auth.register)
   }
 
   return (

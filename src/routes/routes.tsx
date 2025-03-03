@@ -16,7 +16,7 @@ export const PUBLIC_ROUTES = [
     element: <LoginPage />,
   },
   {
-    path: ROUTES.auth.resiter,
+    path: ROUTES.auth.register,
     element: <RegisterPage />,
   },
 ]
