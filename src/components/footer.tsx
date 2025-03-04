@@ -10,6 +10,7 @@ import { Settings } from './settings'
 import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
+import { useDuelStore } from '@/store/duel.store'
 
 const Footer = ({
   format,
@@ -24,6 +25,7 @@ const Footer = ({
 
   const setBet = useSoloStore(({ setBet }) => setBet)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
+  const round = useDuelStore(({ round }) => round)
   const noMoney = useSoloStore(({ noMoney }) => noMoney)
   const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
   const bet = useSoloStore(({ bet }) => bet)
@@ -94,7 +96,7 @@ const Footer = ({
           <div className='flex flex-col items-center text-center'>
             <div className='text-green text-xl font-bold uppercase'>Round</div>
             <div className='text-red relative text-center text-3xl leading-[1]'>
-              3
+              {round}
             </div>
           </div>
         )}
@@ -117,7 +119,7 @@ const Footer = ({
           )}
           {format === 'duel' && variant === 'watch' && (
             <div className='text-red relative text-center text-3xl leading-[1]'>
-              3
+              {round}
             </div>
           )}
         </div>

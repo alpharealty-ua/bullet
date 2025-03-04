@@ -25,6 +25,8 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   useSolo()
 
   const setState = useSoloStore(({ setState }) => setState)
+  const setRound = useDuelStore(({ setRound }) => setRound)
+  const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const { gameId } = useParams<{ gameId: string }>()
@@ -63,8 +65,11 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
 
       if (isGameOver) {
         await gunHandle.shot()
+        // TODO: MOVE TO NEW GAME
+        setRound(1)
         setState('game-over')
       } else {
+        addRound()
         const duration = randomIntFromInterval(25, 50)
         await gameBarHandle.start(duration)
       }
