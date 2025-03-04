@@ -101,7 +101,7 @@ const DuelGameBar = ({
                   <td
                     key={i}
                     className={cn(
-                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-10',
+                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-20 ease-linear',
                       '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
                       className,
                       number === DEFAUTL_NUMBER && 'text-transparent',
