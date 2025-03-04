@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const API_URL = `${env[`${ENV_PREFIX}API_URL`]}`
 
   return {
-    base: './',
+    base: '/',
     plugins: [tailwindcss(), tsconfigPaths(), react()],
     envPrefix: ENV_PREFIX,
     server: {
