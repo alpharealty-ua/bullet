@@ -16,7 +16,6 @@ import { AddMoneyModal } from '@/components/add-money-modal'
 import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
-import { Debug } from '@/components/debug'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle } = useSolo()
@@ -47,7 +46,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Debug />
       <Header logoText={'Solo'} />
       <Result
         title={'Jackpot'}
