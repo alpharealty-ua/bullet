@@ -1,12 +1,13 @@
 import { useCallback, useRef, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
+import { useSettingsStore } from '@/store/settings.store'
 import { ROUTES } from '@/routes/path'
 import { useSolo } from '@/hooks/use-solo'
-import { ENEMY_LIST, VariantGame } from '@/lib/constants'
-import { cn, randomIntFromInterval } from '@/lib/utils'
+import { VariantGame } from '@/lib/constants'
+import { cn, randomIntFromInterval, wait } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from './header'
 import { Footer } from './footer'
@@ -22,18 +23,18 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
   // TODO: USE DUEL
   useSolo()
-  // TODO: USE DUEL STORE
+
   const setState = useSoloStore(({ setState }) => setState)
-  const characterIndex = useDuelStore(({ characterIndex }) => characterIndex)
+  const characterName = useDuelStore(({ characterName }) => characterName)
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const { gameId } = useParams<{ gameId: string }>()
-  const startedGame = Boolean(gameId)
+  const isStartedGame = Boolean(gameId)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
-  const visiblePlayerInfo = !startedGame || showPlayerInfo
+  const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   // TODO: MOVE TO CONTEXT
   const gunHandleRef = useRef<GunHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
-  const startRef = useRef(false)
   const disabledRef = useRef(false)
 
   const handlePull = async () => {
@@ -45,16 +46,31 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
 
     const gunHandle = gunHandleRef.current
     const readySetPullHandle = readySetPullHandleRef.current
+    const gameBarHandle = gameBarRefHandle.current
 
-    if (!(gunHandle && readySetPullHandle)) {
+    if (!(gunHandle && readySetPullHandle && gameBarHandle)) {
       return
     }
 
-    if (startedGame) {
+    if (isStartedGame) {
+      const number = await gameBarHandle.stop()
+      const isGameOver = number === 5
+      await wait(1000)
+
+      await playAudio('triggerpull')
       await gunHandle.spin()
-      await gunHandle.shot()
-      setState('game-over')
+      await gunHandle.click()
+
+      if (isGameOver) {
+        await gunHandle.shot()
+        setState('game-over')
+      } else {
+        const duration = randomIntFromInterval(25, 50)
+        await gameBarHandle.start(duration)
+      }
     } else {
+      const duration = randomIntFromInterval(25, 50)
+      await gameBarHandle.start(duration)
       await readySetPullHandle.start()
     }
 
@@ -63,35 +79,11 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
 
-  const handleStartReadySetPull = useCallback(() => {
-    startRef.current = true
-    const duration = randomIntFromInterval(25, 50)
-
-    const next = async () => {
-      if (!startRef.current) {
-        return
-      }
-
-      const gameBarHandle = gameBarRefHandle.current
-
-      if (gameBarHandle === null) {
-        return
-      }
-
-      await gameBarHandle.next(duration)
-      next()
-    }
-    next()
-  }, [])
+  const handleStartReadySetPull = useCallback(async () => {}, [])
 
   const handleEndReadySetPull = useCallback(() => {
-    startRef.current = false
     navigate(`${ROUTES.duel.play}/1`)
   }, [navigate])
-
-  if (characterIndex === -1) {
-    return <Navigate to={ROUTES.duel.index} />
-  }
 
   return (
     <>
@@ -104,13 +96,16 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
         <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
           <Character
             className={cn(
-              'mx-auto',
+              'mx-auto max-h-50 w-full max-w-48',
               variant === 'watch' && '-mb-7 h-[300px]',
-              variant === 'play' && 'mr-12 h-[235px]',
+              variant === 'play' && 'mr-12',
             )}
-            character={ENEMY_LIST[characterIndex]}
+            characterName='fatty'
+            type='enemy'
             onClick={
-              variant === 'play' && startedGame ? handlePlayerClick : undefined
+              variant === 'play' && isStartedGame
+                ? handlePlayerClick
+                : undefined
             }
             gunHandleRef={gunHandleRef}
             beforeSlot={
@@ -118,14 +113,14 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
                 className='absolute top-0 right-full translate-x-5'
                 side='left'
                 level={53}
-                login={'Suni7222'}
+                login='Suni7222'
                 win={52}
                 visible={visiblePlayerInfo}
               />
             }
           />
           <ReadySetPull
-            show={startedGame}
+            show={isStartedGame}
             onStart={handleStartReadySetPull}
             onEnd={handleEndReadySetPull}
             readySetPullHandle={readySetPullHandleRef}
@@ -134,19 +129,27 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
         {variant === 'play' && (
           <>
             <div className='relative mb-1'>
-              <PlayerInfo
-                className='absolute top-6 right-6'
-                side='right'
-                level={53}
-                login={'Suni7222'}
-                win={52}
-                visible={visiblePlayerInfo}
+              <Character
+                className={cn('ml-6 max-h-[220px] max-w-[180px]')}
+                characterName={characterName}
+                type='player'
+                onClick={
+                  variant === 'play' && isStartedGame
+                    ? handlePlayerClick
+                    : undefined
+                }
+                gunHandleRef={gunHandleRef}
+                beforeSlot={
+                  <PlayerInfo
+                    className='absolute top-6 left-full translate-x-2'
+                    side='right'
+                    level={53}
+                    login='Suni7222'
+                    win={52}
+                    visible={visiblePlayerInfo}
+                  />
+                }
               />
-              <div
-                className='relative ml-10 aspect-[190/220] w-[190px] cursor-pointer items-end justify-center bg-contain bg-center bg-no-repeat'
-                style={{ backgroundImage: `url(${images.player1})` }}
-                onClick={handlePlayerClick}
-              ></div>
               <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
                 <div className='relative'>
                   <ButtonWithAudio

@@ -1,8 +1,24 @@
+import { useCallback, useImperativeHandle, useRef } from 'react'
+
 import { cn } from '@/lib/utils'
-import { useImperativeHandle, useRef } from 'react'
 
 export type GameBarHandle = {
-  next: (duration: number) => Promise<void>
+  start: (duration: number) => Promise<void>
+  stop: () => Promise<number>
+}
+
+const LENGTH = 23
+const DEFAUTL_NUMBER = 5
+const NUMBERS = [50, 33, 20, 10]
+const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]', 'bg-[#ffda10]']
+
+const getItem = (i: number) => {
+  const center = LENGTH >> 1
+  const index = Math.abs(center - i)
+  const number = NUMBERS[index] ?? DEFAUTL_NUMBER
+  const className = CLASS_NAMES[index] ?? ''
+
+  return { number, className }
 }
 
 const DuelGameBar = ({
@@ -13,8 +29,9 @@ const DuelGameBar = ({
   const ref = useRef<HTMLTableElement>(null)
   const directionRef = useRef(1)
   const activeIndexRef = useRef(-1)
+  const isRunningRef = useRef(false)
 
-  const next = async (duration: number) => {
+  const start = useCallback(async (duration: number) => {
     const barDom = ref.current
 
     if (barDom === null) {
@@ -23,36 +40,48 @@ const DuelGameBar = ({
 
     const cells = barDom.rows[0].cells
 
-    const prevActiveIndex = activeIndexRef.current
-    let direction = directionRef.current
-    if (prevActiveIndex === 0) direction = 1
-    else if (prevActiveIndex === cells.length - 1) direction = -1
+    isRunningRef.current = true
 
-    const nextActiveIndex = prevActiveIndex + direction
-    directionRef.current = direction
-    activeIndexRef.current = nextActiveIndex
+    const start = () => {
+      if (!isRunningRef.current) {
+        return
+      }
 
-    const prevActive = cells[prevActiveIndex] ?? document.createElement('td')
-    const nextActive = cells[nextActiveIndex]
+      const prevActiveIndex = activeIndexRef.current
+      let direction = directionRef.current
+      if (prevActiveIndex === 0) direction = 1
+      else if (prevActiveIndex === cells.length - 1) direction = -1
 
-    prevActive.classList.remove('is-active')
-    nextActive.classList.add('is-active')
-    nextActive.style.transitionDuration = `${duration}ms`
+      const nextActiveIndex = prevActiveIndex + direction
+      directionRef.current = direction
+      activeIndexRef.current = nextActiveIndex
 
-    return new Promise<void>((resolve) => {
+      const prevActive = cells[prevActiveIndex] ?? document.createElement('td')
+      const nextActive = cells[nextActiveIndex]
+
+      prevActive.classList.remove('is-active')
+      nextActive.classList.add('is-active')
+      nextActive.style.transitionDuration = `${duration}ms`
+
       nextActive.addEventListener(
         'transitionend',
         () => {
           nextActive.style.transitionDuration = ''
-          resolve()
+          start()
         },
         { once: true },
       )
-    })
-  }
+    }
+
+    start()
+  }, [])
 
   useImperativeHandle(gameBarRef, () => ({
-    next,
+    start,
+    stop: async () => {
+      isRunningRef.current = false
+      return getItem(activeIndexRef.current).number
+    },
   }))
 
   return (
@@ -63,17 +92,10 @@ const DuelGameBar = ({
       >
         <thead>
           <tr>
-            {Array(23)
+            {Array(LENGTH)
               .fill(null)
-              .map((_, i, arr) => {
-                const center = arr.length >> 1
-                const index = Math.abs(center - i)
-                const range = [
-                  { number: 50, className: 'bg-red' },
-                  { number: 33, className: 'bg-[#ff6c00]' },
-                  { number: 20, className: 'bg-[#ff9d10]' },
-                  { number: 10, className: 'bg-[#ffda10]' },
-                ][index] ?? { number: 0, className: '' }
+              .map((_, i) => {
+                const { number, className } = getItem(i)
 
                 return (
                   <td
@@ -81,11 +103,11 @@ const DuelGameBar = ({
                     className={cn(
                       'border-2 border-black text-center align-middle text-[9px] transition-colors duration-10',
                       '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
-                      range.className,
-                      range.number === 0 && 'text-transparent',
+                      className,
+                      number === DEFAUTL_NUMBER && 'text-transparent',
                     )}
                   >
-                    {range.number || 5}
+                    {number}
                   </td>
                 )
               })}

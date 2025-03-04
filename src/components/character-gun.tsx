@@ -9,9 +9,12 @@ import mergeRefs from 'merge-refs'
 import { images } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
+import { Click } from './guns/click'
+import { useClick } from './guns/use-click'
 
 export type GunHandle = {
   spin: (duration?: number) => Promise<void>
+  click: () => Promise<void>
   shot: () => Promise<void>
 }
 
@@ -37,6 +40,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       setShowShot(false)
     }, [playAudio])
 
+    // TODO: REUSE
     const spin = useCallback(async (duration = 200): Promise<void> => {
       const gunDom = gunRef.current
 
@@ -69,59 +73,74 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       })
     }, [])
 
+    const click = useClick(gunRef)
+
     useImperativeHandle(gunHandleRef, () => ({
       spin,
       shot,
+      click,
     }))
 
     return (
-      <div
-        ref={mergeRefs(ref, gunRef)}
-        className={cn('relative aspect-[1/1.95]', className)}
-        {...props}
-      >
+      <>
         <div
-          className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
-          style={{
-            backgroundImage: `url(${images.gunchambercharacter})`,
-          }}
-          data-chamber
-        ></div>
-        <div
-          className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
-          style={{
-            backgroundImage: `url(${images.gunbodycharacter})`,
-          }}
-          data-body
-        ></div>
+          ref={mergeRefs(ref, gunRef)}
+          className={cn('relative aspect-[1/1.95]', className)}
+          {...props}
+        >
+          <Click
+            leftClick={{
+              className: 'w-[80%]',
+            }}
+            rightClick={{
+              className: 'w-[80%]',
+            }}
+          />
+          <div
+            className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
+            style={{
+              backgroundImage: `url(${images.gunchambercharacter})`,
+            }}
+            data-chamber
+          ></div>
+          <div
+            className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
+            style={{
+              backgroundImage: `url(${images.gunbodycharacter})`,
+            }}
+            data-body
+          ></div>
+          {showShot && (
+            <>
+              <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>
+                <div
+                  className={cn(
+                    'absolute inset-0 scale-200 opacity-0',
+                    'zoom-in-50 fade-in fill-mode-backwards bg-no-repea animate-[shot] bg-cover bg-center duration-200 ease-linear',
+                  )}
+                  style={{ backgroundImage: `url(${images.shot1})` }}
+                ></div>
+                <div
+                  className={cn(
+                    'absolute inset-0 scale-600 opacity-0',
+                    'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
+                  )}
+                  style={{ backgroundImage: `url(${images.shot2})` }}
+                ></div>
+              </div>
+            </>
+          )}
+        </div>
         {showShot && (
-          <>
-            <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>
-              <div
-                className={cn(
-                  'absolute inset-0 scale-200 opacity-0',
-                  'zoom-in-50 fade-in fill-mode-backwards bg-no-repea animate-[shot] bg-cover bg-center duration-200 ease-linear',
-                )}
-                style={{ backgroundImage: `url(${images.shot1})` }}
-              ></div>
-              <div
-                className={cn(
-                  'absolute inset-0 scale-600 opacity-0',
-                  'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
-                )}
-                style={{ backgroundImage: `url(${images.shot2})` }}
-              ></div>
-            </div>
-            <div
-              className={cn(
-                'fixed inset-0 z-50 opacity-0',
-                'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
-              )}
-              style={{ backgroundImage: `url(${images.shot3})` }}
-            ></div>
-          </>
+          <div
+            className={cn(
+              'fixed inset-0 z-50 opacity-0',
+              'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
+            )}
+            style={{ backgroundImage: `url(${images.shot3})` }}
+          ></div>
         )}
-      </div>
+      </>
     )
   },
 )
