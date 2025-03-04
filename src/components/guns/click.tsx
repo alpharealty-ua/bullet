@@ -18,7 +18,7 @@ const Click = ({
         data-click
       >
         <svg viewBox='0 0 60 21' preserveAspectRatio='xMinYMid meet'>
-          <text x='0' y='15' font-size='16px' fill='black'>
+          <text x='0' y='15' fontSize='16px' fill='black'>
             click!
           </text>
         </svg>
@@ -32,7 +32,7 @@ const Click = ({
         data-click
       >
         <svg viewBox='0 0 60 21' preserveAspectRatio='xMinYMid meet'>
-          <text x='0' y='15' font-size='16px' fill='black'>
+          <text x='0' y='15' fontSize='16px' fill='black'>
             click!
           </text>
         </svg>
