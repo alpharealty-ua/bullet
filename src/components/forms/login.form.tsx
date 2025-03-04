@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useLogin } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
@@ -22,6 +22,7 @@ import { ChangeForm } from '@/components/ui/change-form'
 const LoginForm = () => {
   const { mutateAsync: loginMutation, error, isPending, isSuccess } = useLogin()
   const navigate = useNavigate()
+  const { state = { redirect: ROUTES.index } } = useLocation()
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -33,7 +34,11 @@ const LoginForm = () => {
 
   const onSubmit = async (values: LoginSchema) => {
     await loginMutation(values)
-    setTimeout(() => navigate(ROUTES.index), 1000)
+    setTimeout(
+      () =>
+        navigate(state.redirect, { state: { ...state, redirect: undefined } }),
+      1000,
+    )
   }
 
   return (
