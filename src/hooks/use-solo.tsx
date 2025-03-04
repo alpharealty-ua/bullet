@@ -13,7 +13,7 @@ import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
-import { GunHandle } from '@/components/revolver'
+import { GunHandle } from '@/components/guns/revolver'
 
 const useSolo = () => {
   const navigate = useNavigate()

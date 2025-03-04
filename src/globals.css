@@ -35,7 +35,7 @@
     0%,
     100% {
       opacity: 0;
-      transform: scale(0.75);
+      transform: scale(0.5);
     }
     50% {
       opacity: 1;

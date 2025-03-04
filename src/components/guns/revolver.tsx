@@ -8,6 +8,8 @@ import mergeRefs from 'merge-refs'
 
 import { images } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { Click } from './click'
+import { useClick } from './use-click'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
@@ -234,25 +236,7 @@ const Revolver = React.forwardRef<
     })
   }, [])
 
-  const click = useCallback(() => {
-    const gunDom = gunRef.current
-    if (gunDom === null) {
-      return
-    }
-
-    const clicks = gunDom.querySelectorAll('[data-click]')
-
-    clicks.forEach((click) => {
-      click.classList.add('animate-click')
-      click.addEventListener(
-        'animationend',
-        () => {
-          click.classList.remove('animate-click')
-        },
-        { once: true },
-      )
-    })
-  }, [])
+  const click = useClick(gunRef)
 
   useImperativeHandle(gunHandleRef, () => ({
     spin,
@@ -265,18 +249,14 @@ const Revolver = React.forwardRef<
       className={cn('relative mx-auto aspect-[1/1.881] w-50', className)}
       {...props}
     >
-      <div
-        className='absolute top-[65px] left-[-50px] -rotate-[45deg] text-[32px] font-bold tracking-wide opacity-0'
-        data-click
-      >
-        click!
-      </div>
-      <div
-        className='absolute top-[65px] right-[-45px] rotate-[45deg] text-[32px] font-bold tracking-wider opacity-0'
-        data-click
-      >
-        click!
-      </div>
+      <Click
+        leftClick={{
+          className: 'top-[10%] right-[70%] w-[50%]',
+        }}
+        rightClick={{
+          className: 'top-[10%] left-[65%] w-[50%]',
+        }}
+      />
       <div className='absolute inset-0 overflow-hidden'>
         <div
           className={cn(
