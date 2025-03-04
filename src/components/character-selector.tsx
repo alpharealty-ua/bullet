@@ -3,21 +3,19 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import { Character as CharacterType, images } from '@/lib/constants'
+import { CharacterName, characterNames, images } from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const CharacterSelector = ({
   label,
-  characterList,
   disabledImages,
   onSelect,
   defaultIndex = 0,
 }: {
   label: string
-  characterList: CharacterType[]
   disabledImages: number[]
-  onSelect: (index: number) => void
+  onSelect: (name: CharacterName) => void
   defaultIndex?: number
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
@@ -25,12 +23,12 @@ const CharacterSelector = ({
 
   const handleArrowClick = (index: number) => {
     const newIndex =
-      index < 0 ? characterList.length - 1 : index % characterList.length
+      index < 0 ? characterNames.length - 1 : index % characterNames.length
     setActiveIndex(newIndex)
     const disabled = disabledImages.includes(index)
     if (!disabled) {
       setSelectedIndex(newIndex)
-      onSelect(newIndex)
+      onSelect(characterNames[newIndex])
     }
   }
 
@@ -45,7 +43,7 @@ const CharacterSelector = ({
           <PiArrowFatLeftFill />
         </button>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
-          {characterList.map((character, i) => {
+          {characterNames.map((name, i) => {
             const disabled = disabledImages.includes(i)
             const selected = i === selectedIndex
             const active = i === activeIndex
@@ -68,7 +66,8 @@ const CharacterSelector = ({
                   disabled={disabled}
                 >
                   <Character
-                    character={character}
+                    characterName={name}
+                    type='player'
                     className='animate-in fade-in zoom-in-150 h-full'
                   />
                 </button>

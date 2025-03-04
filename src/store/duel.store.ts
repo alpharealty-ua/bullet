@@ -1,13 +1,14 @@
+import { CharacterName } from '@/lib/constants'
 import { create } from 'zustand'
 
 type DuelState = {
-  characterIndex: number
-  setCharacterIndex: (characterIndex: number) => void
+  characterName: CharacterName
+  setCharacterName: (characterName: CharacterName) => void
 }
 
 const useDuelStore = create<DuelState>()((set) => ({
-  characterIndex: 0,
-  setCharacterIndex: (characterIndex: number) => set({ characterIndex }),
+  characterName: 'nubcat',
+  setCharacterName: (characterName: CharacterName) => set({ characterName }),
 }))
 
 export { useDuelStore }

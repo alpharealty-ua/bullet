@@ -51,6 +51,9 @@ export const images = {
   enemynubcat: '/assets/images/enemy-nubcat.png',
   enemymickey: '/assets/images/enemy-mickey.png',
   enemyfatty: '/assets/images/enemy-fatty.png',
+  playernubcat: '/assets/images/player-nubcat.png',
+  playermickey: '/assets/images/player-mickey.png',
+  playerfatty: '/assets/images/player-fatty.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
@@ -67,11 +70,24 @@ export type Character = {
   image: string
 }
 
-export const ENEMY_LIST = [
-  { name: 'nubcat', image: images.enemynubcat },
-  { name: 'mickey', image: images.enemymickey },
-  { name: 'fatty', image: images.enemyfatty },
-] satisfies Character[] as Character[]
+export const CHARACTER_LIST = {
+  nubcat: {
+    enemy: images.enemynubcat,
+    player: images.playernubcat,
+  },
+  mickey: {
+    enemy: images.enemymickey,
+    player: images.playermickey,
+  },
+  fatty: {
+    enemy: images.enemyfatty,
+    player: images.playerfatty,
+  },
+}
+
+export type CharacterName = keyof typeof CHARACTER_LIST
+
+export const characterNames = Object.keys(CHARACTER_LIST) as CharacterName[]
 
 export const audios = {
   revolverspin: '/assets/audios/revolverspin.mp3',
