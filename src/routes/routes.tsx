@@ -2,6 +2,7 @@ import { ROUTES } from './path'
 import { Home } from '@/pages/home.page'
 import { LoginPage } from '@/pages/login.page'
 import { RegisterPage } from '@/pages/register.page'
+import { LeaderboardPage } from '@/pages/leadboard.page'
 import { Solo } from '@/components/solo'
 import { Cover } from '@/components/cover'
 import { Duel } from '@/components/duel'
@@ -9,7 +10,10 @@ import { Duel } from '@/components/duel'
 export const PUBLIC_ROUTES = [
   {
     path: ROUTES.index,
-    element: <Home />,
+  },
+  {
+    path: ROUTES.leaderboard.index,
+    element: <LeaderboardPage />,
   },
   {
     path: ROUTES.auth.login,

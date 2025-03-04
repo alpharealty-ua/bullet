@@ -61,6 +61,7 @@ export const images = {
   shot1: '/assets/images/shot-1.png',
   shot2: '/assets/images/shot-2.png',
   shot3: '/assets/images/shot-3.png',
+  leaderboardstar: '/assets/images/leaderboardstar.png',
 } as const
 
 export const srcImages = Object.values(images)

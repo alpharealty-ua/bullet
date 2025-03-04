@@ -4,6 +4,9 @@ export const ROUTES = {
     register: '/register',
     login: '/login',
   },
+  leaderboard: {
+    index: '/leaderboard',
+  },
   solo: {
     index: '/solo',
     play: '/solo/play',

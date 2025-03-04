@@ -110,7 +110,7 @@
   }
 
   #root {
-    @apply grow-1;
+    @apply max-w-full grow-1;
   }
 
   img {
@@ -120,6 +120,6 @@
 
 @layer components {
   .custom-scroll {
-    @apply overflow-auto [&::-webkit-scrollbar]:h-[3px] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#000]/10;
+    @apply overflow-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#000]/10;
   }
 }
