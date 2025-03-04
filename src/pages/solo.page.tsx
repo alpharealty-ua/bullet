@@ -7,18 +7,18 @@ import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ROUTES } from '@/routes/path'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { GameOver } from './game-over'
+import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
-import { Result } from './result'
-import { Header } from './header'
-import { Footer } from './footer'
-import { AddMoneyModal } from './add-money-modal'
-import { Helper } from './helper'
+import { Result } from '@/components/result'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
+import { AddMoneyModal } from '@/components/add-money-modal'
+import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Debug } from '@/components/debug'
 
-const Solo = ({ variant }: { variant: VariantGame }) => {
+const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle } = useSolo()
   const [showHelpers, setShowHelpers] = useState(true)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
@@ -114,4 +114,4 @@ const Solo = ({ variant }: { variant: VariantGame }) => {
   )
 }
 
-export { Solo }
+export { SoloPage }

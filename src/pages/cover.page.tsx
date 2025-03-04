@@ -4,13 +4,13 @@ import { useDuelStore } from '@/store/duel.store'
 import { ROUTES } from '@/routes/path'
 import { CharacterName } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from './logo'
-import { CharacterSelector } from './character-selector'
+import { Logo } from '@/components/logo'
+import { CharacterSelector } from '@/components/character-selector'
 
 // TODO: TEMPORARY SOLUTION
 const disabledImages = [1, 2]
 
-const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
+const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useDuelStore(
     ({ setCharacterName }) => setCharacterName,
   )
@@ -58,4 +58,4 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
   )
 }
 
-export { Cover }
+export { CoverPage }

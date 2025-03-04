@@ -9,17 +9,17 @@ import { useSolo } from '@/hooks/use-solo'
 import { VariantGame } from '@/lib/constants'
 import { cn, randomIntFromInterval, wait } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Header } from './header'
-import { Footer } from './footer'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 import { Bar } from '@/components/bar/bar'
-import { DuelGameBar, GameBarHandle } from './duel-game-bar'
-import { Character } from './character'
-import { PlayerInfo } from './player-info'
-import { ReadySetPull, ReadySetPullHandle } from './ready-set-pull'
-import { GameOver } from './game-over'
-import { GunHandle } from './character-gun'
+import { DuelGameBar, GameBarHandle } from '@/components/duel-game-bar'
+import { Character } from '@/components/character'
+import { PlayerInfo } from '@/components/player-info'
+import { ReadySetPull, ReadySetPullHandle } from '@/components/ready-set-pull'
+import { GameOver } from '@/components/game-over'
+import { GunHandle } from '@/components/character-gun'
 
-const Duel = ({ variant }: { variant: VariantGame }) => {
+const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
   // TODO: USE DUEL
   useSolo()
@@ -175,4 +175,4 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
   )
 }
 
-export { Duel }
+export { DuelPage }

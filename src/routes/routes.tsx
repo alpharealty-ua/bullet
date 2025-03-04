@@ -1,15 +1,16 @@
-import { ROUTES } from './path'
-import { Home } from '@/pages/home.page'
+import { ROUTES } from '@/routes/path'
+import { HomePage } from '@/pages/home.page'
 import { LoginPage } from '@/pages/login.page'
 import { RegisterPage } from '@/pages/register.page'
 import { LeaderboardPage } from '@/pages/leadboard.page'
-import { Solo } from '@/components/solo'
-import { Cover } from '@/components/cover'
-import { Duel } from '@/components/duel'
+import { SoloPage } from '@/pages/solo.page'
+import { DuelPage } from '@/pages/duel.page'
+import { CoverPage } from '@/pages/cover.page'
 
 export const PUBLIC_ROUTES = [
   {
     path: ROUTES.index,
+    element: <HomePage />,
   },
   {
     path: ROUTES.leaderboard.index,
@@ -28,34 +29,34 @@ export const PUBLIC_ROUTES = [
 export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.index,
-    element: <Cover format='solo' />,
+    element: <CoverPage format='solo' />,
   },
   {
     path: ROUTES.solo.play,
-    element: <Solo variant='play' />,
+    element: <SoloPage variant='play' />,
   },
   {
     path: `${ROUTES.solo.play}/:gameId`,
-    element: <Solo variant='play' />,
+    element: <SoloPage variant='play' />,
   },
   {
     path: ROUTES.solo.watch,
-    element: <Solo variant='watch' />,
+    element: <SoloPage variant='watch' />,
   },
   {
     path: ROUTES.duel.index,
-    element: <Cover format='duel' />,
+    element: <CoverPage format='duel' />,
   },
   {
     path: ROUTES.duel.play,
-    element: <Duel variant='play' />,
+    element: <DuelPage variant='play' />,
   },
   {
     path: `${ROUTES.duel.play}/:gameId`,
-    element: <Duel variant='play' />,
+    element: <DuelPage variant='play' />,
   },
   {
     path: ROUTES.duel.watch,
-    element: <Duel variant='watch' />,
+    element: <DuelPage variant='watch' />,
   },
 ]

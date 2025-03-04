@@ -1,13 +1,14 @@
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { images } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from '../components/logo'
-import { Rules } from '../components/rules'
+import { Logo } from '@/components/logo'
+import { Rules } from '@/components/rules'
 
-const Home = () => {
+const HomePage = () => {
   const nagigate = useNavigate()
   const modal = useCustomModal()
   const { data: user } = useProfile()
@@ -61,8 +62,15 @@ const Home = () => {
           <ButtonWithAudio text='Register' onClick={handleRegisterClick} />
         </div>
       )}
+      <Link
+        to={ROUTES.leaderboard.index}
+        className='absolute right-4 bottom-4 aspect-[176/186] h-20 w-20 bg-contain bg-center bg-no-repeat'
+        style={{
+          backgroundImage: `url(${images.leaderboardstar})`,
+        }}
+      ></Link>
     </div>
   )
 }
 
-export { Home }
+export { HomePage }
