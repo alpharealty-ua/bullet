@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { ROUTES } from '@/routes/path'
-import { CHARACTER_IMAGES } from '@/lib/constants'
+import { ENEMY_LIST } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 import { CharacterSelector } from './character-selector'
 
 // TODO: TEMPORARY SOLUTION
-const disabledImages = [1]
+const disabledImages = [1, 2]
 
 const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterIndex = useDuelStore(
@@ -50,7 +50,7 @@ const Cover = ({ format }: { format: 'solo' | 'duel' }) => {
         {isDuel && (
           <CharacterSelector
             label='Choose your character'
-            characterImages={CHARACTER_IMAGES}
+            characterList={ENEMY_LIST}
             disabledImages={disabledImages}
             onSelect={handleSelectCharacter}
             defaultIndex={characterIndex}

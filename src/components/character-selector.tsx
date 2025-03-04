@@ -3,19 +3,19 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import { images } from '@/lib/constants'
+import { Character as CharacterType, images } from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-export const CharacterSelector = ({
+const CharacterSelector = ({
   label,
-  characterImages,
+  characterList,
   disabledImages,
   onSelect,
   defaultIndex = 0,
 }: {
   label: string
-  characterImages: string[]
+  characterList: CharacterType[]
   disabledImages: number[]
   onSelect: (index: number) => void
   defaultIndex?: number
@@ -25,7 +25,7 @@ export const CharacterSelector = ({
 
   const handleArrowClick = (index: number) => {
     const newIndex =
-      index < 0 ? characterImages.length - 1 : index % characterImages.length
+      index < 0 ? characterList.length - 1 : index % characterList.length
     setActiveIndex(newIndex)
     const disabled = disabledImages.includes(index)
     if (!disabled) {
@@ -45,7 +45,7 @@ export const CharacterSelector = ({
           <PiArrowFatLeftFill />
         </button>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
-          {characterImages.map((_, i) => {
+          {characterList.map((character, i) => {
             const disabled = disabledImages.includes(i)
             const selected = i === selectedIndex
             const active = i === activeIndex
@@ -62,13 +62,13 @@ export const CharacterSelector = ({
                 <button
                   key={i}
                   className={cn(
-                    'absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] border-4 p-8 transition-all disabled:cursor-not-allowed',
+                    'absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] border-4 p-10 transition-all disabled:cursor-not-allowed',
                     selected && 'bg-green/10 border-green',
                   )}
                   disabled={disabled}
                 >
                   <Character
-                    characterIndex={i}
+                    character={character}
                     className='animate-in fade-in zoom-in-150 h-full'
                   />
                 </button>
@@ -92,3 +92,5 @@ export const CharacterSelector = ({
     </>
   )
 }
+
+export { CharacterSelector }

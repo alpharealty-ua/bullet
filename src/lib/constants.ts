@@ -48,9 +48,9 @@ export const images = {
   bullet: '/assets/images/bullet.png',
   sliderbar: '/assets/images/sliderbar.svg',
   '1000x': '/assets/images/compressed/1000x.png',
-  duelcharacter1: '/assets/images/character-1.png',
-  duelcharacter2: '/assets/images/character-2.png',
-  player1: '/assets/images/player1.png',
+  enemynubcat: '/assets/images/enemy-nubcat.png',
+  enemymickey: '/assets/images/enemy-mickey.png',
+  enemyfatty: '/assets/images/enemy-fatty.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
@@ -62,8 +62,16 @@ export const images = {
 
 export const srcImages = Object.values(images)
 
-// TODO: ADD NAMES CARACTER -> nubcat and mickey
-export const CHARACTER_IMAGES = [images.duelcharacter1, images.duelcharacter2]
+export type Character = {
+  name: 'nubcat' | 'mickey' | 'fatty'
+  image: string
+}
+
+export const ENEMY_LIST = [
+  { name: 'nubcat', image: images.enemynubcat },
+  { name: 'mickey', image: images.enemymickey },
+  { name: 'fatty', image: images.enemyfatty },
+] satisfies Character[] as Character[]
 
 export const audios = {
   revolverspin: '/assets/audios/revolverspin.mp3',

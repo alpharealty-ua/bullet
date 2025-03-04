@@ -5,7 +5,7 @@ import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { useSolo } from '@/hooks/use-solo'
-import { images, VariantGame } from '@/lib/constants'
+import { ENEMY_LIST, VariantGame } from '@/lib/constants'
 import { cn, randomIntFromInterval } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from './header'
@@ -108,7 +108,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               variant === 'watch' && '-mb-7 h-[300px]',
               variant === 'play' && 'mr-12 h-[235px]',
             )}
-            characterIndex={characterIndex}
+            character={ENEMY_LIST[characterIndex]}
             onClick={
               variant === 'play' && startedGame ? handlePlayerClick : undefined
             }
@@ -124,14 +124,12 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               />
             }
           />
-          {
-            <ReadySetPull
-              show={startedGame}
-              onStart={handleStartReadySetPull}
-              onEnd={handleEndReadySetPull}
-              readySetPullHandle={readySetPullHandleRef}
-            />
-          }
+          <ReadySetPull
+            show={startedGame}
+            onStart={handleStartReadySetPull}
+            onEnd={handleEndReadySetPull}
+            readySetPullHandle={readySetPullHandleRef}
+          />
         </div>
         {variant === 'play' && (
           <>
