@@ -243,10 +243,10 @@ const milestones = [
 
 const LeaderboardPage = () => {
   return (
-    <div>
-      <div className='flex justify-center px-3 pt-4'>
+    <>
+      <header className='flex items-center justify-center px-3 py-2'>
         <Logo to='/' size='lg' />
-      </div>
+      </header>
       <div className='p-6 pb-0'>
         <h1 className='mb-2 text-2xl font-bold'>Bullet Timing Leaderboard</h1>
         <p className='mb-6 text-gray-500'>Population: 10,000 Players</p>
@@ -606,7 +606,7 @@ const LeaderboardPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   )
 }
 
