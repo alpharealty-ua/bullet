@@ -106,7 +106,7 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               variant === 'play' && 'mr-12',
             )}
             characterName='fatty'
-            type='enemy'
+            type='front'
             onClick={
               variant === 'play' && isStartedGame
                 ? handlePlayerClick
@@ -137,13 +137,13 @@ const Duel = ({ variant }: { variant: VariantGame }) => {
               <Character
                 className={cn('ml-6 max-h-[220px] max-w-[180px]')}
                 characterName={characterName}
-                type='player'
+                type='back'
                 onClick={
                   variant === 'play' && isStartedGame
                     ? handlePlayerClick
                     : undefined
                 }
-                gunHandleRef={gunHandleRef}
+                // gunHandleRef={gunHandleRef}
                 beforeSlot={
                   <PlayerInfo
                     className='absolute top-6 left-full translate-x-2'

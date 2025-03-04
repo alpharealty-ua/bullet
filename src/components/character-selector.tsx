@@ -3,9 +3,15 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import { CharacterName, characterNames, images } from '@/lib/constants'
+import {
+  CharacterName,
+  characterNames,
+  CharacterType,
+  images,
+} from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Button } from '@/components/ui/button'
 
 const CharacterSelector = ({
   label,
@@ -20,6 +26,7 @@ const CharacterSelector = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex)
+  const [type, setType] = useState<CharacterType>('front')
 
   const changeIndex = (index: number) => {
     const newIndex =
@@ -38,6 +45,10 @@ const CharacterSelector = ({
 
   const handleNextButtonClick = () => {
     changeIndex(activeIndex + 1)
+  }
+
+  const handleFlipClick = () => {
+    setType(type === 'front' ? 'back' : 'front')
   }
 
   return (
@@ -60,7 +71,7 @@ const CharacterSelector = ({
               <div
                 key={i}
                 className={cn(
-                  'hidden h-full w-full items-center justify-center rounded-full bg-white bg-cover bg-center bg-no-repeat p-8',
+                  'hidden h-full w-full items-center justify-center rounded-full bg-white bg-cover bg-center bg-no-repeat p-8 duration-500',
                   active && 'flex',
                 )}
                 style={{ backgroundImage: `url(${images.texture})` }}
@@ -75,7 +86,7 @@ const CharacterSelector = ({
                 >
                   <Character
                     characterName={name}
-                    type='player'
+                    type={type}
                     className='animate-in fade-in zoom-in-150 h-full'
                   />
                 </button>
@@ -96,6 +107,7 @@ const CharacterSelector = ({
           <PiArrowFatRightFill />
         </button>
       </div>
+      <Button bg='primary' text='flip' onClick={handleFlipClick} />
     </>
   )
 }

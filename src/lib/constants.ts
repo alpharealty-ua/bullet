@@ -48,12 +48,12 @@ export const images = {
   bullet: '/assets/images/bullet.png',
   sliderbar: '/assets/images/sliderbar.svg',
   '1000x': '/assets/images/compressed/1000x.png',
-  enemynubcat: '/assets/images/enemy-nubcat.png',
-  enemymickey: '/assets/images/enemy-mickey.png',
-  enemyfatty: '/assets/images/enemy-fatty.png',
-  playernubcat: '/assets/images/player-nubcat.png',
-  playermickey: '/assets/images/player-mickey.png',
-  playerfatty: '/assets/images/player-fatty.png',
+  characternubcatfront: '/assets/images/character-nubcat-front.png',
+  charactermickeyfront: '/assets/images/character-mickey-front.png',
+  characterfattyfront: '/assets/images/character-fatty-front.png',
+  characternubcatback: '/assets/images/character-nubcat-back.png',
+  charactermickeyback: '/assets/images/character-mickey-back.png',
+  characterfattyback: '/assets/images/character-fatty-back.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
@@ -65,27 +65,24 @@ export const images = {
 
 export const srcImages = Object.values(images)
 
-export type Character = {
-  name: 'nubcat' | 'mickey' | 'fatty'
-  image: string
-}
-
 export const CHARACTER_LIST = {
   nubcat: {
-    enemy: images.enemynubcat,
-    player: images.playernubcat,
+    back: images.characternubcatback,
+    front: images.characternubcatfront,
   },
   mickey: {
-    enemy: images.enemymickey,
-    player: images.playermickey,
+    back: images.charactermickeyback,
+    front: images.charactermickeyfront,
   },
   fatty: {
-    enemy: images.enemyfatty,
-    player: images.playerfatty,
+    back: images.characterfattyback,
+    front: images.characterfattyfront,
   },
-}
+} satisfies Record<CharacterName, Record<CharacterType, string>>
 
-export type CharacterName = keyof typeof CHARACTER_LIST
+export type CharacterName = 'nubcat' | 'mickey' | 'fatty'
+
+export type CharacterType = 'back' | 'front'
 
 export const characterNames = Object.keys(CHARACTER_LIST) as CharacterName[]
 

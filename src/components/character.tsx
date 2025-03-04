@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { cn } from '@/lib/utils'
-import { CHARACTER_LIST, CharacterName } from '@/lib/constants'
+import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
 import { GunCharacter, GunCharacterProps } from './character-gun'
 
 interface CharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement>,
     Pick<GunCharacterProps, 'gunHandleRef'> {
   characterName: CharacterName
-  type: 'enemy' | 'player'
+  type: CharacterType
   beforeSlot?: React.ReactNode
 }
 
@@ -17,23 +17,14 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
     { characterName, className, beforeSlot, gunHandleRef, type, ...props },
     ref,
   ) => {
-    const isEnemy = type === 'enemy'
-    const isPlayer = type === 'player'
-    const isNubcat = characterName === 'nubcat'
-    const isMikey = characterName === 'mickey'
-    const isFatty = characterName === 'fatty'
+    const isFront = type === 'front'
+    const isBack = type === 'back'
 
     return (
       <div
         ref={ref}
         className={cn(
-          'relative aspect-square',
-          isEnemy && isNubcat && 'aspect-[1855/calc(1830*1.25)]',
-          isEnemy && isMikey && 'aspect-[1123/1415]',
-          isEnemy && isFatty && 'aspect-[285/246]',
-          isPlayer && isNubcat && 'aspect-[499/544]',
-          isPlayer && isMikey && 'aspect-[185/274]',
-          isPlayer && isFatty && 'aspect-[190/220]',
+          'relative aspect-square transition-all',
           props.onClick && 'cursor-pointer',
           className,
         )}
@@ -41,25 +32,36 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
       >
         {beforeSlot}
         <div
-          className='absolute inset-0 bg-contain bg-bottom bg-no-repeat'
+          className={cn(
+            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat opacity-0 transition-all duration-500',
+            isFront && 'scale-100 rotate-y-0 opacity-100',
+          )}
           style={{
-            backgroundImage: `url(${CHARACTER_LIST[characterName][type]})`,
+            backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
           }}
-        ></div>
-        {type === 'enemy' && (
+        >
           <GunCharacter
             className={cn(
               'absolute right-0 left-0 max-h-full',
               characterName === 'nubcat' &&
-                'top-0 left-[30%] aspect-[1/2.3] w-[45%]',
+                'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
               characterName === 'mickey' &&
-                'top-[15%] left-[7%] aspect-[1/1.7] w-[30%]',
+                'top-[15%] left-[13%] aspect-[1/1.7] w-[30%]',
               characterName === 'fatty' &&
-                'top-[0%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
+                'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
             )}
             gunHandleRef={gunHandleRef}
           />
-        )}
+        </div>
+        <div
+          className={cn(
+            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat opacity-0 transition-all duration-500',
+            isBack && 'scale-100 rotate-y-0 opacity-100',
+          )}
+          style={{
+            backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
+          }}
+        ></div>
       </div>
     )
   },
