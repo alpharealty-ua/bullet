@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate';
 
+:root {
+  --width: 420px;
+}
+
 @theme {
   --font-roboto: Roboto;
   --font-verdana: Verdana;
