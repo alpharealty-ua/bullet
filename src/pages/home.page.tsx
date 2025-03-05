@@ -72,7 +72,7 @@ const HomePage = () => {
           />
         </div>
       )}
-      <Logo to='/' size='xl' />
+      <Logo size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
         <ButtonWithAudio
           image='duel'

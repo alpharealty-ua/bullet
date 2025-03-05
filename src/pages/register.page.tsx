@@ -5,7 +5,7 @@ const RegisterPage = () => {
   return (
     <>
       <header className='flex items-center justify-center px-3 py-2'>
-        <Logo to='/' size='lg' />
+        <Logo as='link' to='/' size='lg' />
       </header>
       <RegisterForm />
     </>

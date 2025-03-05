@@ -17,19 +17,28 @@ interface LogoProps {
   text?: string
 }
 
-const Logo = React.forwardRef<
-  HTMLAnchorElement,
-  React.RefAttributes<HTMLAnchorElement> & LinkProps & LogoProps
->(({ size = 'md', text, ...props }, ref) => {
+const Logo = ({
+  size = 'md',
+  text,
+  ...props
+}: (
+  | ({ as: 'link' } & LinkProps & React.HTMLAttributes<HTMLAnchorElement>)
+  | ({ as?: 'button' } & React.HTMLAttributes<HTMLButtonElement>)
+) &
+  LogoProps) => {
+  const { as, ...rest } = props
+  const Comp = as === 'link' ? Link : 'button'
+
   return (
-    <Link
-      ref={ref}
+    // TODO: FIX
+    // @ts-ignore
+    <Comp
       className={cn(
         'relative inline-flex bg-contain bg-center bg-no-repeat',
         sizes[size],
-        Boolean(props.onClick) && 'cursor-pointer',
+        Boolean(rest.onClick) && 'cursor-pointer',
       )}
-      {...props}
+      {...rest}
     >
       <div
         className='absolute top-[33%] left-[25.5%] aspect-square w-[17%] -rotate-5 bg-contain bg-no-repeat'
@@ -47,8 +56,8 @@ const Logo = React.forwardRef<
           {text}
         </div>
       )}
-    </Link>
+    </Comp>
   )
-})
+}
 
 export { Logo }

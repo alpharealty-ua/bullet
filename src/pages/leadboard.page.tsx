@@ -245,7 +245,7 @@ const LeaderboardPage = () => {
   return (
     <>
       <header className='flex items-center justify-center px-3 py-2'>
-        <Logo to='/' size='lg' />
+        <Logo as='link' to='/' size='lg' />
       </header>
       <div className='p-6 pb-0'>
         <h1 className='mb-2 text-2xl font-bold'>Bullet Timing Leaderboard</h1>

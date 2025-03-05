@@ -39,7 +39,7 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
 
   return (
     <div className='relative flex grow-1 flex-col items-center justify-center gap-10 bg-no-repeat px-3 py-12'>
-      <Logo to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
+      <Logo as='link' to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
           <ButtonWithAudio

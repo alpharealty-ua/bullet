@@ -18,7 +18,7 @@ export const Header = ({
 
   return (
     <header className='flex items-center justify-between px-3 py-2'>
-      <Logo to='/' text={logoText} />
+      <Logo as='link' to='/' text={logoText} />
       {!hideBalance && !isLoading && (
         <div className='flex gap-1'>
           <MoneyBagButton balance={balance} noMoney={noMoney} />
