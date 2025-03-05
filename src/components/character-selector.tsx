@@ -3,12 +3,7 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import {
-  CharacterName,
-  characterNames,
-  CharacterType,
-  images,
-} from '@/lib/constants'
+import { characterNames, CharacterType, images } from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Button } from '@/components/ui/button'

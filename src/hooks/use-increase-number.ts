@@ -1,4 +1,3 @@
-import { formatNumber } from '@/lib/utils'
 import { useRef, useEffect } from 'react'
 
 export const useIncreaseNumber = ({
