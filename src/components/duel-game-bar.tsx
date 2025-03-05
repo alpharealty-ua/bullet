@@ -3,8 +3,9 @@ import { useCallback, useImperativeHandle, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 export type GameBarHandle = {
+  getState: () => Promise<{ value: number; isRunning: boolean }>
   start: (duration: number) => Promise<void>
-  stop: () => Promise<number>
+  stop: () => Promise<void>
   reset: () => Promise<void>
 }
 
@@ -95,10 +96,15 @@ const DuelGameBar = ({
   )
 
   useImperativeHandle(gameBarRef, () => ({
+    getState: async () => {
+      return {
+        value: getItem(activeIndexRef.current).number,
+        isRunning: isRunningRef.current,
+      }
+    },
     start,
     stop: async () => {
       isRunningRef.current = false
-      return getItem(activeIndexRef.current).number
     },
     reset: async () => {
       directionRef.current = 1

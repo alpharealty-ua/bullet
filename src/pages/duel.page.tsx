@@ -55,20 +55,24 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     }
 
     if (isStartedGame) {
-      const number = await gameBarHandle.stop()
-      const isGameOver = number === 5
-      await wait(1000)
+      const { value, isRunning } = await gameBarHandle.getState()
 
-      await playAudio('triggerpull')
-      await gunHandle.spin()
-      await gunHandle.click()
+      if (isRunning) {
+        await gameBarHandle.stop()
+        const isGameOver = value === 5
 
-      if (isGameOver) {
-        await gunHandle.shot()
-        // TODO: MOVE TO NEW GAME
-        setRound(1)
-        await gameBarHandle.reset()
-        setState('game-over')
+        await wait(1000)
+        await playAudio('triggerpull')
+        await gunHandle.spin()
+        await gunHandle.click()
+
+        if (isGameOver) {
+          await gunHandle.shot()
+          // TODO: MOVE TO NEW GAME
+          setRound(1)
+          await gameBarHandle.reset()
+          setState('game-over')
+        }
       } else {
         const duration = randomIntFromInterval(25, 50)
         await gameBarHandle.start(duration)
