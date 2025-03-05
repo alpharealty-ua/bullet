@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { LoginSchema } from '@/lib/schemas/login.schema'
 import { api, QUERY_KEYS } from '@/api/api'
-import { getToken, saveToken } from '@/lib/localstorage'
+import { saveToken } from '@/lib/localstorage'
 import { RegisterSchema } from '@/lib/schemas/register.schema'
 
 interface LoginResponse {
@@ -56,9 +56,11 @@ export const useRegister = () => {
   })
 }
 
-export const useProfile = () =>
+export const useProfile = (enabled = false) =>
   useQuery({
-    enabled: Boolean(getToken()),
+    // TODO: TOKEN NEED SAVE IN STORE FOR SYNC WITH REACT
+    // Boolean(getToken())
+    enabled,
     queryKey: [QUERY_KEYS.profile],
     queryFn: fetchProfile,
   })
