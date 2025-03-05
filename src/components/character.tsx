@@ -33,8 +33,8 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
         {beforeSlot}
         <div
           className={cn(
-            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat opacity-0 transition-all duration-500',
-            isFront && 'scale-100 rotate-y-0 opacity-100',
+            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat transition-all duration-500 backface-hidden',
+            isFront && 'scale-100 rotate-y-0',
           )}
           style={{
             backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
@@ -55,8 +55,8 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
         </div>
         <div
           className={cn(
-            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat opacity-0 transition-all duration-500',
-            isBack && 'scale-100 rotate-y-0 opacity-100',
+            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat transition-all duration-500 backface-hidden',
+            isBack && 'scale-100 rotate-y-0',
           )}
           style={{
             backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
