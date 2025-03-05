@@ -24,7 +24,7 @@ const Balance = ({
   const formatedValue = useMemo(() => formatNumber(value), [value])
 
   return (
-    <div className='relative flex flex-1 flex-col overflow-hidden'>
+    <div className='relative flex flex-col overflow-hidden'>
       <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
         Balance
       </div>
