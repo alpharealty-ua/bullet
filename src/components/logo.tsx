@@ -26,19 +26,18 @@ const Logo = ({
   | ({ as?: 'button' } & React.HTMLAttributes<HTMLButtonElement>)
 ) &
   LogoProps) => {
-  const { as, ...rest } = props
-  const Comp = as === 'link' ? Link : 'button'
+  const { as, ...componentProps } = props
+  // eslint-disable-next-line
+  const Comp: any = as === 'link' ? Link : 'button'
 
   return (
-    // TODO: FIX
-    // @ts-ignore
     <Comp
       className={cn(
         'relative inline-flex bg-contain bg-center bg-no-repeat',
         sizes[size],
-        Boolean(rest.onClick) && 'cursor-pointer',
+        Boolean(componentProps.onClick) && 'cursor-pointer',
       )}
-      {...rest}
+      {...componentProps}
     >
       <div
         className='absolute top-[33%] left-[25.5%] aspect-square w-[17%] -rotate-5 bg-contain bg-no-repeat'
