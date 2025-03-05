@@ -11,6 +11,7 @@ import { Rank } from './rank'
 import { Helper } from './helper'
 import { MoneyBagButton } from './money-bag-button'
 import { useDuelStore } from '@/store/duel.store'
+import { Balance } from '@/components/balance'
 
 const Footer = ({
   format,
@@ -48,7 +49,7 @@ const Footer = ({
     >
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
-          <div className='text-green text-xl font-bold uppercase'>
+          <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
             {format === 'solo' || variant === 'play'
               ? { solo: 'Bet', duel: 'Prizepool' }[format]
               : 'Jackpot'}
@@ -68,13 +69,8 @@ const Footer = ({
               />
             </>
           )}
-          {format === 'duel' && variant === 'play' && (
-            <div className='relative text-center text-3xl leading-[1]'>
-              $2000
-            </div>
-          )}
-          {format === 'duel' && variant === 'watch' && (
-            <div className='relative text-center text-3xl leading-[1]'>
+          {format === 'duel' && (
+            <div className='relative flex justify-center text-center text-2xl leading-[1] tracking-tight'>
               $2000
             </div>
           )}
@@ -94,35 +90,37 @@ const Footer = ({
         )}
         {format === 'duel' && variant === 'play' && (
           <div className='flex flex-col items-center text-center'>
-            <div className='text-green text-xl font-bold uppercase'>Round</div>
+            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
+              Round
+            </div>
             <div className='text-red relative text-center text-3xl leading-[1]'>
               {round}
             </div>
           </div>
         )}
-        <div className='flex flex-col items-center text-center'></div>
       </div>
-      <div className='relative flex flex-1 flex-row justify-center'>
-        <div className='flex flex-col items-center text-center'>
-          <div className='text-green text-xl font-bold uppercase'>
-            {format === 'solo' || variant === 'play'
-              ? { solo: 'Multiplier', duel: 'Balance' }[format]
-              : 'Round'}
-          </div>
-          {format === 'solo' && (
-            <Multiplier items={MULTIPLIERS} activeIndex={multiplierIndex} />
-          )}
-          {format === 'duel' && variant === 'play' && (
-            <div className='relative text-center text-3xl leading-[1]'>
-              ${balance}
+      <div className='relative flex flex-1 flex-row justify-between'>
+        {format === 'duel' && variant === 'play' && <Balance value={balance} />}
+        {format === 'solo' && (
+          <div className='flex flex-col items-center text-center'>
+            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
+              Multiplier
             </div>
-          )}
-          {format === 'duel' && variant === 'watch' && (
+            {format === 'solo' && (
+              <Multiplier items={MULTIPLIERS} activeIndex={multiplierIndex} />
+            )}
+          </div>
+        )}
+        {format === 'duel' && variant === 'watch' && (
+          <div className='flex flex-col items-center text-center'>
+            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
+              Round
+            </div>
             <div className='text-red relative text-center text-3xl leading-[1]'>
               {round}
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
           <button
             className='mt-auto h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
@@ -131,7 +129,7 @@ const Footer = ({
           ></button>
         </div>
         {format === 'duel' && variant === 'play' && (
-          <div className='py-1 pl-2'>
+          <div className='shrink-0 pl-2'>
             <MoneyBagButton
               className={cn(!noMoney && 'w-4', noMoney && 'text-lg')}
               balance={balance}
