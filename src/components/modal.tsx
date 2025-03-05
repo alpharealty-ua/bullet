@@ -78,7 +78,7 @@ export const Modal = React.forwardRef<
     >
       {!hideHeader && (
         <div className='flex items-center justify-between'>
-          <Logo to='/' size='lg' />
+          <Logo to='/' size='lg' onClick={handleClose} />
           <ButtonWithAudio
             className='w-11'
             image='close'
