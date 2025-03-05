@@ -64,7 +64,6 @@ const CharacterSelector = ({
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
           {characterNames.map((name, i) => {
             const disabled = disabledImages.includes(i)
-            const selected = i === selectedIndex
             const active = i === activeIndex
 
             return (
@@ -79,8 +78,7 @@ const CharacterSelector = ({
                 <button
                   key={i}
                   className={cn(
-                    'absolute inset-0 flex cursor-pointer items-center justify-center rounded-[inherit] border-4 p-10 transition-all disabled:cursor-not-allowed',
-                    selected && 'bg-green/10 border-green',
+                    'absolute inset-0 flex items-center justify-center rounded-[inherit] border-4 p-10 transition-all disabled:cursor-not-allowed',
                   )}
                   disabled={disabled}
                 >
