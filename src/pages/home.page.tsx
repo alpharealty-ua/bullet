@@ -9,17 +9,17 @@ import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
 
 const HomePage = () => {
-  const nagigate = useNavigate()
+  const navigate = useNavigate()
   const modal = useCustomModal()
   // TODO: IS FETCING ON FIRST RENDER
   const { data: user } = useProfile()
 
   const handleSoloButton = async () => {
-    nagigate(ROUTES.solo.index)
+    navigate(ROUTES.solo.index)
   }
 
   const handleDuelButton = async () => {
-    nagigate(ROUTES.duel.index)
+    navigate(ROUTES.duel.index)
   }
 
   const handleGameRules = async () => {
@@ -29,11 +29,11 @@ const HomePage = () => {
   }
 
   const handleLoginClick = () => {
-    nagigate(ROUTES.auth.login)
+    navigate(ROUTES.auth.login)
   }
 
   const handleRegisterClick = () => {
-    nagigate(ROUTES.auth.register)
+    navigate(ROUTES.auth.register)
   }
 
   return (
