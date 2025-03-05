@@ -110,11 +110,11 @@
   }
 
   body {
-    @apply font-bullet-official flex leading-[1.3] text-black uppercase;
+    @apply font-bullet-official flex overflow-y-scroll leading-[1.3] text-black uppercase;
   }
 
   #root {
-    @apply max-w-full grow-1;
+    @apply relative max-w-full grow-1 overflow-hidden;
   }
 
   img {

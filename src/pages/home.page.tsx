@@ -1,12 +1,13 @@
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { images } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
+import { LeadboardIcon } from '@/components/leadboard-icon'
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -34,6 +35,25 @@ const HomePage = () => {
 
   const handleRegisterClick = () => {
     navigate(ROUTES.auth.register)
+  }
+
+  const handleLeadboardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+
+    const target = event.target
+
+    if (!(target instanceof HTMLAnchorElement)) {
+      return
+    }
+
+    target.classList.add('is-animate')
+
+    target.addEventListener('transitionend', () => {
+      target.classList.remove('is-animate')
+
+      const href = target.getAttribute('href') ?? '/'
+      navigate(href)
+    })
   }
 
   return (
@@ -70,13 +90,13 @@ const HomePage = () => {
           onClick={handleGameRules}
         />
       </div>
-      <Link
+      <LeadboardIcon
         to={ROUTES.leaderboard.index}
-        className='absolute right-4 bottom-4 aspect-[176/186] h-20 w-20 bg-contain bg-center bg-no-repeat'
-        style={{
-          backgroundImage: `url(${images.leaderboardstar})`,
-        }}
-      ></Link>
+        className={cn(
+          'repeat-[1] duration-500 ease-linear [&.is-animate]:scale-500 [&.is-animate]:rotate-360 [&.is-animate]:opacity-0',
+        )}
+        onClick={handleLeadboardClick}
+      />
     </div>
   )
 }
