@@ -6,6 +6,7 @@ import { LeaderboardPage } from '@/pages/leadboard.page'
 import { SoloPage } from '@/pages/solo.page'
 import { DuelPage } from '@/pages/duel.page'
 import { CoverPage } from '@/pages/cover.page'
+import { ProfilePage } from '@/pages/profile.page'
 
 export const PUBLIC_ROUTES = [
   {
@@ -27,6 +28,10 @@ export const PUBLIC_ROUTES = [
 ]
 
 export const PRIVATE_ROUTES = [
+  {
+    path: ROUTES.cabinet.profile,
+    element: <ProfilePage />,
+  },
   {
     path: ROUTES.solo.index,
     element: <CoverPage format='solo' />,

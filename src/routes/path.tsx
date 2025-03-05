@@ -4,6 +4,10 @@ export const ROUTES = {
     register: '/register',
     login: '/login',
   },
+  cabinet: {
+    root: '/cabinet',
+    profile: '/cabinet/profile',
+  },
   leaderboard: {
     index: '/leaderboard',
   },
