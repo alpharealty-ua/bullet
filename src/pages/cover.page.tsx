@@ -1,8 +1,9 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { ROUTES } from '@/routes/path'
-import { CharacterName } from '@/lib/constants'
+import { characterNames } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
@@ -15,6 +16,7 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
     ({ setCharacterName }) => setCharacterName,
   )
   const navigate = useNavigate()
+  const [disabled, setDisabled] = useState(false)
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
 
@@ -26,8 +28,13 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
     navigate(isSolo ? ROUTES.solo.watch : ROUTES.duel.watch)
   }
 
-  const handleSelectCharacter = (name: CharacterName) => {
-    setCharacterName(name)
+  const handleSelectCharacter = (index: number) => {
+    const disabled = disabledImages.includes(index)
+    setDisabled(disabled)
+
+    if (!disabled) {
+      setCharacterName(characterNames[index])
+    }
   }
 
   return (
@@ -38,11 +45,13 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
           <ButtonWithAudio
             image='play'
             className='w-30'
+            disabled={disabled}
             onClick={handlePlayButton}
           />
           <ButtonWithAudio
             image='watch'
             className='w-30 text-2xl'
+            disabled={disabled}
             onClick={handleWatchButton}
           />
         </div>

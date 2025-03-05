@@ -21,22 +21,17 @@ const CharacterSelector = ({
 }: {
   label: string
   disabledImages: number[]
-  onSelect: (name: CharacterName) => void
+  onSelect: (index: number) => void
   defaultIndex?: number
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
-  const [selectedIndex, setSelectedIndex] = useState(defaultIndex)
   const [type, setType] = useState<CharacterType>('front')
 
   const changeIndex = (index: number) => {
     const newIndex =
       index < 0 ? characterNames.length - 1 : index % characterNames.length
     setActiveIndex(newIndex)
-    const disabled = disabledImages.includes(index)
-    if (!disabled) {
-      setSelectedIndex(newIndex)
-      onSelect(characterNames[newIndex])
-    }
+    onSelect(index)
   }
 
   const handlePrevButtonClick = () => {
