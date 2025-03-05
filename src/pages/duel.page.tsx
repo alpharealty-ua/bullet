@@ -74,7 +74,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         await gameBarHandle.start(duration)
       }
     } else {
-      await readySetPullHandle.start()
+      const promise = readySetPullHandle.start()
+      navigate(`${ROUTES.duel.play}/1`)
+      await promise
     }
 
     disabledRef.current = false
@@ -93,9 +95,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
     const duration = randomIntFromInterval(25, 50)
     await gameBarHandle.start(duration)
-
-    navigate(`${ROUTES.duel.play}/1`)
-  }, [navigate])
+  }, [])
 
   return (
     <>
