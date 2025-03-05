@@ -59,7 +59,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
       if (isRunning) {
         await gameBarHandle.stop()
-        const isGameOver = value === 5
+        const isGameOver = [50, 33, 20, 10].includes(value)
 
         await wait(1000)
         await playAudio('triggerpull')
