@@ -132,17 +132,18 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             </>
           )}
         </div>
-        {showShot &&
-          createPortal(
+        {createPortal(
+          showShot && (
             <div
               className={cn(
                 'fixed inset-0 z-50 mx-auto max-w-[var(--width)] opacity-0',
                 'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
               )}
               style={{ backgroundImage: `url(${images.shot3})` }}
-            ></div>,
-            document.body,
-          )}
+            ></div>
+          ),
+          document.body,
+        )}
       </>
     )
   },
