@@ -22,7 +22,7 @@ import { ChangeForm } from '@/components/ui/change-form'
 const LoginForm = () => {
   const { mutateAsync: loginMutation, error, isPending, isSuccess } = useLogin()
   const navigate = useNavigate()
-  const { state = { redirect: ROUTES.index } } = useLocation()
+  const { state } = useLocation()
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -34,9 +34,9 @@ const LoginForm = () => {
 
   const onSubmit = async (values: LoginSchema) => {
     await loginMutation(values)
+    const redirect = state.redirect ?? ROUTES.index
     setTimeout(
-      () =>
-        navigate(state.redirect, { state: { ...state, redirect: undefined } }),
+      () => navigate(redirect, { state: { ...state, redirect: undefined } }),
       1000,
     )
   }
