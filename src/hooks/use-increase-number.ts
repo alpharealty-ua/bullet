@@ -1,13 +1,16 @@
+import { formatNumber } from '@/lib/utils'
 import { useRef, useEffect } from 'react'
 
 export const useIncreaseNumber = ({
   value,
   increaseTime,
   decreaseTime,
+  formatValue,
 }: {
   value: number
   increaseTime: number
   decreaseTime: number
+  formatValue: (value: number) => string
 }) => {
   const totalRef = useRef<HTMLDivElement>(null)
   const winRef = useRef<HTMLDivElement>(null)
@@ -28,8 +31,8 @@ export const useIncreaseNumber = ({
     valueRef.current = value
 
     const setValues = (total = value, win = 0) => {
-      totalValueDom.textContent = `${total}`
-      winValueDom.textContent = `${win}`
+      totalValueDom.textContent = `${formatValue(total)}`
+      winValueDom.textContent = `${formatValue(win)}`
     }
 
     if (prevVal === value) {
@@ -95,7 +98,7 @@ export const useIncreaseNumber = ({
       winDom.classList.remove('is-in', 'is-out', state)
       winDom.offsetWidth // need for force layout -> for remove class
     }
-  }, [value, increaseTime, decreaseTime])
+  }, [value, increaseTime, decreaseTime, formatValue])
 
   return { totalRef, winRef }
 }

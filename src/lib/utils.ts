@@ -30,6 +30,13 @@ export const formatBet = (value: number) => {
   return String(value)
 }
 
+export const formatNumber = (value: number) =>
+  value.toLocaleString('en-US', {
+    maximumFractionDigits: 3,
+    notation: 'compact',
+    compactDisplay: 'short',
+  })
+
 export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
 
 export const wait = (timeout: number) =>

@@ -20,12 +20,16 @@ export const Header = ({
     <header className='flex items-center justify-between px-3 py-2'>
       <Logo to='/' text={logoText} />
       {!hideBalance && !isLoading && (
-        <BalanceWithDelay
-          hasDelay={state === 'win'}
-          value={balance}
-          increaseTime={state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined}
-          beforeSlot={<MoneyBagButton balance={balance} noMoney={noMoney} />}
-        />
+        <div className='flex gap-1'>
+          <MoneyBagButton balance={balance} noMoney={noMoney} />
+          <BalanceWithDelay
+            hasDelay={state === 'win'}
+            value={balance}
+            increaseTime={
+              state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined
+            }
+          />
+        </div>
       )}
     </header>
   )
