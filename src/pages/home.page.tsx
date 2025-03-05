@@ -16,11 +16,11 @@ const HomePage = () => {
   const { data: user } = useProfile()
 
   const handleSoloButton = async () => {
-    navigate(ROUTES.solo.index)
+    navigate(ROUTES.solo.root)
   }
 
   const handleDuelButton = async () => {
-    navigate(ROUTES.duel.index)
+    navigate(ROUTES.duel.root)
   }
 
   const handleGameRules = async () => {
@@ -91,7 +91,7 @@ const HomePage = () => {
         />
       </div>
       <LeadboardIcon
-        to={ROUTES.leaderboard.index}
+        to={ROUTES.leaderboard.root}
         className={cn(
           'repeat-[1] duration-500 ease-linear [&.is-animate]:scale-500 [&.is-animate]:rotate-360 [&.is-animate]:opacity-0',
         )}

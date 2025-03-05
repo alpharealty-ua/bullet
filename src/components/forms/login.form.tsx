@@ -34,7 +34,7 @@ const LoginForm = () => {
 
   const onSubmit = async (values: LoginSchema) => {
     await loginMutation(values)
-    const redirect = state.redirect ?? ROUTES.index
+    const redirect = state.redirect ?? ROUTES.root
     setTimeout(
       () => navigate(redirect, { state: { ...state, redirect: undefined } }),
       1000,

@@ -1,5 +1,5 @@
 export const ROUTES = {
-  index: '/',
+  root: '/',
   auth: {
     register: '/register',
     login: '/login',
@@ -9,15 +9,15 @@ export const ROUTES = {
     profile: '/cabinet/profile',
   },
   leaderboard: {
-    index: '/leaderboard',
+    root: '/leaderboard',
   },
   solo: {
-    index: '/solo',
+    root: '/solo',
     play: '/solo/play',
     watch: '/solo/watch',
   },
   duel: {
-    index: '/duel',
+    root: '/duel',
     play: '/duel/play',
     watch: '/duel/watch',
   },

@@ -10,11 +10,11 @@ import { ProfilePage } from '@/pages/profile.page'
 
 export const PUBLIC_ROUTES = [
   {
-    path: ROUTES.index,
+    path: ROUTES.root,
     element: <HomePage />,
   },
   {
-    path: ROUTES.leaderboard.index,
+    path: ROUTES.leaderboard.root,
     element: <LeaderboardPage />,
   },
   {
@@ -33,7 +33,7 @@ export const PRIVATE_ROUTES = [
     element: <ProfilePage />,
   },
   {
-    path: ROUTES.solo.index,
+    path: ROUTES.solo.root,
     element: <CoverPage format='solo' />,
   },
   {
@@ -49,7 +49,7 @@ export const PRIVATE_ROUTES = [
     element: <SoloPage variant='watch' />,
   },
   {
-    path: ROUTES.duel.index,
+    path: ROUTES.duel.root,
     element: <CoverPage format='duel' />,
   },
   {
