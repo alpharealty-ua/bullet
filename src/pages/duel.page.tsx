@@ -134,7 +134,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             gunHandleRef={gunHandleRef}
             beforeSlot={
               <PlayerInfo
-                className='absolute top-0 right-full translate-x-5'
+                className='absolute top-0 right-full translate-x-2'
                 side='left'
                 level={53}
                 login='Suni7222'
@@ -165,7 +165,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 // gunHandleRef={gunHandleRef}
                 beforeSlot={
                   <PlayerInfo
-                    className='absolute top-6 left-full translate-x-2'
+                    className='absolute top-0 left-full translate-x-2'
                     side='right'
                     level={53}
                     login='Suni7222'
