@@ -1,11 +1,12 @@
+import { createPortal } from 'react-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { removeToken } from '@/lib/localstorage'
+import { useSoloStore } from '@/store/solo.store'
 import { StateGame, states, MULTIPLIERS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
 import { QUERY_KEYS } from '@/api/api'
-import { useSoloStore } from '@/store/solo.store'
 
 const Debug = () => {
   const queryClient = useQueryClient()
@@ -35,8 +36,8 @@ const Debug = () => {
     return null
   }
 
-  return (
-    <div className='absolute top-0 right-full flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
+  return createPortal(
+    <div className='absolute top-0 right-[calc(50%+var(--width)/2)] flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
       <h1 className='text-xs'>
         Current state - <strong className='block'>{state}</strong>
       </h1>
@@ -107,7 +108,8 @@ const Debug = () => {
           </select>
         </label>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
