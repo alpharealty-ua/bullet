@@ -67,9 +67,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         await gunHandle.shot()
         // TODO: MOVE TO NEW GAME
         setRound(1)
+        await gameBarHandle.reset()
         setState('game-over')
       } else {
-        addRound()
         const duration = randomIntFromInterval(25, 50)
         await gameBarHandle.start(duration)
       }
@@ -96,6 +96,18 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     const duration = randomIntFromInterval(25, 50)
     await gameBarHandle.start(duration)
   }, [])
+
+  const handleChangeDirection = useCallback(
+    (_: number, nextDiraction: number) => {
+      const isReverseDirection = nextDiraction === -1
+      if (isReverseDirection) {
+        return
+      }
+
+      addRound()
+    },
+    [addRound],
+  )
 
   return (
     <>
@@ -172,7 +184,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 </div>
               </div>
             </div>
-            <DuelGameBar gameBarRef={gameBarRefHandle} />
+            <DuelGameBar
+              gameBarRef={gameBarRefHandle}
+              onChangeDirection={handleChangeDirection}
+            />
           </>
         )}
       </div>

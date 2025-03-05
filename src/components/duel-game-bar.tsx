@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 export type GameBarHandle = {
   start: (duration: number) => Promise<void>
   stop: () => Promise<number>
+  reset: () => Promise<void>
 }
 
 const LENGTH = 23
@@ -23,64 +24,91 @@ const getItem = (i: number) => {
 
 const DuelGameBar = ({
   gameBarRef,
+  onChangeDirection,
 }: {
   gameBarRef: React.ForwardedRef<GameBarHandle>
+  onChangeDirection?: (prevDirection: number, nextDirection: number) => void
 }) => {
   const ref = useRef<HTMLTableElement>(null)
   const directionRef = useRef(1)
   const activeIndexRef = useRef(-1)
   const isRunningRef = useRef(false)
+  const nextActiveRef = useRef<HTMLTableCellElement | null>(null)
 
-  const start = useCallback(async (duration: number) => {
-    const barDom = ref.current
+  const start = useCallback(
+    async (duration: number) => {
+      const barDom = ref.current
 
-    if (barDom === null) {
-      return
-    }
-
-    const cells = barDom.rows[0].cells
-
-    isRunningRef.current = true
-
-    const start = () => {
-      if (!isRunningRef.current) {
+      if (barDom === null) {
         return
       }
 
-      const prevActiveIndex = activeIndexRef.current
-      let direction = directionRef.current
-      if (prevActiveIndex === 0) direction = 1
-      else if (prevActiveIndex === cells.length - 1) direction = -1
+      if (isRunningRef.current) {
+        return
+      }
 
-      const nextActiveIndex = prevActiveIndex + direction
-      directionRef.current = direction
-      activeIndexRef.current = nextActiveIndex
+      isRunningRef.current = true
 
-      const prevActive = cells[prevActiveIndex] ?? document.createElement('td')
-      const nextActive = cells[nextActiveIndex]
+      const cells = barDom.rows[0].cells
 
-      prevActive.classList.remove('is-active')
-      nextActive.classList.add('is-active')
-      nextActive.style.transitionDuration = `${duration}ms`
+      const start = () => {
+        if (!isRunningRef.current) {
+          return
+        }
 
-      nextActive.addEventListener(
-        'transitionend',
-        () => {
-          nextActive.style.transitionDuration = ''
-          start()
-        },
-        { once: true },
-      )
-    }
+        const prevActiveIndex = activeIndexRef.current
+        const prevDirection = directionRef.current
+        let nextDirection = prevDirection
+        if (prevActiveIndex === 0) nextDirection = 1
+        else if (prevActiveIndex === cells.length - 1) nextDirection = -1
 
-    start()
-  }, [])
+        if (prevDirection !== nextDirection) {
+          onChangeDirection && onChangeDirection(prevDirection, nextDirection)
+        }
+
+        const nextActiveIndex = prevActiveIndex + nextDirection
+        directionRef.current = nextDirection
+        activeIndexRef.current = nextActiveIndex
+
+        const prevActive =
+          cells[prevActiveIndex] ?? document.createElement('td')
+        const nextActive = cells[nextActiveIndex]
+        nextActiveRef.current = nextActive
+
+        prevActive.classList.remove('is-active')
+        nextActive.classList.add('is-active')
+        nextActive.style.transitionDuration = `${duration}ms`
+
+        nextActive.addEventListener(
+          'transitionend',
+          () => {
+            nextActive.style.transitionDuration = ''
+            start()
+          },
+          { once: true },
+        )
+      }
+
+      start()
+    },
+    [onChangeDirection],
+  )
 
   useImperativeHandle(gameBarRef, () => ({
     start,
     stop: async () => {
       isRunningRef.current = false
       return getItem(activeIndexRef.current).number
+    },
+    reset: async () => {
+      directionRef.current = 1
+      activeIndexRef.current = -1
+      isRunningRef.current = false
+      const nextActive = nextActiveRef.current
+      if (nextActive) {
+        nextActive.style.transitionDuration = ''
+        nextActive.classList.remove('is-active')
+      }
     },
   }))
 
