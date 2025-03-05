@@ -74,8 +74,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         await gameBarHandle.start(duration)
       }
     } else {
-      const duration = randomIntFromInterval(25, 50)
-      await gameBarHandle.start(duration)
       await readySetPullHandle.start()
     }
 
@@ -86,7 +84,16 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const handleStartReadySetPull = useCallback(async () => {}, [])
 
-  const handleEndReadySetPull = useCallback(() => {
+  const handleEndReadySetPull = useCallback(async () => {
+    const gameBarHandle = gameBarRefHandle.current
+
+    if (gameBarHandle === null) {
+      return
+    }
+
+    const duration = randomIntFromInterval(25, 50)
+    await gameBarHandle.start(duration)
+
     navigate(`${ROUTES.duel.play}/1`)
   }, [navigate])
 
