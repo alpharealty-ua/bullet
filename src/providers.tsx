@@ -8,7 +8,11 @@ import 'react-toastify/ReactToastify.css'
 import { images } from '@/lib/constants'
 import { Audios } from '@/components/audios'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: 0 },
+  },
+})
 
 export function Providers({
   children,
