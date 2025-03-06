@@ -32,7 +32,7 @@ export const formatBet = (value: number) => {
 
 export const formatNumber = (value: number) =>
   value.toLocaleString('en-US', {
-    maximumFractionDigits: 3,
+    maximumFractionDigits: 5,
     notation: 'compact',
     compactDisplay: 'short',
   })
