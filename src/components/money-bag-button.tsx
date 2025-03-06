@@ -19,20 +19,18 @@ const MoneyBagButton = ({
   }
 
   return (
-    <>
-      <ButtonWithAudio
-        className={cn(
-          '',
-          !noMoney && 'w-8',
-          noMoney && 'animate-wiggle text-4xl',
-          className,
-        )}
-        image={noMoney ? '' : 'moneybag'}
-        onClick={handleAddMoney}
-        text={noMoney ? '💀' : ''}
-        {...props}
-      />
-    </>
+    <ButtonWithAudio
+      className={cn(
+        '',
+        !noMoney && 'w-8',
+        noMoney && 'animate-wiggle text-4xl',
+        className,
+      )}
+      image={noMoney ? '' : 'moneybag'}
+      onClick={handleAddMoney}
+      text={noMoney ? '💀' : ''}
+      {...props}
+    />
   )
 }
 
