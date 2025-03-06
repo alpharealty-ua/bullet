@@ -1,9 +1,8 @@
 import { useBalance } from '@/api/wallet.api'
 import { useSoloStore } from '@/store/solo.store'
-import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
-import { Logo } from './logo'
-import { BalanceWithDelay } from './balance'
-import { MoneyBagButton } from './money-bag-button'
+import { Logo } from '@/components/logo'
+import { Balance } from '@/components/balance'
+import { MoneyBagButton } from '@/components/money-bag-button'
 
 export const Header = ({
   logoText,
@@ -13,8 +12,8 @@ export const Header = ({
   hideBalance?: boolean
 }) => {
   const { data: balance, isLoading } = useBalance()
-  const state = useSoloStore(({ state }) => state)
   const noMoney = useSoloStore(({ noMoney }) => noMoney)
+  const increaseTime = useSoloStore(({ increaseTime }) => increaseTime)
 
   return (
     <header className='flex items-center justify-between px-3 py-2'>
@@ -22,13 +21,7 @@ export const Header = ({
       {!hideBalance && !isLoading && (
         <div className='flex gap-1'>
           <MoneyBagButton balance={balance} noMoney={noMoney} />
-          <BalanceWithDelay
-            hasDelay={state === 'win'}
-            value={balance}
-            increaseTime={
-              state === 'win' ? TIME_WIN_INCREASE_NUMBER : undefined
-            }
-          />
+          <Balance value={balance} increaseTime={increaseTime} />
         </div>
       )}
     </header>

@@ -34,6 +34,7 @@ const Footer = ({
   const countBullet = useSoloStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
   const footerWithBg = format === 'solo' || variant === 'watch'
+  const increaseTime = useSoloStore(({ increaseTime }) => increaseTime)
 
   const handleSettings = () => {
     modal.show({ contentSlot: <Settings /> })
@@ -43,7 +44,7 @@ const Footer = ({
     <footer
       className={cn(
         'relative flex h-[74px] justify-between bg-[#f2f2f2] px-1 py-0.5',
-        footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat',
+        footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat pt-1',
       )}
       style={footerWithBg ? { backgroundImage: `url(${images.footer})` } : {}}
     >
@@ -100,7 +101,9 @@ const Footer = ({
         )}
       </div>
       <div className='relative flex flex-1 flex-row justify-between'>
-        {format === 'duel' && variant === 'play' && <Balance value={balance} />}
+        {format === 'duel' && variant === 'play' && (
+          <Balance value={balance} increaseTime={increaseTime} />
+        )}
         {format === 'solo' && (
           <div className='flex flex-col items-center text-center'>
             <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>

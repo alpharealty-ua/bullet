@@ -13,6 +13,7 @@ type SoloState = {
   maxBet: number
   countBullet: number
   offer: number
+  increaseTime: number | undefined
   setState: (state: StateGame) => void
   setMultiplierIndex: (multiplierIndex: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
@@ -22,6 +23,7 @@ type SoloState = {
   setMaxBet: (setBet: number) => void
   setCountBullet: (setBet: number) => void
   setOffer: (offer: number) => void
+  setIncreaseTime: (increaseTime: number | undefined) => void
   newGame: (balance: number) => void
 }
 
@@ -36,6 +38,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   maxBet: 0,
   countBullet: 5,
   offer: 0,
+  increaseTime: undefined,
   setState: (state: StateGame) => set({ state }),
   setMultiplierIndex: (multiplierIndex: number) => set({ multiplierIndex }),
   setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
@@ -45,6 +48,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   setMaxBet: (maxBet: number) => set({ maxBet }),
   setCountBullet: (countBullet: number) => set({ countBullet }),
   setOffer: (offer: number) => set({ offer }),
+  setIncreaseTime: (increaseTime: number | undefined) => set({ increaseTime }),
   newGame: (balance: number) => {
     const {
       setState,

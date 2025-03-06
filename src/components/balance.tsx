@@ -23,8 +23,17 @@ const Balance = ({
 
   const formatedValue = useMemo(() => formatNumber(value), [value])
 
+  const fontSize =
+    length > 10
+      ? 'text-sm'
+      : length > 8
+        ? 'text-lg'
+        : length > 6
+          ? 'text-xl'
+          : ''
+
   return (
-    <div className='relative flex flex-col overflow-hidden'>
+    <div className='relative flex flex-col self-start'>
       <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
         Balance
       </div>
@@ -32,9 +41,7 @@ const Balance = ({
         ref={totalRef}
         className={cn(
           'relative text-center text-2xl !leading-[1] tracking-tight opacity-100',
-          length > 6 && 'text-xl',
-          length > 8 && 'text-lg',
-          length > 10 && 'text-sm',
+          fontSize,
         )}
       >
         <span className='opacity-0'>${formatedValue}</span>
@@ -45,12 +52,13 @@ const Balance = ({
       <div
         ref={winRef}
         className={cn(
-          'absolute top-full right-0 left-0 hidden justify-center text-center text-3xl leading-[1] tracking-tight',
+          'absolute top-full right-0 left-0 hidden justify-center text-center text-2xl leading-[1] tracking-tight',
           'fill-mode-both duration-500',
           '[&.is-in]:animate-in [&.is-in]:fade-in [&.is-in]:slide-in-from-bottom-10 [&.is-in]:flex [&.is-in]:delay-200',
           '[&.is-out]:animate-out [&.is-out]:fade-out [&.is-out]:flex',
           '[&.is-increase]:text-green',
           '[&.is-decrease]:text-red',
+          fontSize,
         )}
       >
         <div className='hidden font-bold [.is-increase_&]:block'>+</div>
@@ -82,7 +90,7 @@ const BalanceWithDelay = ({
     }
 
     // TODO: ADD SUBSCRIPT WINSOUND
-    const timeoutID = setTimeout(changeBalance, 1000)
+    const timeoutID = setTimeout(changeBalance, 0)
 
     return () => {
       clearTimeout(timeoutID)
