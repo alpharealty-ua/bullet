@@ -43,7 +43,7 @@ const LoginForm = () => {
 
   return (
     <div className='relative flex grow-1 flex-col items-center gap-8 p-10'>
-      <h3 className='text-5xl'>Login</h3>
+      <h3 className='text-3xl'>Login</h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
