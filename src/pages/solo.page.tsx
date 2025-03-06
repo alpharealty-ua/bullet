@@ -33,7 +33,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
   const handlePull = async () => {
     setShowHelpers(false)
-    await next()
+    await next('solo')
   }
 
   const handleDeal = async () => {

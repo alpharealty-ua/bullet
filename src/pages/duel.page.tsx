@@ -1,32 +1,28 @@
-import { useCallback, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useCallback, useState } from 'react'
+import { useParams } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
-import { useSettingsStore } from '@/store/settings.store'
 import { ROUTES } from '@/routes/path'
-import { useSolo } from '@/hooks/use-solo'
+import { useSolo as useSolo } from '@/hooks/use-solo'
 import { VariantGame } from '@/lib/constants'
-import { cn, randomIntFromInterval, wait } from '@/lib/utils'
+import { cn, randomIntFromInterval } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Bar } from '@/components/bar/bar'
-import { DuelGameBar, GameBarHandle } from '@/components/duel-game-bar'
+import { DuelGameBar } from '@/components/duel-game-bar'
 import { Character } from '@/components/character'
 import { PlayerInfo } from '@/components/player-info'
-import { ReadySetPull, ReadySetPullHandle } from '@/components/ready-set-pull'
+import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
-import { GunHandle } from '@/components/character-gun'
 import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
-  const navigate = useNavigate()
   // TODO: USE DUEL
-  useSolo()
+  const { next, gunHandleRef, gameBarRefHandle, readySetPullHandleRef } =
+    useSolo()
 
-  const setState = useSoloStore(({ setState }) => setState)
-  const setRound = useDuelStore(({ setRound }) => setRound)
   const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
   const state = useSoloStore(({ state }) => state)
@@ -34,57 +30,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const isStartedGame = Boolean(gameId)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
-  // TODO: MOVE TO CONTEXT
-  const gunHandleRef = useRef<GunHandle>(null)
-  const gameBarRefHandle = useRef<GameBarHandle>(null)
-  const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
-  const disabledRef = useRef(false)
 
   const handlePull = async () => {
-    if (disabledRef.current) {
-      return
-    }
-
-    disabledRef.current = true
-
-    const gunHandle = gunHandleRef.current
-    const readySetPullHandle = readySetPullHandleRef.current
-    const gameBarHandle = gameBarRefHandle.current
-
-    if (!(gunHandle && readySetPullHandle && gameBarHandle)) {
-      return
-    }
-
-    if (isStartedGame) {
-      const { value, isRunning } = await gameBarHandle.getState()
-
-      if (isRunning) {
-        await gameBarHandle.stop()
-        const isGameOver = [50, 33, 20, 10].includes(value)
-
-        await wait(1000)
-        await playAudio('triggerpull')
-        await gunHandle.spin()
-        await gunHandle.click()
-
-        if (isGameOver) {
-          await gunHandle.shot()
-          // TODO: MOVE TO NEW GAME
-          setRound(1)
-          await gameBarHandle.reset()
-          setState('game-over')
-        }
-      } else {
-        const duration = randomIntFromInterval(25, 50)
-        await gameBarHandle.start(duration)
-      }
-    } else {
-      const promise = readySetPullHandle.start()
-      navigate(`${ROUTES.duel.play}/1`)
-      await promise
-    }
-
-    disabledRef.current = false
+    await next('duel')
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)

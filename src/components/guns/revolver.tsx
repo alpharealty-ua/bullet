@@ -16,7 +16,7 @@ const MIN_ADD_SPEED = 10
 const MAX_ADD_SPEED = 100
 const MAX_SPEED = 100
 
-export type GunHandle = {
+export type RevolverHandle = {
   spin: (duration?: number) => Promise<void>
   click: () => void
 }
@@ -26,7 +26,7 @@ const Revolver = React.forwardRef<
   React.HtmlHTMLAttributes<HTMLDivElement> & {
     beforeSlot: React.ReactNode
     disabled: boolean
-    gunHandleRef: React.ForwardedRef<GunHandle>
+    gunHandleRef: React.ForwardedRef<RevolverHandle>
   }
 >(({ beforeSlot, disabled, className, gunHandleRef, ...props }, ref) => {
   const gunRef = useRef<HTMLDivElement>(null)

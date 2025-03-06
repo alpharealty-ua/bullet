@@ -11,14 +11,20 @@ import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval } from '@/lib/utils'
+import { randomIntFromInterval, wait } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
-import { GunHandle } from '@/components/guns/revolver'
+import { RevolverHandle } from '@/components/guns/revolver'
+import { GameBarHandle } from '@/components/duel-game-bar'
+import { ReadySetPullHandle } from '@/components/ready-set-pull'
+import { GunHandle } from '@/components/character-gun'
 
 const useSolo = () => {
   const navigate = useNavigate()
   const { gameId } = useParams<{ gameId: string }>()
-  const revolverRefHandle = useRef<GunHandle>(null)
+  const revolverRefHandle = useRef<RevolverHandle>(null)
+  const gunHandleRef = useRef<GunHandle>(null)
+  const gameBarRefHandle = useRef<GameBarHandle>(null)
+  const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
   const { data: gameDetails } = useGameDetails()
   const { mutateAsync: addBalanceMutation } = useAddBalance()
@@ -96,18 +102,57 @@ const useSolo = () => {
     newGame(balance)
   }
 
-  const next = async () => {
+  const next = async (format: 'solo' | 'duel') => {
     if (disabledRef.current) {
       return
     }
 
     try {
       disabledRef.current = true
-      await nextSolo()
+      format === 'solo' ? await nextSolo() : await nextDuel()
     } catch (e) {
       console.log(e)
     } finally {
       disabledRef.current = false
+    }
+  }
+
+  const nextDuel = async () => {
+    const gunHandle = gunHandleRef.current
+    const readySetPullHandle = readySetPullHandleRef.current
+    const gameBarHandle = gameBarRefHandle.current
+
+    if (!(gunHandle && readySetPullHandle && gameBarHandle)) {
+      return
+    }
+
+    if (isStartedGame) {
+      const { value, isRunning } = await gameBarHandle.getState()
+
+      if (isRunning) {
+        await gameBarHandle.stop()
+        const isGameOver = [50, 33, 20, 10].includes(value)
+
+        await wait(1000)
+        await playAudio('triggerpull')
+        await gunHandle.spin()
+        await gunHandle.click()
+
+        if (isGameOver) {
+          await gunHandle.shot()
+          // TODO: MOVE TO NEW GAME
+          // setRound(1)
+          await gameBarHandle.reset()
+          setState('game-over')
+        }
+      } else {
+        const duration = randomIntFromInterval(25, 50)
+        await gameBarHandle.start(duration)
+      }
+    } else {
+      const promise = readySetPullHandle.start()
+      navigate(`${ROUTES.duel.play}/1`)
+      await promise
     }
   }
 
@@ -188,9 +233,8 @@ const useSolo = () => {
       chachingAudio.addEventListener('play', () => resolve(true))
     })
 
-    return new Promise<void>((resolve) => {
+    const promise = new Promise<void>((resolve) => {
       const winSoundEnded = () => {
-        newGame(balance)
         resolve()
       }
 
@@ -213,13 +257,16 @@ const useSolo = () => {
         winSoundAudio.dispatchEvent(new Event('ended'))
       }
     })
+
+    return promise.then(() => newGame(balance))
   }
 
   useEffect(() => {
     if (isStartedGame) {
       return
     }
-    newGame(balance)
+    // TODO: REMOVE BALANCE
+    // newGame(balance)
   }, [newGame, isStartedGame, balance])
 
   useEffect(() => {
@@ -259,7 +306,14 @@ const useSolo = () => {
     setNoMoney(noMoney)
   }, [setNoMoney, isStartedGame, balance, bet])
 
-  return { next, deal, revolverRefHandle }
+  return {
+    next,
+    deal,
+    revolverRefHandle,
+    gunHandleRef,
+    gameBarRefHandle,
+    readySetPullHandleRef,
+  }
 }
 
 export { useSolo }
