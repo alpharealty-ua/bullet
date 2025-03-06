@@ -16,6 +16,7 @@ import { AddMoneyModal } from '@/components/add-money-modal'
 import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
+import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle } = useSolo()
@@ -26,6 +27,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const offer = useSoloStore(({ offer }) => offer)
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
+  const state = useSoloStore(({ state }) => state)
 
   const modal = useCustomModal()
 
@@ -106,6 +108,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       </div>
+      <Victory show={state === 'win'} />
       <GameOver backRouter={ROUTES.solo.play} />
       <Footer format='solo' variant={variant} showHelpers={showHelpers} />
     </>

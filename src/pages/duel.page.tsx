@@ -18,6 +18,7 @@ import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull, ReadySetPullHandle } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { GunHandle } from '@/components/character-gun'
+import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const setRound = useDuelStore(({ setRound }) => setRound)
   const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const state = useSoloStore(({ state }) => state)
   const { gameId } = useParams<{ gameId: string }>()
   const isStartedGame = Boolean(gameId)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
@@ -195,6 +196,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           </>
         )}
       </div>
+      <Victory show={state === 'win'} />
       <GameOver hasImage={false} backRouter={ROUTES.duel.play} />
       <Footer format='duel' variant={variant} />
     </>
