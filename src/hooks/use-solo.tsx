@@ -179,29 +179,39 @@ const useSolo = () => {
 
   const winGame = async () => {
     setState('win')
-    // TODO: REMOVE 1000. ONLY FOR TEST
-    await addBalanceMutation(jackpot || 1000)
 
     const winSoundAudio = await playAudio('winsound', false)
-    const chachingAudio = await playAudio('chaching')
+    const chachingAudio = await playAudio('chaching', false)
 
-    const winSoundEnded = (resolve: () => void) => () => {
-      newGame(balance)
-      resolve()
-    }
-
-    const chachingEnded = (resolve: () => void) => async () => {
-      winSoundAudio.play()
-
-      winSoundAudio.addEventListener('ended', winSoundEnded(resolve), {
-        once: true,
-      })
-    }
+    const startAudio = await new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(false))
+      chachingAudio.addEventListener('play', () => resolve(true))
+    })
 
     return new Promise<void>((resolve) => {
-      chachingAudio.addEventListener('ended', chachingEnded(resolve), {
+      const winSoundEnded = () => {
+        newGame(balance)
+        resolve()
+      }
+
+      const chachingEnded = async () => {
+        winSoundAudio.addEventListener('ended', winSoundEnded, {
+          once: true,
+        })
+
+        // TODO: REMOVE 1000. ONLY FOR TEST
+        await addBalanceMutation(jackpot || 1000)
+      }
+
+      chachingAudio.addEventListener('ended', chachingEnded, {
         once: true,
       })
+      if (!startAudio) {
+        chachingAudio.dispatchEvent(new Event('play'))
+        chachingAudio.dispatchEvent(new Event('ended'))
+        winSoundAudio.dispatchEvent(new Event('play'))
+        winSoundAudio.dispatchEvent(new Event('ended'))
+      }
     })
   }
 
