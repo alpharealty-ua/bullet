@@ -64,3 +64,17 @@ export const useProfile = (enabled = false) =>
     queryKey: [QUERY_KEYS.profile],
     queryFn: fetchProfile,
   })
+
+export const useUser = () => {
+  const { data: user } = useQuery({
+    enabled: false,
+    queryKey: [QUERY_KEYS.profile],
+    queryFn: fetchProfile,
+  })
+
+  if (user == null) {
+    throw new Error('User not found')
+  }
+
+  return user
+}
