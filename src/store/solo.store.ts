@@ -60,6 +60,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
       setOffer,
       setCountBullet,
       setMultiplierIndex,
+      setMultiplier,
       bet,
     } = get()
 
@@ -71,6 +72,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
     setOffer(0)
     setCountBullet(5)
     setMultiplierIndex(-1)
+    setMultiplier(0)
   },
 }))
 
