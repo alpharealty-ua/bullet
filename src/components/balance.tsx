@@ -40,19 +40,19 @@ const Balance = ({
       <div
         ref={totalRef}
         className={cn(
-          'relative text-center text-2xl !leading-[1] tracking-tight opacity-100',
+          'relative text-right text-2xl !leading-[1] tracking-tight opacity-100',
           fontSize,
         )}
       >
         <span className='opacity-0'>${formatedValue}</span>
-        <div className={cn('absolute top-0 left-0 flex w-full justify-center')}>
+        <div className={cn('absolute top-0 left-0 flex w-full justify-end')}>
           $<div data-value></div>
         </div>
       </div>
       <div
         ref={winRef}
         className={cn(
-          'absolute top-full right-0 left-0 hidden justify-center text-center text-2xl leading-[1] tracking-tight',
+          'absolute top-full right-0 left-0 hidden justify-end text-center text-2xl leading-[1] tracking-tight',
           'fill-mode-both duration-500',
           '[&.is-in]:animate-in [&.is-in]:fade-in [&.is-in]:slide-in-from-bottom-10 [&.is-in]:flex [&.is-in]:delay-200',
           '[&.is-out]:animate-out [&.is-out]:fade-out [&.is-out]:flex',
