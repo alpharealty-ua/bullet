@@ -7,6 +7,7 @@ type DuelState = {
   setCharacterName: (characterName: CharacterName) => void
   setRound: (round: number) => void
   addRound: () => void
+  newGame: () => void
 }
 
 const useDuelStore = create<DuelState>()((set, get) => ({
@@ -15,6 +16,11 @@ const useDuelStore = create<DuelState>()((set, get) => ({
   setCharacterName: (characterName: CharacterName) => set({ characterName }),
   setRound: (round: number) => set({ round }),
   addRound: () => set({ round: get().round + 1 }),
+  newGame: () => {
+    const { setRound } = get()
+
+    setRound(1)
+  },
 }))
 
 export { useDuelStore }

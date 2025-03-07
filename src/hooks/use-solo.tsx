@@ -9,6 +9,7 @@ import {
 } from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
+import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait } from '@/lib/utils'
@@ -48,12 +49,19 @@ const useSolo = () => {
   const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
   const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
-  const newGame = useSoloStore(({ newGame }) => newGame)
+  const soloNewGame = useSoloStore(({ newGame }) => newGame)
+  const duelNewGame = useDuelStore(({ newGame }) => newGame)
   const state = useSoloStore(({ state }) => state)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const offer = useSoloStore(({ offer }) => offer)
   const bet = useSoloStore(({ bet }) => bet)
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
+
+  // TODO: JOIN NEW GAME
+  const newGame = (balance: number) => {
+    duelNewGame()
+    soloNewGame(balance)
+  }
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
@@ -285,14 +293,6 @@ const useSolo = () => {
 
     return promise.then(() => newGame(balance))
   }
-
-  useEffect(() => {
-    if (isStartedGame) {
-      return
-    }
-    // TODO: REMOVE BALANCE
-    // newGame(balance)
-  }, [newGame, isStartedGame, balance])
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
