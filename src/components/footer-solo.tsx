@@ -9,7 +9,7 @@ import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
 
 const Footer = ({
-  variant,
+  variant: _,
   showHelpers = false,
 }: {
   variant: VariantGame
