@@ -213,9 +213,6 @@ const useSolo = () => {
       await winGame()
       return
     }
-    if (!declineAllDeals) {
-      setOffer(100)
-    }
   }
 
   const gameOver = async () => {
