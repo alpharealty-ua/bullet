@@ -80,7 +80,10 @@ const useSolo = () => {
         if (count-- > 0) {
           await revolverHandle.spin(interval)
           const newIndex = ++index % MULTIPLIERS.length
+          const multiplier = MULTIPLIERS[newIndex]
+          // TODO: REMOVE INDEX
           setMultiplierIndex(newIndex)
+          setMultiplier(multiplier)
           spin()
         } else {
           resolve()
