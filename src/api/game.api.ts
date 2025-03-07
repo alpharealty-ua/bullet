@@ -5,6 +5,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 
+type GameStatus = 'ACTIVE' | 'COMPLETED_LOSE'
+
 interface StartGamePayload {
   betAmount: string
 }
@@ -17,7 +19,7 @@ interface StartGameResponse {
 interface GamePullResponse {
   success: boolean
   position: number
-  gameStatus: 'ACTIVE'
+  gameStatus: GameStatus
   remainingPulls: number
 }
 
@@ -27,7 +29,7 @@ type Game = {
   multiplier: string
   potentialWin: string
   currentPosition: string
-  status: 'ACTIVE' | 'COMPLETED_LOSE'
+  status: GameStatus
 }
 
 type GameDetailsResponse = Game
