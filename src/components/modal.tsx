@@ -14,70 +14,69 @@ import { images } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 
-type Props = {
+interface Props extends ModalProps {
   contentSlot: ReactNode
 }
 
 export const ModalPresenter = (props: Props) => {
-  const { contentSlot } = props
+  const { contentSlot, ...modalProps } = props
 
-  return <Modal>{contentSlot}</Modal>
+  return <Modal {...modalProps}>{contentSlot}</Modal>
 }
 
-export const Modal = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
-    children: React.ReactNode
-    hideHeader?: boolean
-  }
->(({ children, hideHeader = false, className, ...props }, ref) => {
-  const modalRef = useRef<HTMLDivElement>(null)
-  const { remove } = useModal()
-  const [isOpen, setIsOpen] = useState(true)
+interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode
+  hideHeader?: boolean
+}
 
-  const closeWithDelay = useCallback(() => {
-    const modalDom = modalRef.current
+export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
+  ({ children, hideHeader = false, className, ...props }, ref) => {
+    const modalRef = useRef<HTMLDivElement>(null)
+    const { remove } = useModal()
+    const [isOpen, setIsOpen] = useState(true)
 
-    if (modalDom === null) {
-      return
-    }
+    const closeWithDelay = useCallback(() => {
+      const modalDom = modalRef.current
 
-    modalDom.addEventListener('animationend', remove, { once: true })
-
-    setIsOpen(false)
-  }, [remove])
-
-  const handleClose = () => {
-    closeWithDelay()
-  }
-
-  useEffect(() => {
-    const closeModal = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeWithDelay()
+      if (modalDom === null) {
+        return
       }
-    }
-    document.addEventListener('keydown', closeModal)
 
-    return () => {
-      document.removeEventListener('keydown', closeModal)
-    }
-  }, [closeWithDelay])
+      modalDom.addEventListener('animationend', remove, { once: true })
 
-  return (
-    <div
-      ref={mergeRefs(ref, modalRef)}
-      className={cn(
-        'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col gap-12 overflow-auto bg-cover bg-[right_center] px-3 py-12 duration-200',
-        className,
-        isOpen
-          ? 'animate-in fade-in-0 zoom-in-95'
-          : 'animate-out fade-out-0 zoom-out-95',
-      )}
-      style={{ backgroundImage: `url(${images.wrapper})` }}
-      {...props}
-    >
-      {!hideHeader && (
+      setIsOpen(false)
+    }, [remove])
+
+    const handleClose = () => {
+      closeWithDelay()
+    }
+
+    useEffect(() => {
+      const closeModal = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          closeWithDelay()
+        }
+      }
+      document.addEventListener('keydown', closeModal)
+
+      return () => {
+        document.removeEventListener('keydown', closeModal)
+      }
+    }, [closeWithDelay])
+
+    return (
+      <div
+        ref={mergeRefs(ref, modalRef)}
+        className={cn(
+          'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col justify-start gap-12 overflow-auto bg-cover bg-[right_center] px-3 py-12 duration-200',
+          className,
+          isOpen
+            ? 'animate-in fade-in-0 zoom-in-95'
+            : 'animate-out fade-out-0 zoom-out-95',
+        )}
+        style={{ backgroundImage: `url(${images.wrapper})` }}
+        {...props}
+      >
         <div className='flex items-center justify-between gap-2'>
           <div className='flex items-center gap-4'>
             <FaArrowLeft
@@ -92,8 +91,8 @@ export const Modal = React.forwardRef<
             onClick={handleClose}
           />
         </div>
-      )}
-      {children}
-    </div>
-  )
-})
+        {children}
+      </div>
+    )
+  },
+)
