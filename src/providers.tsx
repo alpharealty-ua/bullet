@@ -24,7 +24,7 @@ export function Providers({
       <ReactQueryDevtools />
       <BrowserRouter>
         <div
-          className='relative mx-auto flex h-full min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[733px]'
+          className='relative mx-auto flex h-full min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[780px]'
           style={{ backgroundImage: `url(${images.wrapper})` }}
         >
           <NiceModal.Provider>

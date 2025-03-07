@@ -79,7 +79,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           gunHandleRef={revolverRefHandle}
           disabled={isStartedGame}
           beforeSlot={<>{}</>}
-          className='-mb-16 w-[216px] lg:-mb-16 lg:w-[251px]'
+          className='-mb-16 w-[216px] lg:-mb-20 lg:w-[280px]'
         />
         <div
           className={cn(
