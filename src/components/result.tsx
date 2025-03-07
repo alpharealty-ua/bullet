@@ -37,7 +37,7 @@ const Result = ({
             </div>
             <div
               className={cn(
-                'fill-mode-both text-green max-w-[300px] origin-top text-5xl',
+                'fill-mode-both text-red max-w-[300px] origin-top text-5xl',
                 open &&
                   'animate-in fade-in slide-in-from-top-6 delay-750 duration-500',
                 close && 'animate-out fade-out zoom-out-50 duration-200',
