@@ -11,7 +11,7 @@ import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
 import { Result } from '@/components/result'
 import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { Footer } from '@/components/footer-solo'
 import { AddMoneyModal } from '@/components/add-money-modal'
 import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -28,6 +28,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
   const state = useSoloStore(({ state }) => state)
+  const multiplier = useSoloStore(({ multiplier }) => multiplier)
 
   const modal = useCustomModal()
 
@@ -49,16 +50,25 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   return (
     <>
       <Header logoText={'Solo'} />
-      <Result
-        title={'Jackpot'}
-        price={jackpot}
-        open={isStartedGame && Boolean(jackpot)}
-      />
-      <Result
-        title={'the banker offers...'}
-        price={offer}
-        open={isStartedGame && Boolean(offer)}
-      />
+      <div className='flex flex-col gap-3'>
+        <Result
+          title={'Jackpot'}
+          value={`$${offer}`}
+          open={isStartedGame && Boolean(jackpot)}
+          hasDelay
+        />
+        <Result
+          title={'the banker offers...'}
+          value={`$${offer}`}
+          open={isStartedGame && Boolean(offer)}
+          hasDelay
+        />
+        <Result
+          title={'Multiplier'}
+          value={`${multiplier}x`}
+          open={multiplier > 0}
+        />
+      </div>
       {noMoney && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
@@ -69,7 +79,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           gunHandleRef={revolverRefHandle}
           disabled={isStartedGame}
           beforeSlot={<>{}</>}
-          className='-mb-16 w-[216px] lg:-mb-12 lg:w-[251px]'
+          className='-mb-16 w-[216px] lg:-mb-16 lg:w-[251px]'
         />
         <div
           className={cn(
@@ -110,7 +120,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory show={state === 'win'} />
       <GameOver backRouter={ROUTES.solo.play} />
-      <Footer format='solo' variant={variant} showHelpers={showHelpers} />
+      <Footer variant={variant} showHelpers={showHelpers} />
     </>
   )
 }

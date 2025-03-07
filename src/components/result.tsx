@@ -5,12 +5,14 @@ import { cn } from '@/lib/utils'
 
 const Result = ({
   title,
-  price,
+  value,
   open,
+  hasDelay = false,
 }: {
   title: string
-  price: number
+  value: string
   open: boolean
+  hasDelay?: boolean
 }) => {
   const nodeRef = useRef(null)
 
@@ -27,23 +29,24 @@ const Result = ({
           >
             <div
               className={cn(
-                'fill-mode-both origin-top text-xl leading-[1] font-bold',
-                open &&
-                  'animate-in fade-in slide-in-from-top-6 delay-500 duration-500',
+                'fill-mode-both origin-top text-2xl leading-[1]',
+                open && 'animate-in fade-in slide-in-from-top-6 duration-500',
                 close && 'animate-out fade-out zoom-out-50 duration-200',
+                // TODO: REFACTOR
+                hasDelay && 'delay-500',
               )}
             >
               {title}
             </div>
             <div
               className={cn(
-                'fill-mode-both text-red max-w-[300px] origin-top text-5xl',
-                open &&
-                  'animate-in fade-in slide-in-from-top-6 delay-750 duration-500',
+                'fill-mode-both text-red max-w-[300px] origin-top text-4xl',
+                open && 'animate-in fade-in slide-in-from-top-6 duration-500',
                 close && 'animate-out fade-out zoom-out-50 duration-200',
+                hasDelay && 'delay-750',
               )}
             >
-              ${price}
+              {value}
             </div>
           </div>
         )
