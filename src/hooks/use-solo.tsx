@@ -173,7 +173,8 @@ const useSolo = () => {
 
     const { gameId, multiplier } = await startGameMutation({
       betAmount: String(bet),
-    }).catch(() => ({ gameId: 1, multiplier: 100 }))
+    })
+    // .catch(() => ({ gameId: 1, multiplier: 100 }))
 
     setState('running')
     await addBalanceMutation(-bet)
@@ -202,10 +203,11 @@ const useSolo = () => {
       return
     }
 
-    const { success, position } = await gamePullMutation(gameId).catch(() => ({
-      success: true,
-      position: 3,
-    }))
+    const { success, position } = await gamePullMutation(gameId)
+    // .catch(() => ({
+    //   success: true,
+    //   position: 3,
+    // }))
 
     const isGameOver = !success
     const isWin = !isGameOver && position === 5
