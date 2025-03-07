@@ -48,7 +48,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
     const duration = randomIntFromInterval(25, 50)
     await gameBarHandle.start(duration)
-  }, [])
+  }, [gameBarRefHandle])
 
   const handleChangeDirection = useCallback(
     (_: number, nextDiraction: number) => {
