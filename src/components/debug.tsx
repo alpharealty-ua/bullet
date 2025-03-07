@@ -12,9 +12,7 @@ const Debug = () => {
   const queryClient = useQueryClient()
   const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
   const setState = useSoloStore(({ setState }) => setState)
-  const setMultiplierIndex = useSoloStore(
-    ({ setMultiplierIndex }) => setMultiplierIndex,
-  )
+  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
   const state = useSoloStore(({ state }) => state)
   const countBullet = useSoloStore(({ countBullet }) => countBullet)
   const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
@@ -80,11 +78,11 @@ const Debug = () => {
           <select
             className='h-10 w-full bg-white px-2 uppercase'
             value={multiplierIndex}
-            onChange={(e) => setMultiplierIndex(Number(e.target.value))}
+            onChange={(e) => setMultiplier(Number(e.target.value))}
           >
             <option value='-1'>-1</option>
-            {MULTIPLIERS.map(({ value }, i) => (
-              <option key={i} value={i}>
+            {MULTIPLIERS.map((value, i) => (
+              <option key={i} value={value}>
                 {value}
               </option>
             ))}

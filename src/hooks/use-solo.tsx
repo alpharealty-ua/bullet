@@ -33,9 +33,6 @@ const useSolo = () => {
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const declineAllDeals = useSettingsStore(
-    ({ declineAllDeals }) => declineAllDeals,
-  )
   const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
   const setOffer = useSoloStore(({ setOffer }) => setOffer)
   const setBet = useSoloStore(({ setBet }) => setBet)
@@ -43,6 +40,7 @@ const useSolo = () => {
   const setMultiplierIndex = useSoloStore(
     ({ setMultiplierIndex }) => setMultiplierIndex,
   )
+  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
   const setIsStartedGame = useSoloStore(
     ({ setIsStartedGame }) => setIsStartedGame,
   )
@@ -172,10 +170,17 @@ const useSolo = () => {
 
     const { gameId, multiplier } = await startGameMutation({
       betAmount: String(bet),
-    })
+    }).catch(() => ({ gameId: 1, multiplier: 100 }))
+
     setState('running')
     await addBalanceMutation(-bet)
-    await getMultiplier(Number(multiplier))
+    const multiplierIndex = MULTIPLIERS.findIndex(
+      (value) => value === Number(multiplier),
+    )
+    if (multiplierIndex === -1) {
+      return
+    }
+    await getMultiplier(multiplierIndex)
     navigate(`${ROUTES.solo.play}/${gameId}`)
   }
 
@@ -194,7 +199,10 @@ const useSolo = () => {
       return
     }
 
-    const { success, position } = await gamePullMutation(gameId)
+    const { success, position } = await gamePullMutation(gameId).catch(() => ({
+      success: true,
+      position: 3,
+    }))
 
     const isGameOver = !success
     const isWin = !isGameOver && position === 5

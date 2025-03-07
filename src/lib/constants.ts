@@ -1,4 +1,5 @@
-export const MULTIPLIERS: { value: number; color: `#${string}` }[] = [
+// TODO: REMOVE
+export const MULTIPLIERS_COLORS: { value: number; color: `#${string}` }[] = [
   { value: 2, color: '#2d95ff' },
   { value: 3, color: '#ff8787' },
   { value: 5, color: '#ff06a4' },
@@ -8,8 +9,7 @@ export const MULTIPLIERS: { value: number; color: `#${string}` }[] = [
   { value: 1000, color: '#ffbf00' },
 ]
 
-export const getMultiplierValueByIndex = (index: number) =>
-  MULTIPLIERS[index]?.value ?? 0
+export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 
 export const states = ['preparation', 'running', 'win', 'game-over'] as const
 
