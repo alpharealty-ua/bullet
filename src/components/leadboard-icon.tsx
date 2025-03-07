@@ -10,7 +10,7 @@ const LeadboardIcon = ({
   return (
     <Link
       className={cn(
-        'absolute right-4 bottom-4 aspect-[176/186] h-20 w-20 bg-contain bg-center bg-no-repeat',
+        'aspect-[176/186] h-20 w-20 bg-contain bg-center bg-no-repeat',
         className,
       )}
       style={{

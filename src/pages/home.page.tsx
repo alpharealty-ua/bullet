@@ -93,6 +93,7 @@ const HomePage = () => {
       <LeadboardIcon
         to={ROUTES.leaderboard.root}
         className={cn(
+          'absolute right-4 bottom-4',
           'repeat-[1] duration-500 ease-linear [&.is-animate]:scale-500 [&.is-animate]:rotate-360 [&.is-animate]:opacity-0',
         )}
         onClick={handleLeadboardClick}
