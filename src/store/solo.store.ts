@@ -5,6 +5,7 @@ import { StateGame } from '@/lib/constants'
 type SoloState = {
   state: StateGame
   multiplierIndex: number
+  multiplier: number
   prevState: StateGame
   isStartedGame: boolean
   noMoney: boolean
@@ -16,6 +17,7 @@ type SoloState = {
   increaseTime: number | undefined
   setState: (state: StateGame) => void
   setMultiplierIndex: (multiplierIndex: number) => void
+  setMultiplier: (multiplier: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
   setNoMoney: (noMoney: boolean) => void
   setJackpot: (jackpot: number) => void
@@ -31,6 +33,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   state: 'preparation',
   prevState: 'preparation',
   multiplierIndex: -1,
+  multiplier: 0,
   isStartedGame: false,
   noMoney: false,
   jackpot: 0,
@@ -41,6 +44,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   increaseTime: undefined,
   setState: (state: StateGame) => set({ state }),
   setMultiplierIndex: (multiplierIndex: number) => set({ multiplierIndex }),
+  setMultiplier: (multiplier: number) => set({ multiplier }),
   setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
   setNoMoney: (noMoney: boolean) => set({ noMoney }),
   setJackpot: (jackpot: number) => set({ jackpot }),
