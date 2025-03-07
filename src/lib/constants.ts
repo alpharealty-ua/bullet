@@ -104,7 +104,7 @@ export const audios = {
 
 export const audiosEntries = Object.entries(audios)
 
-export const MAX_BET = 1000
+export const MAX_BET = 10_000
 
 const TIME_WIN_AUDIO = 3500
 const TIME_ANIMATION_DELAY = 200
