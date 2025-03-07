@@ -220,16 +220,20 @@ const Bet = ({
         ></div>
         <button
           className={cn(
-            'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none bg-contain bg-center bg-no-repeat',
-            disabled && 'cursor-not-allowed',
-            size === 'sm' && 'h-4 w-4',
+            'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
           )}
+          disabled={disabled}
           style={{
-            backgroundImage: `url(${images.bullet})`,
             left: `${percent}%`,
           }}
           data-button
         >
+          <div
+            className={cn(
+              'bg-red absolute inset-0 m-auto rounded-[inherit]',
+              size === 'sm' && 'h-2/3 w-2/3',
+            )}
+          ></div>
           <>
             {topButtonSlot && (
               <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
@@ -241,7 +245,6 @@ const Bet = ({
         <div
           className={cn(
             'text-red absolute top-1/2 left-full flex -translate-y-1/2 justify-between uppercase',
-            size === 'sm' && 'text-xs',
           )}
         >
           <button
@@ -260,7 +263,7 @@ const Bet = ({
       {bottomSlot ? (
         bottomSlot(value)
       ) : (
-        <div className='grow text-2xl leading-[1] text-ellipsis'>
+        <div className='grow text-right text-2xl leading-[1] text-ellipsis'>
           $<span data-value>{value}</span>
         </div>
       )}
