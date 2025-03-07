@@ -198,6 +198,10 @@ const Bet = ({
     changeValue(roundedBet)
   }
 
+  const handleMaxBetClick = () => {
+    changeValue(maxBet)
+  }
+
   return (
     <div
       ref={sliderWrapperRef}
@@ -234,16 +238,25 @@ const Bet = ({
             )}
           </>
         </button>
+        <div
+          className={cn(
+            'text-red absolute top-1/2 left-full flex -translate-y-1/2 justify-between uppercase',
+            size === 'sm' && 'text-xs',
+          )}
+        >
+          <button
+            className={cn(
+              'absolute top-1/2 left-1/2 -translate-1/2 rotate-90 cursor-pointer pb-2 text-lg disabled:cursor-not-allowed',
+              size === 'sm' && 'text-sm',
+            )}
+            onClick={handleMaxBetClick}
+            disabled={disabled}
+          >
+            Max
+          </button>
+        </div>
       </div>
-      <div
-        className={cn(
-          'text-red absolute -top-3.5 right-0 left-0 flex justify-between uppercase',
-          size === 'sm' && 'text-xs',
-        )}
-      >
-        <div>0</div>
-        <div>Max</div>
-      </div>
+
       {bottomSlot ? (
         bottomSlot(value)
       ) : (
