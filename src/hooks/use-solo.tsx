@@ -22,7 +22,8 @@ const useSolo = () => {
   const navigate = useNavigate()
   const { gameId } = useParams<{ gameId: string }>()
   const revolverRefHandle = useRef<RevolverHandle>(null)
-  const gunHandleRef = useRef<GunHandle>(null)
+  const frontGunHandleRef = useRef<GunHandle>(null)
+  const backGunHandleRef = useRef<GunHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
@@ -119,11 +120,14 @@ const useSolo = () => {
   }
 
   const nextDuel = async () => {
-    const gunHandle = gunHandleRef.current
+    const frontGunHandle = frontGunHandleRef.current
+    const backGunHandle = backGunHandleRef.current
     const readySetPullHandle = readySetPullHandleRef.current
     const gameBarHandle = gameBarRefHandle.current
 
-    if (!(gunHandle && readySetPullHandle && gameBarHandle)) {
+    if (
+      !(frontGunHandle && backGunHandle && readySetPullHandle && gameBarHandle)
+    ) {
       return
     }
 
@@ -132,21 +136,30 @@ const useSolo = () => {
 
       if (isRunning) {
         await gameBarHandle.stop()
-        const isGameOver = [50, 33, 20, 10].includes(value)
+        const inWinGame = [50, 33, 20, 10].includes(value)
 
         await wait(1000)
         await playAudio('triggerpull')
-        await gunHandle.spin()
-        await gunHandle.click()
+        await backGunHandle.spin()
+        await backGunHandle.click()
 
-        if (isGameOver) {
-          await gunHandle.shot()
-          // TODO: MOVE TO NEW GAME
-          // setRound(1)
-          await gameBarHandle.reset()
-          await gameOver()
+        if (inWinGame) {
+          return await winGame()
         } else {
-          await winGame()
+          await wait(1000)
+          await playAudio('triggerpull')
+          await frontGunHandle.spin()
+          await frontGunHandle.click()
+
+          const isGameOver = randomIntFromInterval(1, 5) === 1
+
+          if (isGameOver) {
+            await frontGunHandle.shot()
+            // TODO: MOVE TO NEW GAME
+            // setRound(1)
+            await gameBarHandle.reset()
+            return await gameOver()
+          }
         }
       } else {
         const duration = randomIntFromInterval(25, 50)
@@ -322,7 +335,8 @@ const useSolo = () => {
     next,
     deal,
     revolverRefHandle,
-    gunHandleRef,
+    frontGunHandleRef,
+    backGunHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
   }

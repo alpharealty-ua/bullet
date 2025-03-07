@@ -22,10 +22,11 @@ export type GunHandle = {
 export interface GunCharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   gunHandleRef?: React.ForwardedRef<GunHandle>
+  showGun?: boolean
 }
 
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
-  ({ className, gunHandleRef, ...props }, ref) => {
+  ({ className, gunHandleRef, showGun = true, ...props }, ref) => {
     const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
@@ -97,20 +98,24 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               className: 'w-[80%]',
             }}
           />
-          <div
-            className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
-            style={{
-              backgroundImage: `url(${images.gunchambercharacter})`,
-            }}
-            data-chamber
-          ></div>
-          <div
-            className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
-            style={{
-              backgroundImage: `url(${images.gunbodycharacter})`,
-            }}
-            data-body
-          ></div>
+          {showGun && (
+            <>
+              <div
+                className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
+                style={{
+                  backgroundImage: `url(${images.gunchambercharacter})`,
+                }}
+                data-chamber
+              ></div>
+              <div
+                className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
+                style={{
+                  backgroundImage: `url(${images.gunbodycharacter})`,
+                }}
+                data-body
+              ></div>
+            </>
+          )}
           {showShot && (
             <>
               <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>

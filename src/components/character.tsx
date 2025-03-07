@@ -2,19 +2,27 @@ import React from 'react'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
-import { GunCharacter, GunCharacterProps } from './character-gun'
+import { GunCharacter, GunHandle } from '@/components/character-gun'
 
-interface CharacterProps
-  extends React.HtmlHTMLAttributes<HTMLDivElement>,
-    Pick<GunCharacterProps, 'gunHandleRef'> {
+interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   characterName: CharacterName
   type: CharacterType
   beforeSlot?: React.ReactNode
+  frontGunHandleRef?: React.ForwardedRef<GunHandle>
+  backGunHandleRef?: React.ForwardedRef<GunHandle>
 }
 
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   (
-    { characterName, className, beforeSlot, gunHandleRef, type, ...props },
+    {
+      characterName,
+      className,
+      beforeSlot,
+      frontGunHandleRef,
+      backGunHandleRef,
+      type,
+      ...props
+    },
     ref,
   ) => {
     const isFront = type === 'front'
@@ -50,7 +58,8 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
               characterName === 'fatty' &&
                 'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
             )}
-            gunHandleRef={gunHandleRef}
+            gunHandleRef={frontGunHandleRef}
+            showGun={true}
           />
         </div>
         <div
@@ -61,7 +70,18 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
           style={{
             backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
           }}
-        ></div>
+        >
+          <GunCharacter
+            className={cn(
+              'absolute right-[6%] aspect-[1/1.7] max-h-full w-[20%]',
+              characterName === 'nubcat' && '',
+              characterName === 'mickey' && '',
+              characterName === 'fatty' && '',
+            )}
+            gunHandleRef={backGunHandleRef}
+            showGun={false}
+          />
+        </div>
       </div>
     )
   },

@@ -20,8 +20,13 @@ import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   // TODO: USE DUEL
-  const { next, gunHandleRef, gameBarRefHandle, readySetPullHandleRef } =
-    useSolo()
+  const {
+    next,
+    frontGunHandleRef,
+    backGunHandleRef,
+    gameBarRefHandle,
+    readySetPullHandleRef,
+  } = useSolo()
 
   const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
@@ -84,7 +89,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 ? handlePlayerClick
                 : undefined
             }
-            gunHandleRef={gunHandleRef}
+            frontGunHandleRef={frontGunHandleRef}
             beforeSlot={
               <PlayerInfo
                 className='absolute top-0 right-full translate-x-2'
@@ -115,7 +120,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                     ? handlePlayerClick
                     : undefined
                 }
-                // gunHandleRef={gunHandleRef}
+                backGunHandleRef={backGunHandleRef}
                 beforeSlot={
                   <PlayerInfo
                     className='absolute top-0 left-full translate-x-2'
