@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { useModal } from '@ebay/nice-modal-react'
 import mergeRefs from 'merge-refs'
+import { FaArrowLeft } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
 import { images } from '@/lib/constants'
@@ -77,8 +78,14 @@ export const Modal = React.forwardRef<
       {...props}
     >
       {!hideHeader && (
-        <div className='flex items-center justify-between'>
-          <Logo size='lg' onClick={handleClose} />
+        <div className='flex items-center justify-between gap-2'>
+          <div className='flex items-center gap-4'>
+            <FaArrowLeft
+              className='text-red cursor-pointer text-3xl transition-all hover:text-black'
+              onClick={handleClose}
+            />
+            <Logo size='lg' onClick={handleClose} />
+          </div>
           <ButtonWithAudio
             className='w-11'
             image='close'
