@@ -144,7 +144,9 @@ const useSolo = () => {
           // TODO: MOVE TO NEW GAME
           // setRound(1)
           await gameBarHandle.reset()
-          setState('game-over')
+          await gameOver()
+        } else {
+          await winGame()
         }
       } else {
         const duration = randomIntFromInterval(25, 50)
