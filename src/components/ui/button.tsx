@@ -1,19 +1,19 @@
 import React from 'react'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const imagesMap = {
-  button: images.button,
-  solo: images.solo,
-  play: images.play,
-  pull: images.pull,
-  deal: images.deal,
-  duel: images.duel,
-  watch: images.watch,
-  gamerules: images.gamerules,
-  close: images.close,
-  moneybag: images.moneybag,
+  button: IMAGES.button,
+  solo: IMAGES.solo,
+  play: IMAGES.play,
+  pull: IMAGES.pull,
+  deal: IMAGES.deal,
+  duel: IMAGES.duel,
+  watch: IMAGES.watch,
+  gamerules: IMAGES.gamerules,
+  close: IMAGES.close,
+  moneybag: IMAGES.moneybag,
 }
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {

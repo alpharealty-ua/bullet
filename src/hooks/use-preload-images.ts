@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 
-import { srcImages } from '@/lib/constants'
+import { SRC_IMAGES } from '@/lib/constants'
 
 export const usePreloadImages = () => {
   useEffect(() => {
-    srcImages.forEach((src) => {
+    SRC_IMAGES.forEach((src) => {
       const image = new Image()
       image.src = src
     })

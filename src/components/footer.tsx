@@ -2,7 +2,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useSoloStore } from '@/store/solo.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { FormatGame, images, MULTIPLIERS, VariantGame } from '@/lib/constants'
+import { FormatGame, IMAGES, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { Bet } from './bet'
 import { Bullets } from './bullets'
 import { Multiplier } from './multiplier'
@@ -46,7 +46,7 @@ const Footer = ({
         'relative flex h-[74px] justify-between bg-[#f2f2f2] px-1 py-0.5',
         footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat pt-1',
       )}
-      style={footerWithBg ? { backgroundImage: `url(${images.footer})` } : {}}
+      style={footerWithBg ? { backgroundImage: `url(${IMAGES.footer})` } : {}}
     >
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
@@ -127,7 +127,7 @@ const Footer = ({
         <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
           <button
             className='mt-auto h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${images.settings})` }}
+            style={{ backgroundImage: `url(${IMAGES.settings})` }}
             onClick={handleSettings}
           ></button>
         </div>

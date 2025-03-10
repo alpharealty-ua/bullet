@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Link, LinkProps } from 'react-router'
 
@@ -41,9 +41,9 @@ const Logo = ({
     >
       <div
         className='absolute top-[33%] left-[25.5%] aspect-square w-[17%] -rotate-5 bg-contain bg-no-repeat'
-        style={{ backgroundImage: `url(${images.bullet})` }}
+        style={{ backgroundImage: `url(${IMAGES.bullet})` }}
       ></div>
-      <img src={images.logo} alt='' />
+      <img src={IMAGES.logo} alt='' />
       {text && (
         <div
           className={cn(

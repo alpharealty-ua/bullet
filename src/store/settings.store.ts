@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
-import { audios, SettingsKeys } from '@/lib/constants'
+import { AUDIOS, SettingsKeys } from '@/lib/constants'
 import { getAudio } from '@/lib/utils'
 
 type SettingsState = Record<SettingsKeys, boolean> & {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
   // TODO: MOVE
   playAudio: (
-    key: keyof typeof audios,
+    key: keyof typeof AUDIOS,
     play?: boolean,
   ) => Promise<HTMLAudioElement>
 }
@@ -21,7 +21,7 @@ const useSettingsStore = create<SettingsState>()((set, get) => ({
   change: (payload: Partial<Record<SettingsKeys, boolean>>) =>
     set({ ...payload }),
   playAudio: async (
-    key: keyof typeof audios,
+    key: keyof typeof AUDIOS,
     play = true,
   ): Promise<HTMLAudioElement> => {
     const audio = getAudio(key)

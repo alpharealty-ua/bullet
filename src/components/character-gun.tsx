@@ -7,7 +7,7 @@ import React, {
 import { createPortal } from 'react-dom'
 import mergeRefs from 'merge-refs'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { Click } from './guns/click'
@@ -103,14 +103,14 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               <div
                 className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
                 style={{
-                  backgroundImage: `url(${images.gunchambercharacter})`,
+                  backgroundImage: `url(${IMAGES.gunchambercharacter})`,
                 }}
                 data-chamber
               ></div>
               <div
                 className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
                 style={{
-                  backgroundImage: `url(${images.gunbodycharacter})`,
+                  backgroundImage: `url(${IMAGES.gunbodycharacter})`,
                 }}
                 data-body
               ></div>
@@ -124,14 +124,14 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
                     'absolute inset-0 scale-200 opacity-0',
                     'zoom-in-50 fade-in fill-mode-backwards bg-no-repea animate-[shot] bg-cover bg-center duration-200 ease-linear',
                   )}
-                  style={{ backgroundImage: `url(${images.shot1})` }}
+                  style={{ backgroundImage: `url(${IMAGES.shot1})` }}
                 ></div>
                 <div
                   className={cn(
                     'absolute inset-0 scale-600 opacity-0',
                     'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
                   )}
-                  style={{ backgroundImage: `url(${images.shot2})` }}
+                  style={{ backgroundImage: `url(${IMAGES.shot2})` }}
                 ></div>
               </div>
             </>
@@ -144,7 +144,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
                 'fixed inset-0 z-50 mx-auto max-w-[var(--width)] opacity-0',
                 'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
               )}
-              style={{ backgroundImage: `url(${images.shot3})` }}
+              style={{ backgroundImage: `url(${IMAGES.shot3})` }}
             ></div>
           ),
           document.body,

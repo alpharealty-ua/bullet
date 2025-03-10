@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { removeToken } from '@/lib/localstorage'
 import { useSoloStore } from '@/store/solo.store'
-import { StateGame, states, MULTIPLIERS } from '@/lib/constants'
+import { StateGame, STATES, MULTIPLIERS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
 import { QUERY_KEYS } from '@/api/api'
@@ -49,7 +49,7 @@ const Debug = () => {
         className='text-base'
         onClick={handleResetAddMoney}
       />
-      {states.map((el, i) => (
+      {STATES.map((el, i) => (
         <ButtonWithAudio
           key={i}
           className={cn('text-base', el === state && 'text-white')}
@@ -65,7 +65,7 @@ const Debug = () => {
             value={state}
             onChange={(e) => handleSetState(e.target.value as StateGame)}
           >
-            {states.map((state, i) => (
+            {STATES.map((state, i) => (
               <option key={i} value={state}>
                 {state}
               </option>

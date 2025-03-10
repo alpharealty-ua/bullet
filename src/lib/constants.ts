@@ -11,16 +11,15 @@ export const MULTIPLIERS_COLORS: { value: number; color: `#${string}` }[] = [
 
 export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 
-export const states = ['preparation', 'running', 'win', 'game-over'] as const
+export const STATES = ['preparation', 'running', 'win', 'game-over'] as const
 
-export type StateGame = (typeof states)[number]
+export type StateGame = (typeof STATES)[number]
 
 export type FormatGame = 'solo' | 'duel'
 
 export type VariantGame = 'play' | 'watch'
 
-// TODO: CHANGE TO UPPERCASE
-export const images = {
+export const IMAGES = {
   gamerules: '/assets/images/game-rules.svg',
   close: '/assets/images/close.svg',
   moneybag: '/assets/images/money-bag.svg',
@@ -64,20 +63,20 @@ export const images = {
   leaderboardstar: '/assets/images/leaderboardstar.png',
 } as const
 
-export const srcImages = Object.values(images)
+export const SRC_IMAGES = Object.values(IMAGES)
 
 export const CHARACTER_LIST = {
   nubcat: {
-    back: images.characternubcatback,
-    front: images.characternubcatfront,
+    back: IMAGES.characternubcatback,
+    front: IMAGES.characternubcatfront,
   },
   mickey: {
-    back: images.charactermickeyback,
-    front: images.charactermickeyfront,
+    back: IMAGES.charactermickeyback,
+    front: IMAGES.charactermickeyfront,
   },
   fatty: {
-    back: images.characterfattyback,
-    front: images.characterfattyfront,
+    back: IMAGES.characterfattyback,
+    front: IMAGES.characterfattyfront,
   },
 } satisfies Record<CharacterName, Record<CharacterType, string>>
 
@@ -85,9 +84,9 @@ export type CharacterName = 'nubcat' | 'mickey' | 'fatty'
 
 export type CharacterType = 'back' | 'front'
 
-export const characterNames = Object.keys(CHARACTER_LIST) as CharacterName[]
+export const CHARACTER_NAMES = Object.keys(CHARACTER_LIST) as CharacterName[]
 
-export const audios = {
+export const AUDIOS = {
   revolverspin: '/assets/audios/revolverspin.mp3',
   trigger: '/assets/audios/trigger.wav',
   triggerpull: '/assets/audios/trigger-pull.wav',
@@ -102,7 +101,7 @@ export const audios = {
   pull: '/assets/audios/pull.mp3',
 } as const
 
-export const audiosEntries = Object.entries(audios)
+export const audiosEntries = Object.entries(AUDIOS)
 
 export const MAX_BET = 10_000
 
@@ -112,7 +111,7 @@ const TIME_ANIMATION_DURATION = 500
 export const TIME_WIN_INCREASE_NUMBER =
   TIME_WIN_AUDIO - TIME_ANIMATION_DURATION - TIME_ANIMATION_DELAY
 
-export const settings = {
+export const SETTINGS = {
   music: 'Toggle music',
   soundEffects: 'Toggle sound effects',
   invertButtons: 'Invert PULL AND DEAL button positions',
@@ -120,25 +119,25 @@ export const settings = {
   declineAllDeals: 'Decline all deals',
 } as const
 
-export const settingsEntries = Object.entries(settings) as [
+export const settingsEntries = Object.entries(SETTINGS) as [
   SettingsKeys,
   string,
 ][]
 
-export type SettingsKeys = keyof typeof settings
+export type SettingsKeys = keyof typeof SETTINGS
 
 export const LANGUAGE_LIST = [
   {
     language: 'usa',
-    flag: images.flagusa,
+    flag: IMAGES.flagusa,
   },
   {
     language: 'china',
-    flag: images.flagchina,
+    flag: IMAGES.flagchina,
   },
   {
     language: 'mexico',
-    flag: images.flagmexico,
+    flag: IMAGES.flagmexico,
   },
 ] as const
 

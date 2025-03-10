@@ -1,4 +1,4 @@
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface MultiplerProps {
@@ -26,7 +26,7 @@ const Multiplier = ({ items, activeIndex }: MultiplerProps) => {
           >
             {isJackpot && (
               <div className='absolute inset-0 px-1'>
-                <img src={images['1000x']} alt='' />
+                <img src={IMAGES['1000x']} alt='' />
               </div>
             )}
             {value}x

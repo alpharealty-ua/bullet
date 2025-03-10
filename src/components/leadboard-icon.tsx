@@ -1,4 +1,4 @@
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import React from 'react'
 import { Link } from 'react-router'
@@ -14,7 +14,7 @@ const LeadboardIcon = ({
         className,
       )}
       style={{
-        backgroundImage: `url(${images.leaderboardstar})`,
+        backgroundImage: `url(${IMAGES.leaderboardstar})`,
       }}
       {...props}
     ></Link>

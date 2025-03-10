@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface PlayerInfoProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
@@ -37,7 +37,7 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
         ></div>
         <div
           className='relative flex min-h-[70px] flex-col justify-between gap-4 rounded-md border-2 border-black bg-white bg-cover bg-center bg-no-repeat p-1 text-xs'
-          style={{ backgroundImage: `url(${images.texture})` }}
+          style={{ backgroundImage: `url(${IMAGES.texture})` }}
         >
           <div className='flex justify-between gap-2'>
             <div>
@@ -54,7 +54,7 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
             </div>
             <div
               className='h-6 w-10 bg-gray-100 bg-contain bg-center bg-no-repeat'
-              style={{ backgroundImage: `url(${images.flagusa})` }}
+              style={{ backgroundImage: `url(${IMAGES.flagusa})` }}
             ></div>
           </div>
         </div>

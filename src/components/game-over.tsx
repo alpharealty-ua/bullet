@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn, preloadImage } from '@/lib/utils'
 
 let imageVersion = Date.now()
@@ -22,7 +22,7 @@ const GameOver = ({
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)
-  const [image, setImage] = useState<string>(images.gameover)
+  const [image, setImage] = useState<string>(IMAGES.gameover)
   const [runAnimation, setRunAnimation] = useState(false)
   const navigate = useNavigate()
   const show = state === 'game-over'
@@ -38,7 +38,7 @@ const GameOver = ({
     }
 
     setRunAnimation(false)
-    setImage(`${images.gameover}?v=${imageVersion++}`)
+    setImage(`${IMAGES.gameover}?v=${imageVersion++}`)
   }, [show])
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const GameOver = ({
           'animate-in fade-in fill-mode-both duration-100',
           hasImage && 'delay-800',
         )}
-        style={!blood ? { backgroundImage: `url(${images.blood})` } : {}}
+        style={!blood ? { backgroundImage: `url(${IMAGES.blood})` } : {}}
       >
         <div
           className={cn(
@@ -152,7 +152,7 @@ const GameOver = ({
             hasImage && 'delay-900',
             !hasImage && 'delay-100',
           )}
-          style={{ backgroundImage: `url(${images.you})` }}
+          style={{ backgroundImage: `url(${IMAGES.you})` }}
         >
           You
         </div>
@@ -163,7 +163,7 @@ const GameOver = ({
             hasImage && 'delay-1000',
             !hasImage && 'delay-200',
           )}
-          style={{ backgroundImage: `url(${images.died})` }}
+          style={{ backgroundImage: `url(${IMAGES.died})` }}
         >
           Died
         </div>

@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import mergeRefs from 'merge-refs'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Click } from './click'
 import { useClick } from './use-click'
@@ -273,7 +273,7 @@ const Revolver = React.forwardRef<
           >
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-100 ease-linear'
-              style={{ backgroundImage: `url(${images.gunchamber})` }}
+              style={{ backgroundImage: `url(${IMAGES.gunchamber})` }}
               data-chamber-speed
             ></div>
           </div>
@@ -281,7 +281,7 @@ const Revolver = React.forwardRef<
         <div
           className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
           style={{
-            backgroundImage: `url(${images.gunbody})`,
+            backgroundImage: `url(${IMAGES.gunbody})`,
           }}
         ></div>
       </div>

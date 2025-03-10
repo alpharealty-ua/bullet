@@ -1,4 +1,4 @@
-import { images, TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
+import { IMAGES, TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
@@ -54,7 +54,7 @@ const Victory = ({ show }: { show: boolean }) => {
     >
       <div
         className='flex flex-col gap-2 bg-white bg-cover bg-center bg-no-repeat p-4'
-        style={{ backgroundImage: `url(${images.texture})` }}
+        style={{ backgroundImage: `url(${IMAGES.texture})` }}
       >
         <div className='text-green text-4xl'>Victory</div>
         <div className='flex gap-10'>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 interface BetProps {
@@ -213,7 +213,7 @@ const Bet = ({
             'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
             disabled && 'cursor-not-allowed',
           )}
-          style={{ backgroundImage: `url(${images.sliderbar})` }}
+          style={{ backgroundImage: `url(${IMAGES.sliderbar})` }}
           onClick={handleSliderClick}
           onDoubleClick={handleSliderDbClick}
           data-slider

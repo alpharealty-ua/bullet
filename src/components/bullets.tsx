@@ -1,4 +1,4 @@
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const Bullets = ({ countBullet }: { countBullet: number }) => {
@@ -13,7 +13,7 @@ const Bullets = ({ countBullet }: { countBullet: number }) => {
               'aspect-[1/1.5] w-[20px] bg-contain bg-center bg-no-repeat',
               5 - index > countBullet && 'opacity-60',
             )}
-            style={{ backgroundImage: `url(${images.bullet})` }}
+            style={{ backgroundImage: `url(${IMAGES.bullet})` }}
           ></div>
         ))}
     </div>

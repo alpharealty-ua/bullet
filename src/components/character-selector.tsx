@@ -3,7 +3,7 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import { characterNames, CharacterType, images } from '@/lib/constants'
+import { CHARACTER_NAMES, CharacterType, IMAGES } from '@/lib/constants'
 import { Character } from './character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,7 @@ const CharacterSelector = ({
 
   const changeIndex = (index: number) => {
     const newIndex =
-      index < 0 ? characterNames.length - 1 : index % characterNames.length
+      index < 0 ? CHARACTER_NAMES.length - 1 : index % CHARACTER_NAMES.length
     setActiveIndex(newIndex)
     onSelect(index)
   }
@@ -52,7 +52,7 @@ const CharacterSelector = ({
           <PiArrowFatLeftFill />
         </button>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
-          {characterNames.map((name, i) => {
+          {CHARACTER_NAMES.map((name, i) => {
             const disabled = disabledImages.includes(i)
             const active = i === activeIndex
 
@@ -63,7 +63,7 @@ const CharacterSelector = ({
                   'hidden h-full w-full items-center justify-center rounded-full bg-white bg-cover bg-center bg-no-repeat p-8 duration-500',
                   active && 'flex',
                 )}
-                style={{ backgroundImage: `url(${images.texture})` }}
+                style={{ backgroundImage: `url(${IMAGES.texture})` }}
               >
                 <button
                   key={i}

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { ROUTES } from '@/routes/path'
-import { characterNames } from '@/lib/constants'
+import { CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
@@ -33,7 +33,7 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
     setDisabled(disabled)
 
     if (!disabled) {
-      setCharacterName(characterNames[index])
+      setCharacterName(CHARACTER_NAMES[index])
     }
   }
 

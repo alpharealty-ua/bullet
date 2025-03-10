@@ -1,7 +1,7 @@
 import { useSoloStore } from '@/store/solo.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { images, VariantGame } from '@/lib/constants'
+import { IMAGES, VariantGame } from '@/lib/constants'
 import { Bet } from '@/components/bet'
 import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
@@ -36,7 +36,7 @@ const Footer = ({
       className={cn(
         'relative flex h-[100px] justify-between border-t-2 border-black bg-[#f2f2f2] px-2 py-1',
       )}
-      style={{ backgroundImage: `url(${images.texture})` }}
+      style={{ backgroundImage: `url(${IMAGES.texture})` }}
     >
       <div className='relative flex w-full max-w-1/2 flex-col items-center'>
         <div className='relative flex w-full flex-col gap-2.5 text-center'>
@@ -68,12 +68,12 @@ const Footer = ({
               'aspect-[176/186] h-10 w-10 cursor-pointer bg-contain bg-center bg-no-repeat',
             )}
             style={{
-              backgroundImage: `url(${images.leaderboardstar})`,
+              backgroundImage: `url(${IMAGES.leaderboardstar})`,
             }}
           />
           <button
             className='h-10 w-10 cursor-pointer bg-[length:70%] bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${images.settings})` }}
+            style={{ backgroundImage: `url(${IMAGES.settings})` }}
             onClick={handleSettingsClick}
           ></button>
         </div>

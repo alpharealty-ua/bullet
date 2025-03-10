@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils'
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { AnimationInOut } from '@/components/animation-in-out'
 
 const imagesMap = {
-  wagehere: images.wagerhere,
-  startgame: images.startgame,
+  wagehere: IMAGES.wagerhere,
+  startgame: IMAGES.startgame,
 }
 
 const Helper = ({

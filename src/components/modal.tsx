@@ -10,7 +10,7 @@ import mergeRefs from 'merge-refs'
 import { FaArrowLeft } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
-import { images } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from './logo'
 
@@ -74,7 +74,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             ? 'animate-in fade-in-0 zoom-in-95'
             : 'animate-out fade-out-0 zoom-out-95',
         )}
-        style={{ backgroundImage: `url(${images.wrapper})` }}
+        style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
         {...props}
       >
         <div className='flex items-center justify-between gap-2'>
