@@ -8,6 +8,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
 import { LeadboardIcon } from '@/components/leadboard-icon'
+import { Profile } from '@/components/profile'
 
 const HomePage = () => {
   const navigate = useNavigate()
@@ -56,22 +57,40 @@ const HomePage = () => {
     })
   }
 
+  const handleProfileClick = () => {
+    modal.show({ contentSlot: <Profile /> })
+  }
+
   return (
     <div className='relative flex grow-1 flex-col items-center justify-center gap-10 px-3 py-12'>
-      {!user && (
+      {
         <div className='absolute top-4 right-4 flex gap-4'>
-          <ButtonWithAudio
-            className='w-24 text-xs'
-            text='Login'
-            onClick={handleLoginClick}
-          />
-          <ButtonWithAudio
-            className='w-24 text-xs'
-            text='Register'
-            onClick={handleRegisterClick}
-          />
+          {user ? (
+            <>
+              <button
+                onClick={handleProfileClick}
+                className='cursor-pointer self-end'
+              >
+                {user.username}
+              </button>
+            </>
+          ) : (
+            <>
+              <ButtonWithAudio
+                className='w-24 text-xs'
+                text='Login'
+                onClick={handleLoginClick}
+              />
+              <ButtonWithAudio
+                className='w-24 text-xs'
+                text='Register'
+                onClick={handleRegisterClick}
+              />
+            </>
+          )}
         </div>
-      )}
+      }
+
       <Logo size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
         <ButtonWithAudio
