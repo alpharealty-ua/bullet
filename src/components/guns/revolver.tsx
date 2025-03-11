@@ -24,11 +24,10 @@ export type RevolverHandle = {
 const Revolver = React.forwardRef<
   HTMLDivElement,
   React.HtmlHTMLAttributes<HTMLDivElement> & {
-    beforeSlot: React.ReactNode
     disabled: boolean
     gunHandleRef: React.ForwardedRef<RevolverHandle>
   }
->(({ beforeSlot, disabled, className, gunHandleRef, ...props }, ref) => {
+>(({ disabled, className, gunHandleRef, ...props }, ref) => {
   const gunRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
