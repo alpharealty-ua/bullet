@@ -299,8 +299,7 @@ const useSolo = () => {
           once: true,
         })
 
-        // TODO: REMOVE 1000. ONLY FOR TEST
-        await addBalanceMutation(jackpot || 1000)
+        await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       }
 
       chachingAudio.addEventListener('ended', chachingEnded, {
