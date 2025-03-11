@@ -339,6 +339,7 @@ const useSolo = () => {
     const multiplier = Number(gameDetails.multiplier ?? 0)
     const countBullet = 5 - Number(gameDetails.currentPosition ?? 0)
     const isActive = gameDetails.status === 'ACTIVE'
+    const isPending = gameDetails.status === 'PENDING'
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
     const isWin = gameDetails.status === 'COMPLETED_WIN'
 
@@ -346,7 +347,7 @@ const useSolo = () => {
     setBet(bet)
     setCountBullet(countBullet)
     setMultiplier(multiplier)
-    isActive && setState('running')
+    ;(isActive || isPending) && setState('running')
     isGameOver && setState('game-over')
     isWin && setState('win')
   }, [
