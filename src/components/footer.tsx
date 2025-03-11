@@ -90,7 +90,7 @@ const Footer = ({
           </div>
         )}
         {format === 'duel' && variant === 'play' && (
-          <div className='flex flex-col items-center text-center'>
+          <div className='flex flex-1 flex-col items-center text-center'>
             <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
               Round
             </div>
@@ -105,7 +105,7 @@ const Footer = ({
           <Balance value={balance} increaseTime={increaseTime} />
         )}
         {format === 'solo' && (
-          <div className='flex flex-col items-center text-center'>
+          <div className='flex flex-1 flex-col items-center text-center'>
             <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
               Multiplier
             </div>
@@ -115,7 +115,7 @@ const Footer = ({
           </div>
         )}
         {format === 'duel' && variant === 'watch' && (
-          <div className='flex flex-col items-center text-center'>
+          <div className='flex flex-1 flex-col items-center text-center'>
             <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
               Round
             </div>
