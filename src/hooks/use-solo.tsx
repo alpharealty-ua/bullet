@@ -218,9 +218,11 @@ const useSolo = () => {
     const multiplierIndex = MULTIPLIERS.findIndex(
       (value) => value === Number(multiplier),
     )
+
     if (multiplierIndex === -1) {
       return
     }
+
     await getMultiplier(multiplierIndex)
     navigate(`${ROUTES.solo.play}/${gameId}`)
   }
@@ -361,6 +363,7 @@ const useSolo = () => {
   return {
     next,
     deal,
+    newGame,
     revolverRefHandle,
     frontGunHandleRef,
     backGunHandleRef,
