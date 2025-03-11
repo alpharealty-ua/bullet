@@ -4,6 +4,7 @@ import { StateGame } from '@/lib/constants'
 
 type SoloState = {
   state: StateGame
+  balance: number
   multiplierIndex: number
   multiplier: number
   prevState: StateGame
@@ -16,6 +17,7 @@ type SoloState = {
   offer: number
   increaseTime: number | undefined
   setState: (state: StateGame) => void
+  setBalance: (balance: number) => void
   setMultiplierIndex: (multiplierIndex: number) => void
   setMultiplier: (multiplier: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
@@ -26,12 +28,13 @@ type SoloState = {
   setCountBullet: (setBet: number) => void
   setOffer: (offer: number) => void
   setIncreaseTime: (increaseTime: number | undefined) => void
-  newGame: (balance: number) => void
+  newGame: () => void
 }
 
 const useSoloStore = create<SoloState>()((set, get) => ({
   state: 'preparation',
   prevState: 'preparation',
+  balance: 0,
   multiplierIndex: -1,
   multiplier: 0,
   isStartedGame: false,
@@ -43,6 +46,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   offer: 0,
   increaseTime: undefined,
   setState: (state: StateGame) => set({ state }),
+  setBalance: (balance: number) => set({ balance }),
   setMultiplierIndex: (multiplierIndex: number) => set({ multiplierIndex }),
   setMultiplier: (multiplier: number) => set({ multiplier }),
   setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
@@ -53,9 +57,11 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   setCountBullet: (countBullet: number) => set({ countBullet }),
   setOffer: (offer: number) => set({ offer }),
   setIncreaseTime: (increaseTime: number | undefined) => set({ increaseTime }),
-  newGame: (balance: number) => {
+  newGame: () => {
     const {
+      balance,
       setState,
+      setJackpot,
       setBet,
       setOffer,
       setCountBullet,
@@ -68,6 +74,7 @@ const useSoloStore = create<SoloState>()((set, get) => ({
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
     setState('preparation')
+    setJackpot(0)
     setBet(prevBet)
     setOffer(0)
     setCountBullet(5)

@@ -184,9 +184,6 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
             className='absolute top-1/2 right-4 -translate-y-1/2 text-black'
             onPointerDown={handleMouseDownPassword}
             onPointerUp={handleMouseUpPassword}
-            onClick={() => {
-              console.log('click')
-            }}
             type='button'
           >
             {showPassword ? (

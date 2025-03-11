@@ -58,9 +58,11 @@ const useSolo = () => {
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
 
   // TODO: JOIN NEW GAME
-  const newGame = (balance: number) => {
+  const newGame = async () => {
+    navigate(ROUTES.solo.play)
+    queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
     duelNewGame()
-    soloNewGame(balance)
+    soloNewGame()
   }
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
@@ -109,7 +111,7 @@ const useSolo = () => {
       await addBalanceMutation(offer + bet)
       setOffer(0)
     }
-    newGame(balance)
+    await newGame()
   }
 
   const next = async (format: 'solo' | 'duel') => {
@@ -291,7 +293,7 @@ const useSolo = () => {
       }
     })
 
-    return promise.then(() => newGame(balance))
+    return promise.then(newGame)
   }
 
   useEffect(() => {
