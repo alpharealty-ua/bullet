@@ -12,12 +12,13 @@ const GameOver = ({
   timeout = 3000,
   hasImage = true,
   backRouter,
+  onClick,
 }: {
   timeout?: number
   hasImage?: boolean
   backRouter: string
+  onClick: () => void
 }) => {
-  const setState = useSoloStore(({ setState }) => setState)
   const state = useSoloStore(({ state }) => state)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
@@ -28,8 +29,7 @@ const GameOver = ({
   const show = state === 'game-over'
 
   const handleClick = () => {
-    setState('preparation')
-    navigate(backRouter)
+    onClick()
   }
 
   useEffect(() => {
@@ -47,13 +47,12 @@ const GameOver = ({
     }
 
     const timeoutId = setTimeout(() => {
-      setState('preparation')
-      navigate(backRouter)
+      onClick()
     }, timeout)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [timeout, show, navigate, backRouter, setState])
+  }, [timeout, show, onClick])
 
   useEffect(() => {
     if (!show) {

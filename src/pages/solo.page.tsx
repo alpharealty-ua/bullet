@@ -19,7 +19,7 @@ import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const { next, deal, revolverRefHandle } = useSolo()
+  const { next, deal, revolverRefHandle, newGame } = useSolo()
   const [showHelpers, setShowHelpers] = useState(true)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useSoloStore(({ noMoney }) => noMoney)
@@ -45,6 +45,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     modal.show({
       contentSlot: <AddMoneyModal />,
     })
+  }
+
+  const handleGameOverClick = () => {
+    newGame()
   }
 
   return (
@@ -119,7 +123,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <Victory show={state === 'win'} />
-      <GameOver backRouter={ROUTES.solo.play} />
+      <GameOver backRouter={ROUTES.solo.play} onClick={handleGameOverClick} />
       <Footer variant={variant} showHelpers={showHelpers} />
     </>
   )

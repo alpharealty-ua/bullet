@@ -150,7 +150,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         )}
       </div>
       <Victory show={state === 'win'} />
-      <GameOver hasImage={false} backRouter={ROUTES.duel.play} />
+      <GameOver
+        hasImage={false}
+        backRouter={ROUTES.duel.play}
+        onClick={() => {}}
+      />
       <Footer format='duel' variant={variant} />
     </>
   )

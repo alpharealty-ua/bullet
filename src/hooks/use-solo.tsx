@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import { useQueryClient } from '@tanstack/react-query'
 
+import { QUERY_KEYS } from '@/api/api'
 import {
   useAllGames,
   useGameDetails,
@@ -21,7 +23,9 @@ import { GunHandle } from '@/components/character-gun'
 
 const useSolo = () => {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const { gameId } = useParams<{ gameId: string }>()
+  const queryClient = useQueryClient()
   const revolverRefHandle = useRef<RevolverHandle>(null)
   const frontGunHandleRef = useRef<GunHandle>(null)
   const backGunHandleRef = useRef<GunHandle>(null)
@@ -56,10 +60,11 @@ const useSolo = () => {
   const offer = useSoloStore(({ offer }) => offer)
   const bet = useSoloStore(({ bet }) => bet)
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
+  const isSolo = pathname.includes(ROUTES.solo.root)
 
   // TODO: JOIN NEW GAME
   const newGame = async () => {
-    navigate(ROUTES.solo.play)
+    navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
     queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
     duelNewGame()
     soloNewGame()
@@ -95,6 +100,7 @@ const useSolo = () => {
           // TODO: REMOVE INDEX
           setMultiplierIndex(newIndex)
           setMultiplier(multiplier)
+          setJackpot(bet * multiplier)
           spin()
         } else {
           resolve()
@@ -121,6 +127,12 @@ const useSolo = () => {
 
     try {
       disabledRef.current = true
+
+      if (state === 'win' || state === 'game-over') {
+        await newGame()
+        return
+      }
+
       format === 'solo' ? await nextSolo() : await nextDuel()
     } catch (e) {
       console.log(e)
@@ -188,7 +200,7 @@ const useSolo = () => {
       return
     }
 
-    pullGame()
+    await pullGame()
   }
 
   const startGame = async () => {
@@ -298,14 +310,11 @@ const useSolo = () => {
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
-    if (activeGame && !isStartedGame) {
+    if (activeGame && !gameId) {
+      // setState('running')
       // navigate(`${ROUTES.solo.play}/${activeGame.id}`)
     }
-  }, [allGames, navigate, isStartedGame])
-
-  useEffect(() => {
-    setIsStartedGame(Boolean(gameId))
-  }, [gameId, setIsStartedGame])
+  }, [allGames, navigate, gameId, setState])
 
   useEffect(() => {
     const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
@@ -313,20 +322,36 @@ const useSolo = () => {
   }, [isStartedGame, balance, bet, gameId, setMaxBet])
 
   useEffect(() => {
-    if (!(isStartedGame && gameDetails)) {
+    setIsStartedGame(Boolean(gameDetails))
+
+    if (!gameDetails) {
       return
     }
 
     const jackpot = Number(gameDetails.potentialWin ?? 0)
     const bet = Number(gameDetails.betAmount ?? 0)
+    const multiplier = Number(gameDetails.multiplier ?? 0)
+    const countBullet = 5 - Number(gameDetails.currentPosition ?? 0)
     const isActive = gameDetails.status === 'ACTIVE'
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
+    const isWin = gameDetails.status === 'COMPLETED_WIN'
 
     setJackpot(jackpot)
     setBet(bet)
+    setCountBullet(countBullet)
+    setMultiplier(multiplier)
     isActive && setState('running')
     isGameOver && setState('game-over')
-  }, [gameDetails, isStartedGame, setState, setJackpot, setBet])
+    isWin && setState('win')
+  }, [
+    gameDetails,
+    setState,
+    setJackpot,
+    setBet,
+    setCountBullet,
+    setMultiplier,
+    setIsStartedGame,
+  ])
 
   useEffect(() => {
     const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
