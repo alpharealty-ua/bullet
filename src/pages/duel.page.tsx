@@ -3,7 +3,6 @@ import { useParams } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
-import { ROUTES } from '@/routes/path'
 import { useSolo as useSolo } from '@/hooks/use-solo'
 import { VariantGame } from '@/lib/constants'
 import { cn, randomIntFromInterval } from '@/lib/utils'
@@ -22,6 +21,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   // TODO: USE DUEL
   const {
     next,
+    newGame,
     frontGunHandleRef,
     backGunHandleRef,
     gameBarRefHandle,
@@ -66,6 +66,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     },
     [addRound],
   )
+
+  const handleGameOverClick = () => {
+    newGame()
+  }
 
   return (
     <>
@@ -150,11 +154,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         )}
       </div>
       <Victory show={state === 'win'} />
-      <GameOver
-        hasImage={false}
-        backRouter={ROUTES.duel.play}
-        onClick={() => {}}
-      />
+      <GameOver hasImage={false} onClick={handleGameOverClick} />
       <Footer format='duel' variant={variant} />
     </>
   )

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
@@ -11,12 +10,10 @@ let imageVersion = Date.now()
 const GameOver = ({
   timeout = 3000,
   hasImage = true,
-  backRouter,
   onClick,
 }: {
   timeout?: number
   hasImage?: boolean
-  backRouter: string
   onClick: () => void
 }) => {
   const state = useSoloStore(({ state }) => state)
@@ -25,7 +22,6 @@ const GameOver = ({
   const [disabled, setDisabled] = useState(true)
   const [image, setImage] = useState<string>(IMAGES.gameover)
   const [runAnimation, setRunAnimation] = useState(false)
-  const navigate = useNavigate()
   const show = state === 'game-over'
 
   const handleClick = () => {
@@ -47,6 +43,7 @@ const GameOver = ({
     }
 
     const timeoutId = setTimeout(() => {
+      // TODO: CHANGE TO ON TIMEOUT
       onClick()
     }, timeout)
     return () => {

@@ -4,7 +4,6 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'
 import { useSolo } from '@/hooks/use-solo'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { ROUTES } from '@/routes/path'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
@@ -121,7 +120,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <Victory show={state === 'win'} />
-      <GameOver backRouter={ROUTES.solo.play} onClick={handleGameOverClick} />
+      <GameOver onClick={handleGameOverClick} />
       <Footer variant={variant} showHelpers={showHelpers} />
     </>
   )
