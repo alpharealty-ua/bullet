@@ -64,8 +64,15 @@ const useSolo = () => {
 
   // TODO: JOIN NEW GAME
   const newGame = async () => {
+    const gameBarHandle = gameBarRefHandle.current
+
+    if (gameBarHandle) {
+      await gameBarHandle.reset()
+    }
+
     navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
     queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
+
     duelNewGame()
     soloNewGame()
   }
@@ -167,21 +174,20 @@ const useSolo = () => {
 
         if (inWinGame) {
           return await winGame()
-        } else {
-          await wait(1000)
-          await playAudio('triggerpull')
-          await frontGunHandle.spin()
-          await frontGunHandle.click()
+        }
 
-          const isGameOver = randomIntFromInterval(1, 5) === 1
+        await wait(1000)
+        await playAudio('triggerpull')
+        await frontGunHandle.spin()
+        await frontGunHandle.click()
 
-          if (isGameOver) {
-            await frontGunHandle.shot()
-            // TODO: MOVE TO NEW GAME
-            // setRound(1)
-            await gameBarHandle.reset()
-            return await gameOver()
-          }
+        const isGameOver = randomIntFromInterval(1, 5) === 1
+
+        if (isGameOver) {
+          await frontGunHandle.shot()
+          // TODO: MOVE TO NEW GAME
+          // setRound(1)
+          return await gameOver()
         }
       } else {
         const duration = randomIntFromInterval(25, 50)
