@@ -220,7 +220,7 @@ const Bet = ({
         ></div>
         <button
           className={cn(
-            'absolute top-1/2 left-0 z-[3] h-6 w-6 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
+            'absolute top-1/2 left-0 z-[3] h-10 w-10 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
           )}
           disabled={disabled}
           style={{
@@ -231,7 +231,7 @@ const Bet = ({
           <div
             className={cn(
               'bg-red absolute inset-0 m-auto rounded-[inherit]',
-              size === 'sm' && 'h-2/3 w-2/3',
+              size === 'sm' && 'h-2/4 w-2/4',
             )}
           ></div>
           <>
