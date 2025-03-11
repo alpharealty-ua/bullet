@@ -298,6 +298,7 @@ const useSolo = () => {
           once: true,
         })
 
+        await addBalanceMutation(1000)
         await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       }
 
