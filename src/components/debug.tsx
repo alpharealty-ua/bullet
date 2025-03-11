@@ -1,15 +1,16 @@
 import { createPortal } from 'react-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { removeToken } from '@/lib/localstorage'
+import { QUERY_KEYS } from '@/api/api'
 import { useSoloStore } from '@/store/solo.store'
+import { useAuthStore } from '@/store/auth.store'
 import { StateGame, STATES, MULTIPLIERS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
-import { QUERY_KEYS } from '@/api/api'
 
 const Debug = () => {
   const queryClient = useQueryClient()
+  const resetToken = useAuthStore(({ resetToken }) => resetToken)
   const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
   const setState = useSoloStore(({ setState }) => setState)
   const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
@@ -22,11 +23,12 @@ const Debug = () => {
   }
 
   const handleResetAddMoney = () => {
+    // TODO: RENAEM KEY
     localStorage.removeItem('endTime')
   }
 
   const handleLogout = async () => {
-    removeToken()
+    resetToken()
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 

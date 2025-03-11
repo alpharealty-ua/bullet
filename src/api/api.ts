@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-import { getToken, removeToken } from '@/lib/localstorage'
+import { useAuthStore } from '@/store/auth.store'
 import { ENV } from '@/lib/env'
 
 const { API_URL } = ENV
@@ -19,7 +19,7 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use((request) => {
-  const token = getToken()
+  const token = useAuthStore.getState().token
   if (token) {
     request.headers.Authorization = `Bearer ${token}`
   }
@@ -32,7 +32,7 @@ api.interceptors.response.use(undefined, (error: unknown) => {
     (error.status === 401 || error.status === 403) &&
     error.config?.url === '/auth/profile'
   ) {
-    removeToken()
+    useAuthStore.getState().resetToken()
   }
   if (axios.isAxiosError(error) && error.response && error.response.data) {
     error.message = error.response.data.message

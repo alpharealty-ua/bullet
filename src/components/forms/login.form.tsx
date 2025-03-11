@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { useLogin } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
@@ -35,10 +36,9 @@ const LoginForm = () => {
   const onSubmit = async (values: LoginSchema) => {
     await loginMutation(values)
     const redirect = state?.redirect ?? ROUTES.root
-    setTimeout(
-      () => navigate(redirect, { state: { ...state, redirect: undefined } }),
-      1000,
-    )
+    setTimeout(() => {
+      navigate(redirect, { state: { ...state, redirect: undefined } })
+    }, 1000)
   }
 
   return (

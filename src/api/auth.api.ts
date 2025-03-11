@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { LoginSchema } from '@/lib/schemas/login.schema'
 import { api, QUERY_KEYS } from '@/api/api'
-import { saveToken } from '@/lib/localstorage'
+import { useAuthStore } from '@/store/auth.store'
+import { LoginSchema } from '@/lib/schemas/login.schema'
 import { RegisterSchema } from '@/lib/schemas/register.schema'
 
 interface LoginResponse {
@@ -39,13 +39,12 @@ export const fetchProfile = async (): Promise<User> => {
 }
 
 export const useLogin = () => {
-  const queryClient = useQueryClient()
+  const setToken = useAuthStore(({ setToken }) => setToken)
 
   return useMutation({
     mutationFn: login,
     onSuccess: ({ accessToken }) => {
-      saveToken(accessToken)
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.profile] })
+      setToken(accessToken)
     },
   })
 }
@@ -58,9 +57,7 @@ export const useRegister = () => {
 
 export const useProfile = (enabled = false) =>
   useQuery({
-    // TODO: TOKEN NEED SAVE IN STORE FOR SYNC WITH REACT
-    // Boolean(getToken())
-    enabled,
+    enabled: enabled,
     queryKey: [QUERY_KEYS.profile],
     queryFn: fetchProfile,
   })

@@ -1,6 +1,7 @@
 import { CharacterName } from '@/lib/constants'
 import { create } from 'zustand'
 
+// TODO: CHANGE TO INTERFACE
 type DuelState = {
   characterName: CharacterName
   round: number
