@@ -172,14 +172,15 @@ const useSolo = () => {
         await backGunHandle.spin()
         await backGunHandle.click()
 
-        if (inWinGame) {
-          return await winGame()
-        }
-
         await wait(1000)
         await playAudio('triggerpull')
         await frontGunHandle.spin()
         await frontGunHandle.click()
+
+        if (inWinGame) {
+          await wait(500)
+          return await winGame()
+        }
 
         const isGameOver = randomIntFromInterval(1, 5) === 1
 
