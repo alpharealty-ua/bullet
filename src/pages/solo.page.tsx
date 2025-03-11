@@ -52,17 +52,17 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   return (
     <>
       <Header logoText={'Solo'} />
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-3 pt-2'>
         <Result
           title={'Jackpot'}
           value={`$${jackpot}`}
           open={Boolean(jackpot)}
         />
-        <Result
+        {/* <Result
           title={'the banker offers...'}
           value={`$${offer}`}
           open={isStartedGame && Boolean(offer)}
-        />
+        /> */}
         <Result
           title={'Multiplier'}
           value={`${multiplier}x`}
@@ -74,12 +74,11 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
         </div>
       )}
-      <div className='relative mt-auto'>
+      <div className='relative mt-auto flex flex-1 items-end overflow-hidden px-8 pt-4'>
         <Revolver
           gunHandleRef={revolverRefHandle}
           disabled={isStartedGame}
-          beforeSlot={<>{}</>}
-          className='-mb-16 w-[216px] lg:-mb-20 lg:w-[280px]'
+          className='h-full max-h-[800px] max-w-full'
         />
         <div
           className={cn(

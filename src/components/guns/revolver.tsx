@@ -246,7 +246,7 @@ const Revolver = React.forwardRef<
   return (
     <div
       ref={mergeRefs(gunRef, ref)}
-      className={cn('relative mx-auto aspect-[1/1.881] w-50', className)}
+      className={cn('relative mx-auto aspect-[1/1.881]', className)}
       {...props}
     >
       <Click
