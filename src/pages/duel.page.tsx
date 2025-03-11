@@ -2,8 +2,7 @@ import { useCallback, useState } from 'react'
 import { useParams } from 'react-router'
 
 import { useDuelStore } from '@/store/duel.store'
-import { useSoloStore } from '@/store/solo.store'
-import { useSolo as useSolo } from '@/hooks/use-solo'
+import { useSolo } from '@/hooks/use-solo'
 import { VariantGame } from '@/lib/constants'
 import { cn, randomIntFromInterval } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -30,7 +29,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
-  const state = useSoloStore(({ state }) => state)
   const { gameId } = useParams<{ gameId: string }>()
   const isStartedGame = Boolean(gameId)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
@@ -153,7 +151,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           </>
         )}
       </div>
-      <Victory show={state === 'win'} />
+      <Victory />
       <GameOver hasImage={false} onClick={handleGameOverClick} />
       <Footer format='duel' variant={variant} />
     </>
