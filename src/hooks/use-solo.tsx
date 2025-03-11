@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -59,11 +59,10 @@ const useSolo = () => {
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const offer = useSoloStore(({ offer }) => offer)
   const bet = useSoloStore(({ bet }) => bet)
-  const jackpot = useSoloStore(({ jackpot }) => jackpot)
   const isSolo = pathname.includes(ROUTES.solo.root)
 
   // TODO: JOIN NEW GAME
-  const newGame = async () => {
+  const newGame = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
 
     if (gameBarHandle) {
@@ -75,7 +74,7 @@ const useSolo = () => {
 
     duelNewGame()
     soloNewGame()
-  }
+  }, [duelNewGame, soloNewGame, isSolo, navigate, queryClient])
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
@@ -330,8 +329,6 @@ const useSolo = () => {
   }, [isStartedGame, balance, bet, gameId, setMaxBet])
 
   useEffect(() => {
-    setIsStartedGame(Boolean(gameId) || Boolean(gameDetails))
-
     if (!gameDetails) {
       return
     }
@@ -366,6 +363,16 @@ const useSolo = () => {
     const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
     setNoMoney(noMoney)
   }, [setNoMoney, isStartedGame, balance, bet])
+
+  useEffect(() => {
+    setIsStartedGame(Boolean(gameId))
+
+    if (gameId) {
+      return
+    }
+
+    newGame()
+  }, [gameId, newGame, setIsStartedGame])
 
   return {
     next,
