@@ -77,12 +77,11 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
         {...props}
       >
-        <div className='flex items-center justify-between gap-2'>
+        <header className='flex items-center justify-between gap-2'>
           <div className='flex items-center gap-4'>
-            <FaArrowLeft
-              className='text-red cursor-pointer text-3xl transition-all hover:text-black'
-              onClick={handleClose}
-            />
+            <button onClick={handleClose}>
+              <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
+            </button>
             <Logo size='lg' onClick={handleClose} />
           </div>
           <ButtonWithAudio
@@ -90,7 +89,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             image='close'
             onClick={handleClose}
           />
-        </div>
+        </header>
         {children}
       </div>
     )
