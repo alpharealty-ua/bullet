@@ -132,7 +132,7 @@ const GameOver = ({
     >
       {hasImage && (
         <div
-          className='animate-out fade-out fill-mode-both absolute inset-0 flex translate-y-[-70px] items-end bg-no-repeat delay-800 duration-0 lg:translate-y-0'
+          className='animate-out fade-out fill-mode-both absolute inset-0 flex translate-y-[-70px] items-end bg-center bg-no-repeat delay-800 duration-0 lg:translate-y-0'
           style={{
             backgroundImage: `url(${image})`,
           }}
