@@ -324,7 +324,7 @@ const useSolo = () => {
   }, [isStartedGame, balance, bet, gameId, setMaxBet])
 
   useEffect(() => {
-    setIsStartedGame(Boolean(gameDetails))
+    setIsStartedGame(Boolean(gameId) || Boolean(gameDetails))
 
     if (!gameDetails) {
       return
@@ -353,6 +353,7 @@ const useSolo = () => {
     setCountBullet,
     setMultiplier,
     setIsStartedGame,
+    gameId,
   ])
 
   useEffect(() => {
