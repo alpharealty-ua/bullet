@@ -51,6 +51,10 @@ const ReadySetPull = ({
     pull.classList.add('is-show')
     await waitEndAudio(pullAudio)
 
+    ready.classList.remove('is-show')
+    set.classList.remove('is-show')
+    pull.classList.remove('is-show')
+
     onEnd()
   }, [onStart, onEnd, playAudio])
 
