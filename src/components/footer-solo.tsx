@@ -43,9 +43,11 @@ const Footer = ({
           <div className='text-green pl-7 text-left text-2xl leading-[1] tracking-tight uppercase'>
             Wager
           </div>
+          {/* TODO: REMOVE  */}
           <Helper
             image='wagehere'
-            show={showHelpers && bet === 0 && !isStartedGame}
+            // show={showHelpers && bet === 0 && !isStartedGame}
+            show={false}
           />
           <Bet
             disabled={isStartedGame || noMoney}
