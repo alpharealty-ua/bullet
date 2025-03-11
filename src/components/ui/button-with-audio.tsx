@@ -18,12 +18,13 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       }
 
       setStartedAnimation(true)
+
+      await playAudio('mouseclick')
+
       buttonDom.classList.add('animate-button-click')
 
-      const audio = await playAudio('mouseclick')
-
       await new Promise<Event>((resolve) => {
-        audio.addEventListener('ended', resolve, { once: true })
+        buttonDom.addEventListener('animationend', resolve, { once: true })
       })
 
       buttonDom.classList.remove('animate-button-click')
