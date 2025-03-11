@@ -104,7 +104,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             }
           />
           <ReadySetPull
-            show={isStartedGame}
             onStart={handleStartReadySetPull}
             onEnd={handleEndReadySetPull}
             readySetPullHandle={readySetPullHandleRef}

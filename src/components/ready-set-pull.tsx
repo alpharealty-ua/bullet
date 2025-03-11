@@ -8,19 +8,16 @@ export type ReadySetPullHandle = {
 }
 
 const ReadySetPull = ({
-  show,
   onStart,
   onEnd,
   readySetPullHandle,
 }: {
-  show: boolean
   onStart: () => void
   onEnd: () => void
   readySetPullHandle: React.ForwardedRef<ReadySetPullHandle>
 }) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [animationStarted, setAnimationStarted] = useState(false)
 
   const start = useCallback(async () => {
     const wrapperDom = wrapperRef.current
@@ -35,8 +32,6 @@ const ReadySetPull = ({
     if (!(ready && set && pull)) {
       return
     }
-
-    setAnimationStarted(true)
 
     ready.classList.remove('is-show')
     set.classList.remove('is-show')
@@ -71,7 +66,6 @@ const ReadySetPull = ({
       <div
         className={cn(
           'relative -left-4 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
-          show && !animationStarted && 'is-show',
         )}
       >
         Ready
@@ -79,7 +73,6 @@ const ReadySetPull = ({
       <div
         className={cn(
           'relative -left-4 pl-8 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
-          show && !animationStarted && 'is-show',
         )}
       >
         Set
@@ -87,7 +80,6 @@ const ReadySetPull = ({
       <div
         className={cn(
           'relative -left-4 pl-14 opacity-0 duration-500 [&.is-show]:left-0 [&.is-show]:opacity-100',
-          show && !animationStarted && 'is-show',
         )}
       >
         Pull
