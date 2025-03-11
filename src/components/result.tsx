@@ -15,8 +15,9 @@ const Result = ({
     <div className='z-3 flex flex-col items-center gap-1 px-6'>
       <div
         className={cn(
-          'fill-mode-both origin-top text-lg leading-[1] lg:text-2xl',
-          open && 'animate-in fade-in slide-in-from-top-6 duration-500',
+          'fill-mode-both origin-top text-lg leading-[1] opacity-0 lg:text-2xl',
+          open &&
+            'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
           !open && 'animate-out fade-out zoom-out-50 duration-200',
           // TODO: REFACTOR
           hasDelay && 'delay-500',
@@ -26,8 +27,9 @@ const Result = ({
       </div>
       <div
         className={cn(
-          'fill-mode-both text-red max-w-[300px] origin-top text-xl lg:text-4xl',
-          open && 'animate-in fade-in slide-in-from-top-6 duration-500',
+          'fill-mode-both text-red max-w-[300px] origin-top text-xl opacity-0 lg:text-4xl',
+          open &&
+            'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
           !open && 'animate-out fade-out zoom-out-50 duration-200',
           hasDelay && 'delay-750',
         )}
