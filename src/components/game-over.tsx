@@ -90,15 +90,20 @@ const GameOver = ({
         setDisabled(false)
       }
 
-      gunShotAudio.addEventListener('ended', gunShotEnded, { once: true })
       gunShotAudio.addEventListener('play', gunShotPlay, { once: true })
+      gunShotAudio.addEventListener('ended', gunShotEnded, { once: true })
       drumBeatAudio.addEventListener('ended', drumBeatEnded, { once: true })
 
-      if (hasImage) {
-        await gunShotAudio.play()
-      } else {
+      const dispatch = () => {
         gunShotAudio.dispatchEvent(new Event('play'))
         gunShotAudio.dispatchEvent(new Event('ended'))
+        drumBeatAudio.dispatchEvent(new Event('ended'))
+      }
+
+      if (hasImage) {
+        await gunShotAudio.play().catch(dispatch)
+      } else {
+        dispatch()
       }
     }
     runAnimation().catch(() => {
