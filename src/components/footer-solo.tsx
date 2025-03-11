@@ -8,13 +8,7 @@ import { Settings } from '@/components/settings'
 import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
 
-const Footer = ({
-  variant: _,
-  showHelpers = false,
-}: {
-  variant: VariantGame
-  showHelpers?: boolean
-}) => {
+const Footer = ({ variant: _ }: { variant: VariantGame }) => {
   const setBet = useSoloStore(({ setBet }) => setBet)
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useSoloStore(({ noMoney }) => noMoney)

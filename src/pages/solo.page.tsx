@@ -121,7 +121,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory show={state === 'win'} />
       <GameOver onClick={handleGameOverClick} />
-      <Footer variant={variant} showHelpers={showHelpers} />
+      <Footer variant={variant} />
     </>
   )
 }
