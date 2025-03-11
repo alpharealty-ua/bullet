@@ -57,15 +57,13 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       <div className='flex flex-col gap-3'>
         <Result
           title={'Jackpot'}
-          value={`$${offer}`}
-          open={isStartedGame && Boolean(jackpot)}
-          hasDelay
+          value={`$${jackpot}`}
+          open={Boolean(jackpot)}
         />
         <Result
           title={'the banker offers...'}
           value={`$${offer}`}
           open={isStartedGame && Boolean(offer)}
-          hasDelay
         />
         <Result
           title={'Multiplier'}
