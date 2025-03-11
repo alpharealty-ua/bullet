@@ -214,7 +214,7 @@ const useSolo = () => {
     // .catch(() => ({ gameId: 1, multiplier: 100 }))
 
     setState('running')
-    await addBalanceMutation(-bet)
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     const multiplierIndex = MULTIPLIERS.findIndex(
       (value) => value === Number(multiplier),
     )
