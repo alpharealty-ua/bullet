@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ToastContainer } from 'react-toastify'
@@ -22,17 +21,15 @@ export function Providers({
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
-      <BrowserRouter>
-        <div
-          className='relative mx-auto flex h-screen min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[780px]'
-          style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
-        >
-          <NiceModal.Provider>
-            <Audios />
-            {children}
-          </NiceModal.Provider>
-        </div>
-      </BrowserRouter>
+      <div
+        className='relative mx-auto flex h-screen min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[780px]'
+        style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
+      >
+        <NiceModal.Provider>
+          <Audios />
+          {children}
+        </NiceModal.Provider>
+      </div>
       <ToastContainer theme='colored' />
     </QueryClientProvider>
   )
