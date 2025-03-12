@@ -9,7 +9,7 @@ import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
 
 // TODO: TEMPORARY SOLUTION
-const disabledImages: number[] = []
+const disabledImages: number[] = [4]
 
 const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useDuelStore(
