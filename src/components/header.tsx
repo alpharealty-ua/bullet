@@ -5,7 +5,7 @@ import { Logo } from '@/components/logo'
 import { Balance } from '@/components/balance'
 import { MoneyBagButton } from '@/components/money-bag-button'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { Profile } from './profile'
+import { Profile } from '@/components/profile'
 
 export const Header = ({
   logoText,

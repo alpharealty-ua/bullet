@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { addZerro, cn } from '@/lib/utils'
-import { Balance } from './balance'
+import { Balance } from '@/components/balance'
 
 const END_TIME_LOCAL_STORAGE_KEY = 'END_TIME'
 

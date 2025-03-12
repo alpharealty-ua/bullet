@@ -1,4 +1,4 @@
-import { addId } from './utils'
+import { addId } from '@/lib/utils'
 
 export const mockMessageUSAList = addId([
   {

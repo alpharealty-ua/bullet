@@ -1,6 +1,6 @@
 import { mockWagerList } from '@/lib/mocks'
-import { LiveWagers } from './live-wagers'
-import { PlaceWager } from './place-wager'
+import { LiveWagers } from '@/components/bar/live-wagers'
+import { PlaceWager } from '@/components/bar/place-wager'
 
 const SideBets = () => {
   return <div className='text-3xl'>COMING SOON</div>

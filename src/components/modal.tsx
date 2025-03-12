@@ -12,7 +12,7 @@ import { FaArrowLeft } from 'react-icons/fa'
 import { cn } from '@/lib/utils'
 import { IMAGES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from './logo'
+import { Logo } from '@/components/logo'
 
 interface Props extends ModalProps {
   contentSlot: ReactNode

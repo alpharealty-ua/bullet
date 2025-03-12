@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { cn } from '@/lib/utils'
-import { BarSide } from './bar-side'
-import { SideBets } from './side-bets'
-import { SideChat } from './side-chat'
+import { BarSide } from '@/components/bar/bar-side'
+import { SideBets } from '@/components/bar/side-bets'
+import { SideChat } from '@/components/bar/side-chat'
 
 const Bar = () => {
   const [openSide, setOpenSide] = useState<'left' | 'right' | null>(null)

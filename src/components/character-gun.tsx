@@ -10,8 +10,8 @@ import mergeRefs from 'merge-refs'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
-import { Click } from './guns/click'
-import { useClick } from './guns/use-click'
+import { Click } from '@/components/guns/click'
+import { useClick } from '@/components/guns/use-click'
 
 export type GunHandle = {
   spin: (duration?: number) => Promise<void>

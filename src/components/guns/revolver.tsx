@@ -8,8 +8,8 @@ import mergeRefs from 'merge-refs'
 
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Click } from './click'
-import { useClick } from './use-click'
+import { Click } from '@/components/guns/click'
+import { useClick } from '@/components/guns/use-click'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
