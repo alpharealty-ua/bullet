@@ -50,9 +50,13 @@ export const IMAGES = {
   characternubcatfront: '/assets/images/character-nubcat-front.png',
   charactermickeyfront: '/assets/images/character-mickey-front.png',
   characterfattyfront: '/assets/images/character-fatty-front.png',
+  characteranime1front: '/assets/images/character-anime-1-front.png',
+  characteranime2front: '/assets/images/character-anime-2-front.png',
   characternubcatback: '/assets/images/character-nubcat-back.png',
   charactermickeyback: '/assets/images/character-mickey-back.png',
   characterfattyback: '/assets/images/character-fatty-back.png',
+  characteranime1back: '/assets/images/character-anime-1-back.png',
+  characteranime2back: '/assets/images/character-anime-2-back.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
@@ -78,9 +82,22 @@ export const CHARACTER_LIST = {
     back: IMAGES.characterfattyback,
     front: IMAGES.characterfattyfront,
   },
+  ['anime-1']: {
+    back: IMAGES.characteranime1back,
+    front: IMAGES.characteranime1front,
+  },
+  ['anime-2']: {
+    back: IMAGES.characteranime2back,
+    front: IMAGES.characteranime2front,
+  },
 } satisfies Record<CharacterName, Record<CharacterType, string>>
 
-export type CharacterName = 'nubcat' | 'mickey' | 'fatty'
+export type CharacterName =
+  | 'nubcat'
+  | 'mickey'
+  | 'fatty'
+  | 'anime-1'
+  | 'anime-2'
 
 export type CharacterType = 'back' | 'front'
 

@@ -4,7 +4,7 @@ import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_NAMES, CharacterType, IMAGES } from '@/lib/constants'
-import { Character } from './character'
+import { Character } from '@/components/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Button } from '@/components/ui/button'
 
@@ -26,7 +26,7 @@ const CharacterSelector = ({
     const newIndex =
       index < 0 ? CHARACTER_NAMES.length - 1 : index % CHARACTER_NAMES.length
     setActiveIndex(newIndex)
-    onSelect(index)
+    onSelect(newIndex)
   }
 
   const handlePrevButtonClick = () => {

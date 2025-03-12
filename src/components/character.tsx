@@ -27,6 +27,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   ) => {
     const isFront = type === 'front'
     const isBack = type === 'back'
+    const hasGun = ['nubcat', 'mickey', 'fatty'].includes(characterName)
 
     return (
       <div
@@ -48,19 +49,21 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
           }}
         >
-          <GunCharacter
-            className={cn(
-              'absolute right-0 left-0 max-h-full',
-              characterName === 'nubcat' &&
-                'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
-              characterName === 'mickey' &&
-                'top-[15%] left-[16%] aspect-[1/1.7] w-[26%]',
-              characterName === 'fatty' &&
-                'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
-            )}
-            gunHandleRef={frontGunHandleRef}
-            showGun={true}
-          />
+          {hasGun && (
+            <GunCharacter
+              className={cn(
+                'absolute right-0 left-0 max-h-full',
+                characterName === 'nubcat' &&
+                  'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
+                characterName === 'mickey' &&
+                  'top-[15%] left-[16%] aspect-[1/1.7] w-[26%]',
+                characterName === 'fatty' &&
+                  'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
+              )}
+              gunHandleRef={frontGunHandleRef}
+              showGun={true}
+            />
+          )}
         </div>
         <div
           className={cn(
