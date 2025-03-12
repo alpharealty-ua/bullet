@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react'
-import { useParams } from 'react-router'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useDuelStore } from '@/store/duel.store'
+import { useSoloStore } from '@/store/solo.store'
 import { useSolo } from '@/hooks/use-solo'
-import { VariantGame } from '@/lib/constants'
+import { IMAGES, VariantGame } from '@/lib/constants'
 import { cn, randomIntFromInterval } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
@@ -29,10 +29,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const addRound = useDuelStore(({ addRound }) => addRound)
   const characterName = useDuelStore(({ characterName }) => characterName)
-  const { gameId } = useParams<{ gameId: string }>()
-  const isStartedGame = Boolean(gameId)
+  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
+  const [searched, setSearched] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
 
   const handlePull = async () => {
     await next('duel')
@@ -69,6 +70,24 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     newGame()
   }
 
+  const handleSearchClick = () => {
+    setIsSearching((p) => !p)
+  }
+
+  useEffect(() => {
+    if (!isSearching) {
+      return
+    }
+
+    const timeoutID = setTimeout(() => {
+      setSearched(true)
+    }, 3000)
+
+    return () => {
+      clearTimeout(timeoutID)
+    }
+  }, [isSearching])
+
   return (
     <>
       <Header
@@ -76,39 +95,86 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         hideBalance={variant === 'play'}
       />
       <Bar />
-      <div className='mt-auto flex flex-col pt-6'>
-        <div className='relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4'>
-          <Character
-            className={cn(
-              'mx-auto max-h-50 w-full max-w-48',
-              variant === 'watch' && '-mb-7 h-[300px]',
-              variant === 'play' && 'mr-12',
-            )}
-            characterName='fatty'
-            type='front'
-            onClick={
-              variant === 'play' && isStartedGame
-                ? handlePlayerClick
-                : undefined
-            }
-            frontGunHandleRef={frontGunHandleRef}
-            beforeSlot={
-              <PlayerInfo
-                className='absolute top-0 right-full translate-x-2'
-                side='left'
-                level={53}
-                login='Suni7222'
-                win={52}
-                visible={visiblePlayerInfo}
-              />
-            }
-          />
-          <ReadySetPull
-            onStart={handleStartReadySetPull}
-            onEnd={handleEndReadySetPull}
-            readySetPullHandle={readySetPullHandleRef}
-          />
+      {!searched && (
+        <div className='relative mx-auto flex w-full max-w-46 flex-col items-center justify-center gap-2 pt-14'>
+          <div className='text-2xl'>Enter arena</div>
+          <div className='relative flex aspect-[1/0.31] w-full items-center justify-between px-2 pl-4 text-2xl'>
+            <div
+              className={cn(
+                'absolute inset-0 bg-contain',
+                'repeat-infinite direction-alternate duration-500 ease-linear',
+                isSearching && 'animate-[pulse-enter-arena]',
+              )}
+              style={{ backgroundImage: `url(${IMAGES.enterarena})` }}
+            ></div>
+            <div className='relative'>$1000</div>
+            <div
+              className={cn(
+                'text-red relative flex h-14 w-8 cursor-pointer items-center justify-center font-bold opacity-100 transition-all',
+              )}
+              onClick={handleSearchClick}
+            >
+              X
+            </div>
+          </div>
+          {isSearching && (
+            <div className={cn('px-3', 'animate-in fade-in duration-500')}>
+              Searching for opponent{' '}
+              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-0 duration-400 ease-linear'>
+                .
+              </span>
+              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-200 duration-400 ease-linear'>
+                .
+              </span>
+              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-400 duration-400 ease-linear'>
+                .
+              </span>
+            </div>
+          )}
         </div>
+      )}
+
+      <div className='relative mt-auto flex flex-col pt-6'>
+        {searched && (
+          <div
+            className={cn(
+              'relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4',
+              'animate-in fade-in duration-500',
+            )}
+          >
+            <Character
+              className={cn(
+                'mx-auto max-h-50 w-full max-w-48',
+                variant === 'watch' && '-mb-7 h-[300px]',
+                variant === 'play' && 'mr-12',
+              )}
+              characterName='fatty'
+              type='front'
+              onClick={
+                variant === 'play' && isStartedGame
+                  ? handlePlayerClick
+                  : undefined
+              }
+              frontGunHandleRef={frontGunHandleRef}
+              beforeSlot={
+                <PlayerInfo
+                  className='absolute top-0 right-full translate-x-2'
+                  side='left'
+                  level={53}
+                  login='Suni7222'
+                  win={52}
+                  visible={visiblePlayerInfo}
+                />
+              }
+            />
+            <ReadySetPull
+              onStart={handleStartReadySetPull}
+              onEnd={handleEndReadySetPull}
+              readySetPullHandle={readySetPullHandleRef}
+            />
+          </div>
+        )}
+
         {variant === 'play' && (
           <>
             <div className='relative mb-1'>
@@ -137,6 +203,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 <div className='relative'>
                   <ButtonWithAudio
                     className='w-26'
+                    disabled={!searched}
                     image='pull'
                     onClick={handlePull}
                   />

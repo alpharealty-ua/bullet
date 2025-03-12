@@ -155,9 +155,7 @@ const useSolo = () => {
     const readySetPullHandle = readySetPullHandleRef.current
     const gameBarHandle = gameBarRefHandle.current
 
-    if (
-      !(frontGunHandle && backGunHandle && readySetPullHandle && gameBarHandle)
-    ) {
+    if (!(readySetPullHandle && gameBarHandle)) {
       return
     }
 
@@ -165,6 +163,10 @@ const useSolo = () => {
       const { value, isRunning } = await gameBarHandle.getState()
 
       if (isRunning) {
+        if (!(frontGunHandle && backGunHandle)) {
+          return
+        }
+
         await gameBarHandle.stop()
         const inWinGame = [50, 33, 20, 10].includes(value)
 
@@ -196,9 +198,8 @@ const useSolo = () => {
         await gameBarHandle.start(duration)
       }
     } else {
-      const promise = readySetPullHandle.start()
+      await readySetPullHandle.start()
       navigate(`${ROUTES.duel.play}/1`)
-      await promise
     }
   }
 

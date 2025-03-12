@@ -65,6 +65,7 @@ export const IMAGES = {
   shot2: '/assets/images/shot-2.png',
   shot3: '/assets/images/shot-3.png',
   leaderboardstar: '/assets/images/leaderboardstar.png',
+  enterarena: '/assets/images/enter-arena.svg',
 } as const
 
 export const SRC_IMAGES = Object.values(IMAGES)

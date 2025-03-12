@@ -68,6 +68,26 @@
   }
 }
 
+@keyframes pulse-enter-arena {
+  0% {
+    filter: drop-shadow(0 0 0 var(--color-green));
+  }
+  100% {
+    filter: drop-shadow(0 0 10px var(--color-green));
+  }
+}
+
+@keyframes period-pulse {
+  0%,
+  25% {
+    opacity: 0;
+  }
+  75%,
+  100% {
+    opacity: 1;
+  }
+}
+
 @font-face {
   font-family: Verdana;
   src: url('/assets/fonts/Verdana.woff2');
