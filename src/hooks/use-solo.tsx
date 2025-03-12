@@ -69,12 +69,14 @@ const useSolo = () => {
       await gameBarHandle.reset()
     }
 
-    navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
+    if (gameId) {
+      navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
+    }
     queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     duelNewGame()
     soloNewGame()
-  }, [duelNewGame, soloNewGame, isSolo, navigate, queryClient])
+  }, [duelNewGame, soloNewGame, isSolo, navigate, queryClient, gameId])
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
