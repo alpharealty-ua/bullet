@@ -207,10 +207,10 @@ const Bet = ({
       ref={sliderWrapperRef}
       className='relative -mt-1.5 flex w-full flex-col text-center'
     >
-      <div className='relative z-[3]'>
+      <div className='relative z-[3] -my-4'>
         <div
           className={cn(
-            'aspect-[1/0.15] cursor-pointer bg-contain bg-center bg-no-repeat',
+            'h-14 cursor-pointer bg-contain bg-center bg-no-repeat',
             disabled && 'cursor-not-allowed',
           )}
           style={{ backgroundImage: `url(${IMAGES.sliderbar})` }}
