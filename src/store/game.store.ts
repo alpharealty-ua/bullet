@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
-import { StateGame } from '@/lib/constants'
+import { CharacterName, StateGame } from '@/lib/constants'
 
-interface SoloState {
+interface GameState {
   state: StateGame
   balance: number
   multiplierIndex: number
@@ -16,6 +16,8 @@ interface SoloState {
   countBullet: number
   offer: number
   increaseTime: number | undefined
+  characterName: CharacterName
+  round: number
   setState: (state: StateGame) => void
   setBalance: (balance: number) => void
   setMultiplierIndex: (multiplierIndex: number) => void
@@ -28,13 +30,18 @@ interface SoloState {
   setCountBullet: (setBet: number) => void
   setOffer: (offer: number) => void
   setIncreaseTime: (increaseTime: number | undefined) => void
+  setCharacterName: (characterName: CharacterName) => void
+  setRound: (round: number) => void
+  addRound: () => void
   newGame: () => void
 }
 
-const useSoloStore = create<SoloState>()((set, get) => ({
+const useGameStore = create<GameState>()((set, get) => ({
   state: 'preparation',
   prevState: 'preparation',
   balance: 0,
+  characterName: 'nubcat',
+  round: 1,
   multiplierIndex: -1,
   multiplier: 0,
   isStartedGame: false,
@@ -57,9 +64,11 @@ const useSoloStore = create<SoloState>()((set, get) => ({
   setCountBullet: (countBullet: number) => set({ countBullet }),
   setOffer: (offer: number) => set({ offer }),
   setIncreaseTime: (increaseTime: number | undefined) => set({ increaseTime }),
+  setCharacterName: (characterName: CharacterName) => set({ characterName }),
+  setRound: (round: number) => set({ round }),
+  addRound: () => set({ round: get().round + 1 }),
   newGame: () => {
     const {
-      balance,
       setState,
       setJackpot,
       setBet,
@@ -67,7 +76,9 @@ const useSoloStore = create<SoloState>()((set, get) => ({
       setCountBullet,
       setMultiplierIndex,
       setMultiplier,
+      setRound,
       bet,
+      balance,
     } = get()
 
     const hasPrevBet = bet !== 0
@@ -80,7 +91,8 @@ const useSoloStore = create<SoloState>()((set, get) => ({
     setCountBullet(5)
     setMultiplierIndex(-1)
     setMultiplier(0)
+    setRound(1)
   },
 }))
 
-export { useSoloStore }
+export { useGameStore }

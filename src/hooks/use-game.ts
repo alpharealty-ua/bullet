@@ -11,8 +11,7 @@ import {
 } from '@/api/game.api'
 import { useAddBalance, useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
-import { useDuelStore } from '@/store/duel.store'
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
@@ -21,7 +20,7 @@ import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { GunHandle } from '@/components/character-gun'
 
-const useSolo = () => {
+const useGame = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { gameId } = useParams<{ gameId: string }>()
@@ -39,29 +38,27 @@ const useSolo = () => {
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
-  const setOffer = useSoloStore(({ setOffer }) => setOffer)
-  const setBet = useSoloStore(({ setBet }) => setBet)
-  const setState = useSoloStore(({ setState }) => setState)
-  const setMultiplierIndex = useSoloStore(
+  const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
+  const setOffer = useGameStore(({ setOffer }) => setOffer)
+  const setBet = useGameStore(({ setBet }) => setBet)
+  const setState = useGameStore(({ setState }) => setState)
+  const setMultiplierIndex = useGameStore(
     ({ setMultiplierIndex }) => setMultiplierIndex,
   )
-  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
-  const setIsStartedGame = useSoloStore(
+  const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
+  const setIsStartedGame = useGameStore(
     ({ setIsStartedGame }) => setIsStartedGame,
   )
-  const setNoMoney = useSoloStore(({ setNoMoney }) => setNoMoney)
-  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
-  const setMaxBet = useSoloStore(({ setMaxBet }) => setMaxBet)
-  const soloNewGame = useSoloStore(({ newGame }) => newGame)
-  const duelNewGame = useDuelStore(({ newGame }) => newGame)
-  const state = useSoloStore(({ state }) => state)
-  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
-  const offer = useSoloStore(({ offer }) => offer)
-  const bet = useSoloStore(({ bet }) => bet)
+  const setNoMoney = useGameStore(({ setNoMoney }) => setNoMoney)
+  const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
+  const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
+  const restartGame = useGameStore(({ newGame }) => newGame)
+  const state = useGameStore(({ state }) => state)
+  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
+  const offer = useGameStore(({ offer }) => offer)
+  const bet = useGameStore(({ bet }) => bet)
   const isSolo = pathname.includes(ROUTES.solo.root)
 
-  // TODO: JOIN NEW GAME
   const newGame = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
 
@@ -74,9 +71,8 @@ const useSolo = () => {
     }
     queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
-    duelNewGame()
-    soloNewGame()
-  }, [duelNewGame, soloNewGame, isSolo, navigate, queryClient, gameId])
+    restartGame()
+  }, [restartGame, isSolo, navigate, queryClient, gameId])
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
@@ -386,7 +382,7 @@ const useSolo = () => {
   return {
     next,
     deal,
-    newGame,
+    newGame: newGame,
     revolverRefHandle,
     frontGunHandleRef,
     backGunHandleRef,
@@ -395,4 +391,4 @@ const useSolo = () => {
   }
 }
 
-export { useSolo }
+export { useGame as useSolo }

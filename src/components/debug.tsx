@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { StateGame, STATES, MULTIPLIERS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -11,12 +11,12 @@ import { Button as ButtonWithAudio } from '@/components/ui/button'
 const Debug = () => {
   const queryClient = useQueryClient()
   const resetToken = useAuthStore(({ resetToken }) => resetToken)
-  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
-  const setState = useSoloStore(({ setState }) => setState)
-  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
-  const state = useSoloStore(({ state }) => state)
-  const countBullet = useSoloStore(({ countBullet }) => countBullet)
-  const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
+  const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
+  const setState = useGameStore(({ setState }) => setState)
+  const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
+  const state = useGameStore(({ state }) => state)
+  const countBullet = useGameStore(({ countBullet }) => countBullet)
+  const multiplierIndex = useGameStore(({ multiplierIndex }) => multiplierIndex)
 
   const handleSetState = (s: StateGame) => {
     setState(s)

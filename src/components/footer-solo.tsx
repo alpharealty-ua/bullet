@@ -1,4 +1,4 @@
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { IMAGES, VariantGame } from '@/lib/constants'
@@ -9,12 +9,12 @@ import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
 
 const Footer = ({ variant: _ }: { variant: VariantGame }) => {
-  const setBet = useSoloStore(({ setBet }) => setBet)
-  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
-  const noMoney = useSoloStore(({ noMoney }) => noMoney)
-  const bet = useSoloStore(({ bet }) => bet)
-  const maxBet = useSoloStore(({ maxBet }) => maxBet)
-  const countBullet = useSoloStore(({ countBullet }) => countBullet)
+  const setBet = useGameStore(({ setBet }) => setBet)
+  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
+  const noMoney = useGameStore(({ noMoney }) => noMoney)
+  const bet = useGameStore(({ bet }) => bet)
+  const maxBet = useGameStore(({ maxBet }) => maxBet)
+  const countBullet = useGameStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
 
   const handleSettingsClick = () => {

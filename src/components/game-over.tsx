@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, preloadImage } from '@/lib/utils'
 
@@ -16,7 +16,7 @@ const GameOver = ({
   hasImage?: boolean
   onClick: () => void
 }) => {
-  const state = useSoloStore(({ state }) => state)
+  const state = useGameStore(({ state }) => state)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useDuelStore } from '@/store/duel.store'
+import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -12,10 +12,10 @@ import { CharacterSelector } from '@/components/character-selector'
 const disabledImages: number[] = [4]
 
 const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
-  const setCharacterName = useDuelStore(
+  const setCharacterName = useGameStore(
     ({ setCharacterName }) => setCharacterName,
   )
-  const characterName = useDuelStore(({ characterName }) => characterName)
+  const characterName = useGameStore(({ characterName }) => characterName)
   const navigate = useNavigate()
   const [disabled, setDisabled] = useState(false)
   const isDuel = format === 'duel'

@@ -3,14 +3,14 @@ import { useEffect } from 'react'
 import { IMAGES, TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { AnimationInOut } from '@/components/animation-in-out'
 
 const Victory = () => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const state = useSoloStore(({ state }) => state)
-  const jackpot = useSoloStore(({ jackpot }) => jackpot)
-  const setIncreaseTime = useSoloStore(({ setIncreaseTime }) => setIncreaseTime)
+  const state = useGameStore(({ state }) => state)
+  const jackpot = useGameStore(({ jackpot }) => jackpot)
+  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const show = state === 'win'
 
   useEffect(() => {

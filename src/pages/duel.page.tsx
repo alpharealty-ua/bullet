@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { IoPlay } from 'react-icons/io5'
 
-import { useDuelStore } from '@/store/duel.store'
-import { useSoloStore } from '@/store/solo.store'
-import { useSolo } from '@/hooks/use-solo'
+import { useGameStore } from '@/store/game.store'
+import { useSolo } from '@/hooks/use-game'
 import { IMAGES, VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -18,7 +17,6 @@ import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
-  // TODO: USE DUEL
   const {
     next,
     newGame,
@@ -28,9 +26,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     readySetPullHandleRef,
   } = useSolo()
 
-  const addRound = useDuelStore(({ addRound }) => addRound)
-  const characterName = useDuelStore(({ characterName }) => characterName)
-  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
+  const addRound = useGameStore(({ addRound }) => addRound)
+  const characterName = useGameStore(({ characterName }) => characterName)
+  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   const [searched, setSearched] = useState(true)

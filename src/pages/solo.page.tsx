@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { useSoloStore } from '@/store/solo.store'
-import { useSolo } from '@/hooks/use-solo'
+import { useGameStore } from '@/store/game.store'
+import { useSolo } from '@/hooks/use-game'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -20,13 +20,13 @@ import { Victory } from '@/components/victory'
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle, newGame } = useSolo()
   const [showHelpers, setShowHelpers] = useState(true)
-  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
-  const noMoney = useSoloStore(({ noMoney }) => noMoney)
-  const bet = useSoloStore(({ bet }) => bet)
-  const offer = useSoloStore(({ offer }) => offer)
-  const jackpot = useSoloStore(({ jackpot }) => jackpot)
+  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
+  const noMoney = useGameStore(({ noMoney }) => noMoney)
+  const bet = useGameStore(({ bet }) => bet)
+  const offer = useGameStore(({ offer }) => offer)
+  const jackpot = useGameStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
-  const multiplier = useSoloStore(({ multiplier }) => multiplier)
+  const multiplier = useGameStore(({ multiplier }) => multiplier)
 
   const modal = useCustomModal()
 

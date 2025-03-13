@@ -1,5 +1,5 @@
 import { useBalance } from '@/api/wallet.api'
-import { useSoloStore } from '@/store/solo.store'
+import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { FormatGame, IMAGES, MULTIPLIERS, VariantGame } from '@/lib/constants'
@@ -10,7 +10,6 @@ import { Settings } from '@/components/settings'
 import { Rank } from '@/components/rank'
 import { Helper } from '@/components/helper'
 import { MoneyBagButton } from '@/components/money-bag-button'
-import { useDuelStore } from '@/store/duel.store'
 import { Balance } from '@/components/balance'
 
 const Footer = ({
@@ -24,17 +23,17 @@ const Footer = ({
 }) => {
   const { data: balance } = useBalance()
 
-  const setBet = useSoloStore(({ setBet }) => setBet)
-  const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
-  const round = useDuelStore(({ round }) => round)
-  const noMoney = useSoloStore(({ noMoney }) => noMoney)
-  const multiplierIndex = useSoloStore(({ multiplierIndex }) => multiplierIndex)
-  const bet = useSoloStore(({ bet }) => bet)
-  const maxBet = useSoloStore(({ maxBet }) => maxBet)
-  const countBullet = useSoloStore(({ countBullet }) => countBullet)
+  const setBet = useGameStore(({ setBet }) => setBet)
+  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
+  const round = useGameStore(({ round }) => round)
+  const noMoney = useGameStore(({ noMoney }) => noMoney)
+  const multiplierIndex = useGameStore(({ multiplierIndex }) => multiplierIndex)
+  const bet = useGameStore(({ bet }) => bet)
+  const maxBet = useGameStore(({ maxBet }) => maxBet)
+  const countBullet = useGameStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
   const footerWithBg = format === 'solo' || variant === 'watch'
-  const increaseTime = useSoloStore(({ increaseTime }) => increaseTime)
+  const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   const handleSettings = () => {
     modal.show({ contentSlot: <Settings /> })
