@@ -12,14 +12,16 @@ const CharacterSelector = ({
   label,
   disabledImages,
   onSelect,
-  defaultIndex = 0,
+  defaultName,
 }: {
   label: string
   disabledImages: number[]
   onSelect: (index: number) => void
-  defaultIndex?: number
+  defaultName: string
 }) => {
-  const [activeIndex, setActiveIndex] = useState(defaultIndex)
+  const [activeIndex, setActiveIndex] = useState(
+    CHARACTER_NAMES.findIndex((n) => n === defaultName) ?? 0,
+  )
   const [type, setType] = useState<CharacterType>('front')
 
   const changeIndex = (index: number) => {

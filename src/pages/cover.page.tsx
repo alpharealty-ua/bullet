@@ -15,6 +15,7 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useDuelStore(
     ({ setCharacterName }) => setCharacterName,
   )
+  const characterName = useDuelStore(({ characterName }) => characterName)
   const navigate = useNavigate()
   const [disabled, setDisabled] = useState(false)
   const isDuel = format === 'duel'
@@ -60,6 +61,7 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
             label='Choose your character'
             disabledImages={disabledImages}
             onSelect={handleSelectCharacter}
+            defaultName={characterName}
           />
         )}
       </div>
