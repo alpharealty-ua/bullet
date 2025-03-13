@@ -135,7 +135,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       )}
 
-      <div className='relative mt-auto flex flex-col pt-6'>
+      <div className='relative mt-auto flex flex-col gap-10 pt-6'>
         {searched && (
           <div
             className={cn(
@@ -178,7 +178,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
         {variant === 'play' && (
           <>
-            <div className='relative mb-1'>
+            <div className='relative mb-1 pb-10'>
               <Character
                 className={cn('ml-6 max-h-[220px] max-w-[180px]')}
                 characterName={characterName}
@@ -211,13 +211,15 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 </div>
               </div>
             </div>
-            <DuelGameBar
-              gameBarRef={gameBarRefHandle}
-              onChangeDirection={handleChangeDirection}
-            />
           </>
         )}
       </div>
+      {variant === 'play' && (
+        <DuelGameBar
+          gameBarRef={gameBarRefHandle}
+          onChangeDirection={handleChangeDirection}
+        />
+      )}
       <Victory />
       <GameOver hasImage={false} onClick={handleGameOverClick} />
       <Footer format='duel' variant={variant} />
