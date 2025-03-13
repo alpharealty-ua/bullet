@@ -2,8 +2,7 @@ import { create } from 'zustand'
 
 import { AUDIOS, SettingsKeys } from '@/lib/constants'
 import { getAudio } from '@/lib/utils'
-
-type SettingsState = Record<SettingsKeys, boolean> & {
+interface SettingsState extends Record<SettingsKeys, boolean> {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
   // TODO: MOVE
   playAudio: (

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import { StateGame } from '@/lib/constants'
 
-type SoloState = {
+interface SoloState {
   state: StateGame
   balance: number
   multiplierIndex: number

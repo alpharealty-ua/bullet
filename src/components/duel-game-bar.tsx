@@ -3,7 +3,7 @@ import { useCallback, useImperativeHandle, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { IoSkull } from 'react-icons/io5'
 
-export type GameBarHandle = {
+export interface GameBarHandle {
   getState: () => Promise<{ value: number; isRunning: boolean }>
   start: (duration: number) => Promise<void>
   stop: () => Promise<void>

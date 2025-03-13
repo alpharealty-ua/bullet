@@ -13,7 +13,7 @@ import { useSettingsStore } from '@/store/settings.store'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
 
-export type GunHandle = {
+export interface GunHandle {
   spin: (duration?: number) => Promise<void>
   click: () => Promise<void>
   shot: () => Promise<void>

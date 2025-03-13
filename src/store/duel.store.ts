@@ -1,8 +1,7 @@
 import { CharacterName } from '@/lib/constants'
 import { create } from 'zustand'
 
-// TODO: CHANGE TO INTERFACE
-type DuelState = {
+interface DuelState {
   characterName: CharacterName
   round: number
   setCharacterName: (characterName: CharacterName) => void

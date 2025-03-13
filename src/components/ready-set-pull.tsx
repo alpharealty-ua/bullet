@@ -3,7 +3,7 @@ import { useCallback, useImperativeHandle, useRef } from 'react'
 import { useSettingsStore } from '@/store/settings.store'
 import { cn, waitEndAudio } from '@/lib/utils'
 
-export type ReadySetPullHandle = {
+export interface ReadySetPullHandle {
   start: () => Promise<void>
 }
 

@@ -16,7 +16,7 @@ const MIN_ADD_SPEED = 10
 const MAX_ADD_SPEED = 100
 const MAX_SPEED = 100
 
-export type RevolverHandle = {
+export interface RevolverHandle {
   spin: (duration?: number) => Promise<void>
   click: () => void
 }
