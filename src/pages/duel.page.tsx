@@ -25,14 +25,13 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     gameBarRefHandle,
     readySetPullHandleRef,
   } = useSolo()
-
   const addRound = useGameStore(({ addRound }) => addRound)
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
-  const visiblePlayerInfo = !isStartedGame || showPlayerInfo
-  const [searched, setSearched] = useState(true)
+  const [searched, setSearched] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const visiblePlayerInfo = !isStartedGame || showPlayerInfo
 
   const handlePull = async () => {
     await next('duel')
@@ -51,10 +50,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     },
     [addRound],
   )
-
-  const handleGameOverClick = () => {
-    newGame()
-  }
 
   const handleSearchClick = () => {
     setIsSearching((p) => !p)
@@ -84,7 +79,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       {!searched && (
         <div className='relative mx-auto flex w-full max-w-46 flex-col items-center justify-center gap-2 pt-14'>
           <div className='text-2xl'>Enter arena</div>
-          <div className='relative flex aspect-[1/0.312] w-full items-center justify-between pr-2.5 pl-4 text-2xl'>
+          <div className='relative flex aspect-[1/0.312] w-full items-center justify-between gap-2 px-2.5 text-2xl'>
             <div
               className={cn(
                 'absolute inset-0 bg-contain bg-center bg-no-repeat',
@@ -93,11 +88,16 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               )}
               style={{ backgroundImage: `url(${IMAGES.enterarena})` }}
             ></div>
-            {/* TODO: ADD INPUT */}
-            <div className='relative'>$1000</div>
+            <div className='relative flex grow items-center gap-1'>
+              <div className='shrink-0'>$</div>
+              <input
+                className='h-10 w-full bg-transparent pl-2'
+                value={'1000'}
+              />
+            </div>
             <button
               className={cn(
-                'relative -top-0.5 flex h-13 w-7 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors [&:hover_span]:scale-110',
+                'relative -top-0.5 flex h-13 w-7 shrink-0 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors [&:hover_span]:scale-110',
                 isSearching &&
                   'text-red hover:bg-red/10 active:bg-red/20 text-xl select-none',
                 !isSearching &&

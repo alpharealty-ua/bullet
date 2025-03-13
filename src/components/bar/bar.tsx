@@ -27,14 +27,6 @@ const Bar = () => {
       if (event.key === 'Escape') {
         setOpenSide(null)
       }
-      if (event.key === '1') {
-        toggle('left')
-        return
-      }
-      if (event.key === '2') {
-        toggle('right')
-        return
-      }
     }
 
     document.addEventListener('keydown', close)
