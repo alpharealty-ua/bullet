@@ -4,12 +4,10 @@ const Result = ({
   title,
   value,
   open,
-  hasDelay = false,
 }: {
   title: string
   value: string
   open: boolean
-  hasDelay?: boolean
 }) => {
   return (
     <div className='z-3 flex flex-col items-center gap-1 px-6'>
@@ -19,8 +17,6 @@ const Result = ({
           open &&
             'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
           !open && 'animate-out fade-out zoom-out-50 duration-200',
-          // TODO: REFACTOR
-          hasDelay && 'delay-500',
         )}
       >
         {title}
@@ -31,7 +27,6 @@ const Result = ({
           open &&
             'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
           !open && 'animate-out fade-out zoom-out-50 duration-200',
-          hasDelay && 'delay-750',
         )}
       >
         {value}
