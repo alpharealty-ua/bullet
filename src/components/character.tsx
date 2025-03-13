@@ -27,7 +27,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   ) => {
     const isFront = type === 'front'
     const isBack = type === 'back'
-    const hasGun = ['nubcat', 'mickey', 'fatty'].includes(characterName)
+    const showGun = !['anime-1', 'anime-2'].includes(characterName)
 
     return (
       <div
@@ -42,44 +42,56 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
         {beforeSlot}
         <div
           className={cn(
-            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat transition-all duration-500 backface-hidden',
+            'absolute inset-0',
+            'scale-75 -rotate-y-180 bg-contain transition-all duration-500 backface-hidden',
             isFront && 'scale-100 rotate-y-0',
           )}
-          style={{
-            backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
-          }}
         >
-          {hasGun && (
-            <GunCharacter
-              className={cn(
-                'absolute right-0 left-0 max-h-full',
-                characterName === 'nubcat' &&
-                  'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
-                characterName === 'mickey' &&
-                  'top-[15%] left-[16%] aspect-[1/1.7] w-[26%]',
-                characterName === 'fatty' &&
-                  'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
-              )}
-              gunHandleRef={frontGunHandleRef}
-              showGun={true}
-            />
-          )}
+          <div
+            className='absolute inset-0 z-1 bg-contain bg-bottom bg-no-repeat'
+            style={{
+              backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
+            }}
+          ></div>
+          <GunCharacter
+            className={cn(
+              'absolute z-1',
+              characterName === 'nubcat' &&
+                'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
+              characterName === 'mickey' &&
+                'top-[15%] left-[16%] aspect-[1/1.7] w-[26%]',
+              characterName === 'fatty' &&
+                'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
+              characterName === 'anime-1' &&
+                'top-[25%] left-[12%] aspect-[1/2] w-[11%]',
+              characterName === 'anime-2' &&
+                'top-[16%] left-[34%] aspect-[1/1.9] w-[13%]',
+            )}
+            gunHandleRef={frontGunHandleRef}
+            showGun={showGun}
+          />
         </div>
         <div
           className={cn(
-            'absolute inset-0 scale-75 -rotate-y-180 bg-contain bg-bottom bg-no-repeat transition-all duration-500 backface-hidden',
+            'absolute inset-0',
+            'scale-75 -rotate-y-180 transition-all duration-500 backface-hidden',
             isBack && 'scale-100 rotate-y-0',
           )}
-          style={{
-            backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
-          }}
         >
+          <div
+            className='absolute inset-0 z-2 bg-contain bg-bottom bg-no-repeat'
+            style={{
+              backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
+            }}
+          ></div>
           <GunCharacter
             className={cn(
-              'absolute right-[6%] aspect-[1/1.7] max-h-full w-[20%]',
-              characterName === 'nubcat' && '',
-              characterName === 'mickey' && '',
-              characterName === 'fatty' && '',
+              'absolute z-1 aspect-[1/1.7]',
+              characterName === 'nubcat' && 'right-[6%] w-[20%]',
+              characterName === 'mickey' && 'top-[17%] right-[22%] w-[10%]',
+              characterName === 'fatty' && 'right-[15%] w-[10%]',
+              characterName === 'anime-1' && 'top-[20%] left-[29%] w-[7%]',
+              characterName === 'anime-2' && 'top-[17%] right-[34%] w-[7%]',
             )}
             gunHandleRef={backGunHandleRef}
             showGun={false}
