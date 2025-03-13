@@ -10,11 +10,11 @@ type ProtectedRouteProps = {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isLoading: profileIsLoading, data: user } = useProfile()
-  const { isLoading: balanceIsLoading } = useBalance()
+  const { isPending: profileIsPending, data: user } = useProfile()
+  const { isPending: balanceIsPending } = useBalance()
   const { pathname } = useLocation()
 
-  if (profileIsLoading || balanceIsLoading) {
+  if (profileIsPending || balanceIsPending) {
     return <Loading className='absolute inset-0' />
   }
 
