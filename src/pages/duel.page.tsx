@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { IoPlay } from 'react-icons/io5'
 
 import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
@@ -110,11 +111,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             <div className='relative'>$1000</div>
             <div
               className={cn(
-                'text-red relative flex h-14 w-8 cursor-pointer items-center justify-center font-bold opacity-100 transition-all',
+                'text-red relative flex h-14 w-8.5 cursor-pointer items-center justify-center text-2xl font-bold opacity-100 transition-all',
               )}
               onClick={handleSearchClick}
             >
-              X
+              {isSearching ? 'X' : <IoPlay />}
             </div>
           </div>
           {isSearching && (
