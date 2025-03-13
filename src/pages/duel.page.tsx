@@ -99,24 +99,30 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       {!searched && (
         <div className='relative mx-auto flex w-full max-w-46 flex-col items-center justify-center gap-2 pt-14'>
           <div className='text-2xl'>Enter arena</div>
-          <div className='relative flex aspect-[1/0.31] w-full items-center justify-between px-2 pl-4 text-2xl'>
+          <div className='relative flex aspect-[1/0.312] w-full items-center justify-between pr-2.5 pl-4 text-2xl'>
             <div
               className={cn(
-                'absolute inset-0 bg-contain',
+                'absolute inset-0 bg-contain bg-center bg-no-repeat',
                 'repeat-infinite direction-alternate duration-500 ease-linear',
                 isSearching && 'animate-[pulse-enter-arena]',
               )}
               style={{ backgroundImage: `url(${IMAGES.enterarena})` }}
             ></div>
             <div className='relative'>$1000</div>
-            <div
+            <button
               className={cn(
-                'text-red relative flex h-14 w-8.5 cursor-pointer items-center justify-center text-2xl font-bold opacity-100 transition-all',
+                'relative -top-0.5 flex h-13 w-7 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors [&:hover_span]:scale-110',
+                isSearching &&
+                  'text-red hover:bg-red/10 active:bg-red/20 text-xl select-none',
+                !isSearching &&
+                  'text-green hover:bg-green/10 active:bg-green/20 text-2xl select-none',
               )}
               onClick={handleSearchClick}
             >
-              {isSearching ? 'X' : <IoPlay />}
-            </div>
+              <span className='transition-transform'>
+                {isSearching ? 'X' : <IoPlay />}
+              </span>
+            </button>
           </div>
           {isSearching && (
             <div className={cn('px-3', 'animate-in fade-in duration-500')}>
@@ -149,12 +155,14 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 variant === 'watch' && '-mb-7 h-[300px]',
                 variant === 'play' && 'mr-12',
               )}
-              characterName='fatty'
+              characterName='anime-2'
               type='front'
               onClick={
                 variant === 'play' && isStartedGame
                   ? handlePlayerClick
-                  : undefined
+                  : () => {
+                      frontGunHandleRef.current?.click()
+                    }
               }
               frontGunHandleRef={frontGunHandleRef}
               beforeSlot={
@@ -186,7 +194,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 onClick={
                   variant === 'play' && isStartedGame
                     ? handlePlayerClick
-                    : undefined
+                    : () => {
+                        backGunHandleRef.current?.click()
+                      }
                 }
                 backGunHandleRef={backGunHandleRef}
                 beforeSlot={
