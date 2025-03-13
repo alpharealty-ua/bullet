@@ -11,10 +11,12 @@ const GameOver = ({
   timeout = 3000,
   hasImage = true,
   onClick,
+  onTimeout,
 }: {
   timeout?: number
   hasImage?: boolean
   onClick: () => void
+  onTimeout: () => void
 }) => {
   const state = useGameStore(({ state }) => state)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -44,7 +46,7 @@ const GameOver = ({
 
     const timeoutId = setTimeout(() => {
       // TODO: CHANGE TO ON TIMEOUT
-      onClick()
+      onTimeout()
     }, timeout)
     return () => {
       clearTimeout(timeoutId)

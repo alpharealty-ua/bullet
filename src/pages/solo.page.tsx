@@ -45,10 +45,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     })
   }
 
-  const handleGameOverClick = () => {
-    newGame()
-  }
-
   return (
     <>
       <Header logoText={'Solo'} />
@@ -118,7 +114,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <Victory />
-      <GameOver onClick={handleGameOverClick} />
+      <GameOver onClick={newGame} onTimeout={newGame} />
       <Footer variant={variant} />
     </>
   )
