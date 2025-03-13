@@ -11,7 +11,7 @@ const Click = ({
     <>
       <div
         className={cn(
-          'absolute top-0 right-1/2 aspect-[3/1] w-1/2 -rotate-[45deg] tracking-wider opacity-0 duration-200',
+          'absolute top-0 right-1/2 aspect-[3/1] w-1/2 min-w-6 -rotate-[45deg] tracking-wider opacity-0 duration-200',
           leftClickClassName,
         )}
         {...leftClickProps}
@@ -25,7 +25,7 @@ const Click = ({
       </div>
       <div
         className={cn(
-          'absolute top-0 left-1/2 aspect-[3/1] w-1/2 rotate-[45deg] tracking-wider opacity-0 duration-200',
+          'absolute top-0 left-1/2 aspect-[3/1] w-1/2 min-w-6 rotate-[45deg] tracking-wider opacity-0 duration-200',
           rightClickClassName,
         )}
         {...rightClickProps}
