@@ -32,7 +32,7 @@ const Debug = () => {
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 
-  if (!localStorage.getItem('showDebug')) {
+  if (!localStorage.getItem('SHOW_DEBUG')) {
     return null
   }
 
