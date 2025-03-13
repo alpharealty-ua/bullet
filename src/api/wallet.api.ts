@@ -43,7 +43,7 @@ export const addBalance = async (
   return data
 }
 
-export const useBalance = (enabled = true) => {
+export const useBalance = (enabled = false) => {
   const data = useQuery({
     enabled,
     queryKey: [QUERY_KEYS.balance],
