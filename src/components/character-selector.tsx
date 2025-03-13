@@ -3,30 +3,37 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { cn } from '@/lib/utils'
-import { CHARACTER_NAMES, CharacterType, IMAGES } from '@/lib/constants'
+import {
+  CHARACTER_NAMES,
+  CharacterType,
+  IMAGES,
+  CharacterName,
+} from '@/lib/constants'
 import { Character } from '@/components/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Button } from '@/components/ui/button'
 
 const CharacterSelector = ({
   label,
-  disabledImages,
+  characterNames,
+  disabledCharacter,
   onSelect,
   defaultName,
 }: {
   label: string
-  disabledImages: number[]
-  onSelect: (index: number) => void
+  characterNames: CharacterName[]
+  disabledCharacter: CharacterName[]
   defaultName: string
+  onSelect: (index: number) => void
 }) => {
   const [activeIndex, setActiveIndex] = useState(
-    CHARACTER_NAMES.findIndex((n) => n === defaultName) ?? 0,
+    characterNames.findIndex((n) => n === defaultName) ?? 0,
   )
   const [type, setType] = useState<CharacterType>('front')
 
   const changeIndex = (index: number) => {
     const newIndex =
-      index < 0 ? CHARACTER_NAMES.length - 1 : index % CHARACTER_NAMES.length
+      index < 0 ? characterNames.length - 1 : index % characterNames.length
     setActiveIndex(newIndex)
     onSelect(newIndex)
   }
@@ -55,7 +62,7 @@ const CharacterSelector = ({
         </button>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
           {CHARACTER_NAMES.map((name, i) => {
-            const disabled = disabledImages.includes(i)
+            const disabled = disabledCharacter.includes(name)
             const active = i === activeIndex
 
             return (

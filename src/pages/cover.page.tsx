@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router'
 
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
-import { CHARACTER_NAMES } from '@/lib/constants'
+import { CHARACTER_NAMES, DISABLED_CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
-
-// TODO: TEMPORARY SOLUTION
-const disabledImages: number[] = [4]
 
 const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useGameStore(
@@ -30,11 +27,12 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   }
 
   const handleSelectCharacter = (index: number) => {
-    const disabled = disabledImages.includes(index)
+    const characterName = CHARACTER_NAMES[index]
+    const disabled = DISABLED_CHARACTER_NAMES.includes(characterName)
     setDisabled(disabled)
 
     if (!disabled) {
-      setCharacterName(CHARACTER_NAMES[index])
+      setCharacterName(characterName)
     }
   }
 
@@ -59,7 +57,8 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
         {isDuel && (
           <CharacterSelector
             label='Choose your character'
-            disabledImages={disabledImages}
+            characterNames={CHARACTER_NAMES}
+            disabledCharacter={DISABLED_CHARACTER_NAMES}
             onSelect={handleSelectCharacter}
             defaultName={characterName}
           />
