@@ -201,7 +201,9 @@ const useSolo = () => {
       }
     } else {
       await readySetPullHandle.start()
-      navigate(`${ROUTES.duel.play}/1`)
+      const duration = randomIntFromInterval(25, 50)
+      await gameBarHandle.start(duration)
+      navigate(`${ROUTES.duel.play}/1`, { preventScrollReset: true })
     }
   }
 

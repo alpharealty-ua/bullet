@@ -5,7 +5,7 @@ import { useDuelStore } from '@/store/duel.store'
 import { useSoloStore } from '@/store/solo.store'
 import { useSolo } from '@/hooks/use-solo'
 import { IMAGES, VariantGame } from '@/lib/constants'
-import { cn, randomIntFromInterval } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -33,7 +33,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const isStartedGame = useSoloStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
-  const [searched, setSearched] = useState(false)
+  const [searched, setSearched] = useState(true)
   const [isSearching, setIsSearching] = useState(false)
 
   const handlePull = async () => {
@@ -41,19 +41,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
-
-  const handleStartReadySetPull = useCallback(async () => {}, [])
-
-  const handleEndReadySetPull = useCallback(async () => {
-    const gameBarHandle = gameBarRefHandle.current
-
-    if (gameBarHandle === null) {
-      return
-    }
-
-    const duration = randomIntFromInterval(25, 50)
-    await gameBarHandle.start(duration)
-  }, [gameBarRefHandle])
 
   const handleChangeDirection = useCallback(
     (_: number, nextDiraction: number) => {
@@ -108,6 +95,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               )}
               style={{ backgroundImage: `url(${IMAGES.enterarena})` }}
             ></div>
+            {/* TODO: ADD INPUT */}
             <div className='relative'>$1000</div>
             <button
               className={cn(
@@ -176,11 +164,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 />
               }
             />
-            <ReadySetPull
-              onStart={handleStartReadySetPull}
-              onEnd={handleEndReadySetPull}
-              readySetPullHandle={readySetPullHandleRef}
-            />
+            <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
           </div>
         )}
 

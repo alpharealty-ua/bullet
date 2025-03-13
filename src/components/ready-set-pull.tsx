@@ -8,12 +8,8 @@ export type ReadySetPullHandle = {
 }
 
 const ReadySetPull = ({
-  onStart,
-  onEnd,
   readySetPullHandle,
 }: {
-  onStart: () => void
-  onEnd: () => void
   readySetPullHandle: React.ForwardedRef<ReadySetPullHandle>
 }) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -37,8 +33,6 @@ const ReadySetPull = ({
     set.classList.remove('is-show')
     pull.classList.remove('is-show')
 
-    onStart()
-
     const readyAudio = await playAudio('ready')
     ready.classList.add('is-show')
     await waitEndAudio(readyAudio)
@@ -54,9 +48,7 @@ const ReadySetPull = ({
     ready.classList.remove('is-show')
     set.classList.remove('is-show')
     pull.classList.remove('is-show')
-
-    onEnd()
-  }, [onStart, onEnd, playAudio])
+  }, [playAudio])
 
   useImperativeHandle(readySetPullHandle, () => ({
     start,
