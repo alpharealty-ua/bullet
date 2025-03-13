@@ -1,6 +1,7 @@
 import { useCallback, useImperativeHandle, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
+import { IoSkull } from 'react-icons/io5'
 
 export type GameBarHandle = {
   getState: () => Promise<{ value: number; isRunning: boolean }>
@@ -11,8 +12,8 @@ export type GameBarHandle = {
 
 const LENGTH = 23
 const DEFAUTL_NUMBER = 5
-const NUMBERS = [50, 33, 20, 10]
-const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]', 'bg-[#ffda10]']
+const NUMBERS = [50, 20, 10]
+const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]']
 
 const getItem = (i: number) => {
   const center = LENGTH >> 1
@@ -135,13 +136,18 @@ const DuelGameBar = ({
                   <td
                     key={i}
                     className={cn(
-                      'border-2 border-black text-center align-middle text-[9px] transition-colors duration-20 ease-linear',
+                      'border-2 border-black text-center align-middle text-[9px] text-white',
+                      'transition-colors duration-20 ease-linear',
                       '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
                       className,
                       number === DEFAUTL_NUMBER && 'text-transparent',
                     )}
                   >
-                    {number}
+                    {number === 50 ? (
+                      <IoSkull className='relative -top-[1px] inline-block text-base' />
+                    ) : (
+                      number
+                    )}
                   </td>
                 )
               })}
