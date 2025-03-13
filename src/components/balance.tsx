@@ -1,4 +1,4 @@
-import { ComponentProps, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { cn, formatNumber } from '@/lib/utils'
 import { useIncreaseNumber } from '@/hooks/use-increase-number'
 
@@ -16,7 +16,6 @@ const Balance = ({
     increaseTime,
     decreaseTime: 500,
     formatValue: formatNumber,
-    // TODO:  ADDED DELAY
   })
 
   const length = String(formatNumber(value)).length
@@ -70,34 +69,4 @@ const Balance = ({
   )
 }
 
-const BalanceWithDelay = ({
-  hasDelay,
-  value,
-  ...props
-}: ComponentProps<typeof Balance> & { hasDelay: boolean }) => {
-  const [balanceWithDelay, setBalanceWithDelay] = useState(value)
-
-  useEffect(() => {
-    if (value === balanceWithDelay) {
-      return
-    }
-
-    const changeBalance = () => setBalanceWithDelay(value)
-
-    if (!hasDelay) {
-      changeBalance()
-      return
-    }
-
-    // TODO: ADD SUBSCRIPT WINSOUND
-    const timeoutID = setTimeout(changeBalance, 0)
-
-    return () => {
-      clearTimeout(timeoutID)
-    }
-  }, [value, hasDelay, balanceWithDelay])
-
-  return <Balance {...props} value={balanceWithDelay} />
-}
-
-export { Balance, BalanceWithDelay }
+export { Balance }
