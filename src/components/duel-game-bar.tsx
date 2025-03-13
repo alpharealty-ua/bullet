@@ -11,7 +11,7 @@ export type GameBarHandle = {
 }
 
 const LENGTH = 23
-const DEFAUTL_NUMBER = 5
+const DEFAUTL_NUMBER = 0
 const NUMBERS = [50, 20, 10]
 const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]']
 

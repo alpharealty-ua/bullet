@@ -168,7 +168,9 @@ const useSolo = () => {
         }
 
         await gameBarHandle.stop()
-        const inWinGame = [50, 33, 20, 10].includes(value)
+        const winProbabilityPercentage = value === 50 ? 100 : value
+        const random = randomIntFromInterval(0, 99)
+        const inWinGame = random < winProbabilityPercentage
 
         await wait(1000)
         await playAudio('triggerpull')
