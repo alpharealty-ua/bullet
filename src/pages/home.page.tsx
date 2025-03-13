@@ -9,12 +9,11 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
 import { LeadboardIcon } from '@/components/leadboard-icon'
-import { Profile } from '@/components/profile'
+import { ProfileLink } from '@/components/profile-link'
 
 const HomePage = () => {
   const navigate = useNavigate()
   const modal = useCustomModal()
-  // TODO: IS FETCING ON FIRST RENDER
   const { data: user } = useProfile()
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -84,10 +83,6 @@ const HomePage = () => {
     }
   }, [])
 
-  const handleProfileClick = () => {
-    modal.show({ contentSlot: <Profile /> })
-  }
-
   return (
     <div
       className='relative flex grow-1 flex-col items-center justify-center gap-10 px-3 py-12'
@@ -96,14 +91,7 @@ const HomePage = () => {
       {
         <div className='absolute top-4 right-4 flex gap-4'>
           {user ? (
-            <>
-              <button
-                onClick={handleProfileClick}
-                className='cursor-pointer self-end'
-              >
-                {user.username}
-              </button>
-            </>
+            <ProfileLink name={user.username} />
           ) : (
             <>
               <ButtonWithAudio
