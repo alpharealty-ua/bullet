@@ -51,7 +51,7 @@ const GameOver = ({
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [timeout, show, onClick])
+  }, [timeout, show, onTimeout])
 
   useEffect(() => {
     if (!show) {
