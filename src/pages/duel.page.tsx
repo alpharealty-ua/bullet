@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
-import { IoPlay } from 'react-icons/io5'
+import { useCallback, useState } from 'react'
 
 import { useGameStore } from '@/store/game.store'
 import { useSolo } from '@/hooks/use-game'
-import { IMAGES, VariantGame } from '@/lib/constants'
+import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
@@ -15,6 +14,7 @@ import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
+import { EnterArena } from '@/components/enter-arena'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const {
@@ -30,7 +30,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const [searched, setSearched] = useState(false)
-  const [isSearching, setIsSearching] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
 
   const handlePull = async () => {
@@ -51,24 +50,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     [addRound],
   )
 
-  const handleSearchClick = () => {
-    setIsSearching((p) => !p)
-  }
-
-  useEffect(() => {
-    if (!isSearching) {
-      return
-    }
-
-    const timeoutID = setTimeout(() => {
-      setSearched(true)
-    }, 3000)
-
-    return () => {
-      clearTimeout(timeoutID)
-    }
-  }, [isSearching])
-
   return (
     <>
       <Header
@@ -76,56 +57,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         hideBalance={variant === 'play'}
       />
       <Bar />
-      {!searched && (
-        <div className='relative mx-auto flex w-full max-w-46 flex-col items-center justify-center gap-2 pt-14'>
-          <div className='text-2xl'>Enter arena</div>
-          <div className='relative flex aspect-[1/0.312] w-full items-center justify-between gap-2 px-2.5 text-2xl'>
-            <div
-              className={cn(
-                'absolute inset-0 bg-contain bg-center bg-no-repeat',
-                'repeat-infinite direction-alternate duration-500 ease-linear',
-                isSearching && 'animate-[pulse-enter-arena]',
-              )}
-              style={{ backgroundImage: `url(${IMAGES.enterarena})` }}
-            ></div>
-            <div className='relative flex grow items-center gap-1'>
-              <div className='shrink-0'>$</div>
-              <input
-                className='h-10 w-full bg-transparent pl-2'
-                value={'1000'}
-              />
-            </div>
-            <button
-              className={cn(
-                'relative -top-0.5 flex h-13 w-7 shrink-0 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors [&:hover_span]:scale-110',
-                isSearching &&
-                  'text-red hover:bg-red/10 active:bg-red/20 text-xl select-none',
-                !isSearching &&
-                  'text-green hover:bg-green/10 active:bg-green/20 text-2xl select-none',
-              )}
-              onClick={handleSearchClick}
-            >
-              <span className='transition-transform'>
-                {isSearching ? 'X' : <IoPlay />}
-              </span>
-            </button>
-          </div>
-          {isSearching && (
-            <div className={cn('px-3', 'animate-in fade-in duration-500')}>
-              Searching for opponent{' '}
-              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-0 duration-400 ease-linear'>
-                .
-              </span>
-              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-200 duration-400 ease-linear'>
-                .
-              </span>
-              <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-400 duration-400 ease-linear'>
-                .
-              </span>
-            </div>
-          )}
-        </div>
-      )}
+      {!searched && <EnterArena onSearch={setSearched} />}
 
       <div className='relative mt-auto flex flex-col gap-10 pt-6'>
         {searched && (
