@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
 import {
+  useAcceptOffer,
   useAllGames,
   useGameDetails,
   useGamePull,
@@ -33,6 +34,7 @@ const useGame = () => {
   const disabledRef = useRef(false)
   const { data: gameDetails } = useGameDetails()
   const { mutateAsync: addBalanceMutation } = useAddBalance()
+  const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = useGamePull()
@@ -75,9 +77,13 @@ const useGame = () => {
     }
 
     if (gameId) {
-      navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
+      navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play, {
+        preventScrollReset: true,
+      })
     }
-    queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
+
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+    await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     restartGame()
   }, [restartGame, isSolo, navigate, queryClient, gameId])
@@ -124,12 +130,11 @@ const useGame = () => {
   }
 
   const deal = async () => {
-    if (offer > 0) {
+    if (offer) {
+      await acceptOfferMutation(offer.id)
       await playAudio('chaching')
-      await addBalanceMutation(offer + bet)
-      setOffer(0)
+      await newGame()
     }
-    await newGame()
   }
 
   const next = async (format: 'solo' | 'duel') => {
@@ -239,7 +244,6 @@ const useGame = () => {
     const { gameId, multiplier } = await startGameMutation({
       betAmount: String(bet),
     })
-    // .catch(() => ({ gameId: 1, multiplier: 100 }))
 
     setState('running')
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
@@ -252,7 +256,7 @@ const useGame = () => {
     }
 
     await getMultiplier(multiplierIndex)
-    navigate(`${ROUTES.solo.play}/${gameId}`)
+    navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
   }
 
   const pullGame = async () => {
@@ -270,11 +274,7 @@ const useGame = () => {
       return
     }
 
-    const { success, position } = await gamePullMutation(gameId)
-    // .catch(() => ({
-    //   success: true,
-    //   position: 3,
-    // }))
+    const { success, position, offer } = await gamePullMutation(gameId)
 
     const isGameOver = !success
     const isWin = !isGameOver && position === 5
@@ -292,6 +292,9 @@ const useGame = () => {
     if (isWin) {
       await winGame()
       return
+    }
+    if (offer) {
+      setOffer(offer)
     }
   }
 
@@ -342,7 +345,7 @@ const useGame = () => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !gameId) {
       // setState('running')
-      // navigate(`${ROUTES.solo.play}/${activeGame.id}`)
+      // navigate(`${ROUTES.solo.play}/${activeGame.id}`, { preventScrollReset: true })
     }
   }, [allGames, navigate, gameId, setState])
 

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 
+import { Offer } from '@/api/game.api'
 import { CharacterName, StateGame } from '@/lib/constants'
 
 interface GameState {
@@ -14,7 +15,7 @@ interface GameState {
   bet: number
   maxBet: number
   countBullet: number
-  offer: number
+  offer: Offer | null
   increaseTime: number | undefined
   characterName: CharacterName
   round: number
@@ -28,7 +29,7 @@ interface GameState {
   setBet: (setBet: number) => void
   setMaxBet: (setBet: number) => void
   setCountBullet: (setBet: number) => void
-  setOffer: (offer: number) => void
+  setOffer: (offer: Offer | null) => void
   setIncreaseTime: (increaseTime: number | undefined) => void
   setCharacterName: (characterName: CharacterName) => void
   setRound: (round: number) => void
@@ -50,7 +51,7 @@ const useGameStore = create<GameState>()((set, get) => ({
   bet: 0,
   maxBet: 0,
   countBullet: 5,
-  offer: 0,
+  offer: null,
   increaseTime: undefined,
   setState: (state: StateGame) => set({ state }),
   setBalance: (balance: number) => set({ balance }),
@@ -62,7 +63,7 @@ const useGameStore = create<GameState>()((set, get) => ({
   setBet: (bet: number) => set({ bet }),
   setMaxBet: (maxBet: number) => set({ maxBet }),
   setCountBullet: (countBullet: number) => set({ countBullet }),
-  setOffer: (offer: number) => set({ offer }),
+  setOffer: (offer: Offer | null) => set({ offer }),
   setIncreaseTime: (increaseTime: number | undefined) => set({ increaseTime }),
   setCharacterName: (characterName: CharacterName) => set({ characterName }),
   setRound: (round: number) => set({ round }),
@@ -87,7 +88,7 @@ const useGameStore = create<GameState>()((set, get) => ({
     setState('preparation')
     setJackpot(0)
     setBet(prevBet)
-    setOffer(0)
+    setOffer(null)
     setCountBullet(5)
     setMultiplierIndex(-1)
     setMultiplier(0)

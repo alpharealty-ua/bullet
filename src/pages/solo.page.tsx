@@ -48,21 +48,21 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   return (
     <>
       <Header logoText={'Solo'} />
-      <div className='flex flex-col gap-3 pt-2'>
+      <div className='flex min-h-40 flex-col gap-3 pt-2'>
         <Result
           title={'Jackpot'}
           value={`$${jackpot}`}
           open={Boolean(jackpot)}
         />
-        {/* <Result
-          title={'the banker offers...'}
-          value={`$${offer}`}
-          open={isStartedGame && Boolean(offer)}
-        /> */}
         <Result
           title={'Multiplier'}
           value={`${multiplier}x`}
           open={multiplier > 0}
+        />
+        <Result
+          title={'the banker offers...'}
+          value={`$${offer}`}
+          open={isStartedGame && Boolean(offer)}
         />
       </div>
       {noMoney && (

@@ -7,6 +7,11 @@ import { ROUTES } from '@/routes/path'
 
 type GameStatus = 'ACTIVE' | 'PENDING' | 'COMPLETED_LOSE' | 'COMPLETED_WIN'
 
+export type Offer = {
+  id: string
+  amount: string
+}
+
 interface StartGamePayload {
   betAmount: string
 }
@@ -19,6 +24,15 @@ interface StartGameResponse {
 interface GamePullResponse {
   success: boolean
   position: number
+  offer: null | Offer
+  gameStatus: GameStatus
+  remainingPulls: number
+}
+
+interface AcceptOfferResponse {
+  success: boolean
+  position: number
+  offer: null | Offer
   gameStatus: GameStatus
   remainingPulls: number
 }
@@ -38,6 +52,7 @@ type AllGamesResponse = Game[]
 const routes = {
   start: '/game/start',
   pull: (gameId: string) => `/game/${gameId}/pull`,
+  acceptOffer: (offerId: string) => `/game/offer/${offerId}/accept`,
   details: (gameId: string) => `/game/${gameId}`,
   all: '/game/all',
 } as const
@@ -51,6 +66,15 @@ export const startGame = async (
 
 export const gamePull = async (gameId: string): Promise<GamePullResponse> => {
   const { data } = await api.post<GamePullResponse>(routes.pull(gameId))
+  return data
+}
+
+export const acceptOffer = async (
+  offerId: string,
+): Promise<AcceptOfferResponse> => {
+  const { data } = await api.post<AcceptOfferResponse>(
+    routes.acceptOffer(offerId),
+  )
   return data
 }
 
@@ -101,14 +125,13 @@ export const useStartGame = () => {
   })
 }
 
-export const useGamePull = () => {
-  const navigate = useNavigate()
-
-  return useMutation({
+export const useGamePull = () =>
+  useMutation({
     mutationFn: gamePull,
     onSuccess: () => {},
-    onError: () => {
-      navigate(ROUTES.solo.play)
-    },
   })
-}
+
+export const useAcceptOffer = () =>
+  useMutation({
+    mutationFn: acceptOffer,
+  })
