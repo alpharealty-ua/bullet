@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
 
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
@@ -13,18 +12,9 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
     ({ setCharacterName }) => setCharacterName,
   )
   const characterName = useGameStore(({ characterName }) => characterName)
-  const navigate = useNavigate()
   const [disabled, setDisabled] = useState(false)
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
-
-  const handlePlayButton = async () => {
-    navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play)
-  }
-
-  const handleWatchButton = async () => {
-    navigate(isSolo ? ROUTES.solo.watch : ROUTES.duel.watch)
-  }
 
   const handleSelectCharacter = (index: number) => {
     const characterName = CHARACTER_NAMES[index]
@@ -41,18 +31,37 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
       <Logo as='link' to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
-          <ButtonWithAudio
-            image='play'
-            className='w-30'
-            disabled={disabled}
-            onClick={handlePlayButton}
-          />
-          <ButtonWithAudio
-            image='watch'
-            className='w-30 text-2xl'
-            disabled={disabled}
-            onClick={handleWatchButton}
-          />
+          {disabled ? (
+            <>
+              <ButtonWithAudio
+                as='button'
+                className='w-30'
+                image='play'
+                disabled={disabled}
+              />
+              <ButtonWithAudio
+                as='button'
+                className='w-30 text-2xl'
+                image='watch'
+                disabled={disabled}
+              />
+            </>
+          ) : (
+            <>
+              <ButtonWithAudio
+                as='link'
+                to={isSolo ? ROUTES.solo.play : ROUTES.duel.play}
+                className='w-30'
+                image='play'
+              />
+              <ButtonWithAudio
+                as='link'
+                to={isSolo ? ROUTES.solo.watch : ROUTES.duel.watch}
+                image='watch'
+                className='w-30 text-2xl'
+              />
+            </>
+          )}
         </div>
         {isDuel && (
           <CharacterSelector

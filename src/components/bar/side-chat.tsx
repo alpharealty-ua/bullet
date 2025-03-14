@@ -96,6 +96,7 @@ const SideChat = ({
           placeholder='Type your message here'
         />
         <ButtonWithAudio
+          as='button'
           className='absolute top-1/2 right-2 -translate-y-1/2 px-1 text-xs'
           text='Send'
           bg='red'

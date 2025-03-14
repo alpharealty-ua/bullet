@@ -42,17 +42,20 @@ const Debug = () => {
         Current state - <strong className='block'>{state}</strong>
       </h1>
       <ButtonWithAudio
+        as='button'
         text='Logout'
         className='text-base'
         onClick={handleLogout}
       />
       <ButtonWithAudio
+        as='button'
         text='Reset add money'
         className='text-base'
         onClick={handleResetAddMoney}
       />
       {STATES.map((el, i) => (
         <ButtonWithAudio
+          as='button'
           key={i}
           className={cn('text-base', el === state && 'text-white')}
           onClick={() => handleSetState(el)}

@@ -67,7 +67,11 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       {noMoney && (
         <div className='relative flex flex-col items-center justify-center pt-8'>
-          <ButtonWithAudio text='Add money' onClick={handleAddMoney} />
+          <ButtonWithAudio
+            as='button'
+            text='Add money'
+            onClick={handleAddMoney}
+          />
         </div>
       )}
       <div className='relative mt-auto flex flex-1 items-end overflow-hidden px-8 pt-4'>
@@ -93,6 +97,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               )}
             >
               <ButtonWithAudio
+                as='button'
                 className='w-24'
                 image='deal'
                 onClick={handleDeal}
@@ -105,6 +110,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               show={showHelpers && bet > 0 && !isStartedGame}
             />
             <ButtonWithAudio
+              as='button'
               disabled={bet === 0}
               className='w-24'
               image='pull'

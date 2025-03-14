@@ -26,6 +26,7 @@ export const Header = ({
         {!hideBalance && !isLoading && (
           <div className='flex items-end gap-1'>
             <MoneyBagButton
+              as='button'
               balance={balance}
               noMoney={noMoney}
               className='self-end'

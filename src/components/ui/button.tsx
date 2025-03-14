@@ -2,6 +2,7 @@ import React from 'react'
 
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { Link, LinkProps } from 'react-router'
 
 const imagesMap = {
   button: IMAGES.button,
@@ -16,17 +17,27 @@ const imagesMap = {
   moneybag: IMAGES.moneybag,
 }
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+export type asLink = { as: 'link' } & LinkProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>
+export type asButton = {
+  as: 'button'
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
+
+// TODO: CREATE DISCRIMINATION UNION FOR IMAGE AND BG
+// TODO: ADDED CHILDREN
+export type ButtonProps = {
   image?: keyof typeof imagesMap | ''
   bg?: 'green' | 'red' | 'primary'
   text?: string
-}
+} & (asLink | asButton)
 
-// ADD ON CLICK WRAPPER FOR AUDIO
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, image = 'button', bg, text, ...props }, ref) => {
+  ({ className, image = 'button', bg, text, children, as, ...props }, ref) => {
+    // eslint-disable-next-line
+    const Comp: any = as === 'link' ? Link : 'button'
+
     return (
-      <button
+      <Comp
         ref={ref}
         className={cn(
           'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform disabled:scale-100 disabled:cursor-not-allowed',
@@ -49,7 +60,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </span>
         )}
         {!bg && image && <img src={imagesMap[image]} alt='' />}
-      </button>
+      </Comp>
     )
   },
 )

@@ -195,6 +195,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
                 <div className='relative'>
                   <ButtonWithAudio
+                    as='button'
                     className='w-26'
                     disabled={!searched}
                     image='pull'

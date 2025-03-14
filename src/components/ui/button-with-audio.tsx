@@ -5,10 +5,15 @@ import { useSettingsStore } from '@/store/settings.store'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ onClick, disabled, ...props }, ref) => {
+  ({ onClick, ...props }, ref) => {
     const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const [startedAnimation, setStartedAnimation] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
+    const allProps = {
+      ...props,
+      disabled:
+        props.as === 'button' ? props.disabled || startedAnimation : undefined,
+    }
 
     const mouseClick = async (): Promise<void> => {
       const buttonDom = buttonRef.current
@@ -31,10 +36,11 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       setStartedAnimation(false)
     }
 
-    const handleClick = async (
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => {
+    // TODO: FIX ANY
+    // eslint-disable-next-line
+    const handleClick = async (event: any) => {
       await mouseClick()
+
       onClick && onClick(event)
     }
 
@@ -42,8 +48,7 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Button
         ref={mergeRefs(buttonRef, ref)}
         onMouseDown={handleClick}
-        disabled={disabled || startedAnimation}
-        {...props}
+        {...allProps}
       />
     )
   },

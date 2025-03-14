@@ -11,7 +11,6 @@ import {
 } from '@/lib/constants'
 import { Character } from '@/components/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Button } from '@/components/ui/button'
 
 const CharacterSelector = ({
   label,
@@ -90,7 +89,7 @@ const CharacterSelector = ({
                 {disabled && (
                   <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-full bg-black/30 text-7xl text-white duration-500'>
                     <IoLockClosed />
-                    <ButtonWithAudio bg='primary' text='Unlock' />
+                    <ButtonWithAudio as='button' bg='primary' text='Unlock' />
                   </div>
                 )}
               </div>
@@ -104,7 +103,12 @@ const CharacterSelector = ({
           <PiArrowFatRightFill />
         </button>
       </div>
-      <Button bg='primary' text='flip' onClick={handleFlipClick} />
+      <ButtonWithAudio
+        as='button'
+        bg='primary'
+        text='flip'
+        onClick={handleFlipClick}
+      />
     </>
   )
 }

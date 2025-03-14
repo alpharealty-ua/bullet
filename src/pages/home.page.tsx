@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router'
 import { useEffect, useRef } from 'react'
 
 import { useProfile } from '@/api/auth.api'
@@ -13,32 +12,15 @@ import { LeadboardIcon } from '@/components/leadboard-icon'
 import { ProfileLink } from '@/components/profile-link'
 
 const HomePage = () => {
-  const navigate = useNavigate()
   const modal = useCustomModal()
   const token = useAuthStore(({ token }) => token)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { data: user, isPending } = useProfile()
 
-  const handleSoloButton = async () => {
-    navigate(ROUTES.solo.root)
-  }
-
-  const handleDuelButton = async () => {
-    navigate(ROUTES.duel.root)
-  }
-
   const handleGameRules = async () => {
     modal.show({
       contentSlot: <Rules />,
     })
-  }
-
-  const handleLoginClick = () => {
-    navigate(ROUTES.auth.login)
-  }
-
-  const handleRegisterClick = () => {
-    navigate(ROUTES.auth.register)
   }
 
   const handleLeadboardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -99,14 +81,16 @@ const HomePage = () => {
           ) : (
             <>
               <ButtonWithAudio
+                as='link'
                 className='w-24 text-xs'
+                to={ROUTES.auth.login}
                 text='Login'
-                onClick={handleLoginClick}
               />
               <ButtonWithAudio
+                as='link'
                 className='w-24 text-xs'
+                to={ROUTES.auth.login}
                 text='Register'
-                onClick={handleRegisterClick}
               />
             </>
           )}
@@ -115,16 +99,19 @@ const HomePage = () => {
       <Logo size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
         <ButtonWithAudio
+          as='link'
+          to={ROUTES.duel.root}
           image='duel'
           className='w-30'
-          onClick={handleDuelButton}
         />
         <ButtonWithAudio
+          as='link'
+          to={ROUTES.solo.root}
           image='solo'
           className='w-30'
-          onClick={handleSoloButton}
         />
         <ButtonWithAudio
+          as='button'
           image='gamerules'
           className='w-24'
           onClick={handleGameRules}
