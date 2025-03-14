@@ -123,23 +123,23 @@ const Footer = ({
             </div>
           </div>
         )}
-        <div className='absolute top-0 right-0 bottom-0 flex flex-col justify-between py-1'>
-          <button
-            className='mt-auto h-4 w-4 cursor-pointer bg-contain bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${IMAGES.settings})` }}
-            onClick={handleSettings}
-          ></button>
-        </div>
         {format === 'duel' && variant === 'play' && (
-          <div className='shrink-0 pl-2'>
+          <div className='shrink-0 pl-1'>
             <MoneyBagButton
               as='button'
-              className={cn(!noMoney && 'w-4', noMoney && 'text-lg')}
+              className={cn(!noMoney && 'w-6', noMoney && 'text-lg')}
               balance={balance}
               noMoney={noMoney}
             />
           </div>
         )}
+        <div className='absolute right-0 bottom-0 flex flex-col justify-between py-1'>
+          <button
+            className='mt-auto h-6 w-6 cursor-pointer bg-contain bg-center bg-no-repeat'
+            style={{ backgroundImage: `url(${IMAGES.settings})` }}
+            onClick={handleSettings}
+          ></button>
+        </div>
       </div>
     </footer>
   )
