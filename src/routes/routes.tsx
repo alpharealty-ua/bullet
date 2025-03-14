@@ -5,7 +5,7 @@ import { RegisterPage } from '@/pages/register.page'
 import { LeaderboardPage } from '@/pages/leadboard.page'
 import { SoloPage } from '@/pages/solo.page'
 import { DuelPage } from '@/pages/duel.page'
-import { CoverPage } from '@/pages/cover.page'
+import { GameSelectorPage } from '@/pages/game-selector.page'
 import { ProfilePage } from '@/pages/profile.page'
 
 export const PUBLIC_ROUTES = [
@@ -34,7 +34,7 @@ export const PRIVATE_ROUTES = [
   },
   {
     path: ROUTES.solo.root,
-    element: <CoverPage format='solo' />,
+    element: <GameSelectorPage format='solo' />,
   },
   {
     path: ROUTES.solo.play,
@@ -50,7 +50,7 @@ export const PRIVATE_ROUTES = [
   },
   {
     path: ROUTES.duel.root,
-    element: <CoverPage format='duel' />,
+    element: <GameSelectorPage format='duel' />,
   },
   {
     path: ROUTES.duel.play,

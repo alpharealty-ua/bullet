@@ -8,7 +8,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
 
-const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
+const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useGameStore(
     ({ setCharacterName }) => setCharacterName,
   )
@@ -68,4 +68,4 @@ const CoverPage = ({ format }: { format: 'solo' | 'duel' }) => {
   )
 }
 
-export { CoverPage }
+export { GameSelectorPage }
