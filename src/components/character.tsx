@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useImperativeHandle, useRef, useState } from 'react'
+import { IoSkull } from 'react-icons/io5'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
@@ -8,8 +9,14 @@ interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   characterName: CharacterName
   type: CharacterType
   beforeSlot?: React.ReactNode
-  frontGunHandleRef?: React.ForwardedRef<GunHandle>
-  backGunHandleRef?: React.ForwardedRef<GunHandle>
+  characterHandleRef?: React.ForwardedRef<CharacterHandle>
+}
+
+export interface CharacterHandle {
+  dead: () => Promise<void>
+  reset: () => Promise<void>
+  frontGunHandleRef?: React.RefObject<GunHandle>
+  backGunHandleRef?: React.RefObject<GunHandle>
 }
 
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
@@ -18,16 +25,31 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
       characterName,
       className,
       beforeSlot,
-      frontGunHandleRef,
-      backGunHandleRef,
+      characterHandleRef,
       type,
       ...props
     },
     ref,
   ) => {
+    const frontGunHandleRef = useRef<GunHandle>(null)
+    const backGunHandleRef = useRef<GunHandle>(null)
+    const [isDead, setIsDead] = useState(false)
     const isFront = type === 'front'
     const isBack = type === 'back'
     const showGun = !['anime-1', 'anime-2'].includes(characterName)
+
+    useImperativeHandle(characterHandleRef, () => {
+      return {
+        dead: async () => {
+          setIsDead(true)
+        },
+        reset: async () => {
+          setIsDead(false)
+        },
+        frontGunHandleRef,
+        backGunHandleRef,
+      }
+    })
 
     return (
       <div
@@ -97,6 +119,17 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             showGun={false}
           />
         </div>
+        {isDead && (
+          <div
+            className={cn(
+              'absolute -top-10 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center',
+              'fade-in animate-in zoom-in-80 duration-500',
+            )}
+          >
+            <div className='text-3xl'>Dead</div>
+            <IoSkull className='text-red relative mx-auto text-9xl' />
+          </div>
+        )}
       </div>
     )
   },

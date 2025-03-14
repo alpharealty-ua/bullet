@@ -18,7 +18,7 @@ import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
-import { GunHandle } from '@/components/character-gun'
+import { CharacterHandle } from '@/components/character'
 
 const useGame = () => {
   const navigate = useNavigate()
@@ -26,8 +26,8 @@ const useGame = () => {
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
   const revolverRefHandle = useRef<RevolverHandle>(null)
-  const frontGunHandleRef = useRef<GunHandle>(null)
-  const backGunHandleRef = useRef<GunHandle>(null)
+  const frontCharacterHandleRef = useRef<CharacterHandle>(null)
+  const backCharacterHandleRef = useRef<CharacterHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
@@ -61,9 +61,17 @@ const useGame = () => {
 
   const newGame = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
+    const frontCharacterHandle = frontCharacterHandleRef.current
+    const backCharacterHandle = backCharacterHandleRef.current
 
     if (gameBarHandle) {
       await gameBarHandle.reset()
+    }
+    if (frontCharacterHandle) {
+      await frontCharacterHandle.reset()
+    }
+    if (backCharacterHandle) {
+      await backCharacterHandle.reset()
     }
 
     if (gameId) {
@@ -146,8 +154,10 @@ const useGame = () => {
   }
 
   const nextDuel = async () => {
-    const frontGunHandle = frontGunHandleRef.current
-    const backGunHandle = backGunHandleRef.current
+    const frontCharacterHandle = frontCharacterHandleRef.current
+    const backCharacterHandle = backCharacterHandleRef.current
+    const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
+    const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
     const readySetPullHandle = readySetPullHandleRef.current
     const gameBarHandle = gameBarRefHandle.current
 
@@ -159,33 +169,46 @@ const useGame = () => {
       const { value, isRunning } = await gameBarHandle.getState()
 
       if (isRunning) {
-        if (!(frontGunHandle && backGunHandle)) {
+        if (
+          !(
+            frontCharacterHandle &&
+            backCharacterHandle &&
+            frontGunHandle &&
+            backGunHandle
+          )
+        ) {
           return
         }
 
         const isGameOver = value === 50
-        const winProbabilityPercentage = isGameOver ? 0 : value
+        const winProbabilityPercentage = value
         const random = randomIntFromInterval(0, 99)
-        const inWinGame = random < winProbabilityPercentage
+        const inWinGame = !isGameOver && random < winProbabilityPercentage
 
         await wait(1000)
         await playAudio('triggerpull')
         await backGunHandle.spin()
         await backGunHandle.click()
 
-        await wait(1000)
-        await playAudio('triggerpull')
-        await frontGunHandle.spin()
-        await frontGunHandle.click()
-
         if (inWinGame) {
-          await wait(500)
-          return await winGame()
+          await backGunHandle.shot()
+          await frontCharacterHandle.dead()
+          return winGame()
+        }
+
+        const frontPull = randomIntFromInterval(1, 3) === 1
+
+        if (isGameOver || frontPull) {
+          await wait(1000)
+          await playAudio('triggerpull')
+          await frontGunHandle.spin()
+          await frontGunHandle.click()
         }
 
         if (isGameOver) {
           await frontGunHandle.shot()
-          return await gameOver()
+          await backCharacterHandle.dead()
+          return gameOver()
         }
       } else {
         const duration = randomIntFromInterval(25, 50)
@@ -380,8 +403,8 @@ const useGame = () => {
     deal,
     newGame: newGame,
     revolverRefHandle,
-    frontGunHandleRef,
-    backGunHandleRef,
+    frontCharacterHandleRef,
+    backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
   }

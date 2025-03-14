@@ -20,8 +20,8 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const {
     next,
     newGame,
-    frontGunHandleRef,
-    backGunHandleRef,
+    frontCharacterHandleRef,
+    backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
   } = useSolo()
@@ -78,10 +78,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 variant === 'play' && isStartedGame
                   ? handlePlayerClick
                   : () => {
-                      frontGunHandleRef.current?.click()
+                      frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
                     }
               }
-              frontGunHandleRef={frontGunHandleRef}
+              characterHandleRef={frontCharacterHandleRef}
               beforeSlot={
                 <PlayerInfo
                   className='absolute top-0 right-full translate-x-2'
@@ -96,7 +96,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
           </div>
         )}
-
         {variant === 'play' && (
           <>
             <div className='relative mb-1 pb-10'>
@@ -108,10 +107,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   variant === 'play' && isStartedGame
                     ? handlePlayerClick
                     : () => {
-                        backGunHandleRef.current?.click()
+                        backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
                       }
                 }
-                backGunHandleRef={backGunHandleRef}
+                characterHandleRef={backCharacterHandleRef}
                 beforeSlot={
                   <PlayerInfo
                     className='absolute top-0 left-full translate-x-2'
