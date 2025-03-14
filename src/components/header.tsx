@@ -22,7 +22,7 @@ export const Header = ({
     <header className='flex items-center justify-between px-3 py-2'>
       <Logo as='link' to='/' text={logoText} />
       <div className='flex flex-col gap-1'>
-        <ProfileLink name={user.username} />
+        <ProfileLink className='self-end' name={user.username} />
         {!hideBalance && !isLoading && (
           <div className='flex items-end gap-1'>
             <MoneyBagButton
