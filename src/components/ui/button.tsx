@@ -30,13 +30,13 @@ export type ButtonProps = {
   | { image: keyof typeof imagesMap; bg?: undefined }
   | {
       image?: undefined
-      bg?: 'green' | 'red' | 'primary'
+      bg: 'green' | 'red' | 'primary' | ''
     }
 ) &
   (asLink | asButton)
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, image = 'button', bg, text, children, as, ...props }, ref) => {
+  ({ className, image, bg, text, children, as, ...props }, ref) => {
     // eslint-disable-next-line
     const Comp: any = as === 'link' ? Link : 'button'
 

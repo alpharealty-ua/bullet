@@ -30,6 +30,7 @@ export const Header = ({
               balance={balance}
               noMoney={noMoney}
               className='self-end'
+              bg=''
             />
             <Balance value={balance} increaseTime={increaseTime} />
           </div>

@@ -11,6 +11,7 @@ const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
   const { data: balance } = useBalance(Boolean(token))
   const setBalance = useGameStore(({ setBalance }) => setBalance)
 
+  // TODO: REMOVE
   useEffect(() => {
     setBalance(balance)
   }, [setBalance, balance])

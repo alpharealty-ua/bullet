@@ -58,7 +58,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       />
       <Bar />
       {!searched && <EnterArena onSearch={setSearched} />}
-
       <div className='relative mt-auto flex flex-col gap-10 pt-6'>
         {searched && (
           <div

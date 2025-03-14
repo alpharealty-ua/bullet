@@ -130,6 +130,7 @@ const Footer = ({
               className={cn(!noMoney && 'w-6', noMoney && 'text-lg')}
               balance={balance}
               noMoney={noMoney}
+              bg=''
             />
           </div>
         )}

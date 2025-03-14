@@ -8,11 +8,14 @@ const MoneyBagButton = ({
   balance,
   noMoney,
   className,
+  bg,
   text,
   image,
-  bg,
   ...props
-}: ButtonProps & { balance: number; noMoney: boolean }) => {
+}: ButtonProps & {
+  balance: number
+  noMoney: boolean
+}) => {
   const modal = useCustomModal()
 
   const handleAddMoney = async () => {
@@ -29,8 +32,7 @@ const MoneyBagButton = ({
         noMoney && 'animate-wiggle text-4xl',
         className,
       )}
-      image={noMoney ? undefined : 'moneybag'}
-      text={noMoney ? '💀' : undefined}
+      {...(noMoney ? { bg: '', text: '💀' } : { image: 'moneybag' })}
       onClick={handleAddMoney}
       {...props}
     />

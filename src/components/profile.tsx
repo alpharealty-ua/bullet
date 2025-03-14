@@ -127,6 +127,7 @@ const Profile = () => {
             <ButtonWithAudio
               as='button'
               className='text-2xl'
+              image='button'
               text='Change password'
               type='submit'
               disabled={isPending}

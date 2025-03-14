@@ -83,12 +83,14 @@ const HomePage = () => {
               <ButtonWithAudio
                 as='link'
                 className='w-24 text-xs'
+                image='button'
                 to={ROUTES.auth.login}
                 text='Login'
               />
               <ButtonWithAudio
                 as='link'
                 className='w-24 text-xs'
+                image='button'
                 to={ROUTES.auth.login}
                 text='Register'
               />

@@ -91,6 +91,7 @@ const LoginForm = () => {
           <Notification type='error' message={error?.message} />
           <ButtonWithAudio
             as='button'
+            image='button'
             text='Login'
             type='submit'
             disabled={isPending}

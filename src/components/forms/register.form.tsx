@@ -147,6 +147,7 @@ const RegisterForm = () => {
           <Notification type='error' message={error?.message} />
           <ButtonWithAudio
             as='button'
+            image='button'
             text='Register'
             type='submit'
             disabled={isPending}

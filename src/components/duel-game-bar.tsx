@@ -140,13 +140,12 @@ const DuelGameBar = ({
                       'transition-colors duration-20 ease-linear',
                       '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
                       className,
-                      number === DEFAUTL_NUMBER && 'text-transparent',
                     )}
                   >
                     {number === 50 ? (
                       <IoSkull className='relative -top-[1px] inline-block text-base' />
                     ) : (
-                      number
+                      number !== DEFAUTL_NUMBER && number
                     )}
                   </td>
                 )

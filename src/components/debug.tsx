@@ -43,14 +43,16 @@ const Debug = () => {
       </h1>
       <ButtonWithAudio
         as='button'
-        text='Logout'
         className='text-base'
+        text='Logout'
+        bg='primary'
         onClick={handleLogout}
       />
       <ButtonWithAudio
         as='button'
-        text='Reset add money'
         className='text-base'
+        text='Reset add money'
+        bg='primary'
         onClick={handleResetAddMoney}
       />
       {STATES.map((el, i) => (
@@ -59,6 +61,7 @@ const Debug = () => {
           key={i}
           className={cn('text-base', el === state && 'text-white')}
           onClick={() => handleSetState(el)}
+          bg='primary'
           text={el}
         />
       ))}
