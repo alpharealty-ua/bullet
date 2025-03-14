@@ -23,13 +23,17 @@ export type asButton = {
   as: 'button'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-// TODO: CREATE DISCRIMINATION UNION FOR IMAGE AND BG
 // TODO: ADDED CHILDREN
 export type ButtonProps = {
-  image?: keyof typeof imagesMap | ''
-  bg?: 'green' | 'red' | 'primary'
   text?: string
-} & (asLink | asButton)
+} & (
+  | { image: keyof typeof imagesMap; bg?: undefined }
+  | {
+      image?: undefined
+      bg?: 'green' | 'red' | 'primary'
+    }
+) &
+  (asLink | asButton)
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, image = 'button', bg, text, children, as, ...props }, ref) => {
@@ -53,13 +57,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span
             className={cn(
               !bg && 'absolute inset-0 inline-flex items-center justify-center',
-              image === '' && 'relative',
+              bg && 'relative',
             )}
           >
             {text}
           </span>
         )}
-        {!bg && image && <img src={imagesMap[image]} alt='' />}
+        {image && <img src={imagesMap[image]} alt='' />}
       </Comp>
     )
   },
