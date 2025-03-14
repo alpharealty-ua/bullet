@@ -96,7 +96,7 @@ const HomePage = () => {
           )}
         </header>
       }
-      <Logo size='xl' />
+      <Logo as='link' to='/' size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
         <ButtonWithAudio
           as='link'

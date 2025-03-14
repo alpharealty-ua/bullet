@@ -22,8 +22,8 @@ const Logo = ({
   text,
   ...props
 }: (
-  | ({ as: 'link' } & LinkProps & React.HTMLAttributes<HTMLAnchorElement>)
-  | ({ as?: 'button' } & React.HTMLAttributes<HTMLButtonElement>)
+  | ({ as: 'link' } & LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>)
+  | ({ as: 'button' } & React.ButtonHTMLAttributes<HTMLButtonElement>)
 ) &
   LogoProps) => {
   const { as, ...componentProps } = props

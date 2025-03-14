@@ -82,9 +82,10 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             <button onClick={handleClose}>
               <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
             </button>
-            <Logo size='lg' onClick={handleClose} />
+            <Logo as='button' size='lg' onClick={handleClose} />
           </div>
           <ButtonWithAudio
+            as='button'
             className='w-11'
             image='close'
             onClick={handleClose}
