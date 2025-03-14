@@ -1,14 +1,14 @@
-const TOKEN_LOCAL_STORAGE_KEY = 'TOKEN'
+import { LOCAL_STORAGE_KEYS, LocalStorageKeys } from '@/lib/constants'
 
-export function saveToken(token: string): void {
-  localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, JSON.stringify(token))
+export const setItem = (key: LocalStorageKeys, value: string): void => {
+  localStorage.setItem(LOCAL_STORAGE_KEYS[key], JSON.stringify(value))
 }
 
-export function getToken(): string | undefined {
-  const token = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)
+export const getItem = (key: LocalStorageKeys): string | undefined => {
+  const token = localStorage.getItem(LOCAL_STORAGE_KEYS[key])
   return token ? JSON.parse(token) : undefined
 }
 
-export function removeToken(): void {
-  localStorage.removeItem(TOKEN_LOCAL_STORAGE_KEY)
+export const removeItem = (key: LocalStorageKeys): void => {
+  localStorage.removeItem(LOCAL_STORAGE_KEYS[key])
 }

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { QUERY_KEYS } from '@/api/api'
 import { useLogin, useUser } from '@/api/auth.api'
-import { removeToken } from '@/lib/localstorage'
+import { useAuthStore } from '@/store/auth.store'
 import {
   ChangePasswordSchema,
   changePasswordSchema,
@@ -27,6 +27,7 @@ const Profile = () => {
   const user = useUser()
   const { error, isPending } = useLogin()
   const [isSuccess, setIsSuccess] = useState(false)
+  const resetToken = useAuthStore(({ resetToken }) => resetToken)
 
   const form = useForm<ChangePasswordSchema>({
     resolver: zodResolver(changePasswordSchema),
@@ -37,7 +38,7 @@ const Profile = () => {
   })
 
   const handleLogout = async () => {
-    removeToken()
+    resetToken()
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 

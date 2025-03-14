@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 
+import { getItem, removeItem, setItem } from '@/lib/localstorage'
 import { addZerro, cn } from '@/lib/utils'
 import { Balance } from '@/components/balance'
-
-const END_TIME_LOCAL_STORAGE_KEY = 'END_TIME'
 
 const AddMoney = ({
   balance,
@@ -13,16 +12,14 @@ const AddMoney = ({
   onAddMoney: (money: number) => void
 }) => {
   const [time, setTime] = useState('')
-  const [endTime, setEndTime] = useState(
-    Number(localStorage.getItem(END_TIME_LOCAL_STORAGE_KEY) ?? 0),
-  )
+  const [endTime, setEndTime] = useState(Number(getItem('endTime') ?? 0))
   const handleClick = () => {
     const endDate = new Date()
     endDate.setHours(endDate.getHours() + 12)
 
     const endTime = endDate.getTime()
 
-    localStorage.setItem(END_TIME_LOCAL_STORAGE_KEY, String(endTime))
+    setItem('endTime', String(endTime))
     setEndTime(endTime)
     onAddMoney(1000)
   }
@@ -42,7 +39,7 @@ const AddMoney = ({
       setTime(`${hours}:${addZerro(minutes)}:${addZerro(seconds)}`)
 
       if (rangeTime <= 0) {
-        localStorage.removeItem(END_TIME_LOCAL_STORAGE_KEY)
+        removeItem('endTime')
         setEndTime(0)
       }
     }

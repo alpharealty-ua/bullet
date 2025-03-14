@@ -1,4 +1,4 @@
-import { getToken, removeToken, saveToken } from '@/lib/localstorage'
+import { getItem, removeItem, setItem } from '@/lib/localstorage'
 import { create } from 'zustand'
 
 interface AuthState {
@@ -8,13 +8,13 @@ interface AuthState {
 }
 
 const useAuthStore = create<AuthState>()((set) => ({
-  token: getToken() ?? null,
+  token: getItem('token') ?? null,
   setToken: (token: string) => {
-    saveToken(token)
+    setItem('token', token)
     set({ token })
   },
   resetToken: () => {
-    removeToken()
+    removeItem('token')
     set({ token: null })
   },
 }))
