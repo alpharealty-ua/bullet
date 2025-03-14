@@ -98,6 +98,24 @@ const DuelGameBar = ({
 
   useImperativeHandle(gameBarRef, () => ({
     getState: async () => {
+      const nextActiveDom = nextActiveRef.current
+
+      if (nextActiveDom) {
+        const valueDom = nextActiveDom.querySelector('[data-value]')
+
+        if (valueDom) {
+          valueDom.classList.add('is-selected')
+
+          valueDom.addEventListener(
+            'transitionend',
+            () => {
+              valueDom.classList.remove('is-selected')
+            },
+            { once: true },
+          )
+        }
+      }
+
       return {
         value: getItem(activeIndexRef.current).number,
         isRunning: isRunningRef.current,
@@ -108,22 +126,25 @@ const DuelGameBar = ({
       isRunningRef.current = false
     },
     reset: async () => {
-      directionRef.current = 1
-      activeIndexRef.current = -1
-      isRunningRef.current = false
       const nextActive = nextActiveRef.current
+
       if (nextActive) {
         nextActive.style.transitionDuration = ''
         nextActive.classList.remove('is-active')
       }
+
+      directionRef.current = 1
+      activeIndexRef.current = -1
+      isRunningRef.current = false
+      nextActiveRef.current = null
     },
   }))
 
   return (
-    <div className='overflow-hidden'>
+    <div>
       <table
         ref={ref}
-        className='relative -mx-0.5 h-10 w-[calc(100%+4px)] table-fixed border-collapse justify-center bg-[#f7f7c0]'
+        className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
       >
         <thead>
           <tr>
@@ -132,21 +153,32 @@ const DuelGameBar = ({
               .map((_, i) => {
                 const { number, className } = getItem(i)
 
+                const value = number !== DEFAUTL_NUMBER && number
+
                 return (
                   <td
                     key={i}
                     className={cn(
-                      'border-2 border-black text-center align-middle text-[9px] text-white',
+                      'relative border-2 border-black text-center align-middle text-[9px] text-white',
                       'transition-colors duration-20 ease-linear',
                       '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
-                      className,
                     )}
                   >
-                    {number === 50 ? (
-                      <IoSkull className='relative -top-[1px] inline-block text-base' />
-                    ) : (
-                      number !== DEFAUTL_NUMBER && number
-                    )}
+                    <div
+                      className={cn(
+                        'absolute inset-0 z-2 flex items-center justify-center text-white',
+                        'duration-500',
+                        '[&.is-selected]:z-3 [&.is-selected]:scale-200',
+                        className,
+                      )}
+                      data-value
+                    >
+                      {number === 50 ? (
+                        <IoSkull className='relative -top-[1px] inline-block text-base' />
+                      ) : (
+                        value
+                      )}
+                    </div>
                   </td>
                 )
               })}
