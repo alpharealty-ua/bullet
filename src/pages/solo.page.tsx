@@ -69,6 +69,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         <div className='relative flex flex-col items-center justify-center pt-8'>
           <ButtonWithAudio
             as='button'
+            image='button'
             text='Add money'
             onClick={handleAddMoney}
           />
