@@ -18,34 +18,40 @@ const Balance = ({
     formatValue: formatNumber,
   })
 
-  const length = String(formatNumber(value)).length
-
   const formatedValue = useMemo(() => formatNumber(value), [value])
 
+  const length = String(formatedValue).length
+
+  // TODO: REFACTOR
   const fontSize =
-    length > 10
+    length > 14
       ? 'text-sm'
-      : length > 8
-        ? 'text-lg'
-        : length > 6
-          ? 'text-xl'
-          : ''
+      : length > 12
+        ? 'text-md'
+        : length > 10
+          ? 'text-lg'
+          : length > 8
+            ? 'text-xl'
+            : length > 6
+              ? 'text-2xl'
+              : ''
 
   return (
-    <div className='relative flex flex-col self-start'>
+    <div className='relative flex flex-col items-end self-start'>
       <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
         Balance
       </div>
       <div
         ref={totalRef}
+        title={formatedValue}
         className={cn(
-          'relative text-right text-2xl !leading-[1] tracking-tight opacity-100',
+          'relative max-w-40 text-2xl !leading-[1] tracking-tight opacity-100',
           fontSize,
         )}
       >
         <span className='opacity-0'>${formatedValue}</span>
-        <div className={cn('absolute top-0 left-0 flex w-full justify-end')}>
-          $<div data-value></div>
+        <div className={cn('absolute top-0 left-0 flex w-full')}>
+          $<div data-value className='overflow-hidden'></div>
         </div>
       </div>
       <div

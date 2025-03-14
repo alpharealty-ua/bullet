@@ -24,7 +24,7 @@ export const Header = ({
       <div className='flex flex-col gap-1'>
         <ProfileLink className='self-end' name={user.username} />
         {!hideBalance && !isLoading && (
-          <div className='flex items-end gap-1'>
+          <div className='flex gap-1'>
             <MoneyBagButton
               as='button'
               balance={balance}

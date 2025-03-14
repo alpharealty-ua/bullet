@@ -31,11 +31,7 @@ export const formatBet = (value: number) => {
 }
 
 export const formatNumber = (value: number) =>
-  value.toLocaleString('en-US', {
-    maximumFractionDigits: 5,
-    notation: 'compact',
-    compactDisplay: 'short',
-  })
+  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
 export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
 
