@@ -133,6 +133,7 @@ const Footer = ({
         {format === 'duel' && variant === 'play' && (
           <div className='shrink-0 pl-2'>
             <MoneyBagButton
+              as='button'
               className={cn(!noMoney && 'w-4', noMoney && 'text-lg')}
               balance={balance}
               noMoney={noMoney}

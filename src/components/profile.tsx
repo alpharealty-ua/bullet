@@ -10,7 +10,7 @@ import {
   ChangePasswordSchema,
   changePasswordSchema,
 } from '@/lib/schemas/change-password.schema'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
   FormControl,
@@ -123,7 +123,8 @@ const Profile = () => {
               message={isSuccess ? 'Password updated!' : ''}
             />
             <Notification type='error' message={error?.message} />
-            <Button
+            <ButtonWithAudio
+              as='button'
               className='text-2xl'
               text='Change password'
               type='submit'
@@ -131,7 +132,8 @@ const Profile = () => {
             />
           </form>
         </Form>
-        <Button
+        <ButtonWithAudio
+          as='button'
           className='self-center'
           text='logout'
           bg='red'

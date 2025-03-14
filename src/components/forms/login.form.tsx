@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { useLogin } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { loginSchema, LoginSchema } from '@/lib/schemas/login.schema'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
   FormControl,
@@ -89,7 +89,12 @@ const LoginForm = () => {
             message={isSuccess ? 'You have successfully logged in.' : ''}
           />
           <Notification type='error' message={error?.message} />
-          <Button text='Login' type='submit' disabled={isPending} />
+          <ButtonWithAudio
+            as='button'
+            text='Login'
+            type='submit'
+            disabled={isPending}
+          />
           <ChangeForm type='login' />
         </form>
       </Form>

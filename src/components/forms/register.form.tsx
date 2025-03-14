@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 import { useRegister } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { registerSchema, RegisterSchema } from '@/lib/schemas/register.schema'
-import { Button } from '@/components/ui/button'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
   FormControl,
@@ -145,7 +145,12 @@ const RegisterForm = () => {
             message={isSuccess ? 'You have successfully registered.' : ''}
           />
           <Notification type='error' message={error?.message} />
-          <Button text='Register' type='submit' disabled={isPending} />
+          <ButtonWithAudio
+            as='button'
+            text='Register'
+            type='submit'
+            disabled={isPending}
+          />
           <ChangeForm type='register' />
         </form>
       </Form>
