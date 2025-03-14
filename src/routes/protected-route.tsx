@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router'
 
 import { useProfile } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
+import { useAuthStore } from '@/store/auth.store'
 import { ROUTES } from '@/routes/path'
 import { Loading } from '@/components/loading'
 
@@ -10,11 +11,12 @@ type ProtectedRouteProps = {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isPending: profileIsPending, data: user } = useProfile()
+  const token = useAuthStore(({ token }) => token)
+  const { data: user, isPending: profileIsPending } = useProfile()
   const { isPending: balanceIsPending } = useBalance()
   const { pathname } = useLocation()
 
-  if (profileIsPending || balanceIsPending) {
+  if (token && (profileIsPending || balanceIsPending)) {
     return <Loading className='absolute inset-0' />
   }
 

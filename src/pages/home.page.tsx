@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
+import { useAuthStore } from '@/store/auth.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -14,8 +15,9 @@ import { ProfileLink } from '@/components/profile-link'
 const HomePage = () => {
   const navigate = useNavigate()
   const modal = useCustomModal()
-  const { data: user } = useProfile()
+  const token = useAuthStore(({ token }) => token)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const { data: user, isPending } = useProfile()
 
   const handleSoloButton = async () => {
     navigate(ROUTES.solo.root)
@@ -89,8 +91,10 @@ const HomePage = () => {
       ref={wrapperRef}
     >
       {
-        <div className='absolute top-4 right-4 flex gap-4'>
-          {user ? (
+        <header className='absolute top-0 right-0 flex h-18 items-center justify-between gap-4 px-3 py-2'>
+          {token && isPending ? (
+            'loading'
+          ) : user ? (
             <ProfileLink name={user.username} />
           ) : (
             <>
@@ -106,7 +110,7 @@ const HomePage = () => {
               />
             </>
           )}
-        </div>
+        </header>
       }
       <Logo size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
