@@ -19,7 +19,7 @@ export const Header = ({
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   return (
-    <header className='flex items-center justify-between px-3 py-2'>
+    <header className='flex min-h-18 items-center justify-between px-3 py-2'>
       <Logo as='link' to='/' text={logoText} />
       <div className='flex flex-col gap-1'>
         <ProfileLink className='self-end' name={user.username} />
