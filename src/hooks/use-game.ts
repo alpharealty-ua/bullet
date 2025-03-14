@@ -163,8 +163,8 @@ const useGame = () => {
           return
         }
 
-        await gameBarHandle.stop()
-        const winProbabilityPercentage = value === 50 ? 100 : value
+        const isGameOver = value === 50
+        const winProbabilityPercentage = isGameOver ? 0 : value
         const random = randomIntFromInterval(0, 99)
         const inWinGame = random < winProbabilityPercentage
 
@@ -183,12 +183,8 @@ const useGame = () => {
           return await winGame()
         }
 
-        const isGameOver = randomIntFromInterval(1, 5) === 1
-
         if (isGameOver) {
           await frontGunHandle.shot()
-          // TODO: MOVE TO NEW GAME
-          // setRound(1)
           return await gameOver()
         }
       } else {
