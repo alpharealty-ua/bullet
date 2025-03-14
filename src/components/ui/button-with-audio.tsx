@@ -39,6 +39,8 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // TODO: FIX ANY
     // eslint-disable-next-line
     const handleClick = async (event: any) => {
+      event.target.dispatchEvent(new MouseEvent('click')) // NEED FOR NATIVE FORM SUBMIT
+
       await mouseClick()
 
       onClick && onClick(event)
