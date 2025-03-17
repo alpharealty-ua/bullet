@@ -6,7 +6,6 @@ import { CharacterName, StateGame } from '@/lib/constants'
 interface GameState {
   state: StateGame
   balance: number
-  multiplierIndex: number
   multiplier: number
   prevState: StateGame
   isStartedGame: boolean
@@ -21,7 +20,6 @@ interface GameState {
   round: number
   setState: (state: StateGame) => void
   setBalance: (balance: number) => void
-  setMultiplierIndex: (multiplierIndex: number) => void
   setMultiplier: (multiplier: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
   setNoMoney: (noMoney: boolean) => void
@@ -43,7 +41,6 @@ const useGameStore = create<GameState>()((set, get) => ({
   balance: 0,
   characterName: 'nubcat',
   round: 1,
-  multiplierIndex: -1,
   multiplier: 0,
   isStartedGame: false,
   noMoney: false,
@@ -55,7 +52,6 @@ const useGameStore = create<GameState>()((set, get) => ({
   increaseTime: undefined,
   setState: (state: StateGame) => set({ state }),
   setBalance: (balance: number) => set({ balance }),
-  setMultiplierIndex: (multiplierIndex: number) => set({ multiplierIndex }),
   setMultiplier: (multiplier: number) => set({ multiplier }),
   setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
   setNoMoney: (noMoney: boolean) => set({ noMoney }),
@@ -75,7 +71,6 @@ const useGameStore = create<GameState>()((set, get) => ({
       setBet,
       setOffer,
       setCountBullet,
-      setMultiplierIndex,
       setMultiplier,
       setRound,
       bet,
@@ -90,7 +85,6 @@ const useGameStore = create<GameState>()((set, get) => ({
     setBet(prevBet)
     setOffer(null)
     setCountBullet(5)
-    setMultiplierIndex(-1)
     setMultiplier(0)
     setRound(1)
   },

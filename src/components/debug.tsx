@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/api/api'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
-import { StateGame, STATES, MULTIPLIERS } from '@/lib/constants'
+import { StateGame, STATES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
 
@@ -13,10 +13,8 @@ const Debug = () => {
   const resetToken = useAuthStore(({ resetToken }) => resetToken)
   const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
   const setState = useGameStore(({ setState }) => setState)
-  const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
   const state = useGameStore(({ state }) => state)
   const countBullet = useGameStore(({ countBullet }) => countBullet)
-  const multiplierIndex = useGameStore(({ multiplierIndex }) => multiplierIndex)
 
   const handleSetState = (s: StateGame) => {
     setState(s)
@@ -76,22 +74,6 @@ const Debug = () => {
             {STATES.map((state, i) => (
               <option key={i} value={state}>
                 {state}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          <div className=''>Multiplier</div>
-          <select
-            className='h-10 w-full bg-white px-2 uppercase'
-            value={multiplierIndex}
-            onChange={(e) => setMultiplier(Number(e.target.value))}
-          >
-            <option value='-1'>-1</option>
-            {MULTIPLIERS.map((value, i) => (
-              <option key={i} value={value}>
-                {value}
               </option>
             ))}
           </select>

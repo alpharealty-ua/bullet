@@ -43,9 +43,6 @@ const useGame = () => {
   const setOffer = useGameStore(({ setOffer }) => setOffer)
   const setBet = useGameStore(({ setBet }) => setBet)
   const setState = useGameStore(({ setState }) => setState)
-  const setMultiplierIndex = useGameStore(
-    ({ setMultiplierIndex }) => setMultiplierIndex,
-  )
   const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
   const setIsStartedGame = useGameStore(
     ({ setIsStartedGame }) => setIsStartedGame,
