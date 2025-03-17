@@ -10,7 +10,7 @@ type ButtonWithAudioProps = ButtonProps & {
 }
 
 const ButtonWithAudio = React.forwardRef<
-  HTMLButtonElement,
+  HTMLButtonElement | HTMLAnchorElement,
   ButtonWithAudioProps
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
