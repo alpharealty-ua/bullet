@@ -35,38 +35,39 @@ export type ButtonProps = {
 ) &
   (asLink | asButton)
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, image, bg, text, children, as, ...props }, ref) => {
-    // eslint-disable-next-line
-    const Comp: any = as === 'link' ? Link : 'button'
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(({ className, image, bg, text, children, as, ...props }, ref) => {
+  // eslint-disable-next-line
+  const Comp: any = as === 'link' ? Link : 'button'
 
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
-          'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform disabled:scale-100 disabled:cursor-not-allowed',
-          bg && 'rounded-md border-1 border-black px-4 py-1 text-2xl',
-          bg === 'green' && 'bg-green text-white',
-          bg === 'red' && 'bg-red text-white',
-          bg === 'primary' && 'bg-primary',
-          className,
-        )}
-        {...props}
-      >
-        {text && (
-          <span
-            className={cn(
-              !bg && 'absolute inset-0 inline-flex items-center justify-center',
-              bg && 'relative',
-            )}
-          >
-            {text}
-          </span>
-        )}
-        {image && <img src={imagesMap[image]} alt='' />}
-      </Comp>
-    )
-  },
-)
+  return (
+    <Comp
+      ref={ref}
+      className={cn(
+        'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-transform disabled:scale-100 disabled:cursor-not-allowed',
+        bg && 'rounded-md border-1 border-black px-4 py-1 text-2xl',
+        bg === 'green' && 'bg-green text-white',
+        bg === 'red' && 'bg-red text-white',
+        bg === 'primary' && 'bg-primary',
+        className,
+      )}
+      {...props}
+    >
+      {text && (
+        <span
+          className={cn(
+            !bg && 'absolute inset-0 inline-flex items-center justify-center',
+            bg && 'relative',
+          )}
+        >
+          {text}
+        </span>
+      )}
+      {image && <img src={imagesMap[image]} alt='' />}
+    </Comp>
+  )
+})
 
 export { Button }
