@@ -189,10 +189,10 @@ const useGame = () => {
           return
         }
 
-        const isGameOver = value === 50
+        const isSkull = value === 50
         const winProbabilityPercentage = value
         const random = randomIntFromInterval(0, 99)
-        const inWinGame = !isGameOver && random < winProbabilityPercentage
+        const inWinGame = !isSkull && random < winProbabilityPercentage
 
         await wait(1000)
         await playAudio('triggerpull')
@@ -206,8 +206,9 @@ const useGame = () => {
         }
 
         const frontPull = randomIntFromInterval(1, 3) === 1
+        const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
 
-        if (isGameOver || frontPull) {
+        if (isSkull || frontPull) {
           await wait(1000)
           await playAudio('triggerpull')
           await frontGunHandle.spin()
