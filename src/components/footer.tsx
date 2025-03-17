@@ -2,20 +2,16 @@ import { useBalance } from '@/api/wallet.api'
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
-import { FormatGame, IMAGES, MULTIPLIERS, VariantGame } from '@/lib/constants'
-import { Bet } from '@/components/bet'
+import { FormatGame, IMAGES, VariantGame } from '@/lib/constants'
 import { Bullets } from '@/components/bullets'
-import { Multiplier } from '@/components/multiplier'
 import { Settings } from '@/components/settings'
 import { Rank } from '@/components/rank'
-import { Helper } from '@/components/helper'
 import { MoneyBagButton } from '@/components/money-bag-button'
 import { Balance } from '@/components/balance'
 
 const Footer = ({
-  format,
+  // format,
   variant,
-  showHelpers = false,
 }: {
   format: FormatGame
   variant: VariantGame
@@ -23,16 +19,11 @@ const Footer = ({
 }) => {
   const { data: balance } = useBalance()
 
-  const setBet = useGameStore(({ setBet }) => setBet)
-  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const round = useGameStore(({ round }) => round)
   const noMoney = useGameStore(({ noMoney }) => noMoney)
-  const multiplierIndex = useGameStore(({ multiplierIndex }) => multiplierIndex)
-  const bet = useGameStore(({ bet }) => bet)
-  const maxBet = useGameStore(({ maxBet }) => maxBet)
   const countBullet = useGameStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
-  const footerWithBg = format === 'solo' || variant === 'watch'
+  const footerWithBg = variant === 'watch'
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   const handleSettings = () => {
@@ -49,31 +40,12 @@ const Footer = ({
     >
       <div className='relative flex flex-1 flex-col items-center'>
         <div className='relative flex w-full flex-col text-center'>
-          <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
-            {format === 'solo' || variant === 'play'
-              ? { solo: 'Bet', duel: 'Prizepool' }[format]
-              : 'Jackpot'}
+          <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+            {variant === 'play' ? 'Prizepool' : 'Jackpot'}
           </div>
-          {format === 'solo' && (
-            <>
-              <Helper
-                image='wagehere'
-                show={showHelpers && bet === 0 && !isStartedGame}
-              />
-              <Bet
-                disabled={isStartedGame || noMoney}
-                maxBet={maxBet}
-                bet={bet}
-                onBet={setBet}
-                size='sm'
-              />
-            </>
-          )}
-          {format === 'duel' && (
-            <div className='relative flex justify-center text-center text-2xl leading-[1] tracking-tight'>
-              $2000
-            </div>
-          )}
+          <div className='relative flex justify-center text-center text-2xl leading-[1] tracking-tight'>
+            $2000
+          </div>
         </div>
       </div>
       <div
@@ -82,40 +54,35 @@ const Footer = ({
           footerWithBg && 'self-end',
         )}
       >
-        {(format === 'solo' || variant === 'watch') && (
+        {variant === 'watch' && (
           <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
             <Rank value={30} />
             <Bullets countBullet={countBullet} />
           </div>
         )}
-        {format === 'duel' && variant === 'play' && (
+        {variant === 'play' && (
           <div className='flex flex-1 flex-col items-center text-center'>
             <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
-              Round
+              <span className='relative -left-0.5'>Round</span>
             </div>
-            <div className='text-red relative text-center text-3xl leading-[1]'>
+            <div className='text-red relative text-center text-2xl leading-[1]'>
               {round}
             </div>
           </div>
         )}
       </div>
       <div className='relative flex flex-1 flex-row justify-between'>
-        {format === 'duel' && variant === 'play' && (
-          <Balance value={balance} increaseTime={increaseTime} />
-        )}
-        {format === 'solo' && (
-          <div className='flex flex-1 flex-col items-center text-center'>
-            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
-              Multiplier
+        {variant === 'play' && (
+          <div className='relative flex flex-col items-end self-start'>
+            <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+              Balance
             </div>
-            {format === 'solo' && (
-              <Multiplier items={MULTIPLIERS} activeIndex={multiplierIndex} />
-            )}
+            <Balance value={balance} increaseTime={increaseTime} />
           </div>
         )}
-        {format === 'duel' && variant === 'watch' && (
+        {variant === 'watch' && (
           <div className='flex flex-1 flex-col items-center text-center'>
-            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
+            <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
               Round
             </div>
             <div className='text-red relative text-center text-3xl leading-[1]'>
@@ -123,7 +90,7 @@ const Footer = ({
             </div>
           </div>
         )}
-        {format === 'duel' && variant === 'play' && (
+        {variant === 'play' && (
           <div className='shrink-0 pl-1'>
             <MoneyBagButton
               as='button'
