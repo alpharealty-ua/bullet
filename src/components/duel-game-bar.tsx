@@ -153,7 +153,7 @@ const DuelGameBar = ({
               .map((_, i) => {
                 const { number, className } = getItem(i)
 
-                const value = number !== DEFAUTL_NUMBER && number
+                const isDefaultNumber = number === DEFAUTL_NUMBER
 
                 return (
                   <td
@@ -161,14 +161,17 @@ const DuelGameBar = ({
                     className={cn(
                       'relative border-2 border-black text-center align-middle text-[9px] text-white',
                       'transition-colors duration-20 ease-linear',
-                      '[&.is-active]:bg-[#30ff00] [&.is-active]:text-black',
+                      '[&.is-active]:text-black',
                     )}
                   >
                     <div
                       className={cn(
-                        'absolute inset-0 z-2 flex items-center justify-center text-white',
+                        'absolute inset-0 z-2 flex items-center justify-center text-white select-none',
                         'duration-500',
-                        '[&.is-selected]:z-3 [&.is-selected]:scale-200',
+                        'bg-[#f7f7c0] [&.is-selected]:z-3 [&.is-selected]:scale-200 [&.is-selected]:text-white',
+                        'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [.is-active_&]:before:opacity-100',
+                        isDefaultNumber &&
+                          'text-transparent [&.is-selected]:text-transparent',
                         className,
                       )}
                       data-value
@@ -176,7 +179,7 @@ const DuelGameBar = ({
                       {number === 50 ? (
                         <IoSkull className='relative -top-[1px] inline-block text-base' />
                       ) : (
-                        value
+                        number
                       )}
                     </div>
                   </td>
