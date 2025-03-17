@@ -116,6 +116,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               className='w-24'
               image='pull'
               onClick={handlePull}
+              skipWaitAnimation
             />
           </div>
         </div>

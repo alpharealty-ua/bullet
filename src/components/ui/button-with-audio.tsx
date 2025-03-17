@@ -5,70 +5,77 @@ import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ onClick, ...props }, ref) => {
-    const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-    const [disabled, setDisabled] = useState(false)
-    const buttonRef = useRef<HTMLButtonElement>(null)
-    const allProps = {
-      ...props,
-      disabled: props.as === 'button' ? props.disabled || disabled : undefined,
+type ButtonWithAudioProps = ButtonProps & {
+  skipWaitAnimation?: boolean
+}
+
+const ButtonWithAudio = React.forwardRef<
+  HTMLButtonElement,
+  ButtonWithAudioProps
+>(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const [disabled, setDisabled] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const allProps = {
+    ...props,
+    disabled: props.as === 'button' ? props.disabled || disabled : undefined,
+  }
+
+  const mouseClick = async (): Promise<void> => {
+    const buttonDom = buttonRef.current
+
+    if (buttonDom === null) {
+      return
     }
 
-    const mouseClick = async (): Promise<void> => {
-      const buttonDom = buttonRef.current
+    setDisabled(true)
 
-      if (buttonDom === null) {
-        return
-      }
+    await playAudio('mouseclick')
 
-      setDisabled(true)
+    buttonDom.classList.add('animate-button-click')
 
-      await playAudio('mouseclick')
+    await new Promise<Event>((resolve) => {
+      buttonDom.addEventListener('animationend', resolve, { once: true })
+    })
 
-      buttonDom.classList.add('animate-button-click')
+    buttonDom.classList.remove('animate-button-click')
+    setDisabled(false)
 
-      await new Promise<Event>((resolve) => {
-        buttonDom.addEventListener('animationend', resolve, { once: true })
-      })
+    await wait(0) // need for set disabled state
+  }
 
-      buttonDom.classList.remove('animate-button-click')
-      setDisabled(false)
+  const handeMouseDown = async () => {
+    const buttonDom = buttonRef.current
 
-      await wait(0) // need for set disabled state
+    if (buttonDom === null) {
+      return
     }
 
-    const handeMouseDown = async () => {
-      const buttonDom = buttonRef.current
+    skipWaitAnimation ? mouseClick() : await mouseClick()
 
-      if (buttonDom === null) {
-        return
-      }
+    buttonDom.click()
+  }
 
-      await mouseClick()
-
-      buttonDom.click()
+  const handleClick = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
+      React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (event.isTrusted) {
+      event.preventDefault()
+      return
     }
 
-    const handleClick = (
-      event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
-        React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    ) => {
-      if (event.isTrusted) {
-        event.preventDefault()
-        return
-      }
+    onClick && onClick(event)
+  }
 
-      onClick && onClick(event)
-    }
+  return (
+    <Button
+      ref={mergeRefs(buttonRef, ref)}
+      onMouseDown={handeMouseDown}
+      onClick={handleClick}
+      {...allProps}
+    />
+  )
+})
 
-    return (
-      <Button
-        ref={mergeRefs(buttonRef, ref)}
-        onMouseDown={handeMouseDown}
-        onClick={handleClick}
-        {...allProps}
-      />
-    )
-  },
-)
+export { ButtonWithAudio }

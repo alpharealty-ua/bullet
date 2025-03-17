@@ -130,6 +130,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                     disabled={!searched}
                     image='pull'
                     onClick={handlePull}
+                    skipWaitAnimation
                   />
                 </div>
               </div>
