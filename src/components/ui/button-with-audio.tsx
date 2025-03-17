@@ -2,17 +2,17 @@ import React, { useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
+import { wait } from '@/lib/utils'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ onClick, ...props }, ref) => {
     const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-    const [startedAnimation, setStartedAnimation] = useState(false)
+    const [disabled, setDisabled] = useState(false)
     const buttonRef = useRef<HTMLButtonElement>(null)
     const allProps = {
       ...props,
-      disabled:
-        props.as === 'button' ? props.disabled || startedAnimation : undefined,
+      disabled: props.as === 'button' ? props.disabled || disabled : undefined,
     }
 
     const mouseClick = async (): Promise<void> => {
@@ -22,7 +22,7 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return
       }
 
-      setStartedAnimation(true)
+      setDisabled(true)
 
       await playAudio('mouseclick')
 
@@ -33,22 +33,40 @@ export const ButtonWithAudio = React.forwardRef<HTMLButtonElement, ButtonProps>(
       })
 
       buttonDom.classList.remove('animate-button-click')
-      setStartedAnimation(false)
+      setDisabled(false)
+
+      await wait(0) // need for set disabled state
     }
 
-    // TODO: FIX ANY
-    // eslint-disable-next-line
-    const handleClick = async (event: any) => {
-      event.target.dispatchEvent(new MouseEvent('click')) // NEED FOR NATIVE FORM SUBMIT
-      onClick && onClick(event)
+    const handeMouseDown = async () => {
+      const buttonDom = buttonRef.current
+
+      if (buttonDom === null) {
+        return
+      }
 
       await mouseClick()
+
+      buttonDom.click()
+    }
+
+    const handleClick = (
+      event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
+        React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+      if (event.isTrusted) {
+        event.preventDefault()
+        return
+      }
+
+      onClick && onClick(event)
     }
 
     return (
       <Button
         ref={mergeRefs(buttonRef, ref)}
-        onMouseDown={handleClick}
+        onMouseDown={handeMouseDown}
+        onClick={handleClick}
         {...allProps}
       />
     )
