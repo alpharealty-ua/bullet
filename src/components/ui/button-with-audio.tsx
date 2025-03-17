@@ -5,12 +5,14 @@ import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-type ButtonWithAudioProps = ButtonProps & {
+type OmitClick<T> = T extends { as: string } ? Omit<T, 'onClick'> : T
+
+type ButtonWithAudioProps = OmitClick<ButtonProps> & {
   skipWaitAnimation?: boolean
-  onClick: (
+  onClick?: (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
       React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => Promise<void>
+  ) => void | Promise<void>
 }
 
 const ButtonWithAudio = React.forwardRef<
