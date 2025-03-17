@@ -7,6 +7,10 @@ import { Button, ButtonProps } from '@/components/ui/button'
 
 type ButtonWithAudioProps = ButtonProps & {
   skipWaitAnimation?: boolean
+  onClick: (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
+      React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => Promise<void>
 }
 
 const ButtonWithAudio = React.forwardRef<
@@ -14,11 +18,15 @@ const ButtonWithAudio = React.forwardRef<
   ButtonWithAudioProps
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const [startedAnimation, setStartedAnimtion] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const allProps = {
     ...props,
-    disabled: props.as === 'button' ? props.disabled || disabled : undefined,
+    disabled:
+      props.as === 'button'
+        ? props.disabled || disabled || startedAnimation
+        : undefined,
   }
 
   const mouseClick = async (): Promise<void> => {
@@ -28,7 +36,7 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
-    setDisabled(true)
+    setStartedAnimtion(true)
 
     await playAudio('mouseclick')
 
@@ -39,7 +47,8 @@ const ButtonWithAudio = React.forwardRef<
     })
 
     buttonDom.classList.remove('animate-button-click')
-    setDisabled(false)
+
+    setStartedAnimtion(false)
 
     await wait(0) // need for set disabled state
   }
@@ -56,7 +65,7 @@ const ButtonWithAudio = React.forwardRef<
     buttonDom.click()
   }
 
-  const handleClick = (
+  const handleClick = async (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
       React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -65,7 +74,11 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
-    onClick && onClick(event)
+    setDisabled(true)
+
+    onClick && (await onClick(event))
+
+    setDisabled(false)
   }
 
   return (
