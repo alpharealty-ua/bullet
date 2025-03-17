@@ -10,7 +10,7 @@ import {
   useGamePull,
   useStartGame,
 } from '@/api/game.api'
-import { useAddBalance, useBalance } from '@/api/wallet.api'
+import { useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
@@ -33,7 +33,6 @@ const useGame = () => {
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
   const { data: gameDetails } = useGameDetails()
-  const { mutateAsync: addBalanceMutation } = useAddBalance()
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
@@ -323,7 +322,6 @@ const useGame = () => {
           once: true,
         })
 
-        await addBalanceMutation(1000)
         await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       }
 
