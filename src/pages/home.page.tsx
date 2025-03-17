@@ -1,10 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useAuthStore } from '@/store/auth.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
@@ -22,50 +21,6 @@ const HomePage = () => {
       contentSlot: <Rules />,
     })
   }
-
-  const handleLeadboardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!event.isTrusted) {
-      return
-    }
-
-    event.preventDefault()
-
-    const target = event.target
-
-    if (!(target instanceof HTMLAnchorElement)) {
-      return
-    }
-
-    target.classList.add('is-animate')
-  }
-
-  useEffect(() => {
-    const wrapperDom = wrapperRef.current
-
-    if (wrapperDom === null) {
-      return
-    }
-
-    const link = wrapperDom.querySelector(
-      '[data-leaderboardicon]',
-    ) as HTMLAnchorElement
-
-    if (link === null) {
-      return
-    }
-
-    const transitionEnd = () => {
-      link.classList.remove('is-animate')
-      link.click()
-      link.removeEventListener('transitionend', transitionEnd)
-    }
-
-    link.addEventListener('transitionend', transitionEnd)
-
-    return () => {
-      link.removeEventListener('transitionend', transitionEnd)
-    }
-  }, [])
 
   return (
     <div
@@ -98,7 +53,7 @@ const HomePage = () => {
           )}
         </header>
       }
-      <Logo as='link' to='/' size='xl' />
+      <Logo as='button' size='xl' />
       <div className='flex flex-col items-center justify-center gap-6'>
         <ButtonWithAudio
           as='link'
@@ -119,15 +74,7 @@ const HomePage = () => {
           onClick={handleGameRules}
         />
       </div>
-      <LeadboardIcon
-        to={ROUTES.leaderboard.root}
-        className={cn(
-          'absolute right-4 bottom-4',
-          'repeat-[1] duration-500 ease-linear [&.is-animate]:scale-500 [&.is-animate]:rotate-360 [&.is-animate]:opacity-0',
-        )}
-        onClick={handleLeadboardClick}
-        data-leaderboardicon
-      />
+      <LeadboardIcon />
     </div>
   )
 }
