@@ -99,32 +99,37 @@ const useGame = () => {
       length * Math.round(randomIntFromInterval(20, 30) / length) +
       multiplierIndex
 
-    const END_DELAY = 400
-    const DURATION_AUDIO = 1500 - END_DELAY
+    const spinAudio = await playAudio('spin')
+
+    const END_DELAY = 100
+    const DURATION_AUDIO = spinAudio.duration * 1000 - END_DELAY
     const interval = DURATION_AUDIO / AMOUNT_CHAMBER
 
     let count = AMOUNT_CHAMBER
     let index = 0
 
-    await playAudio('spin')
-
     return new Promise<void>((resolve) => {
-      const spin = async () => {
+      const spin = async (prevLag: number) => {
         if (count-- > 0) {
-          await revolverHandle.spin(interval)
+          const startSpin = Date.now() + prevLag
+
+          await revolverHandle.spin(interval + prevLag)
+
+          const realInterval = Date.now() - startSpin
+
+          const lag = interval - realInterval
           const newIndex = ++index % MULTIPLIERS.length
           const multiplier = MULTIPLIERS[newIndex]
-          // TODO: REMOVE INDEX
-          setMultiplierIndex(newIndex)
+
           setMultiplier(multiplier)
           setJackpot(bet * multiplier)
-          spin()
+          spin(lag)
         } else {
           resolve()
         }
       }
 
-      spin()
+      spin(0)
     })
   }
 
