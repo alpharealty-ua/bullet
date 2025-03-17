@@ -37,10 +37,7 @@ const Balance = ({
               : ''
 
   return (
-    <div className='relative flex flex-col items-end self-start'>
-      <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
-        Balance
-      </div>
+    <>
       <div
         ref={totalRef}
         title={formatedValue}
@@ -71,7 +68,7 @@ const Balance = ({
         <div>$</div>
         <div data-value></div>
       </div>
-    </div>
+    </>
   )
 }
 
