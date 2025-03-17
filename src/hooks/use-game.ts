@@ -39,6 +39,9 @@ const useGame = () => {
   const { mutateAsync: gamePullMutation } = useGamePull()
   const { data: balance } = useBalance()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const declineAllDeals = useSettingsStore(
+    ({ declineAllDeals }) => declineAllDeals,
+  )
   const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
   const setOffer = useGameStore(({ setOffer }) => setOffer)
   const setBet = useGameStore(({ setBet }) => setBet)
@@ -294,7 +297,7 @@ const useGame = () => {
       await winGame()
       return
     }
-    if (offer) {
+    if (offer && !declineAllDeals) {
       setOffer(offer)
     }
   }
