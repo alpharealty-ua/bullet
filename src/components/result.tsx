@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils'
-import { AnimationInOut } from '@/components/animation-in-out'
 
 const Result = ({
   title,
@@ -11,12 +10,7 @@ const Result = ({
   open: boolean
 }) => {
   return (
-    <AnimationInOut
-      in={open}
-      unmountOnExit
-      timeout={400}
-      className='z-3 flex flex-col items-center gap-1 px-6'
-    >
+    <div className='flex flex-col items-center gap-1 px-6'>
       <div
         className={cn(
           'fill-mode-both origin-top text-xl leading-[1] opacity-0 lg:text-2xl',
@@ -37,7 +31,7 @@ const Result = ({
       >
         {value}
       </div>
-    </AnimationInOut>
+    </div>
   )
 }
 
