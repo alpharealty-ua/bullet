@@ -46,7 +46,7 @@ const HomePage = () => {
                 as='link'
                 className='w-24 text-xs'
                 image='button'
-                to={ROUTES.auth.login}
+                to={ROUTES.auth.register}
                 text='Register'
               />
             </>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { IoPlay } from 'react-icons/io5'
 
 import { IMAGES } from '@/lib/constants'
-import { cn, onlyDigit } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 const EnterArena = ({
   onSearch,
