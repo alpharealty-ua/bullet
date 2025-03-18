@@ -111,7 +111,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
               'absolute z-1 aspect-[1/1.7]',
               characterName === 'nubcat' && 'right-[6%] w-[20%]',
               characterName === 'mickey' && 'top-[17%] right-[22%] w-[10%]',
-              characterName === 'fatty' && 'right-[15%] w-[10%]',
+              characterName === 'fatty' && 'right-[16%] w-[10%] -rotate-20',
               characterName === 'anime-1' && 'top-[20%] left-[29%] w-[7%]',
               characterName === 'anime-2' && 'top-[17%] right-[34%] w-[7%]',
             )}
