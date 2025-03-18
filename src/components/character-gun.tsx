@@ -93,6 +93,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           <div
             className={cn(
               'absolute bottom-0 left-[-10%] aspect-square w-[140%] bg-contain bg-center bg-no-repeat',
+              hideGun && 'opacity-0',
             )}
             style={{
               backgroundImage: `url(${IMAGES.gunhandcharacter})`,

@@ -8,17 +8,14 @@ const useClick = (ref: React.RefObject<HTMLDivElement>) => {
       return
     }
 
-    const clicks = gunDom.querySelectorAll('[data-click]')
+    const clickEls = gunDom.querySelectorAll('[data-click]')
 
-    clicks.forEach((click) => {
+    clickEls.forEach(async (click) => {
       click.classList.add('animate-click')
-      click.addEventListener(
-        'animationend',
-        () => {
-          click.classList.remove('animate-click')
-        },
-        { once: true },
+      await new Promise((resolve) =>
+        click.addEventListener('animationend', resolve, { once: true }),
       )
+      click.classList.remove('animate-click')
     })
   }, [ref])
 }
