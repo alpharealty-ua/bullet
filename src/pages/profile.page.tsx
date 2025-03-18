@@ -1,17 +1,16 @@
 import { useUser } from '@/api/auth.api'
 import { Logo } from '@/components/logo'
+import { PageWrapper } from '@/components/page-wrapper'
 import { Profile } from '@/components/profile'
 
 const ProfilePage = () => {
   const user = useUser()
 
   return (
-    <>
-      <header className='flex items-center justify-center px-3 py-2'>
-        <Logo as='link' to='/' size='lg' />
-      </header>
+    <PageWrapper>
+      <Logo as='link' to='/' size='xl' />
       <Profile user={user} />
-    </>
+    </PageWrapper>
   )
 }
 

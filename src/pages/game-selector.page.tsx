@@ -6,6 +6,7 @@ import { CHARACTER_NAMES, DISABLED_CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
+import { PageWrapper } from '@/components/page-wrapper'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const setCharacterName = useGameStore(
@@ -27,7 +28,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   }
 
   return (
-    <div className='relative flex grow-1 flex-col items-center justify-center gap-10 bg-no-repeat px-3 py-12'>
+    <PageWrapper>
       <Logo as='link' to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
@@ -73,7 +74,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
           />
         )}
       </div>
-    </div>
+    </PageWrapper>
   )
 }
 

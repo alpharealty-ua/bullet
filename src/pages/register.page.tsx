@@ -1,14 +1,13 @@
 import { RegisterForm } from '@/components/forms/register.form'
 import { Logo } from '@/components/logo'
+import { PageWrapper } from '@/components/page-wrapper'
 
 const RegisterPage = () => {
   return (
-    <>
-      <header className='flex items-center justify-center px-3 py-2'>
-        <Logo as='link' to='/' size='lg' />
-      </header>
+    <PageWrapper>
+      <Logo as='link' to='/' size='xl' />
       <RegisterForm />
-    </>
+    </PageWrapper>
   )
 }
 

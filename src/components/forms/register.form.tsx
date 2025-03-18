@@ -45,7 +45,7 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className='relative flex grow-1 flex-col items-center gap-8 p-10'>
+    <div className='relative flex w-full flex-col items-center gap-8'>
       <h3 className='text-3xl'>Register</h3>
       <Form {...form}>
         <form
@@ -61,6 +61,57 @@ const RegisterForm = () => {
                 <FormControl>
                   <FormInput
                     placeholder='Name'
+                    disabled={disabled || isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='username'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <FormInput
+                    placeholder='Username'
+                    disabled={disabled || isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='username'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <FormInput
+                    placeholder='Username'
+                    disabled={disabled || isPending}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='username'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <FormInput
+                    placeholder='Username'
                     disabled={disabled || isPending}
                     {...field}
                   />

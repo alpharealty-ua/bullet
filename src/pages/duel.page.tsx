@@ -29,7 +29,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
-  const [searched, setSearched] = useState(false)
+  const [searched, setSearched] = useState(true)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
 
   const handlePull = async () => {
