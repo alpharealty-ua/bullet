@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
+import { cn } from '@/lib/utils'
 import { CHARACTER_NAMES, DISABLED_CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
@@ -27,42 +28,33 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
     }
   }
 
+  const handleButtonClick = (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) => {
+    if (disabled) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <PageWrapper>
       <Logo as='link' to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
-          {disabled ? (
-            <>
-              <ButtonWithAudio
-                as='button'
-                className='w-30'
-                image='play'
-                disabled={disabled}
-              />
-              <ButtonWithAudio
-                as='button'
-                className='w-30 text-2xl'
-                image='watch'
-                disabled={disabled}
-              />
-            </>
-          ) : (
-            <>
-              <ButtonWithAudio
-                as='link'
-                to={isSolo ? ROUTES.solo.play : ROUTES.duel.play}
-                className='w-30'
-                image='play'
-              />
-              <ButtonWithAudio
-                as='link'
-                to={isSolo ? ROUTES.solo.watch : ROUTES.duel.watch}
-                image='watch'
-                className='w-30 text-2xl'
-              />
-            </>
-          )}
+          <ButtonWithAudio
+            as='link'
+            to={isSolo ? ROUTES.solo.play : ROUTES.duel.play}
+            onClick={handleButtonClick}
+            className={cn('w-30', disabled && 'cursor-not-allowed')}
+            image='play'
+          />
+          <ButtonWithAudio
+            as='link'
+            to={isSolo ? ROUTES.solo.watch : ROUTES.duel.watch}
+            onClick={handleButtonClick}
+            className={cn('w-30', disabled && 'cursor-not-allowed')}
+            image='watch'
+          />
         </div>
         {isDuel && (
           <CharacterSelector
