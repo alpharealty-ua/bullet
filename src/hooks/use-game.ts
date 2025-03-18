@@ -283,31 +283,12 @@ const useGame = (variant: VariantGame) => {
       chachingAudio.addEventListener('play', () => resolve(true))
     })
 
-    const promise = new Promise<void>((resolve) => {
-      const winSoundEnded = () => {
-        resolve()
-      }
+    startAudio && (await waitEndAudio(chachingAudio))
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
 
-      const chachingEnded = async () => {
-        winSoundAudio.addEventListener('ended', winSoundEnded, {
-          once: true,
-        })
+    startAudio && (await waitEndAudio(winSoundAudio))
 
-        await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-      }
-
-      chachingAudio.addEventListener('ended', chachingEnded, {
-        once: true,
-      })
-      if (!startAudio) {
-        chachingAudio.dispatchEvent(new Event('play'))
-        chachingAudio.dispatchEvent(new Event('ended'))
-        winSoundAudio.dispatchEvent(new Event('play'))
-        winSoundAudio.dispatchEvent(new Event('ended'))
-      }
-    })
-
-    return promise.then(newGame)
+    newGame()
   }, [setState, newGame, playAudio, queryClient])
 
   const pullGame = useCallback(

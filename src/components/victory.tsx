@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { IMAGES, TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { AnimationInOut } from '@/components/animation-in-out'
@@ -25,21 +25,11 @@ const Victory = () => {
       // TODO: GET DURATION FROM AUDIO
       setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
-      const chachingEnded = async () => {
-        winSoundAudio.play()
-      }
+      await waitEndAudio(chachingAudio)
+      await winSoundAudio.play()
+      await waitEndAudio(winSoundAudio)
 
-      const winSoundEnded = () => {
-        setIncreaseTime(undefined)
-      }
-
-      winSoundAudio.addEventListener('ended', winSoundEnded, {
-        once: true,
-      })
-
-      chachingAudio.addEventListener('ended', chachingEnded, {
-        once: true,
-      })
+      setIncreaseTime(undefined)
     }
 
     runAnimation()
