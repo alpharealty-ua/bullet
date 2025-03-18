@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { QUERY_KEYS } from '@/api/api'
-import { useLogin, useUser } from '@/api/auth.api'
+import { useLogin } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
 import {
   ChangePasswordSchema,
@@ -22,9 +22,8 @@ import {
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 
-const Profile = () => {
+const Profile = ({ user }: { user: User }) => {
   const queryClient = useQueryClient()
-  const user = useUser()
   const { error, isPending } = useLogin()
   const [isSuccess, setIsSuccess] = useState(false)
   const resetToken = useAuthStore(({ resetToken }) => resetToken)

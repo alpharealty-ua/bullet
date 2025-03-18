@@ -32,7 +32,7 @@ const HomePage = () => {
           {token && isPending ? (
             'loading'
           ) : user ? (
-            <ProfileLink name={user.username} />
+            <ProfileLink user={user} />
           ) : (
             <>
               <ButtonWithAudio

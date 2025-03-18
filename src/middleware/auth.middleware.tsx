@@ -5,6 +5,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useAuthStore } from '@/store/auth.store'
 import { useGameStore } from '@/store/game.store'
 
+// TODO: MOVE TO APP
 const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
   const token = useAuthStore(({ token }) => token)
   useProfile(Boolean(token))
