@@ -52,7 +52,7 @@ const AddMoney = ({
 
   return (
     <div className='flex items-center justify-between'>
-      <div className='relative flex flex-col items-end self-start'>
+      <div className='relative flex flex-col items-end'>
         <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
           Balance
         </div>
