@@ -56,7 +56,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         logoText={variant === 'play' ? 'duel' : ''}
         hideBalance={variant === 'play'}
       />
-      <Bar />
+      {variant === 'watch' && <Bar />}
       {!searched && <EnterArena onSearch={setSearched} />}
       <div className='relative mt-auto flex flex-col gap-10 pt-6'>
         {searched && (
