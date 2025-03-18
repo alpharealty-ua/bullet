@@ -49,6 +49,10 @@ export const PRIVATE_ROUTES = [
     element: <SoloPage variant='watch' />,
   },
   {
+    path: `${ROUTES.solo.watch}/:gameId`,
+    element: <SoloPage variant='watch' />,
+  },
+  {
     path: ROUTES.duel.root,
     element: <GameSelectorPage format='duel' />,
   },
