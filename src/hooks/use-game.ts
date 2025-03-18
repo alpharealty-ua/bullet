@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
+import { socket } from '@/socket'
 import { QUERY_KEYS } from '@/api/api'
 import {
   useAcceptOffer,
@@ -15,13 +16,13 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait } from '@/lib/utils'
-import { MAX_BET, MULTIPLIERS } from '@/lib/constants'
+import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { CharacterHandle } from '@/components/character'
 
-const useGame = () => {
+const useGame = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { gameId } = useParams<{ gameId: string }>()
@@ -32,7 +33,7 @@ const useGame = () => {
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
-  const { data: gameDetails } = useGameDetails()
+  const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
@@ -59,6 +60,11 @@ const useGame = () => {
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
   const isSolo = pathname.includes(ROUTES.solo.root)
+  const isPlay = variant === 'play'
+  const [watchGame, setWatchGame] = useState<{
+    gameId: string
+    jackpot: number
+  } | null>(null)
 
   const newGame = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
@@ -233,7 +239,7 @@ const useGame = () => {
   }
 
   const nextSolo = async () => {
-    if (state === 'preparation') {
+    if (!isStartedGame) {
       await startGame()
       return
     }
@@ -242,14 +248,11 @@ const useGame = () => {
   }
 
   const startGame = async () => {
-    if (state !== 'preparation') {
-      return
-    }
-
     const { gameId, multiplier } = await startGameMutation({
       betAmount: String(bet),
     })
 
+    // TODO: REMOVE
     setState('running')
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     const multiplierIndex = MULTIPLIERS.findIndex(
@@ -265,10 +268,6 @@ const useGame = () => {
   }
 
   const pullGame = async () => {
-    if (state !== 'running') {
-      return
-    }
-
     if (!gameId) {
       return
     }
@@ -402,8 +401,85 @@ const useGame = () => {
       return
     }
 
-    newGame()
-  }, [gameId, newGame, setIsStartedGame])
+    // TODO: REMOVE
+    variant === 'play' && newGame()
+  }, [gameId, newGame, setIsStartedGame, variant])
+
+  useEffect(() => {
+    if (isPlay || !gameId) {
+      return
+    }
+    console.log('emit watch game', isPlay, gameId)
+
+    socket.emit('watch_game', gameId, (response: unknown) => {
+      console.log(response) // ok
+    })
+
+    const pullResult = (response: unknown) => {
+      console.log('pull_result', response)
+    }
+    const gameUpdate = (response: unknown) => {
+      console.log('game_update', response)
+    }
+    const offer_created = (response: unknown) => {
+      console.log('offer_created', response)
+    }
+    const offer_accepted = (response: unknown) => {
+      console.log('offer_accepted', response)
+    }
+    const offer_rejected = (response: unknown) => {
+      console.log('offer_rejected', response)
+    }
+    const next_largest_game = (response: unknown) => {
+      console.log('next_largest_game', response)
+    }
+
+    socket.on('pull_result', pullResult)
+    socket.on('game_update', gameUpdate)
+    socket.on('offer_created', offer_created)
+    socket.on('offer_accepted', offer_accepted)
+    socket.on('offer_rejected', offer_rejected)
+    socket.on('next_largest_game', next_largest_game)
+
+    return () => {
+      socket.off('pull_result', pullResult)
+      socket.off('game_update', gameUpdate)
+      socket.off('offer_created', offer_created)
+      socket.off('offer_accepted', offer_accepted)
+      socket.off('offer_rejected', offer_rejected)
+      socket.off('next_largest_game', next_largest_game)
+    }
+  }, [isPlay, gameId])
+
+  useEffect(() => {
+    if (gameId) {
+      return
+    }
+    let isUnmounted = false
+    socket.emit('watch_largest_prize', (response: unknown) => {
+      if (isUnmounted) {
+        return
+      }
+      // TODO: USE ZOD
+      if (
+        !(
+          response &&
+          typeof response === 'object' &&
+          'gameId' in response &&
+          'potentialWin' in response
+        )
+      ) {
+        return
+      }
+      setWatchGame({
+        gameId: String(response.gameId),
+        jackpot: Number(response.potentialWin!),
+      })
+    })
+    return () => {
+      isUnmounted = true
+    }
+  }, [gameId])
 
   return {
     next,
@@ -414,6 +490,7 @@ const useGame = () => {
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
+    watchGame,
   }
 }
 

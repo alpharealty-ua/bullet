@@ -96,11 +96,11 @@ export const useAllGames = () =>
     queryFn: fetchAllGames,
   })
 
-export const useGameDetails = () => {
+export const useGameDetails = (enabled: boolean) => {
   const { gameId } = useParams<{ gameId: string }>()
 
   return useQuery({
-    enabled: Boolean(gameId),
+    enabled: enabled && Boolean(gameId),
     queryKey: [QUERY_KEYS.gameDetails],
     queryFn: () => fetchGameDetails(gameId!),
   })

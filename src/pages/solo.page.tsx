@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { useSolo } from '@/hooks/use-game'
@@ -18,7 +19,7 @@ import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const { next, deal, revolverRefHandle, newGame } = useSolo()
+  const { next, deal, revolverRefHandle, newGame, watchGame } = useSolo(variant)
   const [showHelpers, setShowHelpers] = useState(true)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useGameStore(({ noMoney }) => noMoney)
@@ -48,22 +49,44 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   return (
     <>
       <Header logoText={'Solo'} />
-      <div className='flex min-h-40 flex-col gap-3 pt-2'>
-        <Result
-          title={'Jackpot'}
-          value={`$${jackpot}`}
-          open={Boolean(jackpot)}
-        />
-        <Result
-          title={'Multiplier'}
-          value={`${multiplier}x`}
-          open={multiplier > 0}
-        />
-        <Result
-          title={'the banker offers...'}
-          value={`$${offer ? offer.amount : '0'}`}
-          open={isStartedGame && Boolean(offer)}
-        />
+      <div className='min-h-40'>
+        {variant === 'watch' && watchGame && (
+          <div className='flex flex-col gap-6 p-4'>
+            <div className='text-3xl'>Largest prize game</div>
+            <div className='align-items flex items-center justify-between'>
+              <Result
+                title={'Jackpot'}
+                value={`$${watchGame.jackpot}`}
+                open={true}
+              />
+              <ButtonWithAudio
+                as='link'
+                to={`${ROUTES.solo.watch}/${watchGame.gameId}`}
+                bg='primary'
+                text='Watch'
+              />
+            </div>
+          </div>
+        )}
+        {variant === 'play' && (
+          <div className='flex min-h-40 flex-col gap-3 pt-2'>
+            <Result
+              title={'Jackpot'}
+              value={`$${jackpot}`}
+              open={Boolean(jackpot)}
+            />
+            <Result
+              title={'Multiplier'}
+              value={`${multiplier}x`}
+              open={multiplier > 0}
+            />
+            <Result
+              title={'the banker offers...'}
+              value={`$${offer ? offer.amount : '0'}`}
+              open={isStartedGame && Boolean(offer)}
+            />
+          </div>
+        )}
       </div>
       {noMoney && (
         <div className='relative flex flex-col items-center justify-center pt-8'>

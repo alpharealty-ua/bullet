@@ -24,7 +24,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
-  } = useSolo()
+  } = useSolo(variant)
   const addRound = useGameStore(({ addRound }) => addRound)
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
