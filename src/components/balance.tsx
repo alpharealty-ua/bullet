@@ -24,15 +24,15 @@ const Balance = ({
   // TODO: REFACTOR
   const fontSize =
     length > 14
-      ? 'text-sm'
+      ? 'text-xs'
       : length > 12
-        ? 'text-md'
+        ? 'text-sm'
         : length > 10
-          ? 'text-lg'
+          ? 'text-md'
           : length > 8
-            ? 'text-xl'
+            ? 'text-lg'
             : length > 6
-              ? 'text-2xl'
+              ? 'text-xl'
               : ''
 
   return (
