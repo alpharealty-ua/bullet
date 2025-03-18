@@ -33,7 +33,7 @@ export const Header = ({
               className='self-end'
               bg=''
             />
-            <div className='relative flex flex-col items-end self-start'>
+            <div className='relative flex flex-col items-end gap-1 self-start'>
               <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
                 Balance
               </div>
