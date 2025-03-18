@@ -36,7 +36,6 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
     const [isDead, setIsDead] = useState(false)
     const isFront = type === 'front'
     const isBack = type === 'back'
-    const showGun = !['anime-1', 'anime-2'].includes(characterName)
 
     useImperativeHandle(characterHandleRef, () => {
       return {
@@ -85,12 +84,11 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
               characterName === 'fatty' &&
                 'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
               characterName === 'anime-1' &&
-                'top-[25%] left-[12%] aspect-[1/2] w-[11%]',
+                'top-[25%] left-[12%] aspect-[1/2] w-[13%]',
               characterName === 'anime-2' &&
-                'top-[16%] left-[34%] aspect-[1/1.9] w-[13%]',
+                'top-[16%] left-[33%] aspect-[1/2] w-[14%]',
             )}
             gunHandleRef={frontGunHandleRef}
-            showGun={showGun}
           />
         </div>
         <div
@@ -116,7 +114,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
               characterName === 'anime-2' && 'top-[17%] right-[34%] w-[7%]',
             )}
             gunHandleRef={backGunHandleRef}
-            showGun={false}
+            hideGun={true}
           />
         </div>
         {isDead && (

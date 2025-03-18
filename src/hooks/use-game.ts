@@ -16,7 +16,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval, wait } from '@/lib/utils'
+import { randomIntFromInterval, wait, waitEndAudio } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { GameBarHandle } from '@/components/duel-game-bar'
@@ -202,7 +202,7 @@ const useGame = (variant: VariantGame) => {
         const inWinGame = !isSkull && random < winProbabilityPercentage
 
         await wait(1000)
-        await playAudio('triggerpull')
+        await backGunHandle.trigger()
         await backGunHandle.spin()
         await backGunHandle.click()
 
@@ -217,7 +217,7 @@ const useGame = (variant: VariantGame) => {
 
         if (isSkull || frontPull) {
           await wait(1000)
-          await playAudio('triggerpull')
+          await frontGunHandle.trigger()
           await frontGunHandle.spin()
           await frontGunHandle.click()
         }
@@ -310,9 +310,9 @@ const useGame = (variant: VariantGame) => {
 
       setCountBullet(5 - position)
 
-      await playAudio('triggerpull')
+      await revolverHandle.trigger()
       await revolverHandle.spin()
-      revolverHandle.click()
+      await revolverHandle.click()
 
       if (isGameOver) {
         await gameOver()
@@ -329,7 +329,6 @@ const useGame = (variant: VariantGame) => {
     [
       declineAllDeals,
       gamePullMutation,
-      playAudio,
       setCountBullet,
       setOffer,
       gameOver,

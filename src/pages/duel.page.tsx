@@ -77,8 +77,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               onClick={
                 variant === 'play' && isStartedGame
                   ? handlePlayerClick
-                  : () => {
-                      frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
+                  : async () => {
+                      await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
+                      await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
+                      await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
+                      await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
                     }
               }
               characterHandleRef={frontCharacterHandleRef}
@@ -106,8 +109,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 onClick={
                   variant === 'play' && isStartedGame
                     ? handlePlayerClick
-                    : () => {
-                        backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
+                    : async () => {
+                        await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
+                        await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
+                        await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
+                        await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
                       }
                 }
                 characterHandleRef={backCharacterHandleRef}

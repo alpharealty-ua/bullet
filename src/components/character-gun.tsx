@@ -12,9 +12,11 @@ import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
+import { useSpin } from '@/components/guns/use-spin'
 
 export interface GunHandle {
   spin: (duration?: number) => Promise<void>
+  trigger: () => Promise<void>
   click: () => Promise<void>
   shot: () => Promise<void>
 }
@@ -22,11 +24,11 @@ export interface GunHandle {
 export interface GunCharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   gunHandleRef?: React.ForwardedRef<GunHandle>
-  showGun?: boolean
+  hideGun?: boolean
 }
 
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
-  ({ className, gunHandleRef, showGun = true, ...props }, ref) => {
+  ({ className, gunHandleRef, hideGun = false, ...props }, ref) => {
     const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
@@ -42,43 +44,13 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       setShowShot(false)
     }, [playAudio])
 
-    // TODO: REUSE
-    const spin = useCallback(async (duration = 200): Promise<void> => {
-      const gunDom = gunRef.current
-
-      if (gunDom === null) {
-        return
-      }
-
-      const chamberDom = gunDom.querySelector(
-        '[data-chamber]',
-      ) as HTMLDivElement
-
-      if (chamberDom === null) {
-        return
-      }
-
-      return new Promise<void>((resolve) => {
-        const transitionend = (event: TransitionEvent) => {
-          if (event.propertyName !== 'rotate') {
-            return
-          }
-
-          chamberDom.style.transitionDuration = ``
-          chamberDom.removeEventListener('transitionend', transitionend)
-          resolve()
-        }
-
-        chamberDom.style.rotate = (rotateRef.current += 60) + 'deg'
-        chamberDom.style.transitionDuration = `${duration}ms`
-        chamberDom.addEventListener('transitionend', transitionend)
-      })
-    }, [])
+    const spin = useSpin(gunRef, rotateRef)
 
     const click = useClick(gunRef)
 
     useImperativeHandle(gunHandleRef, () => ({
       spin,
+      trigger: async () => void playAudio('triggerpull'),
       shot,
       click,
     }))
@@ -98,43 +70,49 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               className: 'w-[80%]',
             }}
           />
-          {showGun && (
-            <>
-              <div
-                className='absolute top-[10%] right-0 left-0 aspect-square bg-contain bg-center bg-no-repeat'
-                style={{
-                  backgroundImage: `url(${IMAGES.gunchambercharacter})`,
-                }}
-                data-chamber
-              ></div>
-              <div
-                className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
-                style={{
-                  backgroundImage: `url(${IMAGES.gunbodycharacter})`,
-                }}
-                data-body
-              ></div>
-            </>
-          )}
+          <div
+            className={cn(
+              'absolute top-[10%] right-0 left-0 aspect-square',
+              hideGun && 'opacity-0',
+            )}
+            data-chamber
+          >
+            <div
+              className={'absolute inset-0 bg-contain bg-center bg-no-repeat'}
+              style={{
+                backgroundImage: `url(${IMAGES.gunchambercharacter})`,
+              }}
+              data-chamber-rotate
+            ></div>
+          </div>
+          <div
+            className={cn(
+              'pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat',
+              hideGun && 'opacity-0',
+            )}
+            style={{
+              backgroundImage: `url(${IMAGES.gunbodycharacter})`,
+            }}
+            data-body
+          ></div>
+
           {showShot && (
-            <>
-              <div className='relative top-[7%] left-1/2 z-5 aspect-square w-[53%] -translate-x-1/2'>
-                <div
-                  className={cn(
-                    'absolute inset-0 scale-200 opacity-0',
-                    'zoom-in-50 fade-in fill-mode-backwards bg-no-repea animate-[shot] bg-cover bg-center duration-200 ease-linear',
-                  )}
-                  style={{ backgroundImage: `url(${IMAGES.shot1})` }}
-                ></div>
-                <div
-                  className={cn(
-                    'absolute inset-0 scale-600 opacity-0',
-                    'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
-                  )}
-                  style={{ backgroundImage: `url(${IMAGES.shot2})` }}
-                ></div>
-              </div>
-            </>
+            <div className='relative top-0 right-0 left-0 z-5 mx-auto aspect-square h-[35%]'>
+              <div
+                className={cn(
+                  'absolute inset-0 scale-200 bg-cover bg-center opacity-0',
+                  'zoom-in-50 fade-in fill-mode-backwards animate-[shot] bg-no-repeat duration-200 ease-linear',
+                )}
+                style={{ backgroundImage: `url(${IMAGES.shot1})` }}
+              ></div>
+              <div
+                className={cn(
+                  'absolute inset-0 scale-600 opacity-0',
+                  'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
+                )}
+                style={{ backgroundImage: `url(${IMAGES.shot2})` }}
+              ></div>
+            </div>
           )}
         </div>
         {createPortal(

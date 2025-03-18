@@ -1,15 +1,12 @@
-import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react'
+import React, { useEffect, useImperativeHandle, useRef } from 'react'
 import mergeRefs from 'merge-refs'
 
+import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
+import { useSpin } from '@/components/guns/use-spin'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
@@ -18,7 +15,8 @@ const MAX_SPEED = 100
 
 export interface RevolverHandle {
   spin: (duration?: number) => Promise<void>
-  click: () => void
+  trigger: () => Promise<void>
+  click: () => Promise<void>
 }
 
 const Revolver = React.forwardRef<
@@ -28,6 +26,7 @@ const Revolver = React.forwardRef<
     gunHandleRef: React.ForwardedRef<RevolverHandle>
   }
 >(({ disabled, className, gunHandleRef, ...props }, ref) => {
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const gunRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
@@ -203,42 +202,13 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
-  const spin = useCallback(async (duration = 200): Promise<void> => {
-    const gunDom = gunRef.current
-
-    if (gunDom === null) {
-      return
-    }
-
-    const chamberRotateDom = gunDom.querySelector(
-      '[data-chamber-rotate]',
-    ) as HTMLDivElement
-
-    if (chamberRotateDom === null) {
-      return
-    }
-
-    return new Promise<void>((resolve) => {
-      const transitionend = (event: TransitionEvent) => {
-        if (event.propertyName !== 'rotate') {
-          return
-        }
-
-        chamberRotateDom.style.transitionDuration = ``
-        chamberRotateDom.removeEventListener('transitionend', transitionend)
-        resolve()
-      }
-
-      chamberRotateDom.style.rotate = (rotateRef.current += 60) + 'deg'
-      chamberRotateDom.style.transitionDuration = `${duration}ms`
-      chamberRotateDom.addEventListener('transitionend', transitionend)
-    })
-  }, [])
+  const spin = useSpin(gunRef, rotateRef)
 
   const click = useClick(gunRef)
 
   useImperativeHandle(gunHandleRef, () => ({
     spin,
+    trigger: async () => void playAudio('triggerpull'),
     click,
   }))
 
@@ -282,6 +252,7 @@ const Revolver = React.forwardRef<
           style={{
             backgroundImage: `url(${IMAGES.gunbody})`,
           }}
+          data-body
         ></div>
       </div>
     </div>
