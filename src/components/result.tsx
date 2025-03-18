@@ -10,7 +10,7 @@ const Result = ({
   open: boolean
 }) => {
   return (
-    <div className='flex flex-col items-center gap-1 px-6'>
+    <div className='flex flex-col items-center gap-1'>
       <div
         className={cn(
           'fill-mode-both origin-top text-xl leading-[1] opacity-0 lg:text-2xl',
