@@ -8,7 +8,6 @@ const Balance = ({
 }: {
   value: number
   increaseTime?: number
-  beforeSlot?: React.ReactNode
 }) => {
   // TODO: MAYBE TRANSFORM TO COMPONENT
   const { totalRef, winRef } = useIncreaseNumber({
