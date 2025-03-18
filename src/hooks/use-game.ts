@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { socket } from '@/socket'
 import { QUERY_KEYS } from '@/api/api'
 import {
+  Offer,
   useAcceptOffer,
   useAllGames,
   useGameDetails,
@@ -82,7 +83,7 @@ const useGame = (variant: VariantGame) => {
     }
 
     if (gameId) {
-      navigate(isSolo ? ROUTES.solo.play : ROUTES.duel.play, {
+      navigate(isSolo ? ROUTES.solo[variant] : ROUTES.duel[variant], {
         preventScrollReset: true,
       })
     }
@@ -91,7 +92,7 @@ const useGame = (variant: VariantGame) => {
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     restartGame()
-  }, [restartGame, isSolo, navigate, queryClient, gameId])
+  }, [restartGame, isSolo, navigate, queryClient, gameId, variant])
 
   const getMultiplier = async (multiplierIndex: number): Promise<void> => {
     const revolverHandle = revolverRefHandle.current
@@ -239,12 +240,12 @@ const useGame = (variant: VariantGame) => {
   }
 
   const nextSolo = async () => {
-    if (!isStartedGame) {
+    if (!gameId) {
       await startGame()
       return
     }
 
-    await pullGame()
+    await pullGame(gameId)
   }
 
   const startGame = async () => {
@@ -267,46 +268,11 @@ const useGame = (variant: VariantGame) => {
     navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
   }
 
-  const pullGame = async () => {
-    if (!gameId) {
-      return
-    }
-
-    const revolverHandle = revolverRefHandle.current
-
-    if (revolverHandle === null) {
-      return
-    }
-
-    const { success, position, offer } = await gamePullMutation(gameId)
-
-    const isGameOver = !success
-    const isWin = !isGameOver && position === 5
-
-    setCountBullet(5 - position)
-
-    await playAudio('triggerpull')
-    await revolverHandle.spin()
-    revolverHandle.click()
-
-    if (isGameOver) {
-      await gameOver()
-      return
-    }
-    if (isWin) {
-      await winGame()
-      return
-    }
-    if (offer && !declineAllDeals) {
-      setOffer(offer)
-    }
-  }
-
-  const gameOver = async () => {
+  const gameOver = useCallback(async () => {
     setState('game-over')
-  }
+  }, [setState])
 
-  const winGame = async () => {
+  const winGame = useCallback(async () => {
     setState('win')
 
     const winSoundAudio = await playAudio('winsound', false)
@@ -342,7 +308,53 @@ const useGame = (variant: VariantGame) => {
     })
 
     return promise.then(newGame)
-  }
+  }, [setState, newGame, playAudio, queryClient])
+
+  const pullGame = useCallback(
+    async (
+      gameId: string,
+      result?: { success: boolean; position: number; offer: Offer | null },
+    ) => {
+      const revolverHandle = revolverRefHandle.current
+
+      if (revolverHandle === null) {
+        return
+      }
+
+      const { success, position, offer } =
+        result ?? (await gamePullMutation(gameId))
+
+      const isGameOver = !success
+      const isWin = !isGameOver && position === 5
+
+      setCountBullet(5 - position)
+
+      await playAudio('triggerpull')
+      await revolverHandle.spin()
+      revolverHandle.click()
+
+      if (isGameOver) {
+        await gameOver()
+        return
+      }
+      if (isWin) {
+        await winGame()
+        return
+      }
+      if (offer && !declineAllDeals) {
+        setOffer(offer)
+      }
+    },
+    [
+      declineAllDeals,
+      gamePullMutation,
+      playAudio,
+      setCountBullet,
+      setOffer,
+      gameOver,
+      winGame,
+    ],
+  )
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
@@ -409,77 +421,104 @@ const useGame = (variant: VariantGame) => {
     if (isPlay || !gameId) {
       return
     }
-    console.log('emit watch game', isPlay, gameId)
+    let isUnmounted = false
+
+    setWatchGame(null)
 
     socket.emit('watch_game', gameId, (response: unknown) => {
-      console.log(response) // ok
+      console.log('watch_game', response) // ok
+
+      if (isUnmounted) {
+        socket.emit('unwatch_game', gameId, (response: unknown) => {
+          console.log('unwatch_game', response) // ok
+        })
+      }
     })
 
     const pullResult = (response: unknown) => {
       console.log('pull_result', response)
+      pullGame(
+        gameId,
+        response as { success: boolean; position: number; offer: Offer | null },
+      )
     }
-    const gameUpdate = (response: unknown) => {
-      console.log('game_update', response)
-    }
-    const offer_created = (response: unknown) => {
-      console.log('offer_created', response)
-    }
-    const offer_accepted = (response: unknown) => {
-      console.log('offer_accepted', response)
-    }
-    const offer_rejected = (response: unknown) => {
-      console.log('offer_rejected', response)
-    }
-    const next_largest_game = (response: unknown) => {
-      console.log('next_largest_game', response)
-    }
+    // const gameUpdate = (response: unknown) => {
+    //   // console.log('game_update', response)
+    // }
+    // const offer_created = (response: unknown) => {
+    //   // console.log('offer_created', response)
+    // }
+    // const offer_accepted = (response: unknown) => {
+    //   // console.log('offer_accepted', response)
+    // }
+    // const offer_rejected = (response: unknown) => {
+    //   // console.log('offer_rejected', response)
+    // }
+    // const next_largest_game = (response: unknown) => {
+    //   console.log('next_largest_game', response)
+    // }
 
     socket.on('pull_result', pullResult)
-    socket.on('game_update', gameUpdate)
-    socket.on('offer_created', offer_created)
-    socket.on('offer_accepted', offer_accepted)
-    socket.on('offer_rejected', offer_rejected)
-    socket.on('next_largest_game', next_largest_game)
+    // socket.on('game_update', gameUpdate)
+    // socket.on('offer_created', offer_created)
+    // socket.on('offer_accepted', offer_accepted)
+    // socket.on('offer_rejected', offer_rejected)
+    // socket.on('next_largest_game', next_largest_game)
 
-    return () => {
-      socket.off('pull_result', pullResult)
-      socket.off('game_update', gameUpdate)
-      socket.off('offer_created', offer_created)
-      socket.off('offer_accepted', offer_accepted)
-      socket.off('offer_rejected', offer_rejected)
-      socket.off('next_largest_game', next_largest_game)
-    }
-  }, [isPlay, gameId])
-
-  useEffect(() => {
-    if (gameId) {
-      return
-    }
-    let isUnmounted = false
-    socket.emit('watch_largest_prize', (response: unknown) => {
-      if (isUnmounted) {
-        return
-      }
-      // TODO: USE ZOD
-      if (
-        !(
-          response &&
-          typeof response === 'object' &&
-          'gameId' in response &&
-          'potentialWin' in response
-        )
-      ) {
-        return
-      }
-      setWatchGame({
-        gameId: String(response.gameId),
-        jackpot: Number(response.potentialWin!),
-      })
-    })
     return () => {
       isUnmounted = true
+      socket.emit('unwatch_game', gameId, (response: unknown) => {
+        console.log('unwatch_game', response) // ok
+      })
+
+      socket.off('pull_result', pullResult)
+      // socket.off('game_update', gameUpdate)
+      // socket.off('offer_created', offer_created)
+      // socket.off('offer_accepted', offer_accepted)
+      // socket.off('offer_rejected', offer_rejected)
+      // socket.off('next_largest_game', next_largest_game)
     }
-  }, [gameId])
+  }, [isPlay, gameId, pullGame])
+
+  useInterval
+
+  useEffect(() => {
+    if (gameId || variant === 'play') {
+      return
+    }
+    let id: NodeJS.Timeout | null = null
+    let isUnmounted = false
+    const call = () => {
+      socket.emit('watch_largest_prize', (response: unknown) => {
+        if (isUnmounted) {
+          return
+        }
+        // TODO: USE ZOD
+        if (
+          !(
+            response &&
+            typeof response === 'object' &&
+            'gameId' in response &&
+            'potentialWin' in response
+          )
+        ) {
+          return
+        }
+        setWatchGame({
+          gameId: String(response.gameId),
+          jackpot: Number(response.potentialWin!),
+        })
+      })
+      id = setTimeout(call, 1000)
+    }
+    call()
+    return () => {
+      isUnmounted = true
+      if (id) {
+        clearTimeout(id)
+      }
+    }
+  }, [variant, gameId])
 
   return {
     next,
@@ -495,3 +534,21 @@ const useGame = (variant: VariantGame) => {
 }
 
 export { useGame as useSolo }
+
+export function useInterval(callback: () => void, delay: number) {
+  const savedCallback = useRef(callback)
+
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    const func = () => {
+      savedCallback.current()
+    }
+    if (delay !== null) {
+      const id = setInterval(func, delay)
+      return () => clearInterval(id)
+    }
+  }, [delay])
+}

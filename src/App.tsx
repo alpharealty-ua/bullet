@@ -14,8 +14,15 @@ const App = () => {
     if (token === null) {
       return
     }
+
+    let isUnmounted = false
+
     const onConnect = () => {
       console.log('connect')
+
+      if (isUnmounted) {
+        socket.disconnect()
+      }
     }
 
     const onDisconnect = () => {
@@ -28,6 +35,7 @@ const App = () => {
     socket.on('disconnect', onDisconnect)
 
     return () => {
+      isUnmounted = true
       socket.off('connect', onConnect)
       socket.off('disconnect', onDisconnect)
       if (socket.connected) {
