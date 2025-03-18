@@ -50,7 +50,27 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
 
     useImperativeHandle(gunHandleRef, () => ({
       spin,
-      trigger: async () => void playAudio('triggerpull'),
+      trigger: async () => {
+        const gunDom = gunRef.current
+
+        if (gunDom === null) {
+          return
+        }
+
+        const fingerDom = gunDom.querySelector('[data-finger]')
+
+        if (fingerDom === null) {
+          return
+        }
+
+        fingerDom.classList.add('is-trigger')
+        await new Promise((resolve) =>
+          fingerDom.addEventListener('transitionend', resolve, { once: true }),
+        )
+        fingerDom.classList.remove('is-trigger')
+
+        void playAudio('triggerpull')
+      },
       shot,
       click,
     }))
@@ -70,6 +90,26 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               className: 'w-[80%]',
             }}
           />
+          <div
+            className={cn(
+              'absolute bottom-0 left-[-10%] aspect-square w-[140%] bg-contain bg-center bg-no-repeat',
+            )}
+            style={{
+              backgroundImage: `url(${IMAGES.gunhandcharacter})`,
+            }}
+            data-hand
+          >
+            <div
+              className={cn(
+                'absolute top-[10%] left-[10%] aspect-square w-[60%] bg-contain bg-center bg-no-repeat transition-all',
+                'duration-100 [&.is-trigger]:-rotate-10',
+              )}
+              style={{
+                backgroundImage: `url(${IMAGES.gunfingercharacter})`,
+              }}
+              data-finger
+            ></div>
+          </div>
           <div
             className={cn(
               'absolute top-[10%] right-0 left-0 aspect-square',
@@ -95,7 +135,6 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             }}
             data-body
           ></div>
-
           {showShot && (
             <div className='relative top-0 right-0 left-0 z-5 mx-auto aspect-square h-[35%]'>
               <div
