@@ -7,6 +7,7 @@ import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
 import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const Footer = ({ variant: _ }: { variant: VariantGame }) => {
   const setBet = useGameStore(({ setBet }) => setBet)
@@ -58,20 +59,18 @@ const Footer = ({ variant: _ }: { variant: VariantGame }) => {
           <div>Pulls remaining</div>
         </div>
         <div className='flex items-center gap-1'>
-          <button
+          <ButtonWithAudio
+            as='button'
+            image='leaderboardstar'
             onClick={handleLeaderboardClick}
-            className={cn(
-              'aspect-[176/186] h-10 w-10 cursor-pointer bg-contain bg-center bg-no-repeat',
-            )}
-            style={{
-              backgroundImage: `url(${IMAGES.leaderboardstar})`,
-            }}
+            className={cn('w-10 cursor-pointer')}
           />
-          <button
-            className='h-10 w-10 cursor-pointer bg-[length:70%] bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${IMAGES.settings})` }}
+          <ButtonWithAudio
+            as='button'
+            image='settings'
+            className='w-10 cursor-pointer bg-center bg-no-repeat p-1.5'
             onClick={handleSettingsClick}
-          ></button>
+          />
         </div>
       </div>
     </footer>

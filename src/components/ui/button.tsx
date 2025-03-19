@@ -16,6 +16,7 @@ const imagesMap = {
   close: IMAGES.close,
   moneybag: IMAGES.moneybag,
   leaderboardstar: IMAGES.leaderboardstar,
+  settings: IMAGES.settings,
 }
 
 export type asLink = { as: 'link' } & LinkProps &
