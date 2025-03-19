@@ -147,7 +147,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           onChangeDirection={handleChangeDirection}
         />
       )}
-      <Victory />
+      <Victory hideWon />
       <GameOver hasImage={false} onClick={newGame} onTimeout={newGame} />
       <Footer />
     </>

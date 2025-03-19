@@ -6,7 +6,13 @@ import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { AnimationInOut } from '@/components/animation-in-out'
 
-const Victory = () => {
+const Victory = ({
+  hideWon,
+  hideLvl,
+}: {
+  hideWon?: boolean
+  hideLvl?: boolean
+}) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const state = useGameStore(({ state }) => state)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
@@ -50,9 +56,20 @@ const Victory = () => {
         style={{ backgroundImage: `url(${IMAGES.texture})` }}
       >
         <div className='text-green text-4xl'>Victory</div>
-        <div className='flex w-full justify-between text-4xl'>
-          <div>You won - ${jackpot}</div>
-        </div>
+        {!hideWon && (
+          <div className='text-4xl'>
+            You won - <span className='text-green'>${jackpot}</span>
+          </div>
+        )}
+        {!hideLvl && (
+          <div className='flex gap-10'>
+            <div className='text-4xl'>Lvl</div>
+            <ul className='pt-4 text-right'>
+              <li className='text-lg'>Old rating: 722</li>
+              <li className='text-xl'>new rating: 754</li>
+            </ul>
+          </div>
+        )}
       </div>
     </AnimationInOut>
   )
