@@ -52,10 +52,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Header
-        logoText={variant === 'play' ? 'duel' : ''}
-        hideBalance={variant === 'play'}
-      />
+      <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
       {variant === 'watch' && <Bar />}
       {!searched && <EnterArena onSearch={setSearched} />}
       <div className='relative mt-auto flex flex-col gap-10 pt-6'>
