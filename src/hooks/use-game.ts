@@ -460,8 +460,6 @@ const useGame = (variant: VariantGame) => {
     }
   }, [isPlay, gameId, pullGame])
 
-  useInterval
-
   useEffect(() => {
     if (gameId || variant === 'play') {
       return
@@ -514,21 +512,3 @@ const useGame = (variant: VariantGame) => {
 }
 
 export { useGame as useSolo }
-
-export function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef(callback)
-
-  useEffect(() => {
-    savedCallback.current = callback
-  }, [callback])
-
-  useEffect(() => {
-    const func = () => {
-      savedCallback.current()
-    }
-    if (delay !== null) {
-      const id = setInterval(func, delay)
-      return () => clearInterval(id)
-    }
-  }, [delay])
-}
