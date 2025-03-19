@@ -55,7 +55,7 @@ const ButtonWithAudio = React.forwardRef<
     await wait(0) // need for set disabled state
   }
 
-  const handeMouseDown = async () => {
+  const handleMouseDown = async () => {
     const buttonDom = buttonRef.current
 
     if (buttonDom === null) {
@@ -86,7 +86,7 @@ const ButtonWithAudio = React.forwardRef<
   return (
     <Button
       ref={mergeRefs(buttonRef, ref)}
-      onMouseDown={handeMouseDown}
+      onMouseDown={handleMouseDown}
       onClick={handleClick}
       {...allProps}
     />
