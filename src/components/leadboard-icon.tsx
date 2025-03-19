@@ -8,43 +8,31 @@ const LeadboardIcon = () => {
   const buttonRef = useRef<HTMLAnchorElement>(null)
   const isTrustedRef = useRef(true)
 
-  const handleLeadboardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleLeadboardClick = async (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
     if (!isTrustedRef.current) {
       return
     }
 
     event.preventDefault()
 
-    const target = event.currentTarget
+    const targetEl = event.currentTarget
 
-    if (!(target instanceof HTMLAnchorElement)) {
+    if (!(targetEl instanceof HTMLAnchorElement)) {
       return
     }
 
-    target.classList.add('is-animate')
+    targetEl.classList.add('is-animate')
+    await new Promise((resolve) =>
+      targetEl.addEventListener('transitionend', resolve, { once: true }),
+    )
+
+    targetEl.classList.remove('is-animate')
+    isTrustedRef.current = false
+    targetEl.click()
+    isTrustedRef.current = true
   }
-
-  useEffect(() => {
-    const buttomDom = buttonRef.current
-
-    if (buttomDom === null) {
-      return
-    }
-
-    const transitionEnd = () => {
-      buttomDom.classList.remove('is-animate')
-      isTrustedRef.current = false
-      buttomDom.click()
-      isTrustedRef.current = true
-      buttomDom.removeEventListener('transitionend', transitionEnd)
-    }
-
-    buttomDom.addEventListener('transitionend', transitionEnd)
-
-    return () => {
-      buttomDom.removeEventListener('transitionend', transitionEnd)
-    }
-  }, [])
 
   return (
     <ButtonWithAudio
