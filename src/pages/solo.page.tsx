@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
-import { useSolo } from '@/hooks/use-game'
+import { useGame } from '@/hooks/use-game'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -19,7 +19,7 @@ import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const { next, deal, revolverRefHandle, newGame, watchGame } = useSolo(variant)
+  const { next, deal, revolverRefHandle, newGame, watchGame } = useGame(variant)
   const [showHelpers, setShowHelpers] = useState(true)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useGameStore(({ noMoney }) => noMoney)

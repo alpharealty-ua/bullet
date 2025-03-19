@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
 import { useGameStore } from '@/store/game.store'
-import { useSolo } from '@/hooks/use-game'
+import { useGame } from '@/hooks/use-game'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -24,7 +24,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
-  } = useSolo(variant)
+  } = useGame(variant)
   const addRound = useGameStore(({ addRound }) => addRound)
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)

@@ -511,4 +511,4 @@ const useGame = (variant: VariantGame) => {
   }
 }
 
-export { useGame as useSolo }
+export { useGame }
