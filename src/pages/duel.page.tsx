@@ -29,7 +29,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
-  const [searched, setSearched] = useState(true)
+  const [searched, setSearched] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
 
   const handlePull = async () => {
@@ -72,7 +72,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 variant === 'watch' && '-mb-7 h-[300px]',
                 variant === 'play' && 'mr-12',
               )}
-              characterName='anime-2'
+              name='fatty'
               type='front'
               onClick={
                 variant === 'play' && isStartedGame
