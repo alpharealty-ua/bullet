@@ -111,20 +111,25 @@ const useGame = (variant: VariantGame) => {
     const DURATION_AUDIO = spinAudio.duration * 1000 - END_DELAY
     const interval = DURATION_AUDIO / AMOUNT_CHAMBER
 
-    let count = AMOUNT_CHAMBER
-    let index = 0
+    const FINISH_INDEX = AMOUNT_CHAMBER
+    let currentIndex = 0
 
     return new Promise<void>((resolve) => {
       const spin = async (prevLag: number) => {
-        if (count-- > 0) {
-          const startSpin = Date.now() + prevLag
+        if (currentIndex++ < FINISH_INDEX) {
+          const startSpin = Date.now()
+          const correctLag = prevLag % interval
+          const amountMissSpin = Math.floor(Math.abs(prevLag) / interval)
 
-          await revolverHandle.spin(interval + prevLag)
+          currentIndex += amountMissSpin
 
-          const realInterval = Date.now() - startSpin
+          await revolverHandle.spin(interval + correctLag)
+
+          const realInterval = Date.now() - (startSpin + correctLag)
 
           const lag = interval - realInterval
-          const newIndex = ++index % MULTIPLIERS.length
+          const newIndex =
+            Math.min(currentIndex, FINISH_INDEX) % MULTIPLIERS.length
           const multiplier = MULTIPLIERS[newIndex]
 
           setMultiplier(multiplier)
