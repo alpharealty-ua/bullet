@@ -7,7 +7,7 @@ import React, {
 import { createPortal } from 'react-dom'
 import mergeRefs from 'merge-refs'
 
-import { IMAGES } from '@/lib/constants'
+import { CharacterName, CharacterType, IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { Click } from '@/components/guns/click'
@@ -24,15 +24,59 @@ export interface GunHandle {
 export interface GunCharacterProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   gunHandleRef?: React.ForwardedRef<GunHandle>
+  characterName: CharacterName
+  characterType: CharacterType
   hideGun?: boolean
 }
 
+const imagesMap = {
+  fatty: {
+    hand: IMAGES.gunhandcharacterfatty,
+    finger: IMAGES.gunfingercharacterfatty,
+  },
+  mickey: {
+    hand: IMAGES.gunhandcharactermickey,
+    finger: IMAGES.gunfingercharactermickey,
+  },
+  nubcat: {
+    hand: IMAGES.gunhandcharacternubcat,
+    finger: IMAGES.gunfingercharacternubcat,
+  },
+  'anime-1': {
+    hand: IMAGES.gunhandcharacteranime,
+    finger: IMAGES.gunfingercharacteranime,
+  },
+  'anime-2': {
+    hand: IMAGES.gunhandcharacteranime,
+    finger: IMAGES.gunfingercharacteranime,
+  },
+} satisfies Record<CharacterName, { hand: string; finger: string } | null>
+
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
-  ({ className, gunHandleRef, hideGun = false, ...props }, ref) => {
+  (
+    {
+      className,
+      gunHandleRef,
+      characterName,
+      characterType,
+      hideGun = false,
+      ...props
+    },
+    ref,
+  ) => {
     const playAudio = useSettingsStore(({ playAudio }) => playAudio)
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
     const [showShot, setShowShot] = useState(false)
+    const isFront = characterType === 'front'
+    const isBack = characterType === 'back'
+    const isNubcat = characterName === 'nubcat'
+    const isMickey = characterName === 'mickey'
+    const isFatty = characterName === 'fatty'
+    const isAnime1 = characterName === 'anime-1'
+    const isAnime2 = characterName === 'anime-2'
+
+    const images = imagesMap[characterName]
 
     const shot = useCallback(async () => {
       const gunShotAudio = await playAudio('gunshot')
@@ -79,35 +123,64 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       <>
         <div
           ref={mergeRefs(ref, gunRef)}
-          className={cn('relative aspect-[1/1.95]', className)}
+          className={cn(
+            'absolute z-1 aspect-[1/1.5]',
+            isFront && isNubcat && 'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
+            isFront &&
+              isMickey &&
+              'top-[13%] left-[14%] aspect-[1/1.8] w-[29.5%]',
+            isFront &&
+              isFatty &&
+              'top-[6%] left-[15%] aspect-[1/2.4] w-[22.5%] rotate-12',
+            isFront &&
+              isAnime1 &&
+              'top-[24%] left-[10%] aspect-[1/1.82] w-[14.5%]',
+            isFront &&
+              isAnime2 &&
+              'top-[15%] left-[33%] aspect-[1/2.1] w-[14%]',
+            isBack && isNubcat && 'right-[6%] w-[20%]',
+            isBack && isMickey && 'top-[17%] right-[22%] w-[10%]',
+            isBack && isFatty && 'right-[14%] w-[14%] -rotate-8',
+            isBack && isAnime1 && 'top-[20%] left-[30%] w-[6.5%]',
+            isBack && isAnime2 && 'top-[17%] right-[33.5%] w-[6%]',
+            className,
+          )}
           {...props}
         >
           <Click
-            leftClick={{
-              className: 'w-[80%]',
-            }}
-            rightClick={{
-              className: 'w-[80%]',
-            }}
+            leftClick={{ className: 'w-[80%]' }}
+            rightClick={{ className: 'w-[80%]' }}
           />
           <div
             className={cn(
-              'absolute bottom-0 left-[-10%] aspect-square w-[140%] bg-contain bg-center bg-no-repeat',
+              'absolute bottom-[-10%] left-[40%] aspect-[1632/1830] h-[90%] -translate-x-1/2 bg-contain bg-center bg-no-repeat',
               hideGun && 'opacity-0',
+              isFront && isMickey && 'bottom-[0%] left-1/2 h-[80%]',
+              isFront && isFatty && 'bottom-0 h-[64%]',
+              isFront && isAnime1 && 'bottom-0 left-1/2 h-[65%]',
+              isFront && isAnime2 && 'bottom-0 left-1/2 h-[65%]',
             )}
-            style={{
-              backgroundImage: `url(${IMAGES.gunhandcharacter})`,
-            }}
+            style={
+              images
+                ? {
+                    backgroundImage: `url(${images.hand})`,
+                  }
+                : {}
+            }
             data-hand
           >
             <div
               className={cn(
-                'absolute top-[10%] left-[10%] aspect-square w-[60%] bg-contain bg-center bg-no-repeat transition-all',
+                'absolute top-[12%] left-[15%] aspect-square w-[60%] bg-contain bg-center bg-no-repeat transition-all',
                 'duration-100 [&.is-trigger]:-rotate-10',
               )}
-              style={{
-                backgroundImage: `url(${IMAGES.gunfingercharacter})`,
-              }}
+              style={
+                images
+                  ? {
+                      backgroundImage: `url(${images.finger})`,
+                    }
+                  : {}
+              }
               data-finger
             ></div>
           </div>

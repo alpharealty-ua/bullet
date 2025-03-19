@@ -81,7 +81,7 @@ const CharacterSelector = ({
                   disabled={disabled}
                 >
                   <Character
-                    characterName={name}
+                    name={name}
                     type={type}
                     className='animate-in fade-in zoom-in-150 h-full'
                   />

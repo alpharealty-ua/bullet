@@ -28,8 +28,14 @@ export const IMAGES = {
   gunbody: '/assets/images/compressed/gun-body.png',
   gunchambercharacter: '/assets/images/gun-chamber-character.png',
   gunbodycharacter: '/assets/images/gun-body-character.png',
-  gunhandcharacter: '/assets/images/gun-hand-character.png',
-  gunfingercharacter: '/assets/images/gun-finger-character.png',
+  gunhandcharacternubcat: '/assets/images/gun-hand-character-nubcat.png',
+  gunfingercharacternubcat: '/assets/images/gun-finger-character-nubcat.png',
+  gunhandcharactermickey: '/assets/images/gun-hand-character-mickey.png',
+  gunfingercharactermickey: '/assets/images/gun-finger-character-mickey.png',
+  gunhandcharacterfatty: '/assets/images/gun-hand-character-fatty.png',
+  gunfingercharacterfatty: '/assets/images/gun-finger-character-fatty.png',
+  gunhandcharacteranime: '/assets/images/gun-hand-character-anime.png',
+  gunfingercharacteranime: '/assets/images/gun-finger-character-anime.png',
   solo: '/assets/images/solo.svg',
   play: '/assets/images/play.svg',
   pull: '/assets/images/pull.svg',
@@ -95,7 +101,7 @@ export type CharacterType = 'back' | 'front'
 
 export const CHARACTER_NAMES = Object.keys(CHARACTER_LIST) as CharacterName[]
 
-export const DISABLED_CHARACTER_NAMES: CharacterName[] = ['anime-2']
+export const DISABLED_CHARACTER_NAMES: CharacterName[] = []
 
 export const AUDIOS = {
   revolverspin: '/assets/audios/revolverspin.mp3',

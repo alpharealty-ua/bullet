@@ -13,6 +13,7 @@ const Footer = ({
   // format,
   variant,
 }: {
+  // TODO: REMOVE
   format: FormatGame
   variant: VariantGame
   showHelpers?: boolean

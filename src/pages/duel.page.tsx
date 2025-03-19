@@ -104,7 +104,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             <div className='relative mb-1 pb-10'>
               <Character
                 className={cn('ml-6 max-h-[220px] max-w-[180px]')}
-                characterName={characterName}
+                name={characterName}
                 type='back'
                 onClick={
                   variant === 'play' && isStartedGame

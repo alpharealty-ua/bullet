@@ -6,7 +6,7 @@ import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
 import { GunCharacter, GunHandle } from '@/components/character-gun'
 
 interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  characterName: CharacterName
+  name: CharacterName
   type: CharacterType
   beforeSlot?: React.ReactNode
   characterHandleRef?: React.ForwardedRef<CharacterHandle>
@@ -21,21 +21,12 @@ export interface CharacterHandle {
 
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   (
-    {
-      characterName,
-      className,
-      beforeSlot,
-      characterHandleRef,
-      type,
-      ...props
-    },
+    { name, className, beforeSlot, characterHandleRef, type, ...props },
     ref,
   ) => {
     const frontGunHandleRef = useRef<GunHandle>(null)
     const backGunHandleRef = useRef<GunHandle>(null)
     const [isDead, setIsDead] = useState(false)
-    const isFront = type === 'front'
-    const isBack = type === 'back'
 
     useImperativeHandle(characterHandleRef, () => {
       return {
@@ -65,29 +56,18 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
           className={cn(
             'absolute inset-0',
             'scale-75 -rotate-y-180 bg-contain transition-all duration-500 backface-hidden',
-            isFront && 'scale-100 rotate-y-0',
+            type === 'front' && 'scale-100 rotate-y-0',
           )}
         >
           <div
-            className='absolute inset-0 z-1 bg-contain bg-bottom bg-no-repeat'
+            className='absolute inset-0 bg-contain bg-bottom bg-no-repeat'
             style={{
-              backgroundImage: `url(${CHARACTER_LIST[characterName]['front']})`,
+              backgroundImage: `url(${CHARACTER_LIST[name]['front']})`,
             }}
           ></div>
           <GunCharacter
-            className={cn(
-              'absolute z-1',
-              characterName === 'nubcat' &&
-                'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
-              characterName === 'mickey' &&
-                'top-[15%] left-[16%] aspect-[1/1.7] w-[26%]',
-              characterName === 'fatty' &&
-                'top-[5%] left-[15%] aspect-[1/2.4] w-[22%] rotate-11',
-              characterName === 'anime-1' &&
-                'top-[25%] left-[12%] aspect-[1/2] w-[13%]',
-              characterName === 'anime-2' &&
-                'top-[16%] left-[33%] aspect-[1/2] w-[14%]',
-            )}
+            characterName={name}
+            characterType={'front'}
             gunHandleRef={frontGunHandleRef}
           />
         </div>
@@ -95,24 +75,18 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
           className={cn(
             'absolute inset-0',
             'scale-75 -rotate-y-180 transition-all duration-500 backface-hidden',
-            isBack && 'scale-100 rotate-y-0',
+            type === 'back' && 'scale-100 rotate-y-0',
           )}
         >
           <div
             className='absolute inset-0 z-2 bg-contain bg-bottom bg-no-repeat'
             style={{
-              backgroundImage: `url(${CHARACTER_LIST[characterName]['back']})`,
+              backgroundImage: `url(${CHARACTER_LIST[name]['back']})`,
             }}
           ></div>
           <GunCharacter
-            className={cn(
-              'absolute z-1 aspect-[1/1.7]',
-              characterName === 'nubcat' && 'right-[6%] w-[20%]',
-              characterName === 'mickey' && 'top-[17%] right-[22%] w-[10%]',
-              characterName === 'fatty' && 'right-[16%] w-[10%] -rotate-20',
-              characterName === 'anime-1' && 'top-[20%] left-[29%] w-[7%]',
-              characterName === 'anime-2' && 'top-[17%] right-[34%] w-[7%]',
-            )}
+            characterName={name}
+            characterType={'back'}
             gunHandleRef={backGunHandleRef}
             hideGun={true}
           />
