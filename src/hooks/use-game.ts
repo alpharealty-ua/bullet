@@ -116,31 +116,32 @@ const useGame = (variant: VariantGame) => {
 
     return new Promise<void>((resolve) => {
       const spin = async (prevLag: number) => {
-        if (currentIndex++ < FINISH_INDEX) {
-          const startSpin = Date.now()
-          const correctLag = prevLag % interval
-          const amountMissSpin = Math.floor(Math.abs(prevLag) / interval)
+        const startSpin = Date.now()
+        const correctLag = prevLag % interval
+        const amountMissSpin = Math.floor(Math.abs(prevLag) / interval)
 
-          currentIndex += amountMissSpin
+        currentIndex += amountMissSpin
 
-          await revolverHandle.spin(interval + correctLag)
+        await revolverHandle.spin(interval + correctLag)
 
-          const realInterval = Date.now() - (startSpin + correctLag)
+        const realInterval = Date.now() - (startSpin + correctLag)
 
-          const lag = interval - realInterval
-          const newIndex =
-            Math.min(currentIndex, FINISH_INDEX) % MULTIPLIERS.length
-          const multiplier = MULTIPLIERS[newIndex]
+        const lag = interval - realInterval
+        const newIndex =
+          Math.min(currentIndex++, FINISH_INDEX) % MULTIPLIERS.length
+        const multiplier = MULTIPLIERS[newIndex]
 
-          setMultiplier(multiplier)
-          setJackpot(bet * multiplier)
-          spin(lag)
-        } else {
-          resolve()
+        setMultiplier(multiplier)
+        setJackpot(bet * multiplier)
+
+        if (currentIndex > FINISH_INDEX) {
+          return
         }
+
+        return spin(lag)
       }
 
-      spin(0)
+      spin(0).then(resolve)
     })
   }
 
