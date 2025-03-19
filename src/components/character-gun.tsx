@@ -140,15 +140,15 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             <div className='relative top-0 right-0 left-0 z-5 mx-auto aspect-square h-[35%]'>
               <div
                 className={cn(
-                  'absolute inset-0 scale-200 bg-cover bg-center opacity-0',
-                  'zoom-in-50 fade-in fill-mode-backwards animate-[shot] bg-no-repeat duration-200 ease-linear',
+                  'absolute inset-0 scale-300 bg-cover bg-center',
+                  'zoom-in-50 fade-in fill-mode-backwards animate-in bg-no-repeat delay-100 duration-150 ease-linear',
                 )}
                 style={{ backgroundImage: `url(${IMAGES.shot1})` }}
               ></div>
               <div
                 className={cn(
-                  'absolute inset-0 scale-600 opacity-0',
-                  'zoom-in fade-in fill-mode-backwards animate-[shot] bg-cover bg-center bg-no-repeat delay-200 duration-200 ease-linear',
+                  'absolute inset-0 scale-600',
+                  'zoom-in fade-in fill-mode-backwards animate-in bg-cover bg-center bg-no-repeat delay-250 duration-150 ease-linear',
                 )}
                 style={{ backgroundImage: `url(${IMAGES.shot2})` }}
               ></div>
@@ -159,8 +159,8 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           showShot && (
             <div
               className={cn(
-                'fixed inset-0 z-50 mx-auto max-w-[var(--width)] opacity-0',
-                'fill-mode-both fade-in animate-[shot] bg-cover bg-center bg-no-repeat delay-400 duration-200 ease-linear',
+                'fixed inset-0 z-50 mx-auto max-w-[var(--width)]',
+                'fill-mode-both fade-in animate-in bg-cover bg-center bg-no-repeat delay-350 duration-150 ease-linear',
               )}
               style={{ backgroundImage: `url(${IMAGES.shot3})` }}
             ></div>

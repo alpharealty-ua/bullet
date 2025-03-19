@@ -58,16 +58,6 @@
   }
 }
 
-@keyframes shot {
-  0% {
-    opacity: var(--tw-enter-opacity);
-    scale: var(--tw-enter-scale);
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 @keyframes pulse-enter-arena {
   0% {
     filter: drop-shadow(0 0 0 var(--color-green));
