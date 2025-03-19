@@ -25,7 +25,7 @@ export type asButton = {
   as: 'button'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-// TODO: ADDED CHILDREN
+// TODO: REMOVE TEXT
 export type ButtonProps = {
   text?: string
 } & (
@@ -57,14 +57,14 @@ const Button = React.forwardRef<
       )}
       {...props}
     >
-      {text && (
+      {(text || children) && (
         <span
           className={cn(
             !bg && 'absolute inset-0 inline-flex items-center justify-center',
             bg && 'relative',
           )}
         >
-          {text}
+          {text || children}
         </span>
       )}
       {image && <img src={imagesMap[image]} alt='' />}
