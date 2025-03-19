@@ -55,7 +55,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             <div className='text-3xl'>Largest prize game</div>
             <div className='align-items flex items-center justify-between'>
               <Result
-                title={'Jackpot'}
+                title={'Prizepool'}
                 value={`$${watchGame.jackpot}`}
                 open={true}
               />
@@ -71,7 +71,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         {variant === 'play' && (
           <div className='flex min-h-40 flex-col gap-3 pt-2'>
             <Result
-              title={'Jackpot'}
+              title={'Prizepool'}
               value={`$${jackpot}`}
               open={Boolean(jackpot)}
             />
