@@ -24,7 +24,7 @@ const ProfileLink = ({ className, user, ...props }: Props) => {
   return (
     <button
       className={cn(
-        'hover:text-green cursor-pointer transition-all active:scale-90',
+        'hover:text-green cursor-pointer leading-[1] transition-all active:scale-90',
         className,
       )}
       onClick={handleProfileClick}

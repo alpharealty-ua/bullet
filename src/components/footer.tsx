@@ -1,114 +1,66 @@
-import { useBalance } from '@/api/wallet.api'
+import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { cn } from '@/lib/utils'
-import { FormatGame, IMAGES, VariantGame } from '@/lib/constants'
-import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
-import { Rank } from '@/components/rank'
-import { MoneyBagButton } from '@/components/money-bag-button'
-import { Balance } from '@/components/balance'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Leaderboard } from '@/components/leaderboard'
+import { ProfileLink } from '@/components/profile-link'
 
-const Footer = ({
-  // format,
-  variant,
-}: {
-  // TODO: REMOVE
-  format: FormatGame
-  variant: VariantGame
-  showHelpers?: boolean
-}) => {
-  const { data: balance } = useBalance()
-
+const Footer = () => {
   const round = useGameStore(({ round }) => round)
-  const noMoney = useGameStore(({ noMoney }) => noMoney)
-  const countBullet = useGameStore(({ countBullet }) => countBullet)
   const modal = useCustomModal()
-  const footerWithBg = variant === 'watch'
-  const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
+  // TODO: CHANGED TO USE PROFILE OR RENAME HEADER TO HEADER_AUTH
+  const user = useUser()
 
-  const handleSettings = () => {
+  const handleSettingsClick = () => {
     modal.show({ contentSlot: <Settings /> })
   }
 
+  const handleLeaderboardClick = () => {
+    modal.show({ contentSlot: <Leaderboard /> })
+  }
+
   return (
-    <footer
-      className={cn(
-        'relative flex h-[74px] justify-between bg-[#f2f2f2] px-1 py-0.5',
-        footerWithBg && 'bg-cover bg-[center_top] bg-no-repeat pt-1',
-      )}
-      style={footerWithBg ? { backgroundImage: `url(${IMAGES.footer})` } : {}}
-    >
-      <div className='relative flex flex-1 flex-col items-center'>
-        <div className='relative flex w-full flex-col text-center'>
-          <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
-            {variant === 'play' ? 'Prizepool' : 'Jackpot'}
+    <footer className='relative flex h-[74px] justify-between bg-[#f2f2f2] px-2 py-1'>
+      <div className='relative flex flex-1 flex-col gap-0.5'>
+        <div className='flex items-center gap-1'>
+          <ButtonWithAudio
+            as='button'
+            image='leaderboardstar'
+            onClick={handleLeaderboardClick}
+            className='w-10 cursor-pointer'
+          />
+          <div className='flex flex-col gap-1'>
+            <div className='text-base leading-[1] tracking-tight'>Lvl 921</div>
+            <ProfileLink className='self-start' user={user} />
           </div>
-          <div className='relative flex justify-center text-center text-2xl leading-[1] tracking-tight'>
+        </div>
+      </div>
+      <div className='relative flex flex-1 flex-col gap-0.5'>
+        <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+          Round
+        </div>
+        <div className='text-red relative text-center text-2xl leading-[1]'>
+          {round}
+        </div>
+      </div>
+      <div className='relative flex flex-1 flex-col items-end gap-0.5'>
+        <div className='flex flex-col gap-0.5'>
+          <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+            Prizepool
+          </div>
+          <div className='relative flex justify-center text-center text-lg leading-[1] tracking-tight'>
             $2000
           </div>
         </div>
       </div>
-      <div
-        className={cn(
-          'relative flex flex-1 flex-col items-center',
-          footerWithBg && 'self-end',
-        )}
-      >
-        {variant === 'watch' && (
-          <div className='flex w-[114px] flex-col items-center gap-0.5 text-center'>
-            <Rank value={30} />
-            <Bullets countBullet={countBullet} />
-          </div>
-        )}
-        {variant === 'play' && (
-          <div className='flex flex-1 flex-col items-center text-center'>
-            <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
-              <span className='relative -left-0.5'>Round</span>
-            </div>
-            <div className='text-red relative text-center text-2xl leading-[1]'>
-              {round}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className='relative flex flex-1 flex-row justify-between'>
-        {variant === 'play' && (
-          <div className='relative flex flex-col items-end self-start'>
-            <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
-              Balance
-            </div>
-            <Balance value={balance} increaseTime={increaseTime} />
-          </div>
-        )}
-        {variant === 'watch' && (
-          <div className='flex flex-1 flex-col items-center text-center'>
-            <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
-              Round
-            </div>
-            <div className='text-red relative text-center text-3xl leading-[1]'>
-              {round}
-            </div>
-          </div>
-        )}
-        {variant === 'play' && (
-          <div className='shrink-0 pl-1'>
-            <MoneyBagButton
-              as='button'
-              className={cn(!noMoney && 'w-6', noMoney && 'text-lg')}
-              balance={balance}
-              noMoney={noMoney}
-              bg=''
-            />
-          </div>
-        )}
-        <div className='absolute right-0 bottom-0 flex flex-col justify-between py-1'>
-          <button
-            className='mt-auto h-6 w-6 cursor-pointer bg-contain bg-center bg-no-repeat'
-            style={{ backgroundImage: `url(${IMAGES.settings})` }}
-            onClick={handleSettings}
-          ></button>
-        </div>
+      <div className='absolute right-1 bottom-1'>
+        <ButtonWithAudio
+          as='button'
+          image='settings'
+          className='w-5 cursor-pointer bg-center bg-no-repeat p-1'
+          onClick={handleSettingsClick}
+        />
       </div>
     </footer>
   )

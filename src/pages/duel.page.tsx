@@ -149,7 +149,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       )}
       <Victory />
       <GameOver hasImage={false} onClick={newGame} onTimeout={newGame} />
-      <Footer format='duel' variant={variant} />
+      <Footer />
     </>
   )
 }

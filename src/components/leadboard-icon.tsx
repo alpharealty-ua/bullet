@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { ROUTES } from '@/routes/path'
 import { cn } from '@/lib/utils'
