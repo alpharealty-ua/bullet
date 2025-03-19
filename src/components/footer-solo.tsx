@@ -1,7 +1,6 @@
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { cn } from '@/lib/utils'
-import { IMAGES, VariantGame } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { Bet } from '@/components/bet'
 import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
@@ -9,7 +8,7 @@ import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-const Footer = ({ variant: _ }: { variant: VariantGame }) => {
+const Footer = () => {
   const setBet = useGameStore(({ setBet }) => setBet)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const noMoney = useGameStore(({ noMoney }) => noMoney)
@@ -28,9 +27,7 @@ const Footer = ({ variant: _ }: { variant: VariantGame }) => {
 
   return (
     <footer
-      className={cn(
-        'relative flex h-[100px] justify-between border-t-2 border-black bg-[#f2f2f2] px-2 py-1',
-      )}
+      className='relative flex h-[100px] justify-between border-t-2 border-black bg-[#f2f2f2] px-2 py-1'
       style={{ backgroundImage: `url(${IMAGES.texture})` }}
     >
       <div className='relative flex w-full max-w-1/2 flex-col items-center'>
@@ -63,7 +60,7 @@ const Footer = ({ variant: _ }: { variant: VariantGame }) => {
             as='button'
             image='leaderboardstar'
             onClick={handleLeaderboardClick}
-            className={cn('w-10 cursor-pointer')}
+            className='w-10 cursor-pointer'
           />
           <ButtonWithAudio
             as='button'
