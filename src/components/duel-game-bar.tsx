@@ -5,20 +5,22 @@ import { IoSkull } from 'react-icons/io5'
 
 export interface GameBarHandle {
   getState: () => Promise<{ value: number; isRunning: boolean }>
+  highlight: () => Promise<void>
   start: (duration: number) => Promise<void>
   stop: () => Promise<void>
   reset: () => Promise<void>
 }
 
 const LENGTH = 23
-const DEFAUTL_NUMBER = 0
-const NUMBERS = [50, 20, 10]
+const DEFAUTL_VALUE = 0
+export const SKULL_VALUE = 50
+const NUMBERS = [SKULL_VALUE, 20, 10]
 const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]']
 
 const getItem = (i: number) => {
   const center = LENGTH >> 1
   const index = Math.abs(center - i)
-  const number = NUMBERS[index] ?? DEFAUTL_NUMBER
+  const number = NUMBERS[index] ?? DEFAUTL_VALUE
   const className = CLASS_NAMES[index] ?? ''
 
   return { number, className }
@@ -98,28 +100,31 @@ const DuelGameBar = ({
 
   useImperativeHandle(gameBarRef, () => ({
     getState: async () => {
-      const nextActiveDom = nextActiveRef.current
-
-      if (nextActiveDom) {
-        const valueDom = nextActiveDom.querySelector('[data-value]')
-
-        if (valueDom) {
-          valueDom.classList.add('is-selected')
-
-          valueDom.addEventListener(
-            'transitionend',
-            () => {
-              valueDom.classList.remove('is-selected')
-            },
-            { once: true },
-          )
-        }
-      }
-
       return {
         value: getItem(activeIndexRef.current).number,
         isRunning: isRunningRef.current,
       }
+    },
+    highlight: async () => {
+      const nextActiveDom = nextActiveRef.current
+
+      if (nextActiveDom === null) {
+        return
+      }
+
+      const valueDom = nextActiveDom.querySelector('[data-value]')
+
+      if (valueDom === null) {
+        return
+      }
+
+      valueDom.classList.add('is-selected')
+
+      await new Promise((resolve) =>
+        valueDom.addEventListener('transitionend', resolve, { once: true }),
+      )
+
+      valueDom.classList.remove('is-selected')
     },
     start,
     stop: async () => {
@@ -153,7 +158,7 @@ const DuelGameBar = ({
               .map((_, i) => {
                 const { number, className } = getItem(i)
 
-                const isDefaultNumber = number === DEFAUTL_NUMBER
+                const isDefaultNumber = number === DEFAUTL_VALUE
 
                 return (
                   <td
@@ -168,7 +173,7 @@ const DuelGameBar = ({
                       className={cn(
                         'absolute inset-0 z-2 flex items-center justify-center text-white select-none',
                         'duration-500',
-                        'bg-[#f7f7c0] [&.is-selected]:z-3 [&.is-selected]:scale-200 [&.is-selected]:text-white',
+                        'bg-[#f7f7c0] [&.is-selected]:z-3 [&.is-selected]:scale-200',
                         'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [.is-active_&]:before:opacity-100',
                         isDefaultNumber &&
                           'text-transparent [&.is-selected]:text-transparent',

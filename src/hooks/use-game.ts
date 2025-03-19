@@ -19,7 +19,7 @@ import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait, waitEndAudio } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
-import { GameBarHandle } from '@/components/duel-game-bar'
+import { GameBarHandle, SKULL_VALUE } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { CharacterHandle } from '@/components/character'
 
@@ -196,10 +196,12 @@ const useGame = (variant: VariantGame) => {
           return
         }
 
-        const isSkull = value === 50
+        const isSkull = value === SKULL_VALUE
         const winProbabilityPercentage = value
         const random = randomIntFromInterval(0, 99)
         const inWinGame = !isSkull && random < winProbabilityPercentage
+
+        !isSkull && (await gameBarHandle.highlight())
 
         await wait(1000)
         await backGunHandle.trigger()
