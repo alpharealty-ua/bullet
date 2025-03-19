@@ -27,8 +27,7 @@ const MoneyBagButton = ({
   return (
     <ButtonWithAudio
       className={cn(
-        '',
-        !noMoney && 'w-8',
+        'aspect-[8/12] w-8',
         noMoney && 'animate-wiggle text-4xl',
         className,
       )}
