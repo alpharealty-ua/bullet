@@ -88,7 +88,6 @@ const useGame = (variant: VariantGame) => {
       })
     }
 
-    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     restartGame()
@@ -143,6 +142,7 @@ const useGame = (variant: VariantGame) => {
   const deal = async () => {
     if (offer) {
       await acceptOfferMutation(offer.id)
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       await playAudio('chaching')
       await newGame()
     }
