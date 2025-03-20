@@ -207,7 +207,7 @@ const useGame = (variant: VariantGame) => {
         const random = randomIntFromInterval(0, 99)
         const inWinGame = !isSkull && random < winProbabilityPercentage
 
-        !isSkull && (await gameBarHandle.highlight())
+        await gameBarHandle.highlight()
 
         await wait(1000)
         await backGunHandle.trigger()
