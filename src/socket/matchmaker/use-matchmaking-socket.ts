@@ -153,6 +153,8 @@ type MatchDetails = {
   opponent: { ping: number; username: string; region: string }
 }
 
+// TODO: FIX
+// @ts-ignore
 const addLogEntry = (message: string, type: string) => {
   // console.log(message, type)
 }
