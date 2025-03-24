@@ -37,8 +37,8 @@ const useSettingsStore = create<SettingsState>()((set, get) => ({
     try {
       // TODO: MOVE TO ADUIO
       audio.muted = !get().soundEffects
+      audio.currentTime = 0
       if (play) {
-        audio.currentTime = 0
         await audio.play()
       }
 
