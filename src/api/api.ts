@@ -36,7 +36,7 @@ api.interceptors.response.use(undefined, (error: unknown) => {
   }
   if (axios.isAxiosError(error) && error.response && error.response.data) {
     error.message = error.response.data.message
-    toast.error(error.message)
+    !import.meta.env.PROD && toast.error(error.message)
   }
   throw error
 })
