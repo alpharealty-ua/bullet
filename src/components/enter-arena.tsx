@@ -1,16 +1,40 @@
-import { useEffect, useState } from 'react'
 import { IoPlay } from 'react-icons/io5'
 
+import { Indicator, MatchmakingStatus } from '@/socket/matchmaker/use-matchmaking-socket'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+
+interface EnterArenaProps {
+  onDecline: () => void
+  onConfirm: () => void
+  onSearch: (amount: number) => void
+  indicators: Indicator[]
+  matchmakingStatus: MatchmakingStatus
+  confirmationTimer: {
+    time: number
+    urgent: boolean
+  }
+}
+
+const matchmakingStatusMap: Record<MatchmakingStatus, string> = {
+  'not-in-queue': 'Not in queue',
+  connecting: 'Connecting to matchmaking',
+  searching: 'Searching for opponents',
+  'match-found': 'Match found! Waiting for confirmation',
+  'match-created': 'Match created! Game starting',
+}
 
 const EnterArena = ({
+  onDecline,
+  onConfirm,
   onSearch,
-}: {
-  onSearch: (searched: boolean) => void
-}) => {
-  const [isSearching, setIsSearching] = useState(false)
-  const [value, setValue] = useState<number | null>(null)
+  indicators,
+  confirmationTimer,
+  matchmakingStatus,
+}: EnterArenaProps) => {
+  const isSearching = matchmakingStatus === 'searching'
+  const isFound = matchmakingStatus === 'match-found'
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
@@ -28,27 +52,12 @@ const EnterArena = ({
       return
     }
 
-    setIsSearching((p) => !p)
-    setValue(Number(value))
+    onSearch(Number(value))
   }
 
-  useEffect(() => {
-    if (!isSearching) {
-      return
-    }
-
-    const timeoutID = setTimeout(() => {
-      onSearch(true)
-    }, 3000)
-
-    return () => {
-      clearTimeout(timeoutID)
-    }
-  }, [isSearching, value, onSearch])
-
   return (
-    <div className='relative mx-auto flex w-full max-w-46 flex-col items-center justify-center gap-2 pt-14'>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-2'>
+    <div className='relative mx-auto flex w-full flex-col items-center justify-center gap-2'>
+      <form onSubmit={handleSubmit} className='flex max-w-46 flex-col gap-2'>
         <button className='hover:text-green cursor-pointer text-2xl transition-all'>
           Enter arena
         </button>
@@ -86,20 +95,68 @@ const EnterArena = ({
           </button>
         </div>
       </form>
-      {isSearching && (
-        <div className={cn('px-3', 'animate-in fade-in duration-500')}>
-          Searching for opponent{' '}
-          <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-0 duration-400 ease-linear'>
-            .
-          </span>
-          <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-200 duration-400 ease-linear'>
-            .
-          </span>
-          <span className='repeat-infinite direction-alternate inline-block animate-[period-pulse] rounded-full align-bottom delay-400 duration-400 ease-linear'>
-            .
-          </span>
+      <div className='animate-in fade-in max-w-80 px-3 duration-500'>
+        <div className='text-lg'>
+          {matchmakingStatusMap[matchmakingStatus]}{' '}
+          {matchmakingStatus !== 'not-in-queue' && (
+            <>
+              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-0 duration-400 ease-linear'>
+                .
+              </span>
+              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-200 duration-400 ease-linear'>
+                .
+              </span>
+              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-400 duration-400 ease-linear'>
+                .
+              </span>
+            </>
+          )}
         </div>
-      )}
+        {isFound && (
+          <div className='animate-in fade-in flex max-w-80 flex-col gap-1 text-center duration-500'>
+            <div className='text-xs'>
+              A match has been found. Please confirm to join the&nbsp;game.
+            </div>
+            <div className='flex items-center justify-center gap-2'>
+              {indicators.map((indicator, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    'border-primary h-6 w-6 rounded-full border bg-[#ecf0f1] shadow-lg',
+                    indicator.confirm && 'border-transparent bg-[#2ecc71]',
+                  )}
+                ></div>
+              ))}
+            </div>
+            <div
+              className={cn(
+                'text-red repeat-infinite text-xl duration-500 ',
+                confirmationTimer.urgent && 'animate-[pulse-time]',
+              )}
+            >
+              {confirmationTimer.time}
+            </div>
+            <div className='flex justify-between gap-4'>
+              <ButtonWithAudio
+                as='button'
+                bg='green'
+                className='w-full text-sm'
+                onClick={onConfirm}
+              >
+                Confirm
+              </ButtonWithAudio>
+              <ButtonWithAudio
+                as='button'
+                bg='red'
+                className='w-full text-sm'
+                onClick={onDecline}
+              >
+                Decline
+              </ButtonWithAudio>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

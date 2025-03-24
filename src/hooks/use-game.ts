@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { socket } from '@/socket'
+import { socketGame } from '@/socket/socket'
 import { QUERY_KEYS } from '@/api/api'
 import {
   Offer,
@@ -256,10 +256,12 @@ const useGame = (variant: VariantGame) => {
     await pullGame(gameId)
   }
 
-  const startGame = async () => {
-    const { gameId, multiplier } = await startGameMutation({
-      betAmount: String(bet),
-    })
+  const startGame = async (result?: { gameId: string; multiplier: string }) => {
+    const { gameId, multiplier } =
+      result ??
+      (await startGameMutation({
+        betAmount: String(bet),
+      }))
 
     // TODO: REMOVE
     setState('running')
@@ -413,11 +415,11 @@ const useGame = (variant: VariantGame) => {
 
     setWatchGame(null)
 
-    socket.emit('watch_game', gameId, (response: unknown) => {
+    socketGame.emit('watch_game', gameId, (response: unknown) => {
       console.log('watch_game', response) // ok
 
       if (isUnmounted) {
-        socket.emit('unwatch_game', gameId, (response: unknown) => {
+        socketGame.emit('unwatch_game', gameId, (response: unknown) => {
           console.log('unwatch_game', response) // ok
         })
       }
@@ -446,7 +448,7 @@ const useGame = (variant: VariantGame) => {
     //   console.log('next_largest_game', response)
     // }
 
-    socket.on('pull_result', pullResult)
+    socketGame.on('pull_result', pullResult)
     // socket.on('game_update', gameUpdate)
     // socket.on('offer_created', offer_created)
     // socket.on('offer_accepted', offer_accepted)
@@ -455,11 +457,11 @@ const useGame = (variant: VariantGame) => {
 
     return () => {
       isUnmounted = true
-      socket.emit('unwatch_game', gameId, (response: unknown) => {
+      socketGame.emit('unwatch_game', gameId, (response: unknown) => {
         console.log('unwatch_game', response) // ok
       })
 
-      socket.off('pull_result', pullResult)
+      socketGame.off('pull_result', pullResult)
       // socket.off('game_update', gameUpdate)
       // socket.off('offer_created', offer_created)
       // socket.off('offer_accepted', offer_accepted)
@@ -475,7 +477,7 @@ const useGame = (variant: VariantGame) => {
     let id: NodeJS.Timeout | null = null
     let isUnmounted = false
     const call = () => {
-      socket.emit('watch_largest_prize', (response: unknown) => {
+      socketGame.emit('watch_largest_prize', (response: unknown) => {
         if (isUnmounted) {
           return
         }

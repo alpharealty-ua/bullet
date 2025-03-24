@@ -6,7 +6,7 @@ import { Providers } from '@/providers'
 import { AuthMiddleware } from '@/middleware/auth.middleware'
 import { Debug } from '@/components/debug'
 import '@/globals.css'
-import '@/socket'
+import '@/socket/socket'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

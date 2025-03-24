@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { RouterProvider } from 'react-router'
 
-import { socket } from '@/socket'
+import { socketGame } from '@/socket/socket'
 import { usePreloadImages } from '@/hooks/use-preload-images'
 import { router } from '@/routes/router'
 import { useAuthStore } from '@/store/auth.store'
@@ -21,7 +21,7 @@ const App = () => {
       console.log('connect')
 
       if (isUnmounted) {
-        socket.disconnect()
+        socketGame.disconnect()
       }
     }
 
@@ -29,17 +29,17 @@ const App = () => {
       console.log('disconnect')
     }
 
-    socket.auth = { token }
-    socket.connect()
-    socket.on('connect', onConnect)
-    socket.on('disconnect', onDisconnect)
+    socketGame.auth = { token }
+    // socketGame.connect()
+    socketGame.on('connect', onConnect)
+    socketGame.on('disconnect', onDisconnect)
 
     return () => {
       isUnmounted = true
-      socket.off('connect', onConnect)
-      socket.off('disconnect', onDisconnect)
-      if (socket.connected) {
-        socket.disconnect()
+      socketGame.off('connect', onConnect)
+      socketGame.off('disconnect', onDisconnect)
+      if (socketGame.connected) {
+        socketGame.disconnect()
       }
     }
   }, [token])
