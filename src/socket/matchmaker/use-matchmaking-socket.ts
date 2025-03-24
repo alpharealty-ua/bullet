@@ -221,7 +221,6 @@ const useMatchmakingSocket = (token: string) => {
     let playerId: string | null = null
     let currentMatchId: string | null = null
     let confirmationTimeout: number | null = null
-    let matchmakingTimeout: number | null = null
     let matchConfirmationActive = false
     let matchmakingStatus: MatchmakingStatus = 'not-in-queue'
     let authenticated = false
@@ -271,12 +270,6 @@ const useMatchmakingSocket = (token: string) => {
 
         // Reset the match confirmation flag
         matchConfirmationActive = false
-
-        // Clear any matchmaking timeout
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-        }
 
         // Hide match details
         setMatchDetails(null)
@@ -347,34 +340,10 @@ const useMatchmakingSocket = (token: string) => {
         setInfo((p) => ({ ...p, ping: data.ping }))
 
         // Only hide the confirmation dialog if no match confirmation is active
-        if (matchmakingStatus  === 'not-in-queue') {
+        if (matchmakingStatus === 'not-in-queue') {
           // Hide any previous match details
           setMatchDetails(null)
         }
-
-        // Clear any existing timeout first to prevent multiple timeouts
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-        }
-
-        // Auto-leave after 30 seconds if no match is found
-        matchmakingTimeout = window.setTimeout(() => {
-          if (socket && socket.connected) {
-            // Check if we're still in matchmaking before leaving
-            if (matchmakingStatus === 'searching') {
-              addLogEntry(
-                'No match found after 30 seconds, leaving matchmaking',
-                'warning',
-              )
-              socket.emit('leaveMatchmaking')
-            } else {
-              debug(
-                'Auto-leave timeout triggered but player is no longer in matchmaking',
-              )
-            }
-          }
-        }, 30000)
 
         // Log if this is a re-join after match cancellation
         if (
@@ -397,12 +366,6 @@ const useMatchmakingSocket = (token: string) => {
 
         // Update UI
 
-        // Clear matchmaking timeout
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-        }
-
         // Hide match details
         setMatchDetails(null)
       }
@@ -415,13 +378,6 @@ const useMatchmakingSocket = (token: string) => {
 
         // Update matchmaking status
         updateMatchmakingStatus('match-found')
-
-        // Clear the auto-leave timeout when a match is found
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-          debug('Cleared matchmaking auto-leave timeout due to match found')
-        }
 
         // Show match confirmation dialog
         debug(`Showing match confirmation for match ${matchData.matchId}`)
@@ -500,15 +456,6 @@ const useMatchmakingSocket = (token: string) => {
         // Reset the match confirmation flag
         matchConfirmationActive = false
 
-        // Clear the auto-leave timeout when a match is canceled
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-          debug(
-            'Cleared matchmaking auto-leave timeout due to match cancellation',
-          )
-        }
-
         // Update matchmaking status based on whether the player was returned to queue
         const status =
           data.reason === 'player_declined' && data.declinedBy !== playerId
@@ -541,19 +488,11 @@ const useMatchmakingSocket = (token: string) => {
 
         playAudio('matchConfirmedSound')
 
-        console.log('call')
-
         // Show a notification
         showCustomAlert(
           'Match created successfully! Game is being prepared.',
           'success',
         )
-
-        // Clear matchmaking timeout
-        if (matchmakingTimeout) {
-          clearTimeout(matchmakingTimeout)
-          matchmakingTimeout = null
-        }
 
         // Find opponent's player ID
         const opponentPlayerId = data.players.find((id) => id !== playerId)
