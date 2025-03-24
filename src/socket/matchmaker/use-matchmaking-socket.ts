@@ -626,7 +626,7 @@ const useMatchmakingSocket = (token: string) => {
           username,
           region,
         },
-        matchConfirmationRequired: false,
+        matchConfirmationRequired: true,
       }
 
       socket.emit('joinMatchmaking', joinMatchmaking)
