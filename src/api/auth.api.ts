@@ -70,7 +70,7 @@ export const useUser = () => {
   })
 
   if (user == null) {
-    throw new Error('User not found')
+    throw new Error('useUser should be used within <ProtectedRoute>')
   }
 
   return user
