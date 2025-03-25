@@ -43,6 +43,7 @@ const DuelGameBar = ({
   const activeIndexRef = useRef(-1)
   const isRunningRef = useRef(false)
   const nextActiveRef = useRef<HTMLTableCellElement | null>(null)
+  const startNumber = useRef(-1)
 
   const getState = async () => {
     return {
@@ -65,10 +66,19 @@ const DuelGameBar = ({
 
       isRunningRef.current = true
 
+      // TODO: REFACTOR
+      startNumber.current++
+      const currentStartNumber = startNumber.current
+
       const cells = barDom.rows[0].cells
 
+      // TODO: USE DELAGATION
       const start = () => {
         if (!isRunningRef.current) {
+          return
+        }
+
+        if (currentStartNumber !== startNumber.current) {
           return
         }
 
@@ -86,8 +96,7 @@ const DuelGameBar = ({
         directionRef.current = nextDirection
         activeIndexRef.current = nextActiveIndex
 
-        const prevActive =
-          cells[prevActiveIndex] ?? document.createElement('td')
+        const prevActive = nextActiveRef.current ?? document.createElement('td')
         const nextActive = cells[nextActiveIndex]
         nextActiveRef.current = nextActive
 
@@ -95,14 +104,14 @@ const DuelGameBar = ({
         nextActive.classList.add('is-active')
         nextActive.style.transitionDuration = `${duration}ms`
 
-        nextActive.addEventListener(
-          'transitionend',
-          () => {
-            nextActive.style.transitionDuration = ''
-            start()
-          },
-          { once: true },
-        )
+        const transitionend = () => {
+          nextActive.style.transitionDuration = ''
+          start()
+        }
+
+        nextActive.addEventListener('transitionend', transitionend, {
+          once: true,
+        })
       }
 
       start()
