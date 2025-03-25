@@ -113,7 +113,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
         )
         fingerDom.classList.remove('is-trigger')
 
-        void playAudio('triggerpull')
+        await playAudio('triggerpull')
       },
       shot,
       click,

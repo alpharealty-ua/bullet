@@ -208,7 +208,7 @@ const Revolver = React.forwardRef<
 
   useImperativeHandle(gunHandleRef, () => ({
     spin,
-    trigger: async () => void playAudio('triggerpull'),
+    trigger: async () => void (await playAudio('triggerpull')),
     click,
   }))
 
