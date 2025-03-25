@@ -186,6 +186,7 @@ const DuelGameBar = ({
                         'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [.is-active_&]:before:opacity-100',
                         isDefaultNumber &&
                           'text-transparent [&.is-selected]:text-transparent',
+                        isSkullNumber && '[&.is-selected]:scale-600',
                         className,
                       )}
                       data-value
