@@ -3,10 +3,8 @@ import { useCallback, useState } from 'react'
 import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
-import {
-  ConnectionStatus,
-  useMatchmakingSocket,
-} from '@/socket/matchmaker/use-matchmaking-socket'
+import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
+import { ConnectionStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useGame } from '@/hooks/use-game'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'

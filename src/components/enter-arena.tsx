@@ -3,7 +3,7 @@ import { IoPlay } from 'react-icons/io5'
 import {
   Indicator,
   MatchmakingStatus,
-} from '@/socket/matchmaker/use-matchmaking-socket'
+} from '@/socket/matchmaker/matchmaker-soket.types'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
