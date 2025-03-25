@@ -1,12 +1,13 @@
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { IMAGES } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard'
 import { ProfileLink } from '@/components/profile-link'
 
-const Footer = () => {
+const Footer = ({ hasPull }: { hasPull?: boolean }) => {
   const round = useGameStore(({ round }) => round)
   const modal = useCustomModal()
 
@@ -41,7 +42,15 @@ const Footer = () => {
             className='relative aspect-[1/1.5] h-5 bg-contain bg-center bg-no-repeat'
             style={{ backgroundImage: `url(${IMAGES.bullet})` }}
           >
-            <div className='bg-red absolute top-1/2 left-1/2 h-[130%] w-0.5 origin-center -translate-1/2 rotate-45'></div>
+            {
+              <div
+                className={cn(
+                  'bg-red absolute top-1/2 left-1/2 h-0 w-0.5 origin-center -translate-1/2 rotate-45 transition-all',
+
+                  !hasPull && 'h-[130%]',
+                )}
+              ></div>
+            }
           </div>
         </div>
         <div className='text-red relative text-center text-2xl leading-[1]'>

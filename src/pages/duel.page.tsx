@@ -43,12 +43,16 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const addRound = useGameStore(({ addRound }) => addRound)
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
+  const round = useGameStore(({ round }) => round)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   const user = useUser()
   const token = useAuthStore(({ token }) => token)
+  const [lastPullRound, setLastPullRound] = useState(-1)
+  const hasPull = lastPullRound !== round
 
   const handlePull = async () => {
+    setLastPullRound(round)
     await next('duel')
   }
 
@@ -355,7 +359,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory hideWon />
       <GameOver hasImage={false} onClick={newGame} onTimeout={newGame} />
-      <Footer />
+      <Footer hasPull={hasPull} />
     </>
   )
 }
