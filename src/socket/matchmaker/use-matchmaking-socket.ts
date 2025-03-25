@@ -218,7 +218,7 @@ const useMatchmakingSocket = (token: string) => {
       return resultRef.current
     }
 
-    let off: (() => void) | null = null
+    let off: () => void = () => void 1
 
     let currentPing = 0
     let playerId: string | null = null
@@ -243,7 +243,7 @@ const useMatchmakingSocket = (token: string) => {
     }
 
     const connect = () => {
-      off && off()
+      off()
 
       socket.auth = { token }
       socket.connect()
