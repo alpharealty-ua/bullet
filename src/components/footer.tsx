@@ -1,6 +1,7 @@
 import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { IMAGES } from '@/lib/constants'
 import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard'
@@ -37,8 +38,14 @@ const Footer = () => {
         </div>
       </div>
       <div className='relative flex flex-1 flex-col gap-0.5'>
-        <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+        <div className='text-green flex items-center justify-center gap-1 text-center text-xl leading-[1] tracking-tight uppercase'>
           Round
+          <div
+            className='relative aspect-[1/1.5] h-5 bg-contain bg-center bg-no-repeat'
+            style={{ backgroundImage: `url(${IMAGES.bullet})` }}
+          >
+            <div className='bg-red absolute top-1/2 left-1/2 h-[130%] w-0.5 origin-center -translate-1/2 rotate-45'></div>
+          </div>
         </div>
         <div className='text-red relative text-center text-2xl leading-[1]'>
           {round}
