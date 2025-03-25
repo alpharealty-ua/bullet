@@ -93,57 +93,60 @@ const useGame = (variant: VariantGame) => {
     restartGame()
   }, [restartGame, isSolo, navigate, queryClient, gameId, variant])
 
-  const getMultiplier = async (multiplierIndex: number): Promise<void> => {
-    const revolverHandle = revolverRefHandle.current
+  const getMultiplier = useCallback(
+    async (multiplierIndex: number): Promise<void> => {
+      const revolverHandle = revolverRefHandle.current
 
-    if (revolverHandle === null) {
-      return
-    }
-
-    const length = MULTIPLIERS.length
-    const AMOUNT_CHAMBER =
-      length * Math.round(randomIntFromInterval(20, 30) / length) +
-      multiplierIndex
-
-    const spinAudio = await playAudio('spin')
-
-    const END_DELAY = 100
-    const DURATION_AUDIO = spinAudio.duration * 1000 - END_DELAY
-    const interval = DURATION_AUDIO / AMOUNT_CHAMBER
-
-    const FINISH_INDEX = AMOUNT_CHAMBER
-    let currentIndex = 0
-
-    return new Promise<void>((resolve) => {
-      const spin = async (prevLag: number) => {
-        const startSpin = Date.now()
-        const correctLag = prevLag % interval
-        const amountMissSpin = Math.floor(Math.abs(prevLag) / interval)
-
-        currentIndex += amountMissSpin
-
-        await revolverHandle.spin(interval + correctLag)
-
-        const realInterval = Date.now() - (startSpin + correctLag)
-
-        const lag = interval - realInterval
-        const newIndex =
-          Math.min(currentIndex++, FINISH_INDEX) % MULTIPLIERS.length
-        const multiplier = MULTIPLIERS[newIndex]
-
-        setMultiplier(multiplier)
-        setJackpot(bet * multiplier)
-
-        if (currentIndex > FINISH_INDEX) {
-          return
-        }
-
-        return spin(lag)
+      if (revolverHandle === null) {
+        return
       }
 
-      spin(0).then(resolve)
-    })
-  }
+      const length = MULTIPLIERS.length
+      const AMOUNT_CHAMBER =
+        length * Math.round(randomIntFromInterval(20, 30) / length) +
+        multiplierIndex
+
+      const spinAudio = await playAudio('spin')
+
+      const END_DELAY = 100
+      const DURATION_AUDIO = spinAudio.duration * 1000 - END_DELAY
+      const interval = DURATION_AUDIO / AMOUNT_CHAMBER
+
+      const FINISH_INDEX = AMOUNT_CHAMBER
+      let currentIndex = 0
+
+      return new Promise<void>((resolve) => {
+        const spin = async (prevLag: number) => {
+          const startSpin = Date.now()
+          const correctLag = prevLag % interval
+          const amountMissSpin = Math.floor(Math.abs(prevLag) / interval)
+
+          currentIndex += amountMissSpin
+
+          await revolverHandle.spin(interval + correctLag)
+
+          const realInterval = Date.now() - (startSpin + correctLag)
+
+          const lag = interval - realInterval
+          const newIndex =
+            Math.min(currentIndex++, FINISH_INDEX) % MULTIPLIERS.length
+          const multiplier = MULTIPLIERS[newIndex]
+
+          setMultiplier(multiplier)
+          setJackpot(bet * multiplier)
+
+          if (currentIndex > FINISH_INDEX) {
+            return
+          }
+
+          return spin(lag)
+        }
+
+        spin(0).then(resolve)
+      })
+    },
+    [bet, playAudio, setJackpot, setMultiplier],
+  )
 
   const deal = async () => {
     if (offer) {
@@ -154,129 +157,30 @@ const useGame = (variant: VariantGame) => {
     }
   }
 
-  const next = async (format: 'solo' | 'duel') => {
-    if (disabledRef.current) {
-      return
-    }
+  const startGame = useCallback(
+    async (result?: { gameId: string; multiplier: string }) => {
+      const { gameId, multiplier } =
+        result ??
+        (await startGameMutation({
+          betAmount: String(bet),
+        }))
 
-    try {
-      disabledRef.current = true
+      // TODO: REMOVE
+      setState('running')
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+      const multiplierIndex = MULTIPLIERS.findIndex(
+        (value) => value === Number(multiplier),
+      )
 
-      if (state === 'win' || state === 'game-over') {
-        await newGame()
+      if (multiplierIndex === -1) {
         return
       }
 
-      format === 'solo' ? await nextSolo() : await nextDuel()
-    } catch (e) {
-      console.log(e)
-    } finally {
-      disabledRef.current = false
-    }
-  }
-
-  const nextDuel = async () => {
-    const frontCharacterHandle = frontCharacterHandleRef.current
-    const backCharacterHandle = backCharacterHandleRef.current
-    const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
-    const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
-    const readySetPullHandle = readySetPullHandleRef.current
-    const gameBarHandle = gameBarRefHandle.current
-
-    if (!(readySetPullHandle && gameBarHandle)) {
-      return
-    }
-
-    if (isStartedGame) {
-      const { value, isRunning } = await gameBarHandle.getState()
-
-      if (isRunning) {
-        if (
-          !(
-            frontCharacterHandle &&
-            backCharacterHandle &&
-            frontGunHandle &&
-            backGunHandle
-          )
-        ) {
-          return
-        }
-
-        const isSkull = value === SKULL_VALUE
-        const winProbabilityPercentage = value
-        const random = randomIntFromInterval(0, 99)
-        const inWinGame = !isSkull && random < winProbabilityPercentage
-
-        await gameBarHandle.highlight()
-
-        await wait(1000)
-        await backGunHandle.trigger()
-        await backGunHandle.spin()
-        await backGunHandle.click()
-
-        if (inWinGame) {
-          await backGunHandle.shot()
-          await frontCharacterHandle.dead()
-          return winGame()
-        }
-
-        const frontPull = randomIntFromInterval(1, 3) === 1
-        const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
-
-        if (isSkull || frontPull) {
-          await wait(1000)
-          await frontGunHandle.trigger()
-          await frontGunHandle.spin()
-          await frontGunHandle.click()
-        }
-
-        if (isGameOver) {
-          await frontGunHandle.shot()
-          await backCharacterHandle.dead()
-          return gameOver()
-        }
-      } else {
-        const duration = randomIntFromInterval(25, 50)
-        await gameBarHandle.start(duration)
-      }
-    } else {
-      await readySetPullHandle.start()
-      const duration = randomIntFromInterval(25, 50)
-      await gameBarHandle.start(duration)
-      navigate(`${ROUTES.duel.play}/1`, { preventScrollReset: true })
-    }
-  }
-
-  const nextSolo = async () => {
-    if (!gameId) {
-      await startGame()
-      return
-    }
-
-    await pullGame(gameId)
-  }
-
-  const startGame = async (result?: { gameId: string; multiplier: string }) => {
-    const { gameId, multiplier } =
-      result ??
-      (await startGameMutation({
-        betAmount: String(bet),
-      }))
-
-    // TODO: REMOVE
-    setState('running')
-    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-    const multiplierIndex = MULTIPLIERS.findIndex(
-      (value) => value === Number(multiplier),
-    )
-
-    if (multiplierIndex === -1) {
-      return
-    }
-
-    await getMultiplier(multiplierIndex)
-    navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
-  }
+      await getMultiplier(multiplierIndex)
+      navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
+    },
+    [bet, getMultiplier, navigate, queryClient, setState, startGameMutation],
+  )
 
   const gameOver = useCallback(async () => {
     setState('game-over')
@@ -344,6 +248,110 @@ const useGame = (variant: VariantGame) => {
       gameOver,
       winGame,
     ],
+  )
+
+  const nextDuel = useCallback(async () => {
+    const frontCharacterHandle = frontCharacterHandleRef.current
+    const backCharacterHandle = backCharacterHandleRef.current
+    const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
+    const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
+    const readySetPullHandle = readySetPullHandleRef.current
+    const gameBarHandle = gameBarRefHandle.current
+
+    if (!(readySetPullHandle && gameBarHandle)) {
+      return
+    }
+
+    if (isStartedGame) {
+      const { value, isRunning } = await gameBarHandle.getState()
+
+      if (isRunning) {
+        if (
+          !(
+            frontCharacterHandle &&
+            backCharacterHandle &&
+            frontGunHandle &&
+            backGunHandle
+          )
+        ) {
+          return
+        }
+
+        const isSkull = value === SKULL_VALUE
+        const winProbabilityPercentage = value
+        const random = randomIntFromInterval(0, 99)
+        const inWinGame = !isSkull && random < winProbabilityPercentage
+
+        await gameBarHandle.highlight()
+
+        await backGunHandle.trigger()
+        await backGunHandle.spin()
+        await backGunHandle.click()
+
+        if (inWinGame) {
+          await backGunHandle.shot()
+          await frontCharacterHandle.dead()
+          return winGame()
+        }
+
+        const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
+
+        if (isSkull) {
+          await frontGunHandle.trigger()
+          await frontGunHandle.spin()
+          await frontGunHandle.click()
+        }
+
+        if (isGameOver) {
+          await frontGunHandle.shot()
+          await backCharacterHandle.dead()
+          return gameOver()
+        }
+      } else {
+        const duration = randomIntFromInterval(25, 50)
+        await gameBarHandle.start(duration)
+      }
+    } else {
+      await gameBarHandle.stop()
+      await gameBarHandle.reset()
+      await readySetPullHandle.start()
+      const duration = randomIntFromInterval(25, 50)
+      await gameBarHandle.start(duration)
+      navigate(`${ROUTES.duel.play}/1`, { preventScrollReset: true })
+    }
+  }, [gameOver, isStartedGame, winGame, navigate])
+
+  const nextSolo = useCallback(async () => {
+    if (!gameId) {
+      await startGame()
+      return
+    }
+
+    await pullGame(gameId)
+  }, [gameId, pullGame, startGame])
+
+  const next = useCallback(
+    async (format: 'solo' | 'duel') => {
+      if (disabledRef.current) {
+        return
+      }
+
+      try {
+        disabledRef.current = true
+
+        if (state === 'win' || state === 'game-over') {
+          await newGame()
+          return
+        }
+
+        format === 'solo' ? await nextSolo() : await nextDuel()
+      } catch (e) {
+        console.log(e)
+      } finally {
+        disabledRef.current = false
+      }
+    },
+    [newGame, nextDuel, nextSolo, state],
   )
 
   useEffect(() => {
