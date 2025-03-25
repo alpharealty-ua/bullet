@@ -1,4 +1,3 @@
-import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { IMAGES } from '@/lib/constants'
@@ -10,8 +9,6 @@ import { ProfileLink } from '@/components/profile-link'
 const Footer = () => {
   const round = useGameStore(({ round }) => round)
   const modal = useCustomModal()
-  // TODO: CHANGED TO USE PROFILE OR RENAME HEADER TO HEADER_AUTH
-  const user = useUser()
 
   const handleSettingsClick = () => {
     modal.show({ contentSlot: <Settings /> })
@@ -33,7 +30,7 @@ const Footer = () => {
           />
           <div className='flex flex-col gap-1'>
             <div className='text-base leading-[1] tracking-tight'>Lvl 921</div>
-            <ProfileLink className='self-start' user={user} />
+            <ProfileLink className='self-start' />
           </div>
         </div>
       </div>

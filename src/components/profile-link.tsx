@@ -1,17 +1,21 @@
 import { useEffect } from 'react'
 
+import { useProfile } from '@/api/auth.api'
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { Profile } from '@/components/profile'
 import { cn } from '@/lib/utils'
+import { Profile } from '@/components/profile'
 
-interface Props extends React.ComponentProps<'button'> {
-  user: User
-}
+type Props = React.ComponentProps<'button'>
 
-const ProfileLink = ({ className, user, ...props }: Props) => {
+const ProfileLink = ({ className, ...props }: Props) => {
   const modal = useCustomModal()
+  const { data: user } = useProfile()
 
   const handleProfileClick = () => {
+    if (!user) {
+      return
+    }
+
     modal.show({ contentSlot: <Profile user={user} /> })
   }
 
@@ -20,6 +24,10 @@ const ProfileLink = ({ className, user, ...props }: Props) => {
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     }
   }, [])
+
+  if (!user) {
+    return null
+  }
 
   return (
     <button

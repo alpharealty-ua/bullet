@@ -1,4 +1,3 @@
-import { useUser } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
 import { useGameStore } from '@/store/game.store'
 import { Logo } from '@/components/logo'
@@ -14,8 +13,7 @@ export const Header = ({
   headerProfile?: boolean
 }) => {
   const { data: balance, isLoading } = useBalance()
-  // TODO: CHANGED TO USE PROFILE OR RENAME HEADER TO HEADER_AUTH
-  const user = useUser()
+
   const noMoney = useGameStore(({ noMoney }) => noMoney)
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
@@ -23,7 +21,7 @@ export const Header = ({
     <header className='flex min-h-18 items-center justify-between px-3 py-2'>
       <Logo as='link' to='/' text={logoText} />
       <div className='flex flex-col gap-1'>
-        {!headerProfile && <ProfileLink className='self-end' user={user} />}
+        {!headerProfile && <ProfileLink className='self-end' />}
         {!isLoading && (
           <div className='flex gap-1'>
             <MoneyBagButton
