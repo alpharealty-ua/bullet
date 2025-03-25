@@ -129,6 +129,15 @@ const DuelGameBar = ({
     )
 
     valueDom.classList.remove('is-selected')
+
+    await wait(0)
+
+    valueDom.style.zIndex = '3'
+
+    await new Promise((resolve) =>
+      valueDom.addEventListener('transitionend', resolve, { once: true }),
+    )
+    valueDom.style.zIndex = ''
   }
 
   const reset = async () => {
@@ -183,10 +192,10 @@ const DuelGameBar = ({
                         'absolute inset-0 z-2 flex items-center justify-center text-white select-none',
                         'duration-500',
                         'bg-[#f7f7c0] [&.is-selected]:z-3 [&.is-selected]:scale-200',
-                        'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [.is-active_&]:before:opacity-100',
+                        'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
                         isDefaultNumber &&
                           'text-transparent [&.is-selected]:text-transparent',
-                        isSkullNumber && '[&.is-selected]:scale-600',
+                        isSkullNumber && '[&.is-selected]:scale-400',
                         className,
                       )}
                       data-value
