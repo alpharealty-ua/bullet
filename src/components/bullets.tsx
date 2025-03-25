@@ -10,7 +10,7 @@ const Bullets = ({ countBullet }: { countBullet: number }) => {
           <div
             key={index}
             className={cn(
-              'aspect-[1/1.5] w-[20px] bg-contain bg-center bg-no-repeat',
+              'aspect-[1/1.5] w-5 bg-contain bg-center bg-no-repeat',
               5 - index > countBullet && 'opacity-60',
             )}
             style={{ backgroundImage: `url(${IMAGES.bullet})` }}
