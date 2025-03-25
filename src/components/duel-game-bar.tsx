@@ -1,4 +1,4 @@
-import { useCallback, useImperativeHandle, useRef } from 'react'
+import { useEffect, useImperativeHandle, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 import { IoSkull } from 'react-icons/io5'
@@ -36,95 +36,111 @@ const DuelGameBar = ({
   onChangeDirection,
 }: {
   gameBarRef: React.ForwardedRef<GameBarHandle>
-  onChangeDirection?: (prevDirection: number, nextDirection: number) => void
+  onChangeDirection: (prevDirection: number, nextDirection: number) => void
 }) => {
-  const ref = useRef<HTMLTableElement>(null)
-  const directionRef = useRef(1)
-  const activeIndexRef = useRef(-1)
-  const isRunningRef = useRef(false)
-  const nextActiveRef = useRef<HTMLTableCellElement | null>(null)
-  const startNumber = useRef(-1)
+  const wrapperRef = useRef<HTMLTableElement>(null)
+  const stateRef = useRef<{
+    direction: number
+    activeIndex: number
+    isRunning: boolean
+    nextActive: HTMLTableCellElement | null
+    startNumber: number
+    onChangeDirection: (prevDirection: number, nextDirection: number) => void
+  }>({
+    direction: 1,
+    activeIndex: -1,
+    isRunning: false,
+    nextActive: null,
+    startNumber: -1,
+    onChangeDirection,
+  })
+
+  useEffect(() => {
+    stateRef.current.onChangeDirection = onChangeDirection
+  }, [onChangeDirection])
 
   const getState = async () => {
     return {
-      value: getItem(activeIndexRef.current).number,
-      isRunning: isRunningRef.current,
+      value: getItem(stateRef.current.activeIndex).number,
+      isRunning: stateRef.current.isRunning,
     }
   }
 
-  const start = useCallback(
-    async (duration: number) => {
-      const barDom = ref.current
+  const start = async (duration: number) => {
+    const barDom = wrapperRef.current
 
-      if (barDom === null) {
+    if (barDom === null) {
+      return
+    }
+
+    if (stateRef.current.isRunning) {
+      return
+    }
+
+    stateRef.current.isRunning = true
+
+    // TODO: REFACTOR
+    stateRef.current.startNumber++
+    const currentStartNumber = stateRef.current.startNumber
+
+    const cells = barDom.rows[0].cells
+
+    // TODO: USE DELAGATION
+    const start = () => {
+      if (!stateRef.current.isRunning) {
         return
       }
 
-      if (isRunningRef.current) {
+      if (currentStartNumber !== stateRef.current.startNumber) {
         return
       }
 
-      isRunningRef.current = true
+      const prevActiveIndex = stateRef.current.activeIndex
+      const prevDirection = stateRef.current.direction
+      let nextDirection = prevDirection
+      if (prevActiveIndex === 0) nextDirection = 1
+      else if (prevActiveIndex === cells.length - 1) nextDirection = -1
 
-      // TODO: REFACTOR
-      startNumber.current++
-      const currentStartNumber = startNumber.current
-
-      const cells = barDom.rows[0].cells
-
-      // TODO: USE DELAGATION
-      const start = () => {
-        if (!isRunningRef.current) {
-          return
-        }
-
-        if (currentStartNumber !== startNumber.current) {
-          return
-        }
-
-        const prevActiveIndex = activeIndexRef.current
-        const prevDirection = directionRef.current
-        let nextDirection = prevDirection
-        if (prevActiveIndex === 0) nextDirection = 1
-        else if (prevActiveIndex === cells.length - 1) nextDirection = -1
-
-        if (prevDirection !== nextDirection) {
-          onChangeDirection && onChangeDirection(prevDirection, nextDirection)
-        }
-
-        const nextActiveIndex = prevActiveIndex + nextDirection
-        directionRef.current = nextDirection
-        activeIndexRef.current = nextActiveIndex
-
-        const prevActive = nextActiveRef.current ?? document.createElement('td')
-        const nextActive = cells[nextActiveIndex]
-        nextActiveRef.current = nextActive
-
-        prevActive.classList.remove('is-active')
-        nextActive.classList.add('is-active')
-        nextActive.style.transitionDuration = `${duration}ms`
-
-        const transitionend = () => {
-          nextActive.style.transitionDuration = ''
-          start()
-        }
-
-        nextActive.addEventListener('transitionend', transitionend, {
-          once: true,
-        })
+      if (prevDirection !== nextDirection) {
+        stateRef.current.onChangeDirection(prevDirection, nextDirection)
       }
 
-      start()
-    },
-    [onChangeDirection],
-  )
+      if (!stateRef.current.isRunning) {
+        return
+      }
+
+      const nextActiveIndex = prevActiveIndex + nextDirection
+      stateRef.current.direction = nextDirection
+      stateRef.current.activeIndex = nextActiveIndex
+
+      const prevActive =
+        stateRef.current.nextActive ?? document.createElement('td')
+      const nextActive = cells[nextActiveIndex]
+      stateRef.current.nextActive = nextActive
+
+      prevActive.classList.remove('is-active')
+      nextActive.classList.add('is-active')
+      nextActive.style.transitionDuration = `${duration}ms`
+
+      const transitionend = () => {
+        nextActive.style.transitionDuration = ''
+        start()
+      }
+
+      nextActive.addEventListener('transitionend', transitionend, {
+        once: true,
+      })
+    }
+
+    start()
+  }
 
   const stop = async () => {
-    isRunningRef.current = false
+    stateRef.current.isRunning = false
   }
 
   const highlight = async () => {
-    const nextActiveDom = nextActiveRef.current
+    const nextActiveDom = stateRef.current.nextActive
 
     if (nextActiveDom === null) {
       return
@@ -151,17 +167,17 @@ const DuelGameBar = ({
   }
 
   const reset = async (options: ResetOptions = {}) => {
-    const nextActive = nextActiveRef.current
+    const nextActive = stateRef.current.nextActive
 
     if (nextActive) {
       nextActive.style.transitionDuration = ''
       nextActive.classList.remove('is-active')
     }
 
-    directionRef.current = options.direction ?? 1
-    activeIndexRef.current = options.activeIndex ?? -1
-    isRunningRef.current = false
-    nextActiveRef.current = null
+    stateRef.current.direction = options.direction ?? 1
+    stateRef.current.activeIndex = options.activeIndex ?? -1
+    stateRef.current.isRunning = false
+    stateRef.current.nextActive = null
   }
 
   useImperativeHandle(gameBarRef, () => ({
@@ -173,55 +189,53 @@ const DuelGameBar = ({
   }))
 
   return (
-    <div>
-      <table
-        ref={ref}
-        className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
-      >
-        <thead>
-          <tr>
-            {Array(LENGTH)
-              .fill(null)
-              .map((_, i) => {
-                const { number, className } = getItem(i)
+    <table
+      ref={wrapperRef}
+      className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
+    >
+      <thead>
+        <tr>
+          {Array(LENGTH)
+            .fill(null)
+            .map((_, i) => {
+              const { number, className } = getItem(i)
 
-                const isDefaultNumber = number === DEFAUTL_VALUE
-                const isSkullNumber = number === SKULL_VALUE
+              const isDefaultNumber = number === DEFAUTL_VALUE
+              const isSkullNumber = number === SKULL_VALUE
 
-                return (
-                  <td
-                    key={i}
+              return (
+                <td
+                  key={i}
+                  className={cn(
+                    'relative border-2 border-black text-center align-middle text-[9px] text-white',
+                    'transition-colors duration-20 ease-linear',
+                    '[&.is-active]:text-black',
+                  )}
+                >
+                  <div
                     className={cn(
-                      'relative border-2 border-black text-center align-middle text-[9px] text-white',
-                      'transition-colors duration-20 ease-linear',
-                      '[&.is-active]:text-black',
+                      'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
+                      'repeat-1 zoom-in-200 duration-500',
+                      'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
+                      isDefaultNumber &&
+                        'text-transparent [&.is-selected]:text-transparent',
+                      isSkullNumber && '[&.is-selected]:zoom-in-400',
+                      className,
                     )}
+                    data-value
                   >
-                    <div
-                      className={cn(
-                        'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
-                        'repeat-1 zoom-in-200 duration-500',
-                        'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
-                        isDefaultNumber &&
-                          'text-transparent [&.is-selected]:text-transparent',
-                        isSkullNumber && '[&.is-selected]:zoom-in-400',
-                        className,
-                      )}
-                      data-value
-                    >
-                      {number === 50 ? (
-                        <IoSkull className='relative -top-[1px] inline-block text-base' />
-                      ) : (
-                        number
-                      )}
-                    </div>
-                  </td>
-                )
-              })}
-          </tr>
-        </thead>
-      </table>
-    </div>
+                    {number === 50 ? (
+                      <IoSkull className='relative -top-[1px] inline-block text-base' />
+                    ) : (
+                      number
+                    )}
+                  </div>
+                </td>
+              )
+            })}
+        </tr>
+      </thead>
+    </table>
   )
 }
 
