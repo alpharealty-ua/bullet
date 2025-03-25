@@ -112,13 +112,15 @@ export type InfoResponse = {
   measurementsCount?: number
 }
 
-// type PingResponse = {
-//   sequence: number
-// }
+export type PingResponse = {
+  sequence: number
+}
 
-// type PingUpdateResponse = {
-//   ping: number
-// }
+export type PingUpdateResponse = {
+  ping: number
+  jitter?: number
+  measurements?: number
+}
 
 export type DuelGameCreatedResponse = {
   matchId: string // ID of the match

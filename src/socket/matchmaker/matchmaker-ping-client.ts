@@ -7,6 +7,10 @@
 
 import { Socket } from 'socket.io-client'
 
+import {
+  PingResponse,
+  PingUpdateResponse,
+} from '@/socket/matchmaker/matchmaker-soket.types'
 import { wait } from '@/lib/utils'
 
 export class MatchmakerPingClient {
@@ -41,7 +45,7 @@ export class MatchmakerPingClient {
     const delay = [0] // , 25, 50, 75, 100, 125, 150
     let i = 0
 
-    const ping = async (data: any) => {
+    const ping = async (data: PingResponse) => {
       this.lastSequence = data.sequence
       this.log(`Received ping request (sequence: ${data.sequence})`)
       await wait(delay[i++ % delay.length])
@@ -49,13 +53,13 @@ export class MatchmakerPingClient {
       this.socket.emit('pong', data)
     }
 
-    const pingUpdate = (data: any) => {
+    const pingUpdate = (data: PingUpdateResponse) => {
       this.currentPing = data.ping
       this.currentJitter = data.jitter || 0
       this.measurementsCount = data.measurements || 0
 
       // Update ping history
-      this.updatePingHistory(data.ping, data.jitter)
+      this.updatePingHistory(this.currentPing, this.currentJitter)
 
       this.log(
         `Ping updated: ${data.ping}ms (jitter: ${data.jitter}ms, measurements: ${data.measurements})`,
