@@ -1,6 +1,9 @@
 import { IoPlay } from 'react-icons/io5'
 
-import { Indicator, MatchmakingStatus } from '@/socket/matchmaker/use-matchmaking-socket'
+import {
+  Indicator,
+  MatchmakingStatus,
+} from '@/socket/matchmaker/use-matchmaking-socket'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -82,15 +85,16 @@ const EnterArena = ({
           </div>
           <button
             className={cn(
-              'relative -top-0.5 flex h-13 w-7 shrink-0 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors [&:hover_span]:scale-110',
-              isSearching &&
+              'relative -top-0.5 flex h-13 w-7 shrink-0 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors disabled:cursor-not-allowed [&:hover_span]:scale-110',
+              (isSearching || isFound) &&
                 'text-red hover:bg-red/10 active:bg-red/20 text-xl select-none',
-              !isSearching &&
+              !(isSearching || isFound) &&
                 'text-green hover:bg-green/10 active:bg-green/20 text-2xl select-none',
             )}
+            disabled={isFound}
           >
             <span className='transition-transform'>
-              {isSearching ? 'X' : <IoPlay />}
+              {isSearching || isFound ? 'X' : <IoPlay />}
             </span>
           </button>
         </div>
@@ -130,7 +134,7 @@ const EnterArena = ({
             </div>
             <div
               className={cn(
-                'text-red repeat-infinite text-xl duration-500 ',
+                'text-red repeat-infinite text-xl duration-500',
                 confirmationTimer.urgent && 'animate-[pulse-time]',
               )}
             >
