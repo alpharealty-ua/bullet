@@ -50,10 +50,9 @@ const useSettingsStore = create<SettingsState>()(
           }
         } catch (error) {
           if (play) {
-            console.log(audio.duration)
             setTimeout(
               () => audio.dispatchEvent(new Event('ended')),
-              audio.duration * 1000,
+              (audio.duration || 1) * 1000,
             )
           }
           console.log(error)

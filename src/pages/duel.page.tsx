@@ -7,7 +7,7 @@ import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket
 import { ConnectionStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useGame } from '@/hooks/use-game'
 import { VariantGame } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, wait } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -19,6 +19,7 @@ import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 import { EnterArena } from '@/components/enter-arena'
+import { Countdown } from '@/components/countdown'
 
 const region = 'us-west'
 
@@ -97,11 +98,20 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     toggleConnection()
   }
 
+  const [startedGame, setStartedGame] = useState(false)
+  const matchCreated = matchmakingStatus === 'match-created'
+
+  const handleCountdownEnd = async () => {
+    setStartedGame(true)
+    await wait(0)
+    await next('duel')
+  }
+
   return (
     <>
       <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
       {variant === 'watch' && <Bar />}
-      {matchmakingStatus !== 'match-created' && (
+      {!matchCreated && (
         <div className='flex w-full items-center justify-center gap-4'>
           <div
             className={cn(
@@ -132,7 +142,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       )}
-      {authenticated && matchmakingStatus !== 'match-created' && (
+      {authenticated && !matchCreated && (
         <div className='flex w-full flex-col items-center justify-center gap-3'>
           <EnterArena
             onDecline={declineMatch}
@@ -268,94 +278,100 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       )}
-      <div className='mt-auto pt-6'>
-        {matchmakingStatus === 'match-created' && matchDetails && (
-          <div className='relative mt-auto flex flex-col gap-10'>
-            <div
-              className={cn(
-                'relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4',
-                'animate-in fade-in duration-500',
-              )}
-            >
-              <Character
-                className={cn(
-                  'mx-auto max-h-50 w-full max-w-48',
-                  variant === 'watch' && '-mb-7 h-[300px]',
-                  variant === 'play' && 'mr-12',
-                )}
-                name='fatty'
-                type='front'
-                onClick={
-                  variant === 'play' && isStartedGame
-                    ? handlePlayerClick
-                    : async () => {
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
-                      }
-                }
-                characterHandleRef={frontCharacterHandleRef}
-                beforeSlot={
-                  <PlayerInfo
-                    className='absolute top-0 right-full translate-x-2'
-                    side='left'
-                    level={53}
-                    login={matchDetails.opponent.username}
-                    win={52}
-                    visible={visiblePlayerInfo}
+      <div className='flex grow flex-col items-center justify-center'>
+        {matchCreated &&
+          (!startedGame ? (
+            <Countdown time={5} onEnd={handleCountdownEnd} />
+          ) : (
+            <div className='mt-auto pt-6'>
+              <div className='relative mt-auto flex flex-col gap-10'>
+                <div
+                  className={cn(
+                    'relative flex min-h-[280px] grow-1 flex-col gap-2 pt-4',
+                    'animate-in fade-in duration-500',
+                  )}
+                >
+                  <Character
+                    className={cn(
+                      'mx-auto max-h-50 w-full max-w-48',
+                      variant === 'watch' && '-mb-7 h-[300px]',
+                      variant === 'play' && 'mr-12',
+                    )}
+                    name='fatty'
+                    type='front'
+                    onClick={
+                      variant === 'play' && isStartedGame
+                        ? handlePlayerClick
+                        : async () => {
+                            await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
+                            await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
+                            await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
+                            await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
+                          }
+                    }
+                    characterHandleRef={frontCharacterHandleRef}
+                    beforeSlot={
+                      <PlayerInfo
+                        className='absolute top-0 right-full translate-x-2'
+                        side='left'
+                        level={53}
+                        login={matchDetails?.opponent.username ?? 'username'}
+                        win={52}
+                        visible={visiblePlayerInfo}
+                      />
+                    }
                   />
-                }
-              />
-              <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
-            </div>
-            {variant === 'play' && (
-              <div className='relative mb-1 pb-10'>
-                <Character
-                  className={cn('ml-6 max-h-[220px] max-w-[180px]')}
-                  name={characterName}
-                  type='back'
-                  onClick={
-                    variant === 'play' && isStartedGame
-                      ? handlePlayerClick
-                      : async () => {
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
-                        }
-                  }
-                  characterHandleRef={backCharacterHandleRef}
-                  beforeSlot={
-                    <PlayerInfo
-                      className='absolute top-0 left-full translate-x-2'
-                      side='right'
-                      level={53}
-                      login={user.username}
-                      win={52}
-                      visible={visiblePlayerInfo}
-                    />
-                  }
-                />
-                <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
-                  <div className='relative'>
-                    <ButtonWithAudio
-                      as='button'
-                      className='w-26'
-                      image='pull'
-                      onClick={handlePull}
-                      skipWaitAnimation
-                    />
-                  </div>
+                  <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
                 </div>
+                {variant === 'play' && (
+                  <div className='relative mb-1 pb-10'>
+                    <Character
+                      className={cn('ml-6 max-h-[220px] max-w-[180px]')}
+                      name={characterName}
+                      type='back'
+                      onClick={
+                        variant === 'play' && isStartedGame
+                          ? handlePlayerClick
+                          : async () => {
+                              await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
+                              await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
+                              await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
+                              await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
+                            }
+                      }
+                      characterHandleRef={backCharacterHandleRef}
+                      beforeSlot={
+                        <PlayerInfo
+                          className='absolute top-0 left-full translate-x-2'
+                          side='right'
+                          level={53}
+                          login={user.username}
+                          win={52}
+                          visible={visiblePlayerInfo}
+                        />
+                      }
+                    />
+                    <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
+                      <div className='relative'>
+                        <ButtonWithAudio
+                          as='button'
+                          className='w-26'
+                          image='pull'
+                          onClick={handlePull}
+                          disabled={!hasPull}
+                          skipWaitAnimation
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        )}
-        <DuelGameBar
-          gameBarRef={gameBarRefHandle}
-          onChangeDirection={handleChangeDirection}
-        />
+              <DuelGameBar
+                gameBarRef={gameBarRefHandle}
+                onChangeDirection={handleChangeDirection}
+              />
+            </div>
+          ))}
       </div>
       <Victory hideWon />
       <GameOver hasImage={false} onClick={newGame} onTimeout={newGame} />
