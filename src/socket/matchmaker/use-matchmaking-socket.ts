@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { socketMatchmaker as socket } from '@/socket/socket'
@@ -200,6 +200,7 @@ const useMatchmakingSocket = (token: string) => {
     playerId: null,
     ping: 0,
   })
+  const firstRender = useRef(true)
   // TODO: FIX ANY
   const resultRef = useRef<any>(null)
 
@@ -724,6 +725,18 @@ const useMatchmakingSocket = (token: string) => {
   }, [playAudio, token])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
+
+  useEffect(() => {
+    connect()
+
+    return () => {
+      if (firstRender.current) {
+        firstRender.current = false
+        return
+      }
+      disconnect()
+    }
+  }, [connect, disconnect])
 
   return {
     connect,

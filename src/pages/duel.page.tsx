@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
-import { ConnectionStatus, useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
+import {
+  ConnectionStatus,
+  useMatchmakingSocket,
+} from '@/socket/matchmaker/use-matchmaking-socket'
 import { useGame } from '@/hooks/use-game'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -21,10 +24,10 @@ import { EnterArena } from '@/components/enter-arena'
 
 const region = 'us-west'
 
-const map: Record<ConnectionStatus, string> = {
+const connectionStatusMap: Record<ConnectionStatus, string> = {
   connected: 'Connected',
   disconnected: 'Disconnected',
-  authenticating: 'Authenticating..',
+  authenticating: 'Authenticating',
   authenticated: 'Authenticated',
   'not-authenticated': 'Not authenticated',
   'authentication-failed': 'Authentication failed',
@@ -46,7 +49,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   const user = useUser()
   const token = useAuthStore(({ token }) => token)
-
 
   const handlePull = async () => {
     await next('duel')
@@ -94,14 +96,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     toggleConnection()
   }
 
-  useEffect(() => {
-    const off = connect()
-
-    return () => {
-      off()
-    }
-  }, [connect])
-
   return (
     <>
       <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
@@ -122,7 +116,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 'bg-[#fff3cd] text-[#856404]',
             )}
           >
-            {map[connectionStatus]}
+            {connectionStatusMap[connectionStatus]}
           </div>
           <div className='flex-1'>
             <ButtonWithAudio
