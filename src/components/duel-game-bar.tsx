@@ -39,6 +39,13 @@ const DuelGameBar = ({
   const isRunningRef = useRef(false)
   const nextActiveRef = useRef<HTMLTableCellElement | null>(null)
 
+  const getState = async () => {
+    return {
+      value: getItem(activeIndexRef.current).number,
+      isRunning: isRunningRef.current,
+    }
+  }
+
   const start = useCallback(
     async (duration: number) => {
       const barDom = ref.current
@@ -98,51 +105,52 @@ const DuelGameBar = ({
     [onChangeDirection],
   )
 
+  const stop = async () => {
+    isRunningRef.current = false
+  }
+
+  const highlight = async () => {
+    const nextActiveDom = nextActiveRef.current
+
+    if (nextActiveDom === null) {
+      return
+    }
+
+    const valueDom = nextActiveDom.querySelector('[data-value]')
+
+    if (valueDom === null) {
+      return
+    }
+
+    valueDom.classList.add('is-selected')
+
+    await new Promise((resolve) =>
+      valueDom.addEventListener('transitionend', resolve, { once: true }),
+    )
+
+    valueDom.classList.remove('is-selected')
+  }
+
+  const reset = async () => {
+    const nextActive = nextActiveRef.current
+
+    if (nextActive) {
+      nextActive.style.transitionDuration = ''
+      nextActive.classList.remove('is-active')
+    }
+
+    directionRef.current = 1
+    activeIndexRef.current = -1
+    isRunningRef.current = false
+    nextActiveRef.current = null
+  }
+
   useImperativeHandle(gameBarRef, () => ({
-    getState: async () => {
-      return {
-        value: getItem(activeIndexRef.current).number,
-        isRunning: isRunningRef.current,
-      }
-    },
-    highlight: async () => {
-      const nextActiveDom = nextActiveRef.current
-
-      if (nextActiveDom === null) {
-        return
-      }
-
-      const valueDom = nextActiveDom.querySelector('[data-value]')
-
-      if (valueDom === null) {
-        return
-      }
-
-      valueDom.classList.add('is-selected')
-
-      await new Promise((resolve) =>
-        valueDom.addEventListener('transitionend', resolve, { once: true }),
-      )
-
-      valueDom.classList.remove('is-selected')
-    },
+    getState,
     start,
-    stop: async () => {
-      isRunningRef.current = false
-    },
-    reset: async () => {
-      const nextActive = nextActiveRef.current
-
-      if (nextActive) {
-        nextActive.style.transitionDuration = ''
-        nextActive.classList.remove('is-active')
-      }
-
-      directionRef.current = 1
-      activeIndexRef.current = -1
-      isRunningRef.current = false
-      nextActiveRef.current = null
-    },
+    stop,
+    highlight,
+    reset,
   }))
 
   return (
@@ -159,6 +167,7 @@ const DuelGameBar = ({
                 const { number, className } = getItem(i)
 
                 const isDefaultNumber = number === DEFAUTL_VALUE
+                const isSkullNumber = number === SKULL_VALUE
 
                 return (
                   <td
