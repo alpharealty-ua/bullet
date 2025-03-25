@@ -70,7 +70,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const {
     toggleConnection,
-    connect,
     authenticated,
     joinMatchmaking,
     leaveMatchmaking,
@@ -124,6 +123,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               bg={authenticated ? 'red' : 'green'}
               className={cn('w-full px-1 text-xs')}
               onClick={handleToggleConnection}
+              disabled={['authenticating'].includes(connectionStatus)}
             >
               {authenticated ? 'Disconnect' : 'Connect to Matchmaker'}
             </ButtonWithAudio>
