@@ -27,8 +27,8 @@ const LeadboardIcon = () => {
     await new Promise((resolve) =>
       targetEl.addEventListener('transitionend', resolve, { once: true }),
     )
-
     targetEl.classList.remove('is-animate')
+
     isTrustedRef.current = false
     targetEl.click()
     isTrustedRef.current = true
@@ -42,7 +42,7 @@ const LeadboardIcon = () => {
       image='leaderboardstar'
       className={cn(
         'absolute right-4 bottom-4 w-20',
-        'repeat-[1] delay-100 duration-500 ease-linear [&.is-animate]:scale-500 [&.is-animate]:rotate-360 [&.is-animate]:opacity-0 [&.is-animate]:delay-0',
+        'repeat-1 ease-linear [&.is-animate]:rotate-360 [&.is-animate]:opacity-0 [&.is-animate]:delay-0 [&.is-animate]:duration-500',
       )}
       onClick={handleLeadboardClick}
     />
