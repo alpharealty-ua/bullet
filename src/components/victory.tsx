@@ -17,10 +17,12 @@ const Victory = ({
   const state = useGameStore(({ state }) => state)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
-  const show = state === 'win'
+  const isWin = state === 'win'
+  const isDraw = state === 'draw'
+  const show = isDraw || isWin
 
   useEffect(() => {
-    if (!show) {
+    if (!(show && isWin)) {
       return
     }
 
@@ -39,7 +41,7 @@ const Victory = ({
     }
 
     runAnimation()
-  }, [show, playAudio, jackpot, setIncreaseTime])
+  }, [show, isWin, playAudio, jackpot, setIncreaseTime])
 
   return (
     <AnimationInOut
@@ -47,15 +49,27 @@ const Victory = ({
       unmountOnExit
       timeout={400}
       className={cn(
-        'bg-green/50 absolute top-1/2 right-0 left-0 z-10 -translate-y-1/2 py-[10px]',
+        'absolute top-1/2 right-0 left-0 z-10 -translate-y-1/2 py-[10px]',
         'zoom-in-200 duration-500',
+        isWin && 'bg-green/50',
+        isDraw && 'bg-primary/50',
       )}
     >
       <div
         className='flex flex-col gap-4 bg-white bg-cover bg-center bg-no-repeat p-4'
         style={{ backgroundImage: `url(${IMAGES.texture})` }}
       >
-        <div className='text-green text-4xl'>Victory</div>
+        {/* <div className='text-green text-4xl'>Victory</div> */}
+        <div
+          className={cn(
+            'text-primary text-4xl',
+            isWin && 'text-green',
+            isDraw && 'text-primary',
+          )}
+        >
+          {isWin && 'Victory'}
+          {isDraw && 'Draw'}
+        </div>
         {!hideWon && (
           <div className='text-4xl'>
             You won - <span className='text-green'>${jackpot}</span>

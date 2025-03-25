@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import { useUser } from '@/api/auth.api'
 import { useGameStore } from '@/store/game.store'
@@ -36,40 +36,21 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const {
     next,
     newGame,
+    nextRound,
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
   } = useGame(variant)
-  const addRound = useGameStore(({ addRound }) => addRound)
   const characterName = useGameStore(({ characterName }) => characterName)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const round = useGameStore(({ round }) => round)
+  const pullRound = useGameStore(({ pullRound }) => pullRound)
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   const user = useUser()
   const token = useAuthStore(({ token }) => token)
-  const [lastPullRound, setLastPullRound] = useState(-1)
-  const hasPull = lastPullRound !== round
-
-  const handlePull = async () => {
-    setLastPullRound(round)
-    await next('duel')
-  }
-
-  const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
-
-  const handleChangeDirection = useCallback(
-    (_: number, nextDiraction: number) => {
-      const isReverseDirection = nextDiraction === -1
-      if (isReverseDirection) {
-        return
-      }
-
-      addRound()
-    },
-    [addRound],
-  )
+  const hasPull = pullRound[pullRound.length - 1] !== round
 
   const {
     toggleConnection,
@@ -88,6 +69,21 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     connectionStatus,
   } = useMatchmakingSocket(token!)
 
+  const handlePull = async () => {
+    await next('duel')
+  }
+
+  const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
+
+  const handleChangeDirection = (_: number, nextDiraction: number) => {
+    const isReverseDirection = nextDiraction === -1
+    if (isReverseDirection) {
+      return
+    }
+
+    nextRound()
+  }
+
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'
       ? joinMatchmaking(user.username, region)
@@ -102,8 +98,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const matchCreated = matchmakingStatus === 'match-created'
 
   const handleCountdownEnd = async () => {
+    await newGame()
     setStartedGame(true)
-    await wait(0)
+    await wait(100)
     await next('duel')
   }
 
@@ -281,7 +278,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       <div className='flex grow flex-col items-center justify-center'>
         {matchCreated &&
           (!startedGame ? (
-            <Countdown time={5} onEnd={handleCountdownEnd} />
+            <Countdown time={3} onEnd={handleCountdownEnd} />
           ) : (
             <div className='mt-auto pt-6'>
               <div className='relative mt-auto flex flex-col gap-10'>

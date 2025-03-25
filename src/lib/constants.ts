@@ -1,6 +1,12 @@
 export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 
-export const STATES = ['preparation', 'running', 'win', 'game-over'] as const
+export const STATES = [
+  'preparation',
+  'running',
+  'win',
+  'game-over',
+  'draw',
+] as const
 
 export type StateGame = (typeof STATES)[number]
 

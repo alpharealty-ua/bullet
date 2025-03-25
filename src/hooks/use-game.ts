@@ -16,7 +16,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval, waitEndAudio } from '@/lib/utils'
+import { randomIntFromInterval, wait, waitEndAudio } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { GameBarHandle, SKULL_VALUE } from '@/components/duel-game-bar'
@@ -55,11 +55,14 @@ const useGame = (variant: VariantGame) => {
   const setNoMoney = useGameStore(({ setNoMoney }) => setNoMoney)
   const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
+  const addRound = useGameStore(({ addRound }) => addRound)
+  const addPullRound = useGameStore(({ addPullRound }) => addPullRound)
   const restartGame = useGameStore(({ newGame }) => newGame)
   const state = useGameStore(({ state }) => state)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
+  const round = useGameStore(({ round }) => round)
   const isSolo = pathname.includes(ROUTES.solo.root)
   const isPlay = variant === 'play'
   const [watchGame, setWatchGame] = useState<{
@@ -277,6 +280,8 @@ const useGame = (variant: VariantGame) => {
           return
         }
 
+        addPullRound()
+
         const isSkull = value === SKULL_VALUE
         const winProbabilityPercentage = value
         const random = randomIntFromInterval(0, 99)
@@ -319,7 +324,7 @@ const useGame = (variant: VariantGame) => {
       await gameBarHandle.start(duration)
       navigate(`${ROUTES.duel.play}/1`, { preventScrollReset: true })
     }
-  }, [gameOver, isStartedGame, winGame, navigate])
+  }, [gameOver, isStartedGame, winGame, navigate, addPullRound])
 
   const nextSolo = useCallback(async () => {
     if (!gameId) {
@@ -353,6 +358,25 @@ const useGame = (variant: VariantGame) => {
     },
     [newGame, nextDuel, nextSolo, state],
   )
+
+  const nextRound = async () => {
+    const DRAW_ROUND = 10
+
+    if (round === DRAW_ROUND) {
+      setState('draw')
+      const gameBarHandle = gameBarRefHandle.current
+      if (gameBarHandle) {
+        gameBarHandle.stop()
+      }
+
+      await wait(2000)
+      await newGame()
+
+      return
+    }
+
+    addRound()
+  }
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
@@ -519,7 +543,8 @@ const useGame = (variant: VariantGame) => {
   return {
     next,
     deal,
-    newGame: newGame,
+    newGame,
+    nextRound,
     revolverRefHandle,
     frontCharacterHandleRef,
     backCharacterHandleRef,

@@ -19,6 +19,7 @@ interface GameState {
   increaseTime: number | undefined
   characterName: CharacterName
   round: number
+  pullRound: number[]
   setState: (state: StateGame) => void
   setBalance: (balance: number) => void
   setMultiplier: (multiplier: number) => void
@@ -33,6 +34,8 @@ interface GameState {
   setCharacterName: (characterName: CharacterName) => void
   setRound: (round: number) => void
   addRound: () => void
+  addPullRound: () => void
+  setPullRound: (pullRound: number[]) => void
   newGame: () => void
 }
 
@@ -53,6 +56,7 @@ const useGameStore = create<GameState>()(
       countBullet: 5,
       offer: null,
       increaseTime: undefined,
+      pullRound: [],
       setState: (state: StateGame) => set({ state }),
       setBalance: (balance: number) => set({ balance }),
       setMultiplier: (multiplier: number) => set({ multiplier }),
@@ -69,6 +73,8 @@ const useGameStore = create<GameState>()(
         set({ characterName }),
       setRound: (round: number) => set({ round }),
       addRound: () => set({ round: get().round + 1 }),
+      addPullRound: () => set({ pullRound: [...get().pullRound, get().round] }),
+      setPullRound: (pullRound: number[]) => set({ pullRound }),
       newGame: () => {
         const {
           setState,
@@ -78,6 +84,7 @@ const useGameStore = create<GameState>()(
           setCountBullet,
           setMultiplier,
           setRound,
+          setPullRound,
           bet,
           balance,
         } = get()
@@ -92,6 +99,7 @@ const useGameStore = create<GameState>()(
         setCountBullet(5)
         setMultiplier(0)
         setRound(1)
+        setPullRound([])
       },
     }),
     { name: 'game-storage' },
