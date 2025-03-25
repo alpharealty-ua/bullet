@@ -267,6 +267,8 @@ const useMatchmakingSocket = (token: string) => {
       }
 
       const handleDisconnect = () => {
+        off()
+
         addLogEntry('Disconnected from matchmaker service', 'warning')
         setConnectionStatus('disconnected')
         updateAuthenticated(false)
@@ -575,13 +577,7 @@ const useMatchmakingSocket = (token: string) => {
     }
 
     const disconnect = () => {
-      off()
-
       socket.disconnect()
-
-      if (isUnmount) {
-        return
-      }
 
       setConnectionStatus('disconnected')
       updateMatchmakingStatus('not-in-queue')
