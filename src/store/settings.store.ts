@@ -3,13 +3,16 @@ import { persist } from 'zustand/middleware'
 
 import { AUDIOS, SettingsKeys } from '@/lib/constants'
 import { getAudio } from '@/lib/utils'
+
+export type PlaySound = (
+  key: keyof typeof AUDIOS,
+  play?: boolean,
+) => Promise<HTMLAudioElement>
 interface SettingsState extends Record<SettingsKeys, boolean> {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
   // TODO: MOVE
-  playAudio: (
-    key: keyof typeof AUDIOS,
-    play?: boolean,
-  ) => Promise<HTMLAudioElement>
+  // TODO: RENAME TO PLAY SOUND
+  playAudio: PlaySound
 }
 
 const useSettingsStore = create<SettingsState>()(
