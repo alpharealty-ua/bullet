@@ -26,7 +26,7 @@ const matchmakingStatusMap: Record<MatchmakingStatus, string> = {
   searching: 'Searching for opponents',
   'match-found': 'Match found! Waiting for confirmation',
   'match-created': 'Match created! Game starting',
-}
+} as const
 
 const EnterArena = ({
   onDecline,
@@ -102,7 +102,7 @@ const EnterArena = ({
       <div className='animate-in fade-in max-w-80 px-3 duration-500'>
         <div className='text-lg'>
           {matchmakingStatusMap[matchmakingStatus]}{' '}
-          {matchmakingStatus !== 'not-in-queue' && (
+          {(isSearching || isFound) && (
             <>
               <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-0 duration-400 ease-linear'>
                 .
