@@ -101,7 +101,7 @@ export type CharacterType = 'back' | 'front'
 
 export const CHARACTER_NAMES = Object.keys(CHARACTER_LIST) as CharacterName[]
 
-export const DISABLED_CHARACTER_NAMES: CharacterName[] = []
+export const DISABLED_CHARACTER_NAMES: CharacterName[] = ['anime-2']
 
 export const AUDIOS = {
   revolverspin: '/assets/audios/revolverspin.mp3',
@@ -116,7 +116,7 @@ export const AUDIOS = {
   ready: '/assets/audios/ready.mp3',
   set: '/assets/audios/set.mp3',
   pull: '/assets/audios/pull.mp3',
-  // TODO: DOWNLOAD TO PROJECT 
+  // TODO: DOWNLOAD TO PROJECT
   matchFoundSound:
     'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
   matchConfirmedSound:

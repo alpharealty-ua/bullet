@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
-import { cn } from '@/lib/utils'
+import { cn, formatNumber } from '@/lib/utils'
 import {
   CHARACTER_NAMES,
   CharacterType,
@@ -89,8 +89,9 @@ const CharacterSelector = ({
                   />
                 </button>
                 {disabled && (
-                  <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-full bg-black/30 text-7xl text-white duration-500'>
-                    <IoLockClosed />
+                  <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-full bg-black/30 text-white duration-500'>
+                    <IoLockClosed className='text-7xl drop-shadow-2xl' />
+                    <div className='text-3xl'>$ {formatNumber(100000)}</div>
                     <ButtonWithAudio as='button' bg='primary' text='Unlock' />
                   </div>
                 )}
