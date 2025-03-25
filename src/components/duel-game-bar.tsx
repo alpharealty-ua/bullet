@@ -3,12 +3,17 @@ import { useCallback, useImperativeHandle, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { IoSkull } from 'react-icons/io5'
 
+type ResetOptions = {
+  direction?: number
+  activeIndex?: number
+}
+
 export interface GameBarHandle {
   getState: () => Promise<{ value: number; isRunning: boolean }>
   highlight: () => Promise<void>
   start: (duration: number) => Promise<void>
   stop: () => Promise<void>
-  reset: () => Promise<void>
+  reset: (options?: ResetOptions) => Promise<void>
 }
 
 const LENGTH = 23
@@ -116,31 +121,27 @@ const DuelGameBar = ({
       return
     }
 
-    const valueDom = nextActiveDom.querySelector('[data-value]')
+    const valueDom = nextActiveDom.querySelector(
+      '[data-value]',
+    ) as HTMLDivElement
 
     if (valueDom === null) {
       return
     }
 
+    // TODO: JOIN CLASS
     valueDom.classList.add('is-selected')
+    valueDom.classList.add('animate-[bar-select]')
 
     await new Promise((resolve) =>
-      valueDom.addEventListener('transitionend', resolve, { once: true }),
+      valueDom.addEventListener('animationend', resolve, { once: true }),
     )
 
     valueDom.classList.remove('is-selected')
-
-    await wait(0)
-
-    valueDom.style.zIndex = '3'
-
-    await new Promise((resolve) =>
-      valueDom.addEventListener('transitionend', resolve, { once: true }),
-    )
-    valueDom.style.zIndex = ''
+    valueDom.classList.remove('animate-[bar-select]')
   }
 
-  const reset = async () => {
+  const reset = async (options: ResetOptions = {}) => {
     const nextActive = nextActiveRef.current
 
     if (nextActive) {
@@ -148,8 +149,8 @@ const DuelGameBar = ({
       nextActive.classList.remove('is-active')
     }
 
-    directionRef.current = 1
-    activeIndexRef.current = -1
+    directionRef.current = options.direction ?? 1
+    activeIndexRef.current = options.activeIndex ?? -1
     isRunningRef.current = false
     nextActiveRef.current = null
   }
@@ -189,13 +190,12 @@ const DuelGameBar = ({
                   >
                     <div
                       className={cn(
-                        'absolute inset-0 z-2 flex items-center justify-center text-white select-none',
-                        'duration-500',
-                        'bg-[#f7f7c0] [&.is-selected]:z-3 [&.is-selected]:scale-200',
-                        'before:absolute before:inset-0 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
+                        'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
+                        'repeat-1 zoom-in-200 duration-500',
+                        'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
                         isDefaultNumber &&
                           'text-transparent [&.is-selected]:text-transparent',
-                        isSkullNumber && '[&.is-selected]:scale-400',
+                        isSkullNumber && '[&.is-selected]:zoom-in-400',
                         className,
                       )}
                       data-value

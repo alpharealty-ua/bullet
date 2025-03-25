@@ -93,6 +93,16 @@
   }
 }
 
+@keyframes bar-select {
+  0%,
+  100% {
+    z-index: 3;
+  }
+  50% {
+    scale: var(--tw-enter-scale);
+  }
+}
+
 @font-face {
   font-family: Verdana;
   src: url('/assets/fonts/Verdana.woff2');
