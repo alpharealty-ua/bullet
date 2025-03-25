@@ -40,16 +40,22 @@ const useSettingsStore = create<SettingsState>()(
           { once: true },
         )
 
+        // TODO: MOVE TO ADUIO
+        audio.muted = !get().soundEffects
+        audio.currentTime = 0
+
         try {
-          // TODO: MOVE TO ADUIO
-          audio.muted = !get().soundEffects
-          audio.currentTime = 0
           if (play) {
             await audio.play()
           }
-
-          return audio
         } catch (error) {
+          if (play) {
+            console.log(audio.duration)
+            setTimeout(
+              () => audio.dispatchEvent(new Event('ended')),
+              audio.duration * 1000,
+            )
+          }
           console.log(error)
         }
 
