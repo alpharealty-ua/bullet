@@ -11,9 +11,8 @@ import {
   PingResponse,
   PingUpdateResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
-import { wait } from '@/lib/utils'
 
-export class MatchmakerPingClient {
+class MatchmakerPingClient {
   socket: Socket
   options: Record<string, any>
   pingHistory: { ping: number; jitter: number; timestamp: number }[]
@@ -21,7 +20,7 @@ export class MatchmakerPingClient {
   currentPing: number
   currentJitter: number
   measurementsCount: number
-  eventListener: ((...args: any[]) => any)[] = []
+  eventListener: (() => any)[] = []
 
   constructor(socket: Socket, options = {}) {
     this.socket = socket
@@ -42,14 +41,9 @@ export class MatchmakerPingClient {
   }
 
   attachEventListeners() {
-    const delay = [0] // , 25, 50, 75, 100, 125, 150
-    let i = 0
-
     const ping = async (data: PingResponse) => {
       this.lastSequence = data.sequence
       this.log(`Received ping request (sequence: ${data.sequence})`)
-      await wait(delay[i++ % delay.length])
-      // Send pong response with the same data
       this.socket.emit('pong', data)
     }
 
@@ -58,7 +52,6 @@ export class MatchmakerPingClient {
       this.currentJitter = data.jitter || 0
       this.measurementsCount = data.measurements || 0
 
-      // Update ping history
       this.updatePingHistory(this.currentPing, this.currentJitter)
 
       this.log(
@@ -77,13 +70,11 @@ export class MatchmakerPingClient {
       }
     }
 
-    // Handle ping requests from server
     this.on('ping', ping)
-    // Handle ping updates from server
     this.on('pingUpdate', pingUpdate)
   }
 
-  on(event: string, handler: (...args: any[]) => any) {
+  on<T>(event: string, handler: (...args: T[]) => void) {
     this.socket.on(event, handler)
 
     this.eventListener.push(() => {
@@ -91,7 +82,7 @@ export class MatchmakerPingClient {
     })
   }
 
-  off(event: string, handler: (...args: any[]) => any) {
+  off<T>(event: string, handler: (...args: T[]) => void) {
     this.socket.off(event, handler)
   }
 
@@ -111,16 +102,10 @@ export class MatchmakerPingClient {
     }
   }
 
-  /**
-   * Get the ping history
-   */
   getPingHistory() {
     return [...this.pingHistory]
   }
 
-  /**
-   * Get current ping statistics
-   */
   getPingStats() {
     return {
       currentPing: this.currentPing,
@@ -132,9 +117,6 @@ export class MatchmakerPingClient {
     }
   }
 
-  /**
-   * Calculate average ping from history
-   */
   calculateAveragePing() {
     if (this.pingHistory.length === 0) {
       return 0
@@ -148,10 +130,6 @@ export class MatchmakerPingClient {
     return this.currentPing <= threshold
   }
 
-  /**
-   * Get ping quality category
-   * @returns {'excellent'|'good'|'fair'|'poor'}
-   */
   getPingQuality() {
     if (this.currentPing < 50) return 'excellent'
     if (this.currentPing < 100) return 'good'
@@ -165,3 +143,5 @@ export class MatchmakerPingClient {
     }
   }
 }
+
+export { MatchmakerPingClient }

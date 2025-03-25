@@ -112,8 +112,6 @@ const useMatchmakingSocket = (token: string) => {
     }
 
     const connect = () => {
-      off()
-
       socket.auth = { token }
       socket.connect()
 
@@ -408,6 +406,7 @@ const useMatchmakingSocket = (token: string) => {
         })
       }
 
+      off()
       // socketMatchmaker.onAny(onAny)
       socket.on('connect', handleConnect)
       socket.on('disconnect', handleDisconnect)
@@ -424,10 +423,6 @@ const useMatchmakingSocket = (token: string) => {
       socket.on('duelGameCreated', handleDuelGameCreated)
 
       return (off = () => {
-        if (!socket) {
-          return
-        }
-
         matchmakerPingClient.dettachEventListeners()
         socket.off('connect', handleConnect)
         socket.off('disconnect', handleDisconnect)

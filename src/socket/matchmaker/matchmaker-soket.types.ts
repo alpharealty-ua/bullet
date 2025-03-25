@@ -133,7 +133,10 @@ export type DuelGameCreatedResponse = {
   metadata?: any
 }
 
-export type Indicator = { playerId: string; confirm: boolean }
+export type Indicator = {
+  playerId: string
+  confirm: boolean
+}
 // @ts-ignore
 type Player = {
   id: string // Player ID
