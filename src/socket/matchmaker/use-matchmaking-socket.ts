@@ -200,7 +200,7 @@ const useMatchmakingSocket = (token: string) => {
     playerId: null,
     ping: 0,
   })
-  const firstRender = useRef(true)
+  const isUnmount = useRef(false)
   // TODO: FIX ANY
   const resultRef = useRef<any>(null)
 
@@ -575,11 +575,14 @@ const useMatchmakingSocket = (token: string) => {
     }
 
     const disconnect = () => {
-      if (!socket) {
+      off()
+
+      socket.disconnect()
+
+      if (isUnmount) {
         return
       }
 
-      socket.disconnect()
       setConnectionStatus('disconnected')
       updateMatchmakingStatus('not-in-queue')
 
@@ -728,13 +731,16 @@ const useMatchmakingSocket = (token: string) => {
 
   useEffect(() => {
     connect()
+    isUnmount.current = true
 
     return () => {
-      if (firstRender.current) {
-        firstRender.current = false
-        return
-      }
-      disconnect()
+      isUnmount.current = false
+      Promise.resolve().then(() => {
+        if (isUnmount.current) {
+          return
+        }
+        disconnect()
+      })
     }
   }, [connect, disconnect])
 
