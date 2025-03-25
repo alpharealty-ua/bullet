@@ -137,8 +137,8 @@ export type Indicator = {
   playerId: string
   confirm: boolean
 }
-// @ts-ignore
-type Player = {
+
+export type Player = {
   id: string // Player ID
   username: string // Player username
 }
@@ -149,4 +149,20 @@ export type MatchDetails = {
   averagePing: any
   gameId: any
   opponent: { ping: number; username: string; region: string }
+}
+
+export type Statistics = {
+  playersInQueue: number
+  totalMatches: number
+  averageWaitTime: number
+}
+
+export type ConfirmationTimer = {
+  time: number
+  urgent: boolean
+}
+
+export type Info = {
+  playerId: string | null
+  ping: number
 }
