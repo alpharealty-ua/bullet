@@ -179,11 +179,23 @@ const Revolver = React.forwardRef<
       chamberSpeedDom.style.rotate = `${roundedRotate}deg`
     }
 
+    let started = false
+
+    const speedChanged = () => {
+      if (started) {
+        return
+      }
+
+      startSpin()
+    }
+
     const startSpin = () => {
+      started = true
       const speed = speedRef.current
       const sign = speed >= 0 ? 1 : -1
 
       if (speed * sign < 5 * sign) {
+        started = false
         stopSpin()
         return
       }
@@ -193,12 +205,12 @@ const Revolver = React.forwardRef<
     }
 
     chamberSpeedDom.addEventListener('transitionend', startSpin)
-    chamberSpeedDom.addEventListener('speedchanged', startSpin)
+    chamberSpeedDom.addEventListener('speedchanged', speedChanged)
 
     return () => {
       stopSpin()
       chamberSpeedDom.removeEventListener('transitionend', startSpin)
-      chamberSpeedDom.removeEventListener('speedchanged', startSpin)
+      chamberSpeedDom.removeEventListener('speedchanged', speedChanged)
     }
   }, [disabled])
 
