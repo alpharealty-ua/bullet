@@ -232,6 +232,7 @@ const useGame = (variant: VariantGame) => {
       await revolverHandle.click()
 
       if (isGameOver) {
+        await revolverHandle.shot()
         await gameOver()
         return
       }

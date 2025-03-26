@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { IMAGES } from '@/lib/constants'
-import { cn, preloadImage } from '@/lib/utils'
+import { cn, preloadImage, waitEndAudio } from '@/lib/utils'
 
 let imageVersion = Date.now()
 
@@ -58,60 +58,19 @@ const GameOver = ({
       return
     }
 
-    let isUnmounted = false
     setDisabled(true)
 
     const runAnimation = async () => {
-      const drumBeatAudio = await playAudio('drumbeat', false)
-      const gunShotAudio = await playAudio('gunshot', false)
+      const drumBeatAudio = await playAudio('drumbeat')
 
-      const gunShotPlay = async () => {
-        if (isUnmounted) {
-          return
-        }
-
-        setRunAnimation(true)
-      }
-
-      const gunShotEnded = async () => {
-        if (isUnmounted) {
-          return
-        }
-
-        await drumBeatAudio.play()
-      }
-
-      const drumBeatEnded = () => {
-        if (isUnmounted) {
-          return
-        }
-
-        setDisabled(false)
-      }
-
-      gunShotAudio.addEventListener('play', gunShotPlay, { once: true })
-      gunShotAudio.addEventListener('ended', gunShotEnded, { once: true })
-      drumBeatAudio.addEventListener('ended', drumBeatEnded, { once: true })
-
-      const dispatch = () => {
-        gunShotAudio.dispatchEvent(new Event('play'))
-        gunShotAudio.dispatchEvent(new Event('ended'))
-        drumBeatAudio.dispatchEvent(new Event('ended'))
-      }
-
-      if (hasImage) {
-        await gunShotAudio.play().catch(dispatch)
-      } else {
-        dispatch()
-      }
-    }
-    runAnimation().catch(() => {
       setRunAnimation(true)
-    })
 
-    return () => {
-      isUnmounted = true
+      await waitEndAudio(drumBeatAudio)
+
+      setDisabled(false)
+      setRunAnimation(true)
     }
+    runAnimation()
   }, [show, playAudio, hasImage])
 
   useEffect(() => {
@@ -132,28 +91,17 @@ const GameOver = ({
       onClick={handleClick}
       disabled={disabled}
     >
-      {hasImage && (
-        <div
-          className='animate-out fade-out fill-mode-both absolute inset-0 flex translate-y-[-70px] items-end bg-center bg-no-repeat delay-800 duration-0 lg:translate-y-0'
-          style={{
-            backgroundImage: `url(${image})`,
-          }}
-        ></div>
-      )}
       <div
         className={cn(
           'absolute inset-0 bg-cover bg-center',
           'animate-in fade-in fill-mode-both duration-100',
-          hasImage && 'delay-800',
         )}
         style={!blood ? { backgroundImage: `url(${IMAGES.blood})` } : {}}
       >
         <div
           className={cn(
             'w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center text-5xl text-transparent uppercase select-none',
-            'animate-in fade-in fill-mode-both duration-100',
-            hasImage && 'delay-900',
-            !hasImage && 'delay-100',
+            'animate-in fade-in fill-mode-both delay-100 duration-100',
           )}
           style={{ backgroundImage: `url(${IMAGES.you})` }}
         >
@@ -162,9 +110,7 @@ const GameOver = ({
         <div
           className={cn(
             'uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent select-none',
-            'animate-in fade-in fill-mode-both duration-100',
-            hasImage && 'delay-1000',
-            !hasImage && 'delay-200',
+            'animate-in fade-in fill-mode-both delay-200 duration-100',
           )}
           style={{ backgroundImage: `url(${IMAGES.died})` }}
         >

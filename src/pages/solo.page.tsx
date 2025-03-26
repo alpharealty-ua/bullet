@@ -98,7 +98,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           />
         </div>
       )}
-      <div className='relative mt-auto flex flex-1 items-end overflow-hidden px-8 pt-2'>
+      <div className='relative mt-auto flex flex-1 items-end px-8 pt-2'>
         <Revolver
           gunHandleRef={revolverRefHandle}
           disabled={isStartedGame}

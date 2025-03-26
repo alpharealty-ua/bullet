@@ -1,9 +1,9 @@
-import React, { useEffect, useImperativeHandle, useRef } from 'react'
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
-import { cn } from '@/lib/utils'
+import { cn, waitEndAudio } from '@/lib/utils'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
 import { useSpin } from '@/components/guns/use-spin'
@@ -17,6 +17,7 @@ export interface RevolverHandle {
   spin: (duration?: number) => Promise<void>
   trigger: () => Promise<void>
   click: () => Promise<void>
+  shot: () => Promise<void>
 }
 
 const Revolver = React.forwardRef<
@@ -31,6 +32,7 @@ const Revolver = React.forwardRef<
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
   const speedRef = useRef(0)
+  const [showShot, setShowShot] = useState(false)
 
   useEffect(() => {
     if (disabled) {
@@ -214,13 +216,29 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
+  const shot = async () => {
+    const gunShotAudio = await playAudio('gunshot')
+
+    setShowShot(true)
+
+    console.time()
+    console.log(gunShotAudio.duration)
+    await waitEndAudio(gunShotAudio)
+    console.timeEnd()
+
+    setShowShot(false)
+  }
+
   const spin = useSpin(gunRef, rotateRef)
+
+  const trigger = async () => void (await playAudio('triggerpull'))
 
   const click = useClick(gunRef)
 
   useImperativeHandle(gunHandleRef, () => ({
+    shot,
     spin,
-    trigger: async () => void (await playAudio('triggerpull')),
+    trigger,
     click,
   }))
 
@@ -267,6 +285,38 @@ const Revolver = React.forwardRef<
           data-body
         ></div>
       </div>
+      {showShot && (
+        <div className='relative -left-0.5 h-[48%]'>
+          <div
+            className={cn(
+              'absolute inset-0 scale-50 bg-contain bg-center bg-no-repeat',
+              'zoom-in-0 fade-in fill-mode-both animate-in delay-0 duration-100 ease-linear',
+            )}
+            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+          ></div>
+          <div
+            className={cn(
+              'absolute inset-0 scale-100 bg-contain bg-center bg-no-repeat',
+              'zoom-in-50 fade-in fill-mode-both animate-in delay-100 duration-100 ease-linear',
+            )}
+            style={{ backgroundImage: `url(${IMAGES.shotrevolver2})` }}
+          ></div>
+          <div
+            className={cn(
+              'absolute inset-0 scale-150 bg-contain bg-center bg-no-repeat',
+              'zoom-in-50 fade-in fill-mode-both animate-in delay-200 duration-100 ease-linear',
+            )}
+            style={{ backgroundImage: `url(${IMAGES.shotrevolver3})` }}
+          ></div>
+          <div
+            className={cn(
+              'absolute inset-0 scale-250 bg-contain bg-center bg-no-repeat',
+              'zoom-in-0 fade-in fill-mode-both animate-in delay-250 duration-350 ease-linear',
+            )}
+            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+          ></div>
+        </div>
+      )}
     </div>
   )
 })

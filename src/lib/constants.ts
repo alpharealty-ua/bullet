@@ -67,6 +67,9 @@ export const IMAGES = {
   shot1: '/assets/images/shot-1.png',
   shot2: '/assets/images/shot-2.png',
   shot3: '/assets/images/shot-3.png',
+  shotrevolver1: '/assets/images/shot-revolver-1.png',
+  shotrevolver2: '/assets/images/shot-revolver-2.png',
+  shotrevolver3: '/assets/images/shot-revolver-3.png',
   leaderboardstar: '/assets/images/leaderboardstar.png',
   enterarena: '/assets/images/enter-arena.svg',
 } as const
