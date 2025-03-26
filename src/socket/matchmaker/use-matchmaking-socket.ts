@@ -38,8 +38,7 @@ const useMatchmakingSocket = (token: string) => {
   const [matchDetails, setMatchDetails] = useState<MatchDetails | null>(null)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const isUnmount = useRef(false)
-  // TODO: FIX ANY
-  const resultRef = useRef<any>(null)
+  const resultRef = useRef(null)
 
   const {
     connect,
@@ -55,6 +54,8 @@ const useMatchmakingSocket = (token: string) => {
       return resultRef.current
     }
 
+    // TODO: FIX ANY
+    // @ts-ignore
     return (resultRef.current = matchmakerSocket(socket, {
       token,
       playAudio,

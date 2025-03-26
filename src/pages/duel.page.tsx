@@ -86,7 +86,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'
-      ? joinMatchmaking(user.username, region)
+      ? joinMatchmaking(user.username, region, characterName)
       : matchmakingStatus === 'searching' && leaveMatchmaking()
   }
 
@@ -294,7 +294,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                       variant === 'watch' && '-mb-7 h-[300px]',
                       variant === 'play' && 'mr-12',
                     )}
-                    name='fatty'
+                    name={matchDetails?.opponent.characterName ?? 'fatty'}
                     type='front'
                     onClick={
                       variant === 'play' && isStartedGame

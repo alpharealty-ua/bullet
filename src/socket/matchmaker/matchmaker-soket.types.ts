@@ -1,3 +1,5 @@
+import { CharacterName } from '@/lib/constants'
+
 export type PingData = {
   ping: number
   jitter: number
@@ -148,7 +150,12 @@ export type MatchDetails = {
   pingDifference: any
   averagePing: any
   gameId: any
-  opponent: { ping: number; username: string; region: string }
+  opponent: {
+    ping: number
+    username: string
+    region: string
+    characterName: CharacterName
+  }
 }
 
 export type Statistics = {

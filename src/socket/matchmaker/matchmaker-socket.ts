@@ -351,6 +351,7 @@ export const matchmakerSocket = (
           ping: 0,
           username: '',
           region: '',
+          characterName: 'fatty',
         },
       }
 
@@ -358,9 +359,11 @@ export const matchmakerSocket = (
       if (opponentPlayerId && data.metadata?.playerMetadata) {
         const opponentData = data.metadata.playerMetadata[opponentPlayerId]
         if (opponentData) {
+          // TODO: FIX ANY
           matchDetails.opponent.ping = opponentData.ping ?? '--'
           matchDetails.opponent.username = opponentData.username ?? ''
           matchDetails.opponent.region = opponentData.region ?? ''
+          matchDetails.opponent.characterName = opponentData.characterName ?? ''
         }
       }
 
@@ -429,7 +432,11 @@ export const matchmakerSocket = (
     })
   }
 
-  const joinMatchmaking = (username: string, region: string) => {
+  const joinMatchmaking = (
+    username: string,
+    region: string,
+    characterName: string,
+  ) => {
     if (!socket || !socket.connected || !authenticated) {
       addLogEntry('Not connected or authenticated', 'error')
       showCustomAlert('Not connected or authenticated', 'error')
@@ -462,6 +469,7 @@ export const matchmakerSocket = (
       metadata: {
         username,
         region,
+        characterName,
       },
       matchConfirmationRequired: false,
     }
