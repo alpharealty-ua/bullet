@@ -90,32 +90,34 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
 
     const spin = useSpin(gunRef, rotateRef)
 
+    const trigger = async () => {
+      const gunDom = gunRef.current
+
+      if (gunDom === null) {
+        return
+      }
+
+      const fingerDom = gunDom.querySelector('[data-finger]')
+
+      if (fingerDom === null) {
+        return
+      }
+
+      fingerDom.classList.add('is-trigger')
+      await new Promise((resolve) =>
+        fingerDom.addEventListener('transitionend', resolve, { once: true }),
+      )
+      fingerDom.classList.remove('is-trigger')
+
+      await playAudio('triggerpull')
+    }
+
     const click = useClick(gunRef)
 
     useImperativeHandle(gunHandleRef, () => ({
-      spin,
-      trigger: async () => {
-        const gunDom = gunRef.current
-
-        if (gunDom === null) {
-          return
-        }
-
-        const fingerDom = gunDom.querySelector('[data-finger]')
-
-        if (fingerDom === null) {
-          return
-        }
-
-        fingerDom.classList.add('is-trigger')
-        await new Promise((resolve) =>
-          fingerDom.addEventListener('transitionend', resolve, { once: true }),
-        )
-        fingerDom.classList.remove('is-trigger')
-
-        await playAudio('triggerpull')
-      },
       shot,
+      spin,
+      trigger,
       click,
     }))
 
@@ -210,18 +212,18 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             data-body
           ></div>
           {showShot && (
-            <div className='relative top-0 right-0 left-0 z-5 mx-auto aspect-square h-[35%]'>
+            <div className='relative z-5 mx-auto aspect-square h-[35%]'>
               <div
                 className={cn(
-                  'absolute inset-0 scale-300 bg-cover bg-center',
-                  'zoom-in-50 fade-in fill-mode-backwards animate-in bg-no-repeat delay-100 duration-150 ease-linear',
+                  'absolute inset-0 scale-300 bg-contain bg-center bg-no-repeat',
+                  'zoom-in-50 fade-in fill-mode-backwards animate-in delay-100 duration-150 ease-linear',
                 )}
                 style={{ backgroundImage: `url(${IMAGES.shot1})` }}
               ></div>
               <div
                 className={cn(
                   'absolute inset-0 scale-600',
-                  'zoom-in fade-in fill-mode-backwards animate-in bg-cover bg-center bg-no-repeat delay-250 duration-150 ease-linear',
+                  'zoom-in fade-in fill-mode-backwards animate-in bg-contain bg-center bg-no-repeat delay-250 duration-150 ease-linear',
                 )}
                 style={{ backgroundImage: `url(${IMAGES.shot2})` }}
               ></div>
