@@ -69,7 +69,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         )}
         {variant === 'play' && (
-          <div className='flex min-h-40 flex-col gap-3 pt-2'>
+          <div className='flex flex-col gap-3 pt-2'>
             <Result
               title={'Prizepool'}
               value={`$${jackpot}`}
