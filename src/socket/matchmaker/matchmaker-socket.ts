@@ -19,11 +19,7 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
-import {
-  ConfirmationTimer,
-  Info,
-  Statistics,
-} from '@/socket/matchmaker/matchmaker-soket.types'
+import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
 
 // TODO: FIX
 // @ts-ignore
@@ -66,7 +62,7 @@ export const matchmakerSocket = (
     setStatistics: React.Dispatch<React.SetStateAction<Statistics>>
     setMatchDetails: (value: MatchDetails | null) => void
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
-    setConfirmationTimer: (value: ConfirmationTimer) => void
+    setConfirmationTimer: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
   },
 ) => {
@@ -256,15 +252,12 @@ export const matchmakerSocket = (
       // Start the countdown
       let timeLeft = matchData.confirmationTimeoutSeconds || 10
 
-      setConfirmationTimer({ time: timeLeft, urgent: false })
+      setConfirmationTimer(timeLeft)
 
       confirmationTimeout = window.setInterval(() => {
         timeLeft--
 
-        // Add urgent styling when time is running low
-        const urgent = timeLeft <= 3
-
-        setConfirmationTimer({ time: timeLeft, urgent })
+        setConfirmationTimer(timeLeft)
 
         if (timeLeft <= 0 && confirmationTimeout) {
           clearInterval(confirmationTimeout)

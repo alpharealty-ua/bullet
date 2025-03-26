@@ -157,11 +157,6 @@ export type Statistics = {
   averageWaitTime: number
 }
 
-export type ConfirmationTimer = {
-  time: number
-  urgent: boolean
-}
-
 export type Info = {
   playerId: string | null
   ping: number

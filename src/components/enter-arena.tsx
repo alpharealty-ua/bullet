@@ -14,10 +14,7 @@ interface EnterArenaProps {
   onSearch: (amount: number) => void
   indicators: Indicator[]
   matchmakingStatus: MatchmakingStatus
-  confirmationTimer: {
-    time: number
-    urgent: boolean
-  }
+  confirmationTimer: number
 }
 
 const matchmakingStatusMap: Record<MatchmakingStatus, string> = {
@@ -134,11 +131,10 @@ const EnterArena = ({
             </div>
             <div
               className={cn(
-                'text-red repeat-infinite text-xl duration-500',
-                confirmationTimer.urgent && 'animate-[pulse-time]',
+                'text-red repeat-infinite animate-[pulse-time] text-xl duration-500',
               )}
             >
-              {confirmationTimer.time}
+              {confirmationTimer}
             </div>
             <div className='flex justify-between gap-4'>
               <ButtonWithAudio

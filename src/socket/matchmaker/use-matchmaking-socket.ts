@@ -9,7 +9,6 @@ import {
   ConnectionStatus,
   Indicator,
   MatchDetails,
-  ConfirmationTimer,
   Info,
   Statistics,
 } from '@/socket/matchmaker/matchmaker-soket.types'
@@ -29,12 +28,7 @@ const useMatchmakingSocket = (token: string) => {
     totalMatches: 0,
     averageWaitTime: 0,
   })
-  const [confirmationTimer, setConfirmationTimer] = useState<ConfirmationTimer>(
-    {
-      time: 0,
-      urgent: false,
-    },
-  )
+  const [confirmationTimer, setConfirmationTimer] = useState(0)
   const [matchmakingStatus, setMatchmakingStatus] =
     useState<MatchmakingStatus>('not-in-queue')
   const [connectionStatus, setConnectionStatus] =
