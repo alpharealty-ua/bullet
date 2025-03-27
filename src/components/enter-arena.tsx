@@ -35,6 +35,7 @@ const EnterArena = ({
 }: EnterArenaProps) => {
   const isSearching = matchmakingStatus === 'searching'
   const isFound = matchmakingStatus === 'match-found'
+  const isMatchCreated = matchmakingStatus === 'match-created'
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
@@ -88,7 +89,7 @@ const EnterArena = ({
               !(isSearching || isFound) &&
                 'text-green hover:bg-green/10 active:bg-green/20 text-2xl select-none',
             )}
-            disabled={isFound}
+            disabled={isFound || isMatchCreated}
           >
             <span className='transition-transform'>
               {isSearching || isFound ? 'X' : <IoPlay />}
