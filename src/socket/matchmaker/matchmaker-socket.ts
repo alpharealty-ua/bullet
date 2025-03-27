@@ -57,10 +57,10 @@ export const matchmakerSocket = (
 ) => {
   let off: () => void = () => void 1
 
+  // TODO: MOVE TO COMPONENT
   let currentPing = 0
   let playerId: string | null = null
   let currentMatchId: string | null = null
-  let matchConfirmationActive = false
   let matchmakingStatus: MatchmakingStatus = 'not-in-queue'
   let authenticated = false
 
@@ -106,9 +106,6 @@ export const matchmakerSocket = (
       addLogEntry('Disconnected from matchmaker service', 'warning')
       setConnectionStatus('disconnected')
       updateAuthenticated(false)
-
-      // Reset the match confirmation flag
-      matchConfirmationActive = false
 
       // Hide match details
       setMatchDetails(null)
@@ -212,9 +209,6 @@ export const matchmakerSocket = (
     const handleMatchFound = (matchData: MatchFoundResponse) => {
       addLogEntry(`Match found: ${JSON.stringify(matchData)}`, 'success')
 
-      // Set the flag to indicate a match confirmation is active
-      matchConfirmationActive = true
-
       // Update matchmaking status
       updateMatchmakingStatus('match-found')
 
@@ -265,9 +259,6 @@ export const matchmakerSocket = (
     const handleMatchCanceled = (data: MatchCancelResponse) => {
       addLogEntry(`Match canceled: ${JSON.stringify(data)}`, 'warning')
 
-      // Reset the match confirmation flag
-      matchConfirmationActive = false
-
       // Update matchmaking status based on whether the player was returned to queue
       const status =
         data.reason === 'player_declined' && data.declinedBy !== playerId
@@ -291,9 +282,6 @@ export const matchmakerSocket = (
 
     const handleMatchCreated = (data: MatchCreatedResponse) => {
       addLogEntry(`Match created: ${JSON.stringify(data)}`, 'success')
-
-      // Reset the match confirmation flag
-      matchConfirmationActive = false
 
       // Update matchmaking status
       updateMatchmakingStatus('match-created')
@@ -425,9 +413,6 @@ export const matchmakerSocket = (
       return
     }
 
-    // Reset any active match confirmation
-    matchConfirmationActive = false
-
     const joinMatchmaking: JoinMatchmaking = {
       betOptions: {
         networkId: 'local',
@@ -455,7 +440,7 @@ export const matchmakerSocket = (
     }
 
     // Check if a match confirmation is active
-    if (matchConfirmationActive) {
+    if (matchmakingStatus === 'match-found') {
       addLogEntry(
         'Cannot leave matchmaking while a match confirmation is active',
         'warning',
@@ -506,9 +491,6 @@ export const matchmakerSocket = (
 
     socket.emit('declineMatch', { matchId: currentMatchId })
     addLogEntry(`Declining match ${currentMatchId}`, 'info')
-
-    // Reset the match confirmation flag
-    matchConfirmationActive = true
   }
 
   const getStats = () => {
