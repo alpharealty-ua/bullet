@@ -16,6 +16,7 @@ import {
   MatchmakingStatus,
   PingData,
   AdditionalPlayerMetadata,
+  StatisticsResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
@@ -344,7 +345,7 @@ export const matchmakerSocket = (
       setGameId(data.gameId)
     }
 
-    const handleStats = (data: any) => {
+    const handleStats = (data: StatisticsResponse) => {
       addLogEntry(`Received stats: ${JSON.stringify(data)}`, 'info')
 
       setStatistics({

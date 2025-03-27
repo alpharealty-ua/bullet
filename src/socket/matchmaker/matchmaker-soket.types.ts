@@ -169,6 +169,8 @@ export type Statistics = {
   averageWaitTime: number
 }
 
+export type StatisticsResponse = Partial<Statistics>
+
 export type Info = {
   playerId: string | null
   ping: number
