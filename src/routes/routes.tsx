@@ -7,6 +7,7 @@ import { SoloPage } from '@/pages/solo.page'
 import { DuelPage } from '@/pages/duel.page'
 import { GameSelectorPage } from '@/pages/game-selector.page'
 import { ProfilePage } from '@/pages/profile.page'
+import { MatchmakerPage } from '@/pages/matchmaker.page'
 
 export const PUBLIC_ROUTES = [
   {
@@ -58,7 +59,7 @@ export const PRIVATE_ROUTES = [
   },
   {
     path: ROUTES.duel.play,
-    element: <DuelPage variant='play' />,
+    element: <MatchmakerPage />,
   },
   {
     path: `${ROUTES.duel.play}/:gameId`,
