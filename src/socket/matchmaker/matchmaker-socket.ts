@@ -88,6 +88,26 @@ export const matchmakerSocket = (
     socket.auth = { token }
     socket.connect()
 
+    on()
+  }
+
+  const disconnect = () => {
+    socket.disconnect()
+
+    setConnectionStatus('disconnected')
+    updateMatchmakingStatus('not-in-queue')
+
+    setMatchDetails(null)
+    setPingData({
+      ping: 0,
+      jitter: 0,
+      measurements: 0,
+      history: [],
+      sequence: 0,
+    })
+  }
+
+  const on = () => {
     const matchmakerPingClient = new MatchmakerPingClient(socket, {
       onPingUpdate: (pingData: PingData) => {
         currentPing = pingData.ping
@@ -380,22 +400,6 @@ export const matchmakerSocket = (
       socket.off('stats', handleStats)
       socket.off('matchCreated', handleMatchCreated)
       socket.off('duelGameCreated', handleDuelGameCreated)
-    })
-  }
-
-  const disconnect = () => {
-    socket.disconnect()
-
-    setConnectionStatus('disconnected')
-    updateMatchmakingStatus('not-in-queue')
-
-    setMatchDetails(null)
-    setPingData({
-      ping: 0,
-      jitter: 0,
-      measurements: 0,
-      history: [],
-      sequence: 0,
     })
   }
 
