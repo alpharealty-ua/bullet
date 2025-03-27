@@ -251,34 +251,31 @@ export const matchmakerSocket = (
       // Play match found sound
       playAudio('matchFoundSound')
 
-      // Start the countdown
-      let timeLeft = matchData.confirmationTimeoutSeconds || 10
-
-      setConfirmationTimer(timeLeft)
-
-      confirmationTimeout = window.setInterval(() => {
-        timeLeft--
-
-        setConfirmationTimer(timeLeft)
-
-        if (timeLeft <= 0 && confirmationTimeout) {
-          clearInterval(confirmationTimeout)
-          confirmationTimeout = null
-          // The server will handle the timeout
-        }
-      }, 1000)
-
-      // Log that the modal is being shown
-      addLogEntry(
-        `Showing match confirmation modal for match ${matchData.matchId}`,
-        'success',
-      )
-
       // Show a notification
       showCustomAlert(
         'Match found! Please confirm to join the game.',
         'success',
       )
+
+      if (matchData.confirmationRequired) {
+        // TODO: MOVE TO COMPONENT
+        // Start the countdown
+        let timeLeft = matchData.confirmationTimeoutSeconds || 10
+
+        setConfirmationTimer(timeLeft)
+
+        confirmationTimeout = window.setInterval(() => {
+          timeLeft--
+
+          setConfirmationTimer(timeLeft)
+
+          if (timeLeft <= 0 && confirmationTimeout) {
+            clearInterval(confirmationTimeout)
+            confirmationTimeout = null
+            // The server will handle the timeout
+          }
+        }, 1000)
+      }
     }
 
     const handleMatchConfirmationUpdate = (data: MatchConfirmationUpdate) => {
