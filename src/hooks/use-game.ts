@@ -65,7 +65,6 @@ const useGame = (variant: VariantGame) => {
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
   const round = useGameStore(({ round }) => round)
-  const isSolo = pathname.includes(ROUTES.solo.root)
   const isPlay = variant === 'play'
   const [watchGame, setWatchGame] = useState<{
     gameId: string
@@ -325,9 +324,8 @@ const useGame = (variant: VariantGame) => {
       await readySetPullHandle.start()
       const duration = randomIntFromInterval(25, 50)
       await gameBarHandle.start(duration)
-      navigate(`${ROUTES.duel.play}/1`, { preventScrollReset: true })
     }
-  }, [gameOver, isStartedGame, winGame, navigate, addPullRound])
+  }, [gameOver, isStartedGame, winGame, addPullRound])
 
   const nextSolo = useCallback(async () => {
     if (!gameId) {
