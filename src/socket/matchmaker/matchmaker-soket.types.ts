@@ -8,9 +8,22 @@ export type PingData = {
   sequence: number
 }
 
+export type AdditionalPlayerMetadata = {
+  username: string
+  region: string
+  characterName: string
+}
+
+type PlayerMetadata = {
+  roles: string[]
+  userId: string
+  betOptions: BetOptions
+  matchConfirmationRequired: boolean
+} & AdditionalPlayerMetadata
+
 export type JoinMatchmaking = {
   betOptions?: BetOptions
-  metadata?: Record<string, any> // Optional: Additional metadata
+  metadata?: AdditionalPlayerMetadata // Optional: Additional metadata
   matchConfirmationRequired: boolean
 }
 
@@ -27,26 +40,19 @@ type BetOptions = {
   maxRounds?: number // Maximum number of rounds
 }
 
-type PlayerMetadata = {
+type MatchFoundResponseMetadata = {
+  averagePing: number
+  pingDifference: number
+  userIds: string[]
+  playerMetadata: Record<string, PlayerMetadata>
   betOptions: BetOptions
-  matchConfirmationRequired: boolean
-  region: string
-  roles: string[]
-  userId: string
-  username: string
 }
 
 export type MatchFoundResponse = {
   matchId: string // ID of the match
   players: string[] // Array of player IDs
   // Match metadata, including bet options if available
-  metadata: {
-    averagePing: number
-    pingDifference: number
-    userIds: string[]
-    playerMetadata: Record<string, PlayerMetadata>
-    betOptions: BetOptions
-  }
+  metadata: MatchFoundResponseMetadata
   confirmationRequired: boolean // Whether confirmation is required
   confirmationTimeoutSeconds: number // Timeout for confirmation in seconds
 }
@@ -108,7 +114,7 @@ export type InfoResponse = {
   service: string
   status: 'online'
   user: { id: string; roles: string[] }
-  version: '1.0.0'
+  version: string
   currentPing?: number
   currentJitter?: number
   measurementsCount?: number
@@ -124,10 +130,9 @@ export type PingUpdateResponse = {
   measurements?: number
 }
 
-export type DuelGameCreatedResponse = {
+export type MatchCreatedResponse = {
   matchId: string // ID of the match
   gameId: string // ID of the created duel game
-
   // Array of players in the duel game
   players: string[]
   // Bet information
@@ -146,10 +151,10 @@ export type Player = {
 }
 
 export type MatchDetails = {
-  matchId: any
-  pingDifference: any
-  averagePing: any
-  gameId: any
+  matchId: string
+  pingDifference: number
+  averagePing: number
+  gameId: string
   opponent: {
     ping: number
     username: string

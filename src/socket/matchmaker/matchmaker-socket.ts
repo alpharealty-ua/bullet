@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import {
   ConfirmMatch,
   ConnectionStatus,
-  DuelGameCreatedResponse,
+  MatchCreatedResponse,
   Indicator,
   InfoResponse,
   JoinedMatchmakingResponse,
@@ -16,6 +16,7 @@ import {
   MatchFoundResponse,
   MatchmakingStatus,
   PingData,
+  AdditionalPlayerMetadata,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
@@ -437,11 +438,7 @@ export const matchmakerSocket = (
     })
   }
 
-  const joinMatchmaking = (
-    username: string,
-    region: string,
-    characterName: string,
-  ) => {
+  const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
     if (!socket || !socket.connected || !authenticated) {
       addLogEntry('Not connected or authenticated', 'error')
       showCustomAlert('Not connected or authenticated', 'error')
@@ -471,18 +468,14 @@ export const matchmakerSocket = (
         betAmount: '0.01',
         maxRounds: 10,
       },
-      metadata: {
-        username,
-        region,
-        characterName,
-      },
+      metadata,
       matchConfirmationRequired: false,
     }
 
-    socket.emit('joinMatchmaking', joinMatchmaking)
+    socket.emit('joinMatchmakingWithBet', joinMatchmaking)
 
     addLogEntry(
-      `Joining matchmaking as ${username} with server-measured ping ${currentPing}ms`,
+      `Joining matchmaking as ${metadata.username} with server-measured ping ${currentPing}ms`,
       'info',
     )
   }
