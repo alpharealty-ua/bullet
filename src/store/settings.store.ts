@@ -23,6 +23,8 @@ const useSettingsStore = create<SettingsState>()(
       invertButtons: false,
       blood: false,
       declineAllDeals: false,
+      autoConnect: true,
+      autoJoin: true,
       change: (payload: Partial<Record<SettingsKeys, boolean>>) =>
         set({ ...payload }),
       playAudio: async (

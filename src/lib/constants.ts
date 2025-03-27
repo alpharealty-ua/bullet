@@ -150,6 +150,8 @@ export const SETTINGS = {
   invertButtons: 'Invert PULL AND DEAL button positions',
   blood: 'Toggles off blood',
   declineAllDeals: 'Decline all deals',
+  autoConnect: 'Auto connect to matchmaker',
+  autoJoin: 'Auto join to metchmaker',
 } as const
 
 export const settingsEntries = Object.entries(SETTINGS) as [
