@@ -52,6 +52,7 @@ export const matchmakerSocket = (
     setIndicators,
     setConfirmationTimer,
     setInfo,
+    setGameId,
   }: {
     token: string
     playAudio: PlaySound
@@ -64,6 +65,7 @@ export const matchmakerSocket = (
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
     setConfirmationTimer: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
+    setGameId: (gameId: string) => void
   },
 ) => {
   let off: () => void = () => void 1
@@ -322,7 +324,7 @@ export const matchmakerSocket = (
       showCustomAlert(`Match canceled: ${reason}`, 'warning')
     }
 
-    const handleDuelGameCreated = (data: DuelGameCreatedResponse) => {
+    const handleMatchCreated = (data: MatchCreatedResponse) => {
       addLogEntry(`Match created: ${JSON.stringify(data)}`, 'success')
 
       // Reset the match confirmation flag
@@ -372,6 +374,12 @@ export const matchmakerSocket = (
       currentMatchId = null
     }
 
+    const handleDuelGameCreated = (data: MatchCreatedResponse) => {
+      addLogEntry(`Duel game created: ${JSON.stringify(data)}`, 'success')
+
+      setGameId(data.gameId)
+    }
+
     const handleStats = (data: any) => {
       addLogEntry(`Received stats: ${JSON.stringify(data)}`, 'info')
 
@@ -395,7 +403,7 @@ export const matchmakerSocket = (
     socket.on('matchConfirmationUpdate', handleMatchConfirmationUpdate)
     socket.on('matchCanceled', handleMatchCanceled)
     socket.on('stats', handleStats)
-    socket.on('matchCreated', handleDuelGameCreated)
+    socket.on('matchCreated', handleMatchCreated)
     socket.on('duelGameCreated', handleDuelGameCreated)
 
     return (off = () => {
@@ -411,7 +419,7 @@ export const matchmakerSocket = (
       socket.off('matchConfirmationUpdate', handleMatchConfirmationUpdate)
       socket.off('matchCanceled', handleMatchCanceled)
       socket.off('stats', handleStats)
-      socket.off('matchCreated', handleDuelGameCreated)
+      socket.off('matchCreated', handleMatchCreated)
       socket.off('duelGameCreated', handleDuelGameCreated)
     })
   }

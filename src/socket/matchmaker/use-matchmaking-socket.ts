@@ -37,6 +37,7 @@ const useMatchmakingSocket = (token: string) => {
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [matchDetails, setMatchDetails] = useState<MatchDetails | null>(null)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
+  const [gameId, setGameId] = useState<string | null>(null)
   const isUnmount = useRef(false)
   const resultRef = useRef(null)
 
@@ -54,9 +55,7 @@ const useMatchmakingSocket = (token: string) => {
       return resultRef.current
     }
 
-    // TODO: FIX ANY
-    // @ts-ignore
-    return (resultRef.current = matchmakerSocket(socket, {
+    const result = matchmakerSocket(socket, {
       token,
       playAudio,
       setAuthenticated,
@@ -68,7 +67,11 @@ const useMatchmakingSocket = (token: string) => {
       setIndicators,
       setConfirmationTimer,
       setInfo,
-    }))
+      setGameId,
+    })
+    // TODO: FIX ANY
+    // @ts-ignore
+    return (resultRef.current = result)
   }, [playAudio, token])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
@@ -105,6 +108,7 @@ const useMatchmakingSocket = (token: string) => {
     matchDetails,
     confirmationTimer,
     info,
+    gameId,
   }
 }
 
