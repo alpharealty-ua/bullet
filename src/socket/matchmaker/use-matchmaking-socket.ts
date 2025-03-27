@@ -40,7 +40,15 @@ const useMatchmakingSocket = (token: string) => {
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [gameId, setGameId] = useState<string | null>(null)
   const isUnmount = useRef(false)
-  const resultRef = useRef(null)
+
+  // NEED FOR HOT MODULE RELOAD
+  const initState = useRef({
+    currentPing: 0,
+    playerId: null,
+    currentMatchId: null,
+    matchmakingStatus,
+    authenticated,
+  })
 
   const {
     connect,
@@ -51,29 +59,27 @@ const useMatchmakingSocket = (token: string) => {
     confirmMatch,
     declineMatch,
     getStats,
-  } = useMemo(() => {
-    if (resultRef.current) {
-      return resultRef.current
-    }
-
-    const result = matchmakerSocket(socket, {
-      token,
-      playAudio,
-      setAuthenticated,
-      setMatchmakingStatus,
-      setConnectionStatus,
-      setPingData,
-      setStatistics,
-      setMatchDetails,
-      setIndicators,
-      setConfirmationTimeoutSeconds,
-      setInfo,
-      setGameId,
-    })
-    // TODO: FIX ANY
-    // @ts-ignore
-    return (resultRef.current = result)
-  }, [playAudio, token])
+  } = useMemo(
+    () =>
+      matchmakerSocket(
+        socket,
+        { token, ...initState.current },
+        {
+          playAudio,
+          setAuthenticated,
+          setMatchmakingStatus,
+          setConnectionStatus,
+          setPingData,
+          setStatistics,
+          setMatchDetails,
+          setIndicators,
+          setConfirmationTimeoutSeconds,
+          setInfo,
+          setGameId,
+        },
+      ),
+    [token, playAudio],
+  )
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 

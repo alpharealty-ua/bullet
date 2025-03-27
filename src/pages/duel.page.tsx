@@ -72,7 +72,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   useEffect(() => {
     gameInstance.connect()
-    console.log('connect call')
     isUnmount.current = true
 
     return () => {

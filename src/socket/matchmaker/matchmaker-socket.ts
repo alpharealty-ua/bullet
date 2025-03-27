@@ -29,6 +29,20 @@ export const matchmakerSocket = (
   socket: Socket,
   {
     token,
+    currentPing,
+    playerId,
+    currentMatchId,
+    matchmakingStatus,
+    authenticated,
+  }: {
+    token: string
+    currentPing: number
+    playerId: string | null
+    currentMatchId: string | null
+    matchmakingStatus: MatchmakingStatus
+    authenticated: boolean
+  },
+  {
     playAudio,
     setAuthenticated,
     setMatchmakingStatus,
@@ -41,7 +55,6 @@ export const matchmakerSocket = (
     setInfo,
     setGameId,
   }: {
-    token: string
     playAudio: PlaySound
     setAuthenticated: (value: boolean) => void
     setMatchmakingStatus: (value: MatchmakingStatus) => void
@@ -56,13 +69,6 @@ export const matchmakerSocket = (
   },
 ) => {
   let off: () => void = () => void 1
-
-  // TODO: MOVE TO COMPONENT
-  let currentPing = 0
-  let playerId: string | null = null
-  let currentMatchId: string | null = null
-  let matchmakingStatus: MatchmakingStatus = 'not-in-queue'
-  let authenticated = false
 
   const updateAuthenticated = (auth: boolean) => {
     setAuthenticated(auth)
