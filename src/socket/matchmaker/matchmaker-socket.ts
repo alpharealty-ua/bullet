@@ -88,7 +88,7 @@ export const matchmakerSocket = (
     socket.auth = { token }
     socket.connect()
 
-    on()
+    return on()
   }
 
   const disconnect = () => {

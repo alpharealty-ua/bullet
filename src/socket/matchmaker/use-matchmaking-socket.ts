@@ -41,14 +41,19 @@ const useMatchmakingSocket = (token: string) => {
   const [gameId, setGameId] = useState<string | null>(null)
   const isUnmount = useRef(false)
 
-  // NEED FOR HOT MODULE RELOAD
-  const initState = useRef({
-    currentPing: 0,
-    playerId: null,
-    currentMatchId: null,
-    matchmakingStatus,
-    authenticated,
-  })
+  const initState = useMemo(
+    () => ({
+      token,
+      currentPing: 0,
+      playerId: null,
+      currentMatchId: null,
+      matchmakingStatus,
+      authenticated,
+    }),
+    // INIT STATE NEED FOR HOT MODULE RELOAD
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [token],
+  )
 
   const {
     connect,
@@ -61,33 +66,30 @@ const useMatchmakingSocket = (token: string) => {
     getStats,
   } = useMemo(
     () =>
-      matchmakerSocket(
-        socket,
-        { token, ...initState.current },
-        {
-          playAudio,
-          setAuthenticated,
-          setMatchmakingStatus,
-          setConnectionStatus,
-          setPingData,
-          setStatistics,
-          setMatchDetails,
-          setIndicators,
-          setConfirmationTimeoutSeconds,
-          setInfo,
-          setGameId,
-        },
-      ),
-    [token, playAudio],
+      matchmakerSocket(socket, initState, {
+        playAudio,
+        setAuthenticated,
+        setMatchmakingStatus,
+        setConnectionStatus,
+        setPingData,
+        setStatistics,
+        setMatchDetails,
+        setIndicators,
+        setConfirmationTimeoutSeconds,
+        setInfo,
+        setGameId,
+      }),
+    [playAudio, initState],
   )
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 
   useEffect(() => {
-    connect()
+    const off = connect()
     isUnmount.current = true
 
     return () => {
+      off()
       isUnmount.current = false
       Promise.resolve().then(() => {
         if (isUnmount.current) {
