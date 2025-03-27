@@ -6,12 +6,17 @@ import { cn } from '@/lib/utils'
 const Countdown = ({ time, onEnd }: { time: number; onEnd: () => void }) => {
   const [currentTime, setTime] = useState(time)
   const timeRef = useRef(time)
-  useInterval(() => {
+
+  const countdown = () => {
     if (timeRef.current === 0) {
       onEnd()
+      setTime(0)
+      return
     }
     setTime(--timeRef.current)
-  }, 1000)
+  }
+
+  useInterval(countdown, timeRef.current > -1 ? 1000 : null)
 
   return (
     <div
