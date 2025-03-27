@@ -36,7 +36,7 @@ export const matchmakerSocket = (
     setStatistics,
     setMatchDetails,
     setIndicators,
-    setConfirmationTimer,
+    setConfirmationTimeoutSeconds,
     setInfo,
     setGameId,
   }: {
@@ -49,7 +49,7 @@ export const matchmakerSocket = (
     setStatistics: React.Dispatch<React.SetStateAction<Statistics>>
     setMatchDetails: (value: MatchDetails | null) => void
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
-    setConfirmationTimer: (value: number) => void
+    setConfirmationTimeoutSeconds: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
     setGameId: (gameId: string) => void
   },
@@ -59,7 +59,6 @@ export const matchmakerSocket = (
   let currentPing = 0
   let playerId: string | null = null
   let currentMatchId: string | null = null
-  let confirmationTimeout: number | null = null
   let matchConfirmationActive = false
   let matchmakingStatus: MatchmakingStatus = 'not-in-queue'
   let authenticated = false
@@ -221,12 +220,6 @@ export const matchmakerSocket = (
       // Show match confirmation dialog
       debug(`Showing match confirmation for match ${matchData.matchId}`)
 
-      // Make sure any previous confirmation is properly cleaned up
-      if (confirmationTimeout) {
-        clearInterval(confirmationTimeout)
-        confirmationTimeout = null
-      }
-
       currentMatchId = matchData.matchId
 
       // Create player confirmation indicators
@@ -243,24 +236,12 @@ export const matchmakerSocket = (
         'success',
       )
 
+      // TODO: SET ALL RESPONSE DATA
       if (matchData.confirmationRequired) {
-        // TODO: MOVE TO COMPONENT
-        // Start the countdown
-        let timeLeft = matchData.confirmationTimeoutSeconds || 10
+        const confirmationTimeoutSeconds =
+          matchData.confirmationTimeoutSeconds || 10
 
-        setConfirmationTimer(timeLeft)
-
-        confirmationTimeout = window.setInterval(() => {
-          timeLeft--
-
-          setConfirmationTimer(timeLeft)
-
-          if (timeLeft <= 0 && confirmationTimeout) {
-            clearInterval(confirmationTimeout)
-            confirmationTimeout = null
-            // The server will handle the timeout
-          }
-        }, 1000)
+        setConfirmationTimeoutSeconds(confirmationTimeoutSeconds)
       }
     }
 
@@ -454,7 +435,7 @@ export const matchmakerSocket = (
         maxRounds: 10,
       },
       metadata,
-      matchConfirmationRequired: false,
+      matchConfirmationRequired: true,
     }
 
     socket.emit('joinMatchmakingWithBet', joinMatchmaking)

@@ -7,6 +7,7 @@ import {
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Countdown } from '@/components/countdown'
 
 interface EnterArenaProps {
   onDecline: () => void
@@ -14,7 +15,7 @@ interface EnterArenaProps {
   onSearch: (amount: number) => void
   indicators: Indicator[]
   matchmakingStatus: MatchmakingStatus
-  confirmationTimer: number
+  confirmationTimeoutSeconds: number
 }
 
 const matchmakingStatusMap: Record<MatchmakingStatus, string> = {
@@ -30,7 +31,7 @@ const EnterArena = ({
   onConfirm,
   onSearch,
   indicators,
-  confirmationTimer,
+  confirmationTimeoutSeconds,
   matchmakingStatus,
 }: EnterArenaProps) => {
   const isSearching = matchmakingStatus === 'searching'
@@ -130,13 +131,7 @@ const EnterArena = ({
                 ></div>
               ))}
             </div>
-            <div
-              className={cn(
-                'text-red repeat-infinite animate-[pulse-time] text-xl duration-500',
-              )}
-            >
-              {confirmationTimer}
-            </div>
+            <Countdown time={confirmationTimeoutSeconds} />
             <div className='flex justify-between gap-4'>
               <ButtonWithAudio
                 as='button'

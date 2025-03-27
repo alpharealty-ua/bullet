@@ -41,7 +41,7 @@ const MatchmakerPage = () => {
     matchmakingStatus,
     indicators,
     matchDetails,
-    confirmationTimer,
+    confirmationTimeoutSeconds,
     info,
     connectionStatus,
     gameId,
@@ -108,7 +108,7 @@ const MatchmakerPage = () => {
               onConfirm={confirmMatch}
               onSearch={handleSearch}
               indicators={indicators}
-              confirmationTimer={confirmationTimer}
+              confirmationTimeoutSeconds={confirmationTimeoutSeconds}
               matchmakingStatus={matchmakingStatus}
             />
             {matchDetails && (

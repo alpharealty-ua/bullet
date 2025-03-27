@@ -28,7 +28,8 @@ const useMatchmakingSocket = (token: string) => {
     totalMatches: 0,
     averageWaitTime: 0,
   })
-  const [confirmationTimer, setConfirmationTimer] = useState(0)
+  const [confirmationTimeoutSeconds, setConfirmationTimeoutSeconds] =
+    useState(0)
   const [matchmakingStatus, setMatchmakingStatus] =
     useState<MatchmakingStatus>('not-in-queue')
   const [connectionStatus, setConnectionStatus] =
@@ -65,7 +66,7 @@ const useMatchmakingSocket = (token: string) => {
       setStatistics,
       setMatchDetails,
       setIndicators,
-      setConfirmationTimer,
+      setConfirmationTimeoutSeconds,
       setInfo,
       setGameId,
     })
@@ -106,7 +107,7 @@ const useMatchmakingSocket = (token: string) => {
     statistics,
     indicators,
     matchDetails,
-    confirmationTimer,
+    confirmationTimeoutSeconds,
     info,
     gameId,
   }
