@@ -111,7 +111,13 @@ const MatchmakerPage = () => {
               confirmationTimer={confirmationTimer}
               matchmakingStatus={matchmakingStatus}
             />
-            {matchDetails && <Countdown time={1} onEnd={handleCountdownEnd} />}
+            {matchDetails && (
+              <Countdown
+                time={1}
+                onEnd={handleCountdownEnd}
+                className='text-7xl'
+              />
+            )}
             {matchDetails && (
               <div className='flex w-full flex-col gap-2'>
                 <div className='px-2'>Match Found!</div>

@@ -1,15 +1,20 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, ComponentProps } from 'react'
 
 import { useInterval } from '@/hooks/use-interval'
 import { cn } from '@/lib/utils'
 
-const Countdown = ({ time, onEnd }: { time: number; onEnd: () => void }) => {
+const Countdown = ({
+  className,
+  time,
+  onEnd,
+  ...props
+}: ComponentProps<'div'> & { time: number; onEnd?: () => void }) => {
   const [currentTime, setTime] = useState(time)
   const timeRef = useRef(time)
 
   const countdown = () => {
     if (timeRef.current === 0) {
-      onEnd()
+      onEnd && onEnd()
       setTime(0)
       return
     }
@@ -21,9 +26,11 @@ const Countdown = ({ time, onEnd }: { time: number; onEnd: () => void }) => {
   return (
     <div
       className={cn(
-        'text-red text-7xl',
+        'text-red text-xl',
         'repeat-infinite animate-[pulse-time] duration-500',
+        className,
       )}
+      {...props}
     >
       {currentTime}
     </div>
