@@ -40,7 +40,7 @@ type BetOptions = {
   maxRounds?: number // Maximum number of rounds
 }
 
-type MatchFoundResponseMetadata = {
+type MatchFoundMetadata = {
   averagePing: number
   pingDifference: number
   userIds: string[]
@@ -52,7 +52,7 @@ export type MatchFoundResponse = {
   matchId: string // ID of the match
   players: string[] // Array of player IDs
   // Match metadata, including bet options if available
-  metadata: MatchFoundResponseMetadata
+  metadata: MatchFoundMetadata
   confirmationRequired: boolean // Whether confirmation is required
   confirmationTimeoutSeconds: number // Timeout for confirmation in seconds
 }
