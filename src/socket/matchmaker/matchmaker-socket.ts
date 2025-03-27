@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io-client'
-import { toast } from 'react-toastify'
 
 import {
   ConfirmMatch,
@@ -21,21 +20,7 @@ import {
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
 import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
-
-// TODO: FIX
-// @ts-ignore
-const addLogEntry = (message: string, type: string) => {
-  // console.log(message, type)
-}
-
-const debug = (_: string) => {}
-
-const showCustomAlert = (
-  message: string,
-  type: 'info' | 'success' | 'error' | 'warning',
-) => {
-  toast[type](message)
-}
+import { addLogEntry, showCustomAlert, debug } from '../utils'
 
 // TODO: TRANSFORM TO CLASS
 // TODO: REMOVED DISPATCH TYPE
