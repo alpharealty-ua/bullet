@@ -363,7 +363,7 @@ const useGame = (variant: VariantGame) => {
   )
 
   const nextRound = async () => {
-    const DRAW_ROUND = 10
+    const DRAW_ROUND = 50
 
     if (round === DRAW_ROUND) {
       setState('draw')
