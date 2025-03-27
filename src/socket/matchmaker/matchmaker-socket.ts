@@ -1,13 +1,11 @@
 import { Socket } from 'socket.io-client'
 
 import {
-  ConfirmMatch,
   ConnectionStatus,
   MatchCreatedResponse,
   Indicator,
   InfoResponse,
   JoinedMatchmakingResponse,
-  JoinMatchmaking,
   LeftMatchmakingResponse,
   MatchCancelResponse,
   MatchConfirmationUpdate,
@@ -15,7 +13,6 @@ import {
   MatchFoundResponse,
   MatchmakingStatus,
   PingData,
-  AdditionalPlayerMetadata,
   StatisticsResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
@@ -28,19 +25,13 @@ import { addLogEntry, showCustomAlert, debug } from '../utils'
 export const matchmakerSocket = (
   socket: Socket,
   {
-    token,
-    currentPing,
     playerId,
     currentMatchId,
     matchmakingStatus,
-    authenticated,
   }: {
-    token: string
-    currentPing: number
     playerId: string | null
     currentMatchId: string | null
     matchmakingStatus: MatchmakingStatus
-    authenticated: boolean
   },
   {
     playAudio,
@@ -54,6 +45,7 @@ export const matchmakerSocket = (
     setConfirmationTimeoutSeconds,
     setInfo,
     setGameId,
+    setMatchId,
   }: {
     playAudio: PlaySound
     setAuthenticated: (value: boolean) => void
@@ -65,14 +57,14 @@ export const matchmakerSocket = (
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
     setConfirmationTimeoutSeconds: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
-    setGameId: (gameId: string) => void
+    setGameId: (value: string | null) => void
+    setMatchId: (value: string | null) => void
   },
 ) => {
   let off: () => void = () => void 1
 
   const updateAuthenticated = (auth: boolean) => {
     setAuthenticated(auth)
-    authenticated = auth
   }
 
   const updateMatchmakingStatus = (status: MatchmakingStatus) => {
@@ -80,37 +72,14 @@ export const matchmakerSocket = (
     matchmakingStatus = status
   }
 
-  const toggleConnection = () => {
-    socket.connected ? disconnect() : connect()
-  }
-
-  const connect = () => {
-    socket.auth = { token }
-    socket.connect()
-
-    return on()
-  }
-
-  const disconnect = () => {
-    socket.disconnect()
-
-    setConnectionStatus('disconnected')
-    updateMatchmakingStatus('not-in-queue')
-
-    setMatchDetails(null)
-    setPingData({
-      ping: 0,
-      jitter: 0,
-      measurements: 0,
-      history: [],
-      sequence: 0,
-    })
+  const updateMatchId = (matchId: string | null) => {
+    setMatchId(matchId)
+    currentMatchId = matchId
   }
 
   const on = () => {
     const matchmakerPingClient = new MatchmakerPingClient(socket, {
       onPingUpdate: (pingData: PingData) => {
-        currentPing = pingData.ping
         setPingData(pingData)
       },
     })
@@ -131,9 +100,19 @@ export const matchmakerSocket = (
 
       addLogEntry('Disconnected from matchmaker service', 'warning')
       setConnectionStatus('disconnected')
+      updateMatchmakingStatus('not-in-queue')
+
+      setMatchDetails(null)
+      setPingData({
+        ping: 0,
+        jitter: 0,
+        measurements: 0,
+        history: [],
+        sequence: 0,
+      })
       updateAuthenticated(false)
 
-      // Hide match details
+      // Reset match details
       setMatchDetails(null)
     }
 
@@ -188,24 +167,16 @@ export const matchmakerSocket = (
 
     const handleJoinedMatchmaking = (data: JoinedMatchmakingResponse) => {
       addLogEntry(`Joined matchmaking: ${JSON.stringify(data)}`, 'success')
-      setInfo((p) => ({ ...p, playerId: data.playerId }))
+      // Store your player info for display
+      setInfo((p) => ({ ...p, playerId: data.playerId, ping: data.ping }))
       playerId = data.playerId
-
-      // Update UI
 
       // Update matchmaking status
       if (matchmakingStatus === 'not-in-queue') {
         updateMatchmakingStatus('searching')
       }
 
-      // Store your player info for display
-      setInfo((p) => ({ ...p, ping: data.ping }))
-
-      // Only hide the confirmation dialog if no match confirmation is active
-      if (matchmakingStatus === 'not-in-queue') {
-        // Hide any previous match details
-        setMatchDetails(null)
-      }
+      setMatchDetails(null)
 
       // Log if this is a re-join after match cancellation
       if (
@@ -220,28 +191,29 @@ export const matchmakerSocket = (
     const handleLeftMatchmaking = (data: LeftMatchmakingResponse) => {
       addLogEntry(`Left matchmaking: ${JSON.stringify(data)}`, 'info')
 
-      // Show notification
       showCustomAlert('You have left the matchmaking queue', 'info')
 
-      // Update matchmaking status
       updateMatchmakingStatus('not-in-queue')
 
-      // Update UI
-
-      // Hide match details
       setMatchDetails(null)
     }
 
     const handleMatchFound = (matchData: MatchFoundResponse) => {
       addLogEntry(`Match found: ${JSON.stringify(matchData)}`, 'success')
 
-      // Update matchmaking status
-      updateMatchmakingStatus('match-found')
+      // Show a notification
+      showCustomAlert(
+        'Match found! Please confirm to join the game.',
+        'success',
+      )
 
       // Show match confirmation dialog
       debug(`Showing match confirmation for match ${matchData.matchId}`)
 
-      currentMatchId = matchData.matchId
+      // Update matchmaking status
+      updateMatchmakingStatus('match-found')
+
+      updateMatchId(matchData.matchId)
 
       // Create player confirmation indicators
       setIndicators(
@@ -250,12 +222,6 @@ export const matchmakerSocket = (
 
       // Play match found sound
       playAudio('matchFoundSound')
-
-      // Show a notification
-      showCustomAlert(
-        'Match found! Please confirm to join the game.',
-        'success',
-      )
 
       // TODO: SET ALL RESPONSE DATA
       if (matchData.confirmationRequired) {
@@ -350,7 +316,7 @@ export const matchmakerSocket = (
 
       setMatchDetails(matchDetails)
 
-      currentMatchId = null
+      updateMatchId(null)
     }
 
     const handleDuelGameCreated = (data: MatchCreatedResponse) => {
@@ -403,124 +369,15 @@ export const matchmakerSocket = (
     })
   }
 
-  const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
-    if (!socket || !socket.connected || !authenticated) {
-      addLogEntry('Not connected or authenticated', 'error')
-      showCustomAlert('Not connected or authenticated', 'error')
-      return
-    }
-
-    // Check if ping is too high
-    if (currentPing > 500) {
-      addLogEntry(
-        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
-        'error',
-      )
-      showCustomAlert(
-        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
-        'error',
-      )
-      return
-    }
-
-    const joinMatchmaking: JoinMatchmaking = {
-      betOptions: {
-        networkId: 'local',
-        coinId: 'usd',
-        betAmount: '0.01',
-        maxRounds: 10,
-      },
-      metadata,
-      matchConfirmationRequired: true,
-    }
-
-    socket.emit('joinMatchmakingWithBet', joinMatchmaking)
-
-    addLogEntry(
-      `Joining matchmaking as ${metadata.username} with server-measured ping ${currentPing}ms`,
-      'info',
-    )
-  }
-
-  const leaveMatchmaking = () => {
-    if (!socket || !socket.connected) {
-      addLogEntry('Not connected', 'error')
-      showCustomAlert('Not connected', 'error')
-      return
-    }
-
-    // Check if a match confirmation is active
-    if (matchmakingStatus === 'match-found') {
-      addLogEntry(
-        'Cannot leave matchmaking while a match confirmation is active',
-        'warning',
-      )
-      showCustomAlert(
-        'Cannot leave matchmaking while a match confirmation is active. Please accept or decline the match first.',
-        'warning',
-      )
-      return
-    }
-
-    socket.emit('leaveMatchmaking')
-    addLogEntry('Leaving matchmaking', 'info')
-  }
-
-  const confirmMatch = () => {
-    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
-      addLogEntry(
-        'Cannot confirm match: not connected or authenticated',
-        'error',
-      )
-      showCustomAlert(
-        'Cannot confirm match: not connected or authenticated',
-        'error',
-      )
-      return
-    }
-
-    debug(`Confirming match ${currentMatchId}`)
-    socket.emit('confirmMatch', {
-      matchId: currentMatchId,
-    } satisfies ConfirmMatch)
-    addLogEntry(`Confirming match ${currentMatchId}`, 'info')
-  }
-
-  const declineMatch = () => {
-    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
-      addLogEntry(
-        'Cannot decline match: not connected or authenticated',
-        'error',
-      )
-      showCustomAlert(
-        'Cannot decline match: not connected or authenticated',
-        'error',
-      )
-      return
-    }
-
-    socket.emit('declineMatch', { matchId: currentMatchId })
-    addLogEntry(`Declining match ${currentMatchId}`, 'info')
-  }
-
-  const getStats = () => {
-    if (!socket || !socket.connected || !authenticated) {
-      addLogEntry('Not connected or authenticated', 'error')
-      return
-    }
-
-    socket.emit('getStats')
-    addLogEntry('Requesting matchmaking stats', 'info')
-  }
-
   return {
-    connect,
-    disconnect,
-    toggleConnection,
-    joinMatchmaking,
-    leaveMatchmaking,
-    confirmMatch,
-    declineMatch,
-    getStats,
+    // connect,
+    // disconnect,
+    // toggleConnection,
+    on,
+    // joinMatchmaking,
+    // leaveMatchmaking,
+    // confirmMatch,
+    // declineMatch,
+    // getStats,
   }
 }

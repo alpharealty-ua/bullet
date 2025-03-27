@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { socketMatchmaker as socket } from '@/socket/socket'
+import { addLogEntry, debug, showCustomAlert } from '@/socket/utils'
+import { matchmakerSocket } from '@/socket/matchmaker/matchmaker-socket'
 import { useInterval } from '@/hooks/use-interval'
 import { useSettingsStore } from '@/store/settings.store'
 import {
@@ -11,8 +13,10 @@ import {
   MatchDetails,
   Info,
   Statistics,
+  AdditionalPlayerMetadata,
+  JoinMatchmaking,
+  ConfirmMatch,
 } from '@/socket/matchmaker/matchmaker-soket.types'
-import { matchmakerSocket } from '@/socket/matchmaker/matchmaker-socket'
 
 const useMatchmakingSocket = (token: string) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -39,7 +43,9 @@ const useMatchmakingSocket = (token: string) => {
   const [matchDetails, setMatchDetails] = useState<MatchDetails | null>(null)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [gameId, setGameId] = useState<string | null>(null)
+  const [currentMatchId, setMatchId] = useState<string | null>(null)
   const isUnmount = useRef(false)
+  const currentPing = info.ping
 
   const initState = useMemo(
     () => ({
@@ -55,16 +61,7 @@ const useMatchmakingSocket = (token: string) => {
     [token],
   )
 
-  const {
-    connect,
-    disconnect,
-    toggleConnection,
-    joinMatchmaking,
-    leaveMatchmaking,
-    confirmMatch,
-    declineMatch,
-    getStats,
-  } = useMemo(
+  const { on } = useMemo(
     () =>
       matchmakerSocket(socket, initState, {
         playAudio,
@@ -78,9 +75,134 @@ const useMatchmakingSocket = (token: string) => {
         setConfirmationTimeoutSeconds,
         setInfo,
         setGameId,
+        setMatchId,
       }),
     [playAudio, initState],
   )
+
+  const connect = useCallback(() => {
+    socket.auth = { token }
+    socket.connect()
+    return on()
+  }, [token, on])
+
+  const disconnect = useCallback(() => {
+    socket.disconnect()
+  }, [])
+
+  const toggleConnection = useCallback(() => {
+    socket.connected ? disconnect() : connect()
+  }, [connect, disconnect])
+
+  const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
+    if (!socket || !socket.connected || !authenticated) {
+      addLogEntry('Not connected or authenticated', 'error')
+      showCustomAlert('Not connected or authenticated', 'error')
+      return
+    }
+
+    // Check if ping is too high
+    if (currentPing > 500) {
+      addLogEntry(
+        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
+        'error',
+      )
+      showCustomAlert(
+        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
+        'error',
+      )
+      return
+    }
+
+    const joinMatchmaking: JoinMatchmaking = {
+      betOptions: {
+        networkId: 'local',
+        coinId: 'usd',
+        betAmount: '0.01',
+        maxRounds: 10,
+      },
+      metadata,
+      matchConfirmationRequired: true,
+    }
+
+    socket.emit('joinMatchmakingWithBet', joinMatchmaking)
+
+    addLogEntry(
+      `Joining matchmaking as ${metadata.username} with server-measured ping ${currentPing}ms`,
+      'info',
+    )
+  }
+
+  const leaveMatchmaking = () => {
+    if (!socket || !socket.connected) {
+      addLogEntry('Not connected', 'error')
+      showCustomAlert('Not connected', 'error')
+      return
+    }
+
+    // Check if a match confirmation is active
+    if (matchmakingStatus === 'match-found') {
+      addLogEntry(
+        'Cannot leave matchmaking while a match confirmation is active',
+        'warning',
+      )
+      showCustomAlert(
+        'Cannot leave matchmaking while a match confirmation is active. Please accept or decline the match first.',
+        'warning',
+      )
+      return
+    }
+
+    socket.emit('leaveMatchmaking')
+    addLogEntry('Leaving matchmaking', 'info')
+  }
+
+  const confirmMatch = () => {
+    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
+      addLogEntry(
+        'Cannot confirm match: not connected or authenticated',
+        'error',
+      )
+      showCustomAlert(
+        'Cannot confirm match: not connected or authenticated',
+        'error',
+      )
+      return
+    }
+
+    debug(`Confirming match ${currentMatchId}`)
+    socket.emit('confirmMatch', {
+      matchId: currentMatchId,
+    } satisfies ConfirmMatch)
+    addLogEntry(`Confirming match ${currentMatchId}`, 'info')
+  }
+
+  const declineMatch = () => {
+    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
+      addLogEntry(
+        'Cannot decline match: not connected or authenticated',
+        'error',
+      )
+      showCustomAlert(
+        'Cannot decline match: not connected or authenticated',
+        'error',
+      )
+      return
+    }
+
+    socket.emit('declineMatch', { matchId: currentMatchId })
+    addLogEntry(`Declining match ${currentMatchId}`, 'info')
+  }
+
+  const getStats = () => {
+    if (!socket || !socket.connected || !authenticated) {
+      addLogEntry('Not connected or authenticated', 'error')
+      return
+    }
+
+    socket.emit('getStats')
+    addLogEntry('Requesting matchmaking stats', 'info')
+  }
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 
@@ -98,7 +220,7 @@ const useMatchmakingSocket = (token: string) => {
         disconnect()
       })
     }
-  }, [connect, disconnect])
+  }, [connect, disconnect, on])
 
   return {
     connect,
