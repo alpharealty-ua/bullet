@@ -321,7 +321,7 @@ const useGame = (variant: VariantGame) => {
     } else {
       await gameBarHandle.stop()
       await gameBarHandle.reset()
-      await readySetPullHandle.start()
+      await readySetPullHandle.startAll()
       const duration = randomIntFromInterval(25, 50)
       await gameBarHandle.start(duration)
     }

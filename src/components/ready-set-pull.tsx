@@ -4,8 +4,11 @@ import { useSettingsStore } from '@/store/settings.store'
 import { cn, waitEndAudio } from '@/lib/utils'
 
 export interface ReadySetPullHandle {
-  start: () => Promise<void>
+  startAll: () => Promise<void>
+  start: (value: ReadyTakePull) => Promise<void>
 }
+
+export type ReadyTakePull = 'ready' | 'take' | 'pull'
 
 const ReadySetPull = ({
   readySetPullHandle,
@@ -15,7 +18,7 @@ const ReadySetPull = ({
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
-  const start = useCallback(async () => {
+  const startAll = useCallback(async () => {
     const wrapperDom = wrapperRef.current
 
     if (wrapperDom === null) {
@@ -50,7 +53,52 @@ const ReadySetPull = ({
     pull.classList.remove('is-show')
   }, [playAudio])
 
+  const start = async (value: ReadyTakePull) => {
+    const wrapperDom = wrapperRef.current
+
+    if (wrapperDom === null) {
+      return
+    }
+
+    const [ready, set, pull] =
+      wrapperDom.children as HTMLCollectionOf<HTMLDivElement>
+
+    if (!(ready && set && pull)) {
+      return
+    }
+
+    ready.classList.remove('is-show')
+    set.classList.remove('is-show')
+    pull.classList.remove('is-show')
+
+    if (value === 'ready') {
+      const readyAudio = await playAudio('ready')
+      ready.classList.add('is-show')
+      await waitEndAudio(readyAudio)
+    }
+
+    if (value === 'take') {
+      const setAudio = await playAudio('ready')
+      ready.classList.add('is-show')
+      set.classList.add('is-show')
+      await waitEndAudio(setAudio)
+    }
+
+    if (value === 'pull') {
+      const pullAudio = await playAudio('pull')
+      ready.classList.add('is-show')
+      set.classList.add('is-show')
+      pull.classList.add('is-show')
+      await waitEndAudio(pullAudio)
+    }
+
+    ready.classList.remove('is-show')
+    set.classList.remove('is-show')
+    pull.classList.remove('is-show')
+  }
+
   useImperativeHandle(readySetPullHandle, () => ({
+    startAll,
     start,
   }))
 

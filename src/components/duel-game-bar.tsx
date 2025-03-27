@@ -14,9 +14,10 @@ export interface GameBarHandle {
   start: (duration: number) => Promise<void>
   stop: () => Promise<void>
   reset: (options?: ResetOptions) => Promise<void>
+  setActive: (index: number) => Promise<void>
 }
 
-const LENGTH = 23
+const LENGTH = 13
 const DEFAUTL_VALUE = 0
 export const SKULL_VALUE = 50
 const NUMBERS = [SKULL_VALUE, 20, 10]
@@ -139,6 +140,25 @@ const DuelGameBar = ({
     stateRef.current.isRunning = false
   }
 
+  const setActive = async (index: number) => {
+    const barDom = wrapperRef.current
+
+    if (barDom === null) {
+      return
+    }
+
+    const cells = barDom.rows[0].cells
+
+    const prevActive =
+      stateRef.current.nextActive ?? document.createElement('td')
+
+    const nextActive = cells[index]
+    stateRef.current.nextActive = nextActive
+
+    prevActive.classList.remove('is-active')
+    nextActive.classList.add('is-active')
+  }
+
   const highlight = async () => {
     const nextActiveDom = stateRef.current.nextActive
 
@@ -186,6 +206,7 @@ const DuelGameBar = ({
     stop,
     highlight,
     reset,
+    setActive,
   }))
 
   return (
