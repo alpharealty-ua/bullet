@@ -25,15 +25,6 @@ import { addLogEntry, showCustomAlert, debug } from '../utils'
 export const matchmakerSocket = (
   socket: Socket,
   {
-    playerId,
-    currentMatchId,
-    matchmakingStatus,
-  }: {
-    playerId: string | null
-    currentMatchId: string | null
-    matchmakingStatus: MatchmakingStatus
-  },
-  {
     playAudio,
     setAuthenticated,
     setMatchmakingStatus,
@@ -63,21 +54,29 @@ export const matchmakerSocket = (
 ) => {
   let off: () => void = () => void 1
 
-  const updateAuthenticated = (auth: boolean) => {
-    setAuthenticated(auth)
-  }
+  const on = ({
+    playerId,
+    currentMatchId,
+    matchmakingStatus,
+  }: {
+    playerId: string | null
+    currentMatchId: string | null
+    matchmakingStatus: MatchmakingStatus
+  }) => {
+    const updateAuthenticated = (auth: boolean) => {
+      setAuthenticated(auth)
+    }
 
-  const updateMatchmakingStatus = (status: MatchmakingStatus) => {
-    setMatchmakingStatus(status)
-    matchmakingStatus = status
-  }
+    const updateMatchmakingStatus = (status: MatchmakingStatus) => {
+      setMatchmakingStatus(status)
+      matchmakingStatus = status
+    }
 
-  const updateMatchId = (matchId: string | null) => {
-    setMatchId(matchId)
-    currentMatchId = matchId
-  }
+    const updateMatchId = (matchId: string | null) => {
+      setMatchId(matchId)
+      currentMatchId = matchId
+    }
 
-  const on = () => {
     const matchmakerPingClient = new MatchmakerPingClient(socket, {
       onPingUpdate: (pingData: PingData) => {
         setPingData(pingData)
@@ -96,6 +95,7 @@ export const matchmakerSocket = (
     }
 
     const handleDisconnect = () => {
+      console.log('disconnect')
       off()
 
       addLogEntry('Disconnected from matchmaker service', 'warning')
@@ -369,15 +369,5 @@ export const matchmakerSocket = (
     })
   }
 
-  return {
-    // connect,
-    // disconnect,
-    // toggleConnection,
-    on,
-    // joinMatchmaking,
-    // leaveMatchmaking,
-    // confirmMatch,
-    // declineMatch,
-    // getStats,
-  }
+  return on
 }

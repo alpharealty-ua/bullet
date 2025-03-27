@@ -60,10 +60,11 @@ const useMatchmakingSocket = (token: string) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [token],
   )
+  const offRef = useRef(() => {})
 
-  const { on } = useMemo(
+  const on = useMemo(
     () =>
-      matchmakerSocket(socket, initState, {
+      matchmakerSocket(socket, {
         playAudio,
         setAuthenticated,
         setMatchmakingStatus,
@@ -77,14 +78,14 @@ const useMatchmakingSocket = (token: string) => {
         setGameId,
         setMatchId,
       }),
-    [playAudio, initState],
+    [playAudio],
   )
 
   const connect = useCallback(() => {
     socket.auth = { token }
     socket.connect()
-    return on()
-  }, [token, on])
+    offRef.current = on(initState)
+  }, [token, on, initState])
 
   const disconnect = useCallback(() => {
     socket.disconnect()
@@ -207,11 +208,11 @@ const useMatchmakingSocket = (token: string) => {
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 
   useEffect(() => {
-    const off = connect()
+    connect()
     isUnmount.current = true
 
     return () => {
-      off()
+      offRef.current()
       isUnmount.current = false
       Promise.resolve().then(() => {
         if (isUnmount.current) {
@@ -220,7 +221,7 @@ const useMatchmakingSocket = (token: string) => {
         disconnect()
       })
     }
-  }, [connect, disconnect, on])
+  }, [connect, disconnect])
 
   return {
     connect,
