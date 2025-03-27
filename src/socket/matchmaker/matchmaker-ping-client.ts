@@ -41,13 +41,12 @@ class MatchmakerPingClient {
   }
 
   attachEventListeners() {
-    const ping = async (data: PingResponse) => {
+    this.on('ping', (data: PingResponse) => {
       this.lastSequence = data.sequence
       this.log(`Received ping request (sequence: ${data.sequence})`)
       this.socket.emit('pong', data)
-    }
-
-    const pingUpdate = (data: PingUpdateResponse) => {
+    })
+    this.on('pingUpdate', (data: PingUpdateResponse) => {
       this.currentPing = data.ping
       this.currentJitter = data.jitter || 0
       this.measurementsCount = data.measurements || 0
@@ -68,10 +67,14 @@ class MatchmakerPingClient {
           sequence: this.lastSequence,
         })
       }
-    }
+    })
+  }
 
-    this.on('ping', ping)
-    this.on('pingUpdate', pingUpdate)
+  dettachEventListeners() {
+    let off = null
+    while ((off = this.eventListener.pop())) {
+      off()
+    }
   }
 
   on<T>(event: string, handler: (...args: T[]) => void) {
@@ -84,13 +87,6 @@ class MatchmakerPingClient {
 
   off<T>(event: string, handler: (...args: T[]) => void) {
     this.socket.off(event, handler)
-  }
-
-  dettachEventListeners() {
-    let off = null
-    while ((off = this.eventListener.pop())) {
-      off()
-    }
   }
 
   updatePingHistory(ping: number, jitter: number) {
