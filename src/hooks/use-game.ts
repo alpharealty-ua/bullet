@@ -23,9 +23,11 @@ import { GameBarHandle, SKULL_VALUE } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { CharacterHandle } from '@/components/character'
 
+// TODO: SPLIT DUEL AND SOLO
 const useGame = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const isSolo = pathname.includes(ROUTES.solo.root)
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
   const revolverRefHandle = useRef<RevolverHandle>(null)
@@ -34,7 +36,7 @@ const useGame = (variant: VariantGame) => {
   const gameBarRefHandle = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
-  const { data: gameDetails } = useGameDetails(variant === 'play')
+  const { data: gameDetails } = useGameDetails(isSolo && variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
