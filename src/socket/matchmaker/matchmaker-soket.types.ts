@@ -131,11 +131,17 @@ export type PingUpdateResponse = {
 }
 
 export type MatchCreatedResponse = {
-  matchId: string // ID of the match
-  gameId: string // ID of the created duel game
-  // Array of players in the duel game
+  matchId: string
+  gameId: string
   players: string[]
-  // Bet information
+  bet: Omit<BetOptions, 'maxRounds'>
+  metadata?: any
+}
+
+export type DuelGameCreatedResponse = {
+  matchId: string
+  gameId: string
+  players: string[]
   bet: Omit<BetOptions, 'maxRounds'>
   metadata?: any
 }

@@ -15,10 +15,19 @@ import {
   Statistics,
   AdditionalPlayerMetadata,
   JoinMatchmaking,
-  ConfirmMatch,
 } from '@/socket/matchmaker/matchmaker-soket.types'
+import { useGameStore } from '@/store/game.store'
 
-const useMatchmakingSocket = (token: string) => {
+const useMatchmakingSocket = (
+  token: string,
+  {
+    username,
+    characterName,
+    region,
+  }: { username: string; characterName: string; region: string },
+) => {
+  const autoConnect = useSettingsStore(({ autoConnect }) => autoConnect)
+  const autoJoin = useSettingsStore(({ autoJoin }) => autoJoin)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -42,7 +51,6 @@ const useMatchmakingSocket = (token: string) => {
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const [matchDetails, setMatchDetails] = useState<MatchDetails | null>(null)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
-  const [gameId, setGameId] = useState<string | null>(null)
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const isUnmount = useRef(false)
   const currentPing = info.ping
@@ -75,7 +83,6 @@ const useMatchmakingSocket = (token: string) => {
         setIndicators,
         setConfirmationTimeoutSeconds,
         setInfo,
-        setGameId,
         setMatchId,
       }),
     [playAudio],
@@ -174,7 +181,7 @@ const useMatchmakingSocket = (token: string) => {
     debug(`Confirming match ${currentMatchId}`)
     socket.emit('confirmMatch', {
       matchId: currentMatchId,
-    } satisfies ConfirmMatch)
+    })
     addLogEntry(`Confirming match ${currentMatchId}`, 'info')
   }
 
@@ -205,23 +212,63 @@ const useMatchmakingSocket = (token: string) => {
     addLogEntry('Requesting matchmaking stats', 'info')
   }
 
-  useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
-
   useEffect(() => {
+    if (!autoConnect) {
+      return
+    }
+
     connect()
     isUnmount.current = true
 
     return () => {
       offRef.current()
+
       isUnmount.current = false
       Promise.resolve().then(() => {
         if (isUnmount.current) {
           return
         }
+        const disconnectHandle = () => {
+          setMatchDetails(null)
+          setPingData({
+            ping: 0,
+            jitter: 0,
+            measurements: 0,
+            history: [],
+            sequence: 0,
+          })
+          useGameStore.setState({ gameId: null })
+          socket.off('disconnect', disconnectHandle)
+        }
+
+        socket.on('disconnect', disconnectHandle)
         disconnect()
       })
     }
-  }, [connect, disconnect])
+  }, [connect, disconnect, autoConnect])
+
+  useEffect(() => {
+    if (!autoJoin) {
+      return
+    }
+
+    if (!authenticated) {
+      return
+    }
+
+    joinMatchmaking({
+      username,
+      characterName,
+      region,
+    })
+
+    return () => {
+      leaveMatchmaking()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authenticated, username, characterName, region, autoJoin])
+
+  useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 
   return {
     connect,
@@ -240,7 +287,7 @@ const useMatchmakingSocket = (token: string) => {
     matchDetails,
     confirmationTimeoutSeconds,
     info,
-    gameId,
+    getStats,
   }
 }
 

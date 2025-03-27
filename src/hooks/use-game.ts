@@ -86,8 +86,8 @@ const useGame = (variant: VariantGame) => {
       await backCharacterHandle.reset()
     }
 
-    if (gameId) {
-      navigate(isSolo ? ROUTES.solo[variant] : ROUTES.duel[variant], {
+    if (gameId && isSolo) {
+      navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
       })
     }
@@ -255,6 +255,7 @@ const useGame = (variant: VariantGame) => {
     ],
   )
 
+  // TODO: REMOVE
   const nextDuel = useCallback(async () => {
     const frontCharacterHandle = frontCharacterHandleRef.current
     const backCharacterHandle = backCharacterHandleRef.current
@@ -364,19 +365,19 @@ const useGame = (variant: VariantGame) => {
     const DRAW_ROUND = 50
 
     if (round === DRAW_ROUND) {
-      setState('draw')
-      const gameBarHandle = gameBarRefHandle.current
-      if (gameBarHandle) {
-        gameBarHandle.stop()
-      }
-
-      await wait(2000)
-      await newGame()
+      draw()
 
       return
     }
 
     addRound()
+  }
+
+  const draw = async () => {
+    setState('draw')
+
+    await wait(2000)
+    await newGame()
   }
 
   useEffect(() => {
@@ -552,6 +553,9 @@ const useGame = (variant: VariantGame) => {
     gameBarRefHandle,
     readySetPullHandleRef,
     watchGame,
+    gameOver,
+    winGame,
+    draw,
   }
 }
 

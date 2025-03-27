@@ -14,11 +14,15 @@ import {
   MatchmakingStatus,
   PingData,
   StatisticsResponse,
+  DuelGameCreatedResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
 import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
 import { addLogEntry, showCustomAlert, debug } from '../utils'
+import { useGameStore } from '@/store/game.store'
+
+const autoConfirm = true
 
 // TODO: TRANSFORM TO CLASS
 // TODO: REMOVED DISPATCH TYPE
@@ -35,7 +39,6 @@ export const matchmakerSocket = (
     setIndicators,
     setConfirmationTimeoutSeconds,
     setInfo,
-    setGameId,
     setMatchId,
   }: {
     playAudio: PlaySound
@@ -48,7 +51,6 @@ export const matchmakerSocket = (
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
     setConfirmationTimeoutSeconds: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
-    setGameId: (value: string | null) => void
     setMatchId: (value: string | null) => void
   },
 ) => {
@@ -63,6 +65,15 @@ export const matchmakerSocket = (
     currentMatchId: string | null
     matchmakingStatus: MatchmakingStatus
   }) => {
+    const updateGameId = (gameId: string | null) => {
+      useGameStore.setState({ gameId })
+    }
+
+    const updatePlayerId = (newPlayerId: string | null) => {
+      useGameStore.setState({ playerId: newPlayerId })
+      playerId = newPlayerId
+    }
+
     const updateAuthenticated = (auth: boolean) => {
       setAuthenticated(auth)
     }
@@ -92,10 +103,11 @@ export const matchmakerSocket = (
     const handleConnect = () => {
       addLogEntry('Connected to matchmaker service', 'success')
       setConnectionStatus('authenticating')
+      updateGameId(null)
     }
 
+    // TODO: NOT CALL IF UNMOUNT
     const handleDisconnect = () => {
-      console.log('disconnect')
       off()
 
       addLogEntry('Disconnected from matchmaker service', 'warning')
@@ -111,9 +123,7 @@ export const matchmakerSocket = (
         sequence: 0,
       })
       updateAuthenticated(false)
-
-      // Reset match details
-      setMatchDetails(null)
+      updateGameId(null)
     }
 
     const connect_error = (error: { message: string }) => {
@@ -167,14 +177,15 @@ export const matchmakerSocket = (
 
     const handleJoinedMatchmaking = (data: JoinedMatchmakingResponse) => {
       addLogEntry(`Joined matchmaking: ${JSON.stringify(data)}`, 'success')
-      // Store your player info for display
-      setInfo((p) => ({ ...p, playerId: data.playerId, ping: data.ping }))
-      playerId = data.playerId
 
       // Update matchmaking status
       if (matchmakingStatus === 'not-in-queue') {
         updateMatchmakingStatus('searching')
       }
+
+      // Store your player info for display
+      setInfo((p) => ({ ...p, playerId: data.playerId, ping: data.ping }))
+      updatePlayerId(data.playerId)
 
       setMatchDetails(null)
 
@@ -195,7 +206,9 @@ export const matchmakerSocket = (
 
       updateMatchmakingStatus('not-in-queue')
 
+      updatePlayerId(null)
       setMatchDetails(null)
+      console.log('call left disconnect')
     }
 
     const handleMatchFound = (matchData: MatchFoundResponse) => {
@@ -222,6 +235,14 @@ export const matchmakerSocket = (
 
       // Play match found sound
       playAudio('matchFoundSound')
+
+      if (autoConfirm) {
+        socket.emit('confirmMatch', {
+          matchId: currentMatchId,
+        })
+
+        return
+      }
 
       // TODO: SET ALL RESPONSE DATA
       if (matchData.confirmationRequired) {
@@ -315,14 +336,13 @@ export const matchmakerSocket = (
       }
 
       setMatchDetails(matchDetails)
-
       updateMatchId(null)
     }
 
-    const handleDuelGameCreated = (data: MatchCreatedResponse) => {
+    const handleDuelGameCreated = (data: DuelGameCreatedResponse) => {
       addLogEntry(`Duel game created: ${JSON.stringify(data)}`, 'success')
 
-      setGameId(data.gameId)
+      updateGameId(data.gameId)
     }
 
     const handleStats = (data: StatisticsResponse) => {

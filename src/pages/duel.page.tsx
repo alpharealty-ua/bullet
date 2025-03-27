@@ -21,9 +21,9 @@ import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const {
-    next,
     newGame,
-    nextRound,
+    winGame,
+    gameOver,
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,
@@ -37,61 +37,95 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
   const user = useUser()
+  const playerId = user.id
   const token = useAuthStore(({ token }) => token)
   const hasPull = pullRound[pullRound.length - 1] !== round
-  const gameInstance = useMemo(() => new GameSocket(token!), [token])
+  const gameInstance = useMemo(
+    () =>
+      new GameSocket(token!, user.id, gameId, {
+        onPullResult: async (result) => {
+          const isPlayer = playerId === result.playerId
+
+          const pull = isPlayer ? playerPull : opponentPull
+
+          await pull(result.fired)
+          if (result.fired) {
+            isPlayer ? winGame() : gameOver()
+          }
+        },
+        onProbability: (data) => {
+          gameBarRefHandle.current?.setActive(data.index)
+        },
+        onReadyTakePull: (data) => {
+          readySetPullHandleRef.current?.start(data)
+        },
+        onPlayerWon: (data) => {
+          const isWin = data.playerId === playerId
+          console.log({ isWin })
+        },
+        onEnded: (data) => {
+          if (data.winner) {
+            if (data.winner.id === playerId) {
+              console.log(`I WON THE GAME!`)
+            } else {
+              console.log(`I lost the game.`)
+            }
+          } else {
+            // draw()
+          }
+        },
+        onRoundCurrent: () => {},
+      }),
+    [token, gameBarRefHandle, readySetPullHandleRef],
+  )
 
   const matchDetails = { opponent: { username: 'opponent' } }
 
   const handlePull = async () => {
-    await next('duel')
+    gameInstance.pullTrigger()
+    await gameBarRefHandle.current?.highlight()
+  }
+
+  const opponentPull = async (shot: boolean) => {
+    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
+    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
+    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
+    shot &&
+      (await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot())
+  }
+
+  const playerPull = async (shot: boolean) => {
+    await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
+    await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
+    await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
+    shot &&
+      (await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot())
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
 
-  const handleChangeDirection = (_: number, nextDiraction: number) => {
-    const isReverseDirection = nextDiraction === -1
-    if (isReverseDirection) {
-      return
-    }
-
-    nextRound()
-  }
-
-  const connect = () => {
-    const playerId = ''
-
-    if (!(gameId && playerId)) {
-      return
-    }
-
-    gameInstance.joinDuelGame(gameId, playerId)
-  }
-
-  const isUnmount = useRef(false)
+  const isUnmounted = useRef(false)
 
   useEffect(() => {
     gameInstance.connect()
-    isUnmount.current = true
+    isUnmounted.current = false
 
     return () => {
-      isUnmount.current = false
+      gameInstance.dettachEventListeners()
+      isUnmounted.current = true
       Promise.resolve().then(() => {
-        if (isUnmount.current) {
+        if (!isUnmounted.current) {
           return
         }
         gameInstance.disconnect()
       })
     }
-  }, [gameInstance])
+  }, [gameInstance, playerId, gameId])
 
   return (
     <>
       <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
       {variant === 'watch' && <Bar />}
-      <button onClick={connect}>
-        gameId - {gameId} playerId - {'info.playerId'}
-      </button>
       <div className='flex grow flex-col items-center justify-center'>
         <div className='mt-auto pt-6'>
           <div className='relative mt-auto flex flex-col gap-10'>
@@ -178,7 +212,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           </div>
           <DuelGameBar
             gameBarRef={gameBarRefHandle}
-            onChangeDirection={handleChangeDirection}
+            onChangeDirection={() => {}}
           />
         </div>
       </div>

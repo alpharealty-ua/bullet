@@ -1,10 +1,108 @@
-import { toast } from 'react-toastify'
-import { socketDuel } from '@/socket//socket'
+import { socketDuel } from '@/socket/socket'
 import { showCustomAlert } from '@/socket/utils'
+import { ReadyTakePull } from '@/components/ready-set-pull'
+
+interface Game {
+  id: string
+  status: 'waiting' | 'in_progress' | 'completed'
+  players: Player[]
+  currentRound: number
+  rounds: Round[]
+  createdAt: string
+  updatedAt: string
+}
+
+interface Player {
+  id: string
+  username: string
+}
+
+interface Round {
+  number: number
+  playerActions: {
+    [playerId: string]: {
+      timestamp: string
+      fired: boolean
+    }
+  }
+  winner?: Player
+}
+
+interface GameJoinedResponse {
+  gameId: string
+  game: Game
+  message: string
+}
+
+interface PullResultResponse {
+  playerId: string
+  fired: boolean
+  isFirstPlayerToPull: boolean
+}
+
+interface PlayerWonResponse {
+  gameId: string
+  message: string
+  playerId: string
+}
+
+interface EndedResponse {
+  gameId: string
+  message: string
+  winner?: { id: string }
+}
+interface ProbabilityResponse {
+  gameId: string
+  probability: number
+  index: number
+  timestamp: string
+}
+interface RematchRequestResponse {
+  gameId: string
+  playerId: string
+  message: string
+}
+interface RematchCreatedResonse {
+  originalGameId: string
+  rematchGameId: string
+  rematchGame: Game
+  requestedBy: string
+  message: string
+  countdown: number
+}
+
+interface RematchCancelledResponse {
+  gameId: string
+  playerId: string
+  reason: string
+  message: string
+}
+interface CountdownUpdateResponse {
+  gameId: string
+  remainingSeconds: number
+  message: string
+}
+interface PlayerLeftResponse {
+  gameId: string
+  leavingPlayerId: string
+  winner?: Player
+  message: string
+}
+interface PlayerDisconnectedResponse {
+  gameId: string
+  disconnectedPlayerId: string
+  winner: Player
+  message: string
+}
+
+type PullResult = PullResultResponse
+type Probability = ProbabilityResponse
+type Won = PlayerWonResponse
+type Ended = EndedResponse
 
 class GameSocket {
   socket = socketDuel
-  currentGameId: null | string = null
+  // currentGameId: null | string = null
   inDuelGame = false
   currentGame: any
   gameStatus: string = ''
@@ -12,10 +110,21 @@ class GameSocket {
   currentRound: number = 0
   betOptions: any
   rematchRequested: boolean = true
-  playerId: string | null = null
   eventListener: (() => any)[] = []
 
-  constructor(public token: string) {}
+  constructor(
+    public token: string,
+    public playerId: string,
+    public currentGameId: string,
+    public events: {
+      onPullResult: (value: PullResult) => void
+      onProbability: (value: Probability) => void
+      onReadyTakePull: (value: ReadyTakePull) => void
+      onPlayerWon: (value: Won) => void
+      onEnded: (value: Ended) => void
+      onRoundCurrent: (value: any) => void
+    },
+  ) {}
 
   connect() {
     try {
@@ -36,6 +145,7 @@ class GameSocket {
     // Handle connection events
     this.on('connect', () => {
       console.log(`Connected to duel game service`)
+      this.joinDuelGame()
     })
 
     this.on('connect_error', (error) => {
@@ -48,8 +158,7 @@ class GameSocket {
     })
 
     // Game joined event
-    this.on('game:joined', (data: any) => {
-      console.log(`Joined duel game ${data.gameId}`)
+    this.on('game:joined', (data: GameJoinedResponse) => {
       this.inDuelGame = true
       this.currentGame = data.game
       this.gameStatus = data.game.status
@@ -73,100 +182,85 @@ class GameSocket {
       console.log(`Game status: ${this.gameStatus}`)
     })
 
+    interface RoundCurrentResponse {
+      gameId: string
+      roundNumber: number
+      round: Round
+      message: string
+    }
+
     // Current round information
-    this.on('game:round_current', (data: any) => {
+    this.on('game:round_current', (data: RoundCurrentResponse) => {
+      this.events.onRoundCurrent(data)
       console.log(`Current round: ${data.roundNumber}`)
       this.currentRound = data.roundNumber
     })
 
+    interface ReadyTakePullResponse {
+      gameId: string
+      roundNumber: number
+      message: string
+      timestamp: string
+    }
+
     // Ready phase
-    this.on('game:ready', (data: any) => {
-      console.log(`Round ${data.roundNumber}: READY...`)
+    this.on('game:ready', (_: ReadyTakePullResponse) => {
+      this.events.onReadyTakePull('ready')
     })
 
     // Take phase
-    this.on('game:take', (data: any) => {
-      console.log(`Round ${data.roundNumber}: TAKE...`)
+    this.on('game:take', (_: ReadyTakePullResponse) => {
+      this.events.onReadyTakePull('take')
     })
 
     // Pull phase
-    this.on('game:pull', (data: any) => {
-      console.log(`Round ${data.roundNumber}: PULL!`)
+    this.on('game:pull', (_: ReadyTakePullResponse) => {
+      this.events.onReadyTakePull('pull')
     })
 
     // Pull result
     this.on('game:pull_result', (data: any) => {
-      if (data.playerId === this.playerId) {
-        if (data.fired) {
-          console.log(`I pulled the trigger and it FIRED!`)
-        } else {
-          console.log(`I pulled the trigger but it didn't fire.`)
-        }
-      } else {
-        if (data.fired) {
-          console.log(`Opponent pulled the trigger and it FIRED!`)
-        } else {
-          console.log(`Opponent pulled the trigger but it didn't fire.`)
-        }
+      const result = {
+        playerId: data.playerId,
+        fired: data.fired,
+        isFirstPlayerToPull: data.isFirstPlayerToPull,
       }
-
-      if (data.isFirstPlayerToPull) {
-        console.log(
-          `${data.playerId === this.playerId ? 'I was' : 'Opponent was'} the first to pull!`,
-        )
-      }
+      this.events.onPullResult(result)
     })
 
     // Player won round
-    this.on('game:player_won', (data: any) => {
-      if (data.playerId === this.playerId) {
-        console.log(`I won the round!`)
-      } else {
-        console.log(`Opponent won the round.`)
-      }
+    this.on('game:player_won', (data: PlayerWonResponse) => {
+      this.events.onPlayerWon(data)
     })
 
     // Game ended
-    this.on('game:ended', (data: any) => {
-      console.log(`Game ended.`)
+    this.on('game:ended', (data: EndedResponse) => {
       this.gameStatus = 'completed'
 
-      if (data.winner) {
-        if (data.winner.id === this.playerId) {
-          console.log(`I WON THE GAME!`)
-          console.log(
-            `Received ${parseFloat(this.betOptions.betAmount) * 2} ${this.betOptions.coinId}`,
-          )
-        } else {
-          console.log(`I lost the game.`)
-        }
-      } else {
-        console.log(`Game ended with no winner.`)
-      }
-
-      // Request a rematch after a short delay
-      setTimeout(
-        () => {
-          this.requestRematch()
-        },
-        1000 + Math.random() * 1000,
-      )
+      this.events.onEnded(data)
     })
 
     // Probability update
-    this.on('game:probability', (data: any) => {
-      // console.log(`Probability update: ${data.probability}`)
+    this.on('game:probability', (data: ProbabilityResponse) => {
+      const propability: Probability = {
+        index: data.index,
+        probability: data.probability,
+        gameId: data.gameId,
+        timestamp: data.timestamp,
+      }
+
+      this.events.onProbability(propability)
     })
 
     // Rematch requested
-    this.on('game:rematch_requested', (data: any) => {
+    this.on('game:rematch_requested', (data: RematchRequestResponse) => {
       console.log(
         `${data.playerId === this.playerId ? 'I' : 'Opponent'} requested a rematch.`,
       )
     })
 
     // Rematch created
-    this.on('game:rematch_created', (data: any) => {
+    this.on('game:rematch_created', (data: RematchCreatedResonse) => {
       console.log(`Rematch created! New game ID: ${data.rematchGameId}`)
       console.log(`Countdown: ${data.countdown} seconds`)
 
@@ -179,18 +273,18 @@ class GameSocket {
     })
 
     // Rematch cancelled
-    this.on('game:rematch_cancelled', (data: any) => {
+    this.on('game:rematch_cancelled', (data: RematchCancelledResponse) => {
       console.log(`Rematch cancelled. Reason: ${data.reason}`)
       this.rematchRequested = false
     })
 
     // Countdown update
-    this.on('game:countdown_update', (data: any) => {
+    this.on('game:countdown_update', (data: CountdownUpdateResponse) => {
       console.log(`Countdown: ${data.remainingSeconds} seconds`)
     })
 
     // Player left
-    this.on('game:player_left', (data: any) => {
+    this.on('game:player_left', (data: PlayerLeftResponse) => {
       console.log(`Player ${data.leavingPlayerId} left the game.`)
 
       if (data.winner && data.winner.id === this.playerId) {
@@ -199,7 +293,7 @@ class GameSocket {
     })
 
     // Player disconnected
-    this.on('game:player_disconnected', (data: any) => {
+    this.on('game:player_disconnected', (data: PlayerDisconnectedResponse) => {
       console.log(`Player ${data.disconnectedPlayerId} disconnected.`)
 
       if (data.winner && data.winner.id === this.playerId) {
@@ -208,9 +302,12 @@ class GameSocket {
     })
 
     // Error event
-    this.on('error', (error) => {
-      console.error(`Game error:`, error)
-    })
+    this.on(
+      'error',
+      (error: { event: string; message: string; timestamp: string }) => {
+        console.error(`Game error:`, error.message)
+      },
+    )
   }
 
   dettachEventListeners() {
@@ -232,16 +329,15 @@ class GameSocket {
     this.socket.off(event, handler)
   }
 
-  joinDuelGame(gameId: string, playerId: string) {
-    console.log(`Joining duel game ${gameId}...`)
+  joinDuelGame() {
+    type JoinPayload = { gameId: string; playerId: string }
 
-    // Store the game ID
-    this.currentGameId = gameId
-    this.playerId = playerId
+    const payload: JoinPayload = {
+      gameId: this.currentGameId,
+      playerId: this.playerId,
+    }
 
-    this.socket.emit('game:join', {
-      gameId: gameId,
-    })
+    this.socket.emit('game:join', payload)
   }
 
   pullTrigger() {
@@ -249,49 +345,38 @@ class GameSocket {
       return
     }
 
-    this.socket.emit('game:pull_trigger', {
+    type PullTriggerPayload = { gameId: string; playerId: string }
+
+    const payload: PullTriggerPayload = {
       gameId: this.currentGameId,
-    })
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:pull_trigger', payload)
   }
 
   requestRematch() {
-    if (
-      !this.socket ||
-      !this.currentGameId ||
-      this.gameStatus !== 'completed'
-    ) {
-      toast.error(`Cannot request rematch: game not completed`)
-      return
-    }
+    type RequestRematch = { gameId: string; playerId: string }
 
-    if (this.rematchRequested) {
-      toast.error(`Already requested a rematch`)
-      return
-    }
-
-    console.log(`Requesting a rematch...`)
-
-    this.socket.emit('game:request_rematch', {
+    const payload: RequestRematch = {
       gameId: this.currentGameId,
-    })
+      playerId: this.playerId,
+    }
 
-    this.rematchRequested = true
-    return true
+    this.socket.emit('game:request_rematch', payload)
   }
 
   leaveDuelGame() {
-    if (!this.socket || !this.currentGameId) {
-      showCustomAlert('Cannot leave game: not in a duel game', 'warning')
-      return
-    }
-
     showCustomAlert(`Leaving duel game ${this.currentGameId}...`, 'info')
 
-    this.socket.emit('game:leave', {
-      gameId: this.currentGameId,
-    })
+    type LeaveRematch = { gameId: string; playerId: string }
 
-    return true
+    const payload: LeaveRematch = {
+      gameId: this.currentGameId,
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:leave', payload)
   }
 
   disconnect() {
