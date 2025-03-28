@@ -14,6 +14,7 @@ interface EnterArenaProps {
   onDecline: () => void
   onConfirm: () => void
   onSearch: (amount: number) => void
+  onCountdownEnd: () => void
   indicators: Indicator[]
   matchmakingStatus: MatchmakingStatus
   confirmationTimeoutSeconds: number
@@ -31,6 +32,7 @@ const EnterArena = ({
   onDecline,
   onConfirm,
   onSearch,
+  onCountdownEnd,
   indicators,
   confirmationTimeoutSeconds,
   matchmakingStatus,
@@ -102,7 +104,7 @@ const EnterArena = ({
       <div className='animate-in fade-in max-w-80 px-3 duration-500'>
         <div className='text-lg'>
           {matchmakingStatusMap[matchmakingStatus]}{' '}
-          {(isSearching || isFound) && (
+          {(isSearching || isFound || isMatchCreated) && (
             <>
               <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-0 duration-400 ease-linear'>
                 .
@@ -153,6 +155,13 @@ const EnterArena = ({
               </ButtonWithAudio>
             </div>
           </div>
+        )}
+        {isMatchCreated && (
+          <Countdown
+            time={3}
+            onEnd={onCountdownEnd}
+            className='my-4 flex items-center justify-center text-5xl'
+          />
         )}
       </div>
     </div>
