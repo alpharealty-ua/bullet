@@ -130,7 +130,7 @@ const useMatchmakingSocket = (
         maxRounds: 10,
       },
       metadata,
-      matchConfirmationRequired: true,
+      matchConfirmationRequired: false,
     }
 
     socket.emit('joinMatchmakingWithBet', joinMatchmaking)
@@ -142,7 +142,7 @@ const useMatchmakingSocket = (
   }
 
   const leaveMatchmaking = () => {
-    if (!socket || !socket.connected) {
+    if (!socket.connected) {
       addLogEntry('Not connected', 'error')
       showCustomAlert('Not connected', 'error')
       return
@@ -166,7 +166,7 @@ const useMatchmakingSocket = (
   }
 
   const confirmMatch = () => {
-    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
+    if (!socket.connected || !authenticated || !currentMatchId) {
       addLogEntry(
         'Cannot confirm match: not connected or authenticated',
         'error',
