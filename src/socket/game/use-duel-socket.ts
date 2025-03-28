@@ -6,7 +6,7 @@ import { socketDuel as socket } from '@/socket/socket'
 import { showCustomAlert } from '@/socket/utils'
 import { Events, DuelEvents } from '@/socket/game/duel-events'
 import { useSettingsStore } from '@/store/settings.store'
-import { waitEndAudio } from '@/lib/utils'
+import { wait, waitEndAudio } from '@/lib/utils'
 import { CharacterHandle } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
@@ -126,7 +126,10 @@ export const useDuelSocket = ({
 
     startAudio && (await waitEndAudio(chachingAudio))
     startAudio && (await waitEndAudio(winSoundAudio))
-  }, [playAudio])
+    !startAudio && (await wait(2000))
+
+    newGame()
+  }, [playAudio, newGame])
 
   const drawGame = useCallback(() => {
     setGameState('draw')
@@ -161,6 +164,8 @@ export const useDuelSocket = ({
             const isWin = winPlayer && winPlayer.id === playerId
 
             isWin ? await winGame() : await gameOver()
+
+            setRematchState('show')
 
             return
           }
