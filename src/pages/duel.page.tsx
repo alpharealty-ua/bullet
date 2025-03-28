@@ -69,7 +69,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col items-center justify-center'>
-        <div className='absolute top-4 z-3 flex flex-col items-center justify-center gap-4 text-center'>
+        <div className='absolute top-1/2 left-1/2 z-3 flex w-full max-w-[300px] -translate-1/2 flex-col items-center justify-center gap-4 bg-white/90 p-4 text-center shadow-2xl'>
           {gameState === 'preperation' && rematchState !== 'hide' && (
             <>
               <div className='text-2xl'>Request rematch</div>
@@ -116,16 +116,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 )}
                 name={matchDetails?.opponent.characterName ?? 'fatty'}
                 type='front'
-                onClick={
-                  variant === 'play' && isStartedGame
-                    ? handlePlayerClick
-                    : async () => {
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
-                        await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot()
-                      }
-                }
+                onClick={handlePlayerClick}
                 characterHandleRef={frontCharacterHandleRef}
                 beforeSlot={
                   <PlayerInfo
@@ -140,48 +131,37 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               />
               <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
             </div>
-            {variant === 'play' && (
-              <div className='relative mb-1 pb-10'>
-                <Character
-                  className={cn('ml-6 max-h-[220px] max-w-[180px]')}
-                  name={characterName}
-                  type='back'
-                  onClick={
-                    variant === 'play' && isStartedGame
-                      ? handlePlayerClick
-                      : async () => {
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
-                          await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot()
-                        }
-                  }
-                  characterHandleRef={backCharacterHandleRef}
-                  beforeSlot={
-                    <PlayerInfo
-                      className='absolute top-0 left-full translate-x-2'
-                      side='right'
-                      level={53}
-                      login={user.username}
-                      win={52}
-                      visible={visiblePlayerInfo}
-                    />
-                  }
-                />
-                <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
-                  <div className='relative ml-auto'>
-                    <ButtonWithAudio
-                      as='button'
-                      className='w-26'
-                      image='pull'
-                      onClick={handlePull}
-                      disabled={!hasPull}
-                      skipWaitAnimation
-                    />
-                  </div>
+            <div className='relative mb-1 pb-10'>
+              <Character
+                className={cn('ml-6 max-h-[220px] max-w-[180px]')}
+                name={characterName}
+                type='back'
+                onClick={handlePlayerClick}
+                characterHandleRef={backCharacterHandleRef}
+                beforeSlot={
+                  <PlayerInfo
+                    className='absolute top-0 left-full translate-x-2'
+                    side='right'
+                    level={53}
+                    login={user.username}
+                    win={52}
+                    visible={visiblePlayerInfo}
+                  />
+                }
+              />
+              <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
+                <div className='relative ml-auto'>
+                  <ButtonWithAudio
+                    as='button'
+                    className='w-26'
+                    image='pull'
+                    onClick={handlePull}
+                    disabled={!hasPull}
+                    skipWaitAnimation
+                  />
                 </div>
               </div>
-            )}
+            </div>
           </div>
           <DuelGameBar
             gameBarRef={gameBarRefHandle}
