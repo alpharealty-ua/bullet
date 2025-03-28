@@ -353,5 +353,6 @@ export const useDuelSocket = ({
     requestRematch,
     rematchState,
     requestIndicator,
+    leaveDuelGame,
   }
 }

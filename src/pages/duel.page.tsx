@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
+import { ROUTES } from '@/routes/path'
 import { useDuelSocket } from '@/socket/game/use-duel-socket'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
@@ -20,6 +21,7 @@ import { Victory } from '@/components/victory'
 import { Indicators } from '@/components/indicators'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
+  const navigate = useNavigate()
   const { gameId } = useParams() as { gameId: string }
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)
@@ -55,6 +57,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     requestRematch()
   }
 
+  const handleCancelRematch = async () => {
+    navigate(ROUTES.duel.play)
+  }
+
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
 
   return (
@@ -79,15 +85,15 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   className='w-full text-sm'
                   onClick={handleRequestRematch}
                 >
-                  Confirm
+                  Request
                 </ButtonWithAudio>
                 <ButtonWithAudio
                   as='button'
                   bg='red'
                   className='w-full text-sm'
-                  onClick={handleRequestRematch}
+                  onClick={handleCancelRematch}
                 >
-                  Decline
+                  Cancel
                 </ButtonWithAudio>
               </div>
             </>
