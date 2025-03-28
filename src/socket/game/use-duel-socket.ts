@@ -184,6 +184,8 @@ export const useDuelSocket = ({
           return
         }
         case 'game:pull_result': {
+          showCustomAlert(payload.message, 'info')
+
           const isPlayer = playerId === payload.playerId
 
           const pull = isPlayer ? playerPull : opponentPull
