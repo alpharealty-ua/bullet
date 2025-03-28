@@ -62,7 +62,6 @@ class DuelEvents {
   attachEventListeners() {
     this.dettachEventListeners()
 
-    // Handle connection events
     this.on('connect', () => {
       console.log(`Connected to duel game service`)
       this.onEvent({ type: 'connect', payload: undefined })
@@ -76,12 +75,10 @@ class DuelEvents {
       this.onEvent({ type: 'disconnect', payload: undefined })
     })
 
-    // Game joined event
     this.on('game:joined', (data: GameJoinedResponse) => {
       this.onEvent({ type: 'game:joined', payload: data })
     })
 
-    // Game reconnected event
     this.on('game:reconnected', () => {
       this.onEvent({ type: 'game:reconnected', payload: undefined })
     })
@@ -107,12 +104,7 @@ class DuelEvents {
     })
 
     this.on('game:pull_result', (data: PullResultResponse) => {
-      const payload = {
-        playerId: data.playerId,
-        fired: data.fired,
-        isFirstPlayerToPull: data.isFirstPlayerToPull,
-      }
-      this.onEvent({ type: 'game:pull_result', payload })
+      this.onEvent({ type: 'game:pull_result', payload: data })
     })
 
     // Player won round
@@ -125,16 +117,8 @@ class DuelEvents {
       this.onEvent({ type: 'game:ended', payload: data })
     })
 
-    // Probability update
     this.on('game:probability', (data: ProbabilityResponse) => {
-      const payload: Probability = {
-        index: data.index,
-        probability: data.probability,
-        gameId: data.gameId,
-        timestamp: data.timestamp,
-      }
-
-      this.onEvent({ type: 'probability', payload })
+      this.onEvent({ type: 'probability', payload: data })
     })
 
     // Rematch requested
@@ -195,27 +179,3 @@ class DuelEvents {
 }
 
 export { DuelEvents }
-
-// requestRematch() {
-//   type RequestRematch = { gameId: string; playerId: string }
-
-//   const payload: RequestRematch = {
-//     gameId: this.currentGameId,
-//     playerId: this.playerId,
-//   }
-
-//   this.socket.emit('game:request_rematch', payload)
-// }
-
-// leaveDuelGame() {
-//   showCustomAlert(`Leaving duel game ${this.currentGameId}...`, 'info')
-
-//   type LeaveRematch = { gameId: string; playerId: string }
-
-//   const payload: LeaveRematch = {
-//     gameId: this.currentGameId,
-//     playerId: this.playerId,
-//   }
-
-//   this.socket.emit('game:leave', payload)
-// }

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
+import { ROUTES } from '@/routes/path'
+
 import { socketDuel as socket } from '@/socket/socket'
 import { showCustomAlert } from '@/socket/utils'
-import { Events, DuelEvents as DuelEvents } from '@/socket/game/game-socket'
+import { Events, DuelEvents } from '@/socket/game/duel-events'
 import { useSettingsStore } from '@/store/settings.store'
 import { waitEndAudio } from '@/lib/utils'
 import { CharacterHandle } from '@/components/character'
