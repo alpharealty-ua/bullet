@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { socketMatchmaker as socket } from '@/socket/socket'
-import { addLogEntry, debug, showCustomAlert } from '@/socket/utils'
+import { addLogEntry, notify } from '@/socket/utils'
 import { matchmakerSocket } from '@/socket/matchmaker/matchmaker-socket'
 import { useInterval } from '@/hooks/use-interval'
 import { useSettingsStore } from '@/store/settings.store'
@@ -107,7 +107,7 @@ const useMatchmakingSocket = (
   const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
     if (!socket || !socket.connected || !authenticated) {
       addLogEntry('Not connected or authenticated', 'error')
-      showCustomAlert('Not connected or authenticated', 'error')
+      notify('Not connected or authenticated', 'error')
       return
     }
 
@@ -117,7 +117,7 @@ const useMatchmakingSocket = (
         `Cannot join matchmaking: ping too high (${currentPing}ms)`,
         'error',
       )
-      showCustomAlert(
+      notify(
         `Cannot join matchmaking: ping too high (${currentPing}ms)`,
         'error',
       )
@@ -144,9 +144,10 @@ const useMatchmakingSocket = (
   }
 
   const leaveMatchmaking = () => {
+    // TODO: FIX
     if (!socket.connected) {
       addLogEntry('Not connected', 'error')
-      showCustomAlert('Not connected', 'error')
+      notify('Not connected', 'error')
       return
     }
 
@@ -156,7 +157,7 @@ const useMatchmakingSocket = (
         'Cannot leave matchmaking while a match confirmation is active',
         'warning',
       )
-      showCustomAlert(
+      notify(
         'Cannot leave matchmaking while a match confirmation is active. Please accept or decline the match first.',
         'warning',
       )
@@ -173,14 +174,10 @@ const useMatchmakingSocket = (
         'Cannot confirm match: not connected or authenticated',
         'error',
       )
-      showCustomAlert(
-        'Cannot confirm match: not connected or authenticated',
-        'error',
-      )
+      notify('Cannot confirm match: not connected or authenticated', 'error')
       return
     }
 
-    debug(`Confirming match ${currentMatchId}`)
     socket.emit('confirmMatch', {
       matchId: currentMatchId,
     })
@@ -193,10 +190,7 @@ const useMatchmakingSocket = (
         'Cannot decline match: not connected or authenticated',
         'error',
       )
-      showCustomAlert(
-        'Cannot decline match: not connected or authenticated',
-        'error',
-      )
+      notify('Cannot decline match: not connected or authenticated', 'error')
       return
     }
 

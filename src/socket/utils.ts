@@ -1,13 +1,11 @@
 import { toast } from 'react-toastify'
 
 // TODO: FIX
+// TODO: ADDED LOG TO COMPONENT
 // @ts-ignore
-export const addLogEntry = (message: string, type: string) => {
-  // console.log(message, type)
-}
-export const debug = (_: string) => {}
+export const addLogEntry = (message: string, type: string) => {}
 
-export const showCustomAlert = (
+export const notify = (
   message: string,
   type: 'info' | 'success' | 'error' | 'warning',
 ) => {

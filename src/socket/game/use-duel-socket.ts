@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router'
 import { ROUTES } from '@/routes/path'
 
 import { socketDuel as socket } from '@/socket/socket'
-import { showCustomAlert } from '@/socket/utils'
 import { Events, DuelEvents } from '@/socket/game/duel-events'
 import { useSettingsStore } from '@/store/settings.store'
+import { notify } from '@/socket/utils'
 import { wait, waitEndAudio } from '@/lib/utils'
 import { CharacterHandle, CharacterState } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
@@ -80,7 +80,7 @@ export const useDuelSocket = ({
   }
 
   const leaveDuelGame = useCallback(() => {
-    showCustomAlert(`Leaving duel game ${gameId}...`, 'info')
+    notify(`Leaving duel game ${gameId}...`, 'info')
 
     type LeaveRematch = { gameId: string; playerId: string }
 
@@ -150,7 +150,7 @@ export const useDuelSocket = ({
       const { type, payload } = event
       switch (type) {
         case 'connect': {
-          showCustomAlert('Connected to duel game service', 'info')
+          notify('Connected to duel game service', 'info')
           joinDuelGame()
           return
         }
@@ -163,7 +163,7 @@ export const useDuelSocket = ({
         case 'game:joined': {
           const { game } = payload
           if (payload.game.status === 'completed') {
-            showCustomAlert('The game is already completed.', 'info')
+            notify('The game is already completed.', 'info')
 
             setRound(game.currentRound)
 
@@ -177,7 +177,7 @@ export const useDuelSocket = ({
 
             return
           }
-          showCustomAlert(payload.message, 'info')
+          notify(payload.message, 'info')
           return
         }
         case 'game:reconnected': {
@@ -199,7 +199,7 @@ export const useDuelSocket = ({
           return
         }
         case 'game:pull_result': {
-          showCustomAlert(payload.message, 'info')
+          notify(payload.message, 'info')
 
           const isPlayer = playerId === payload.playerId
 
@@ -219,15 +219,15 @@ export const useDuelSocket = ({
         }
         case 'game:player_won': {
           const isWin = payload.playerId === playerId
-          showCustomAlert(payload.message, isWin ? 'success' : 'error')
+          notify(payload.message, isWin ? 'success' : 'error')
           return
         }
         case 'game:ended': {
           if (payload.winner) {
             const isWin = payload.winner.id === playerId
-            showCustomAlert(payload.message, isWin ? 'success' : 'error')
+            notify(payload.message, isWin ? 'success' : 'error')
           } else {
-            showCustomAlert(payload.message, 'info')
+            notify(payload.message, 'info')
             drawGame()
           }
           setRematchState('show')
@@ -238,19 +238,19 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_requested': {
-          const isI = payload.playerId === playerId
-          isI
+          const isPlayer = payload.playerId === playerId
+          isPlayer
             ? setRequestIndicator((p) => ({ ...p, player: true }))
             : setRequestIndicator((p) => ({ ...p, opponnent: true }))
           setRematchState('requested')
-          showCustomAlert(payload.message, 'info')
+          notify(payload.message, 'info')
           return
         }
         case 'game:rematch_created': {
           setRequestIndicator({ opponnent: true, player: true })
           setRematchState('created')
           setGameState('preperation')
-          showCustomAlert(payload.message, 'info')
+          notify(payload.message, 'info')
           const rematchGameId = payload.rematchGame.id
           console.log('navigate ', rematchGameId)
           navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
@@ -279,16 +279,16 @@ export const useDuelSocket = ({
             case 'game:join':
             case 'game:pull_trigger':
             case 'game:request_rematch':
-              showCustomAlert(payload.message, 'error')
+              notify(payload.message, 'error')
               return
           }
           console.error(payload)
-          showCustomAlert('Unhandled error ' + event, 'info')
+          notify('Unhandled error ' + event, 'info')
           return
         }
       }
       console.error(event)
-      showCustomAlert('Unhandled event ' + event.type, 'info')
+      notify('Unhandled event ' + event.type, 'info')
     },
     [
       drawGame,
@@ -340,7 +340,7 @@ export const useDuelSocket = ({
   const disconnect = useCallback(() => {
     leaveDuelGame()
     socket.disconnect()
-    showCustomAlert(`Disconnected from duel game service`, 'info')
+    notify(`Disconnected from duel game service`, 'info')
   }, [leaveDuelGame])
 
   useEffect(() => {

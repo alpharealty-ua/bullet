@@ -19,7 +19,7 @@ import {
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
 import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
-import { addLogEntry, showCustomAlert, debug } from '../utils'
+import { addLogEntry, notify } from '@/socket/utils'
 import { useGameStore } from '@/store/game.store'
 
 // TODO: TRANSFORM TO CLASS
@@ -101,7 +101,6 @@ export const matchmakerSocket = (
     }
 
     const handleConnect = () => {
-      addLogEntry('Connected to matchmaker service', 'success')
       setConnectionStatus('authenticating')
       updateGameId(null)
     }
@@ -110,7 +109,6 @@ export const matchmakerSocket = (
     const handleDisconnect = () => {
       off()
 
-      addLogEntry('Disconnected from matchmaker service', 'warning')
       setConnectionStatus('disconnected')
       updateMatchmakingStatus('not-in-queue')
 
@@ -127,7 +125,7 @@ export const matchmakerSocket = (
 
     const connect_error = (error: { message: string }) => {
       addLogEntry(`Connection error: ${error.message}`, 'error')
-      showCustomAlert(`Connection error: ${error.message}`, 'error')
+      notify(`Connection error: ${error.message}`, 'error')
       setConnectionStatus('disconnected')
     }
 
@@ -161,7 +159,7 @@ export const matchmakerSocket = (
 
     const handleError = (error: { message: string }) => {
       addLogEntry(`Error: ${error.message}`, 'error')
-      showCustomAlert(`Error: ${error.message}`, 'error')
+      notify(`Error: ${error.message}`, 'error')
 
       if (error.message === 'Authentication failed') {
         setConnectionStatus('authentication-failed')
@@ -192,15 +190,14 @@ export const matchmakerSocket = (
         data.message &&
         data.message.includes('Returned to matchmaking after')
       ) {
-        debug(`Auto-rejoined matchmaking: ${data.message}`)
-        showCustomAlert(data.message, 'info')
+        notify(data.message, 'info')
       }
     }
 
     const handleLeftMatchmaking = (data: LeftMatchmakingResponse) => {
       addLogEntry(`Left matchmaking: ${JSON.stringify(data)}`, 'info')
 
-      showCustomAlert('You have left the matchmaking queue', 'info')
+      notify('You have left the matchmaking queue', 'info')
 
       updateMatchmakingStatus('not-in-queue')
 
@@ -212,13 +209,7 @@ export const matchmakerSocket = (
       addLogEntry(`Match found: ${JSON.stringify(matchData)}`, 'success')
 
       // Show a notification
-      showCustomAlert(
-        'Match found! Please confirm to join the game.',
-        'success',
-      )
-
-      // Show match confirmation dialog
-      debug(`Showing match confirmation for match ${matchData.matchId}`)
+      notify('Match found! Please confirm to join the game.', 'success')
 
       // Update matchmaking status
       updateMatchmakingStatus('match-found')
@@ -279,7 +270,7 @@ export const matchmakerSocket = (
         reason = 'A player declined the match'
       }
 
-      showCustomAlert(`Match canceled: ${reason}`, 'warning')
+      notify(`Match canceled: ${reason}`, 'warning')
     }
 
     const handleMatchCreated = (data: MatchCreatedResponse) => {
@@ -291,10 +282,7 @@ export const matchmakerSocket = (
       playAudio('matchConfirmedSound')
 
       // Show a notification
-      showCustomAlert(
-        'Match created successfully! Game is being prepared.',
-        'success',
-      )
+      notify('Match created successfully! Game is being prepared.', 'success')
 
       // Find opponent's player ID
       const opponentPlayerId = data.players.find((id) => id !== playerId)
