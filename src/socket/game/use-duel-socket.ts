@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router'
 import { ROUTES } from '@/routes/path'
 
 import { socketDuel as socket } from '@/socket/socket'
-import { Events, DuelEvents } from '@/socket/game/duel-events'
+import { DuelSocketEvents } from '@/socket/game/duel-socket-events'
+import { useInUnmounted } from '@/hooks/use-is-unmounted'
 import { useSettingsStore } from '@/store/settings.store'
 import { notify } from '@/socket/utils'
 import { wait, waitEndAudio } from '@/lib/utils'
 import { CharacterHandle, CharacterState } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
-import { createTestEvents } from './test-events'
 
 type StateGame = 'preperation' | 'running' | 'win' | 'lose' | 'draw'
 
@@ -24,6 +24,7 @@ export const useDuelSocket = ({
   playerId: string
 }) => {
   const navigate = useNavigate()
+  const isUnmounted = useInUnmounted()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [gameState, setGameState] = useState<StateGame>('preperation')
   const [pulls, setPulls] = useState<number[]>([])
@@ -41,6 +42,11 @@ export const useDuelSocket = ({
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const hasPull = !pulls.includes(round)
 
+  const duelEvents = useMemo(
+    () => new DuelSocketEvents(socket, token, gameId, playerId),
+    [token, gameId, playerId],
+  )
+
   const opponentPull = useCallback(async (shot: boolean) => {
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
@@ -57,17 +63,6 @@ export const useDuelSocket = ({
       (await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot())
   }, [])
 
-  const joinDuelGame = useCallback(() => {
-    type JoinPayload = { gameId: string; playerId: string }
-
-    const payload: JoinPayload = {
-      gameId,
-      playerId,
-    }
-
-    socket.emit('game:join', payload)
-  }, [gameId, playerId])
-
   const requestRematch = () => {
     type RequestRematch = { gameId: string; playerId: string }
 
@@ -78,19 +73,6 @@ export const useDuelSocket = ({
 
     socket.emit('game:request_rematch', payload)
   }
-
-  const leaveDuelGame = useCallback(() => {
-    notify(`Leaving duel game ${gameId}...`, 'info')
-
-    type LeaveRematch = { gameId: string; playerId: string }
-
-    const payload: LeaveRematch = {
-      gameId,
-      playerId,
-    }
-
-    socket.emit('game:leave', payload)
-  }, [gameId, playerId])
 
   const reset = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
@@ -145,20 +127,26 @@ export const useDuelSocket = ({
     setGameState('draw')
   }, [])
 
-  const callback = useCallback(
-    async (event: Events) => {
+  const pullTrigger = async () => {
+    setPulls((p) => [...p, round])
+
+    duelEvents.pullTrigger()
+  }
+
+  useEffect(() => {
+    duelEvents.updateEvents(async (event) => {
       const { type, payload } = event
       switch (type) {
         case 'connect': {
           notify('Connected to duel game service', 'info')
-          joinDuelGame()
+          duelEvents.joinDuelGame()
           return
         }
         case 'connect_error': {
           break
         }
         case 'disconnect': {
-          break
+          return
         }
         case 'game:joined': {
           const { game } = payload
@@ -252,7 +240,6 @@ export const useDuelSocket = ({
           setGameState('preperation')
           notify(payload.message, 'info')
           const rematchGameId = payload.rematchGame.id
-          console.log('navigate ', rematchGameId)
           navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
             preventScrollReset: true,
           })
@@ -289,93 +276,47 @@ export const useDuelSocket = ({
       }
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
-    },
-    [
-      drawGame,
-      gameOver,
-      joinDuelGame,
-      navigate,
-      opponentPull,
-      playerId,
-      playerPull,
-      winGame,
-    ],
-  )
-
-  const refCallback = useRef(callback)
+    })
+  }, [
+    duelEvents,
+    playerId,
+    winGame,
+    gameOver,
+    playerPull,
+    opponentPull,
+    drawGame,
+    navigate,
+  ])
 
   useEffect(() => {
-    refCallback.current = callback
-  }, [callback])
-
-  const duelEvents = useMemo(() => {
-    return new DuelEvents(refCallback)
-  }, [])
-
-  // @ts-ignore
-  const testEvents = createTestEvents(playerId)
-
-  const pullTrigger = async () => {
-    setPulls((p) => [...p, round])
-
-    const payload = {
-      gameId,
-      playerId,
-    }
-
-    socket.emit('game:pull_trigger', payload)
-  }
-
-  const isUnmounted = useRef(false)
-
-  const connect = useCallback(() => {
-    try {
-      socket.auth = { token }
-      socket.connect()
-    } catch (error) {
-      console.error(`Error connecting to duel game service:`, error)
-    }
-  }, [token])
-
-  const disconnect = useCallback(() => {
-    leaveDuelGame()
-    socket.disconnect()
-    notify(`Disconnected from duel game service`, 'info')
-  }, [leaveDuelGame])
-
-  useEffect(() => {
-    connect()
+    duelEvents.connect()
     duelEvents.attachEventListeners()
-    isUnmounted.current = false
 
     return () => {
       duelEvents.dettachEventListeners()
-      isUnmounted.current = true
-      Promise.resolve().then(() => {
+      queueMicrotask(() => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         if (!isUnmounted.current) {
           return
         }
-        disconnect()
+        duelEvents.disconnect()
       })
     }
-  }, [duelEvents, connect, disconnect])
+  }, [duelEvents, isUnmounted])
 
   return {
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
-    joinDuelGame,
     pullTrigger,
+    requestRematch,
+    reset,
     gameState,
-    isStartedGame: gameState === 'running',
     hasPull,
     newGame,
     round,
-    requestRematch,
     rematchState,
     requestIndicator,
-    leaveDuelGame,
-    reset,
   }
 }

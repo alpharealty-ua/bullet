@@ -1,4 +1,3 @@
-import { socketDuel } from '@/socket/socket'
 import { ReadyTakePull } from '@/components/ready-set-pull'
 import {
   RoundCurrent,
@@ -23,8 +22,10 @@ import {
   JoinedResponse,
   RoundStartedResponse,
 } from './game-socket.types'
+import { Socket } from 'socket.io-client'
+import { notify, SocketEvents } from '../utils'
 
-export type Events =
+export type OnEvents =
   | { type: 'connect'; payload: undefined }
   | { type: 'connect_error'; payload: any }
   | { type: 'disconnect'; payload: undefined }
@@ -59,14 +60,69 @@ export type Events =
       payload: { event: string; message: string; timestamp: string }
     }
 
-class DuelEvents {
-  socket = socketDuel
-  eventListener: (() => any)[] = []
-  get onEvent() {
-    return this._onEvent.current!
+class DuelSocketEvents extends SocketEvents {
+  private onEvent: (events: OnEvents) => void = () => {}
+
+  constructor(
+    protected socket: Socket,
+    private token: string,
+    private gameId: string,
+    private playerId: string,
+  ) {
+    super(socket)
   }
 
-  constructor(public _onEvent: React.RefObject<(events: Events) => void>) {}
+  updateEvents(onEvent: (events: OnEvents) => void) {
+    this.onEvent = onEvent
+  }
+
+  connect() {
+    try {
+      this.socket.auth = { token: this.token }
+      this.socket.connect()
+    } catch (error) {
+      console.error(`Error connecting to duel game service:`, error)
+    }
+  }
+
+  disconnect() {
+    this.leaveDuelGame()
+    notify(`Disconnected from duel game service`, 'info')
+    this.socket.disconnect()
+  }
+
+  joinDuelGame() {
+    type JoinPayload = { gameId: string; playerId: string }
+
+    const payload: JoinPayload = {
+      gameId: this.gameId,
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:join', payload)
+  }
+
+  leaveDuelGame() {
+    notify(`Leaving duel game ${this.gameId}...`, 'info')
+
+    type LeaveRematch = { gameId: string; playerId: string }
+
+    const payload: LeaveRematch = {
+      gameId: this.gameId,
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:leave', payload)
+  }
+
+  pullTrigger() {
+    const payload = {
+      gameId: this.gameId,
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:pull_trigger', payload)
+  }
 
   attachEventListeners() {
     this.dettachEventListeners()
@@ -116,12 +172,10 @@ class DuelEvents {
       this.onEvent({ type: 'game:pull_result', payload: data })
     })
 
-    // Player won round
     this.on('game:player_won', (data: PlayerWonResponse) => {
       this.onEvent({ type: 'game:player_won', payload: data })
     })
 
-    // Game ended
     this.on('game:ended', (data: EndedResponse) => {
       this.onEvent({ type: 'game:ended', payload: data })
     })
@@ -130,61 +184,35 @@ class DuelEvents {
       this.onEvent({ type: 'probability', payload: data })
     })
 
-    // Rematch requested
     this.on('game:rematch_requested', (data: RematchRequestResponse) => {
       this.onEvent({ type: 'game:rematch_requested', payload: data })
     })
 
-    // Rematch created
     this.on('game:rematch_created', (data: RematchCreatedResonse) => {
       this.onEvent({ type: 'game:rematch_created', payload: data })
     })
 
-    // Rematch cancelled
     this.on('game:rematch_cancelled', (data: RematchCancelledResponse) => {
       this.onEvent({ type: 'game:rematch_cancelled', payload: data })
     })
 
-    // Countdown update
     this.on('game:countdown_update', (data: CountdownUpdateResponse) => {
       this.onEvent({ type: 'game:countdown_update', payload: data })
       console.log(`Countdown: ${data.remainingSeconds} seconds`)
     })
 
-    // Player left
     this.on('game:player_left', (data: PlayerLeftResponse) => {
       this.onEvent({ type: 'game:player_left', payload: data })
     })
 
-    // Player disconnected
     this.on('game:player_disconnected', (data: PlayerDisconnectedResponse) => {
       this.onEvent({ type: 'game:player_disconnected', payload: data })
     })
 
-    // Error event
     this.on('error', (error: ErrorResponse) => {
       this.onEvent({ type: 'error', payload: error })
     })
   }
-
-  dettachEventListeners() {
-    let off = null
-    while ((off = this.eventListener.pop())) {
-      off()
-    }
-  }
-
-  on<T>(event: string, handler: (...args: T[]) => void) {
-    this.socket.on(event, handler)
-
-    this.eventListener.push(() => {
-      this.socket.off(event, handler)
-    })
-  }
-
-  off<T>(event: string, handler: (...args: T[]) => void) {
-    this.socket.off(event, handler)
-  }
 }
 
-export { DuelEvents }
+export { DuelSocketEvents }
