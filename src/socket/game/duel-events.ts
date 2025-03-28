@@ -32,9 +32,18 @@ export type Events =
   | { type: 'game:reconnected'; payload: undefined }
   | { type: 'game:round_started'; payload: RoundStartedResponse }
   | { type: 'game:round_current'; payload: RoundCurrent }
-  | { type: 'game:ready'; payload: ReadyTakePull }
-  | { type: 'game:take'; payload: ReadyTakePull }
-  | { type: 'game:pull'; payload: ReadyTakePull }
+  | {
+      type: 'game:ready'
+      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+    }
+  | {
+      type: 'game:take'
+      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+    }
+  | {
+      type: 'game:pull'
+      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+    }
   | { type: 'game:pull_result'; payload: PullResult }
   | { type: 'game:player_won'; payload: Won }
   | { type: 'game:ended'; payload: Ended }
@@ -91,16 +100,16 @@ class DuelEvents {
       this.onEvent({ type: 'game:round_current', payload: data })
     })
 
-    this.on('game:ready', (_: ReadyTakePullResponse) => {
-      this.onEvent({ type: 'game:ready', payload: 'ready' })
+    this.on('game:ready', (data: ReadyTakePullResponse) => {
+      this.onEvent({ type: 'game:ready', payload: { ...data, event: 'ready' } })
     })
 
-    this.on('game:take', (_: ReadyTakePullResponse) => {
-      this.onEvent({ type: 'game:take', payload: 'take' })
+    this.on('game:take', (data: ReadyTakePullResponse) => {
+      this.onEvent({ type: 'game:take', payload: { ...data, event: 'take' } })
     })
 
-    this.on('game:pull', (_: ReadyTakePullResponse) => {
-      this.onEvent({ type: 'game:pull', payload: 'pull' })
+    this.on('game:pull', (data: ReadyTakePullResponse) => {
+      this.onEvent({ type: 'game:pull', payload: { ...data, event: 'pull' } })
     })
 
     this.on('game:pull_result', (data: PullResultResponse) => {

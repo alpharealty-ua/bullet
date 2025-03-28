@@ -184,7 +184,9 @@ export const useDuelSocket = ({
         case 'game:ready':
         case 'game:take':
         case 'game:pull': {
-          readySetPullHandleRef.current?.start(payload)
+          if (payload.roundNumber === 1) {
+            readySetPullHandleRef.current?.start(payload.event)
+          }
 
           return
         }
