@@ -8,6 +8,7 @@ import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/countdown'
+import { Indicators } from '@/components/indicators'
 
 interface EnterArenaProps {
   onDecline: () => void
@@ -120,6 +121,7 @@ const EnterArena = ({
             <div className='text-xs'>
               A match has been found. Please confirm to join the&nbsp;game.
             </div>
+            <Indicators indicators={indicators} />
             <div className='flex items-center justify-center gap-2'>
               {indicators.map((indicator, i) => (
                 <div
