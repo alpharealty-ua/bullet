@@ -41,21 +41,21 @@ export const useDuelSocket = ({
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const hasPull = !pulls.includes(round)
 
-  const opponentPull = async (shot: boolean) => {
+  const opponentPull = useCallback(async (shot: boolean) => {
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
     shot &&
       (await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot())
-  }
+  }, [])
 
-  const playerPull = async (shot: boolean) => {
+  const playerPull = useCallback(async (shot: boolean) => {
     await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
     await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
     await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
     shot &&
       (await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot())
-  }
+  }, [])
 
   const joinDuelGame = useCallback(() => {
     type JoinPayload = { gameId: string; playerId: string }
@@ -292,10 +292,6 @@ export const useDuelSocket = ({
   const testEvents = createTestEvents(playerId)
 
   const pullTrigger = async () => {
-    // const event: any = testEvents.connect
-    // const event: any = testEvents.connect
-    // callback()
-
     setPulls((p) => [...p, round])
 
     const payload = {
