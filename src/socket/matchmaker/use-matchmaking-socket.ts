@@ -144,14 +144,6 @@ const useMatchmakingSocket = (
   }
 
   const leaveMatchmaking = () => {
-    // TODO: FIX
-    if (!socket.connected) {
-      addLogEntry('Not connected', 'error')
-      notify('Not connected', 'error')
-      return
-    }
-
-    // Check if a match confirmation is active
     if (matchmakingStatus === 'match-found') {
       addLogEntry(
         'Cannot leave matchmaking while a match confirmation is active',
