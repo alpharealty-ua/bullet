@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { Offer } from '@/api/game.api'
+import { MatchDetails } from '@/socket/matchmaker/matchmaker-soket.types'
 import { CharacterName, StateGame } from '@/lib/constants'
 
 interface GameState {
@@ -22,6 +23,7 @@ interface GameState {
   pullRound: number[]
   playerId: string | null
   gameId: string | null
+  matchDetails: MatchDetails | null
   setState: (state: StateGame) => void
   setBalance: (balance: number) => void
   setMultiplier: (multiplier: number) => void
@@ -40,6 +42,7 @@ interface GameState {
   setPullRound: (pullRound: number[]) => void
   setPlayerId: (playerId: string | null) => void
   setGameId: (playerId: string | null) => void
+  setMatchDetails: (matchDetails: MatchDetails | null) => void
   newGame: () => void
 }
 
@@ -63,6 +66,7 @@ const useGameStore = create<GameState>()(
       pullRound: [],
       gameId: null,
       playerId: null,
+      matchDetails: null,
       setState: (state: StateGame) => set({ state }),
       setBalance: (balance: number) => set({ balance }),
       setMultiplier: (multiplier: number) => set({ multiplier }),
@@ -83,6 +87,8 @@ const useGameStore = create<GameState>()(
       setPullRound: (pullRound: number[]) => set({ pullRound }),
       setGameId: (gameId: string | null) => set({ gameId }),
       setPlayerId: (playerId: string | null) => set({ playerId }),
+      setMatchDetails: (matchDetails: MatchDetails | null) =>
+        set({ matchDetails }),
       newGame: () => {
         const {
           setState,

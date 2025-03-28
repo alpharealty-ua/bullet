@@ -112,7 +112,6 @@ export const matchmakerSocket = (
       setConnectionStatus('disconnected')
       updateMatchmakingStatus('not-in-queue')
 
-      setMatchDetails(null)
       setPingData({
         ping: 0,
         jitter: 0,
@@ -179,13 +178,12 @@ export const matchmakerSocket = (
       // Update matchmaking status
       if (matchmakingStatus === 'not-in-queue') {
         updateMatchmakingStatus('searching')
+        setMatchDetails(null)
       }
 
       // Store your player info for display
       setInfo((p) => ({ ...p, playerId: data.playerId, ping: data.ping }))
       updatePlayerId(data.playerId)
-
-      setMatchDetails(null)
 
       // Log if this is a re-join after match cancellation
       if (
@@ -205,7 +203,6 @@ export const matchmakerSocket = (
       updateMatchmakingStatus('not-in-queue')
 
       updatePlayerId(null)
-      setMatchDetails(null)
       console.log('call left disconnect')
     }
 

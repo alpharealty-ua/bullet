@@ -28,6 +28,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const playerId = user.id
   const token = useAuthStore(({ token }) => token)
+  const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
 
   const {
     frontCharacterHandleRef,
@@ -47,7 +48,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const visiblePlayerInfo = showPlayerInfo
 
-  const matchDetails = { opponent: { username: 'opponent' } }
+  // const matchDetails = { opponent: { username: 'opponent' } }
 
   const handlePull = async () => {
     pullTrigger()
@@ -113,7 +114,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   variant === 'watch' && '-mb-7 h-[300px]',
                   variant === 'play' && 'mr-12',
                 )}
-                name={'fatty'}
+                name={matchDetails?.opponent.characterName ?? 'fatty'}
                 type='front'
                 onClick={
                   variant === 'play' && isStartedGame

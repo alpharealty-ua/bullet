@@ -49,7 +49,8 @@ const useMatchmakingSocket = (
     useState<ConnectionStatus>('disconnected')
   const [authenticated, setAuthenticated] = useState(false)
   const [indicators, setIndicators] = useState<Indicator[]>([])
-  const [matchDetails, setMatchDetails] = useState<MatchDetails | null>(null)
+  const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
+  const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const isUnmount = useRef(false)
@@ -87,6 +88,8 @@ const useMatchmakingSocket = (
       }),
     [playAudio],
   )
+
+  console.log({ matchDetails })
 
   const connect = useCallback(() => {
     socket.auth = { token }
@@ -229,14 +232,6 @@ const useMatchmakingSocket = (
           return
         }
         const disconnectHandle = () => {
-          setMatchDetails(null)
-          setPingData({
-            ping: 0,
-            jitter: 0,
-            measurements: 0,
-            history: [],
-            sequence: 0,
-          })
           useGameStore.setState({ gameId: null })
           socket.off('disconnect', disconnectHandle)
         }
