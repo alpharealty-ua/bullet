@@ -22,7 +22,6 @@ interface GameState {
   round: number
   pullRound: number[]
   playerId: string | null
-  gameId: string | null
   matchDetails: MatchDetails | null
   setState: (state: StateGame) => void
   setBalance: (balance: number) => void
@@ -41,7 +40,6 @@ interface GameState {
   addPullRound: () => void
   setPullRound: (pullRound: number[]) => void
   setPlayerId: (playerId: string | null) => void
-  setGameId: (playerId: string | null) => void
   setMatchDetails: (matchDetails: MatchDetails | null) => void
   newGame: () => void
 }
@@ -64,7 +62,6 @@ const useGameStore = create<GameState>()(
       offer: null,
       increaseTime: undefined,
       pullRound: [],
-      gameId: null,
       playerId: null,
       matchDetails: null,
       setState: (state: StateGame) => set({ state }),
@@ -85,7 +82,6 @@ const useGameStore = create<GameState>()(
       addRound: () => set({ round: get().round + 1 }),
       addPullRound: () => set({ pullRound: [...get().pullRound, get().round] }),
       setPullRound: (pullRound: number[]) => set({ pullRound }),
-      setGameId: (gameId: string | null) => set({ gameId }),
       setPlayerId: (playerId: string | null) => set({ playerId }),
       setMatchDetails: (matchDetails: MatchDetails | null) =>
         set({ matchDetails }),

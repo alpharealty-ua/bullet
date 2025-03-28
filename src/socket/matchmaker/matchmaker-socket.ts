@@ -38,6 +38,7 @@ export const matchmakerSocket = (
     setConfirmationTimeoutSeconds,
     setInfo,
     setMatchId,
+    setGameId,
   }: {
     playAudio: PlaySound
     setAuthenticated: (value: boolean) => void
@@ -50,6 +51,7 @@ export const matchmakerSocket = (
     setConfirmationTimeoutSeconds: (value: number) => void
     setInfo: React.Dispatch<React.SetStateAction<Info>>
     setMatchId: (value: string | null) => void
+    setGameId: (value: string | null) => void
   },
 ) => {
   let off: () => void = () => void 1
@@ -64,7 +66,7 @@ export const matchmakerSocket = (
     matchmakingStatus: MatchmakingStatus
   }) => {
     const updateGameId = (gameId: string | null) => {
-      useGameStore.setState({ gameId })
+      setGameId(gameId)
     }
 
     const updatePlayerId = (newPlayerId: string | null) => {

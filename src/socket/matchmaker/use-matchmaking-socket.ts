@@ -53,6 +53,7 @@ const useMatchmakingSocket = (
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [currentMatchId, setMatchId] = useState<string | null>(null)
+  const [gameId, setGameId] = useState<string | null>(null)
   const isUnmount = useRef(false)
   const currentPing = info.ping
 
@@ -85,11 +86,10 @@ const useMatchmakingSocket = (
         setConfirmationTimeoutSeconds,
         setInfo,
         setMatchId,
+        setGameId,
       }),
-    [playAudio],
+    [playAudio, setMatchDetails],
   )
-
-  console.log({ matchDetails })
 
   const connect = useCallback(() => {
     socket.auth = { token }
@@ -231,12 +231,7 @@ const useMatchmakingSocket = (
         if (isUnmount.current) {
           return
         }
-        const disconnectHandle = () => {
-          useGameStore.setState({ gameId: null })
-          socket.off('disconnect', disconnectHandle)
-        }
 
-        socket.on('disconnect', disconnectHandle)
         disconnect()
       })
     }
@@ -283,6 +278,7 @@ const useMatchmakingSocket = (
     confirmationTimeoutSeconds,
     info,
     getStats,
+    gameId,
   }
 }
 
