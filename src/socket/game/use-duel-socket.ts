@@ -23,10 +23,18 @@ export const useDuelSocket = ({
   gameId: string
   playerId: string
 }) => {
+  const navigate = useNavigate()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [gameState, setGameState] = useState<StateGame>('preperation')
   const [pulls, setPulls] = useState<number[]>([])
   const [round, setRound] = useState(1)
+  const [rematchState, setRematchState] = useState<
+    'hide' | 'show' | 'requested' | 'created'
+  >('hide')
+  const [requestIndicator, setRequestIndicator] = useState({
+    player: false,
+    opponnent: false,
+  })
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
@@ -58,6 +66,30 @@ export const useDuelSocket = ({
     }
 
     socket.emit('game:join', payload)
+  }, [gameId, playerId])
+
+  const requestRematch = () => {
+    type RequestRematch = { gameId: string; playerId: string }
+
+    const payload: RequestRematch = {
+      gameId,
+      playerId,
+    }
+
+    socket.emit('game:request_rematch', payload)
+  }
+
+  const leaveDuelGame = useCallback(() => {
+    showCustomAlert(`Leaving duel game ${gameId}...`, 'info')
+
+    type LeaveRematch = { gameId: string; playerId: string }
+
+    const payload: LeaveRematch = {
+      gameId,
+      playerId,
+    }
+
+    socket.emit('game:leave', payload)
   }, [gameId, playerId])
 
   const newGame = useCallback(async () => {
@@ -178,16 +210,41 @@ export const useDuelSocket = ({
             showCustomAlert(payload.message, 'info')
             drawGame()
           }
+          setRematchState('show')
           return
         }
         case 'probability': {
           gameBarRefHandle.current?.setActive(payload.index)
           return
         }
-        case 'game:rematch_requested':
-        case 'game:rematch_created':
-        case 'game:rematch_cancelled':
-        case 'game:countdown_update':
+        case 'game:rematch_requested': {
+          const isI = payload.playerId === playerId
+          isI
+            ? setRequestIndicator((p) => ({ ...p, player: true }))
+            : setRequestIndicator((p) => ({ ...p, opponnent: true }))
+          setRematchState('requested')
+          showCustomAlert(payload.message, 'info')
+          return
+        }
+        case 'game:rematch_created': {
+          setRequestIndicator({ opponnent: true, player: true })
+          setRematchState('created')
+          setGameState('preperation')
+          showCustomAlert(payload.message, 'info')
+          const rematchGameId = payload.rematchGame.id
+          console.log('navigate ', rematchGameId)
+          navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
+            preventScrollReset: true,
+          })
+          return
+        }
+        case 'game:rematch_cancelled': {
+          break
+        }
+        case 'game:countdown_update': {
+          console.log('game:countdown_update')
+          return
+        }
         case 'game:player_left':
         case 'game:player_disconnected': {
           break
@@ -197,6 +254,7 @@ export const useDuelSocket = ({
           switch (event) {
             case 'game:join':
             case 'game:pull_trigger':
+            case 'game:request_rematch':
               showCustomAlert(payload.message, 'error')
               return
           }
@@ -208,7 +266,16 @@ export const useDuelSocket = ({
       console.error(event)
       showCustomAlert('Unhandled event ' + event.type, 'info')
     },
-    [drawGame, gameOver, joinDuelGame, playerId, winGame],
+    [
+      drawGame,
+      gameOver,
+      joinDuelGame,
+      navigate,
+      opponentPull,
+      playerId,
+      playerPull,
+      winGame,
+    ],
   )
 
   const refCallback = useRef(callback)
@@ -284,5 +351,8 @@ export const useDuelSocket = ({
     hasPull,
     newGame,
     round,
+    requestRematch,
+    rematchState,
+    requestIndicator,
   }
 }

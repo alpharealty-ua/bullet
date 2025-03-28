@@ -17,6 +17,7 @@ import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
+import { Indicators } from '@/components/indicators'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId } = useParams() as { gameId: string }
@@ -33,20 +34,25 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     readySetPullHandleRef,
     round,
     pullTrigger,
-    joinDuelGame,
+    requestRematch,
     isStartedGame,
     hasPull,
     gameState,
     newGame,
+    rematchState,
+    requestIndicator,
   } = useDuelSocket({ token: token!, gameId, playerId })
 
-  const visiblePlayerInfo = !isStartedGame || showPlayerInfo
+  const visiblePlayerInfo = showPlayerInfo
 
   const matchDetails = { opponent: { username: 'opponent' } }
 
   const handlePull = async () => {
-    // joinDuelGame()
     pullTrigger()
+  }
+
+  const handleRequestRematch = async () => {
+    requestRematch()
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
@@ -55,7 +61,38 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     <>
       <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
       {variant === 'watch' && <Bar />}
-      <div className='flex grow flex-col items-center justify-center'>
+      <div className='relative flex grow flex-col items-center justify-center'>
+        <div className='absolute top-4 z-3 flex flex-col items-center justify-center gap-4 text-center'>
+          {rematchState !== 'hide' && (
+            <>
+              <div className='text-2xl'>Request rematch</div>
+              <Indicators
+                indicators={[
+                  { confirm: requestIndicator.player },
+                  { confirm: requestIndicator.opponnent },
+                ]}
+              />
+              <div className='flex justify-between gap-4'>
+                <ButtonWithAudio
+                  as='button'
+                  bg='green'
+                  className='w-full text-sm'
+                  onClick={handleRequestRematch}
+                >
+                  Confirm
+                </ButtonWithAudio>
+                <ButtonWithAudio
+                  as='button'
+                  bg='red'
+                  className='w-full text-sm'
+                  onClick={handleRequestRematch}
+                >
+                  Decline
+                </ButtonWithAudio>
+              </div>
+            </>
+          )}
+        </div>
         <div className='mt-auto pt-6'>
           <div className='relative mt-auto flex flex-col gap-10'>
             <div
@@ -125,17 +162,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   }
                 />
                 <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
-                  <div>
-                    <ButtonWithAudio
-                      as='button'
-                      className='w-26'
-                      bg='green'
-                      text='join duel game'
-                      onClick={joinDuelGame}
-                      skipWaitAnimation
-                    />
-                  </div>
-                  <div className='relative'>
+                  <div className='relative ml-auto'>
                     <ButtonWithAudio
                       as='button'
                       className='w-26'
