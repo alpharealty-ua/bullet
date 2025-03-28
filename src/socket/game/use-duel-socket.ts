@@ -314,9 +314,10 @@ export const useDuelSocket = ({
   }, [token])
 
   const disconnect = useCallback(() => {
+    leaveDuelGame()
     socket.disconnect()
     showCustomAlert(`Disconnected from duel game service`, 'info')
-  }, [])
+  }, [leaveDuelGame])
 
   useEffect(() => {
     connect()
