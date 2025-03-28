@@ -19,9 +19,6 @@ import { ROUTES } from '@/routes/path'
 import { randomIntFromInterval, wait, waitEndAudio } from '@/lib/utils'
 import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
-import { GameBarHandle, SKULL_VALUE } from '@/components/duel-game-bar'
-import { ReadySetPullHandle } from '@/components/ready-set-pull'
-import { CharacterHandle } from '@/components/character'
 
 // TODO: SPLIT DUEL AND SOLO
 const useGame = (variant: VariantGame) => {
@@ -31,10 +28,6 @@ const useGame = (variant: VariantGame) => {
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
   const revolverRefHandle = useRef<RevolverHandle>(null)
-  const frontCharacterHandleRef = useRef<CharacterHandle>(null)
-  const backCharacterHandleRef = useRef<CharacterHandle>(null)
-  const gameBarRefHandle = useRef<GameBarHandle>(null)
-  const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const disabledRef = useRef(false)
   const { data: gameDetails } = useGameDetails(isSolo && variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
@@ -58,7 +51,6 @@ const useGame = (variant: VariantGame) => {
   const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
   const addRound = useGameStore(({ addRound }) => addRound)
-  const addPullRound = useGameStore(({ addPullRound }) => addPullRound)
   const restartGame = useGameStore(({ newGame }) => newGame)
   const state = useGameStore(({ state }) => state)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
@@ -72,20 +64,6 @@ const useGame = (variant: VariantGame) => {
   } | null>(null)
 
   const newGame = useCallback(async () => {
-    const gameBarHandle = gameBarRefHandle.current
-    const frontCharacterHandle = frontCharacterHandleRef.current
-    const backCharacterHandle = backCharacterHandleRef.current
-
-    if (gameBarHandle) {
-      await gameBarHandle.reset()
-    }
-    if (frontCharacterHandle) {
-      await frontCharacterHandle.reset()
-    }
-    if (backCharacterHandle) {
-      await backCharacterHandle.reset()
-    }
-
     if (gameId && isSolo) {
       navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
@@ -256,77 +234,77 @@ const useGame = (variant: VariantGame) => {
   )
 
   // TODO: REMOVE
-  const nextDuel = useCallback(async () => {
-    const frontCharacterHandle = frontCharacterHandleRef.current
-    const backCharacterHandle = backCharacterHandleRef.current
-    const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
-    const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
-    const readySetPullHandle = readySetPullHandleRef.current
-    const gameBarHandle = gameBarRefHandle.current
+  // const nextDuel = useCallback(async () => {
+  //   const frontCharacterHandle = frontCharacterHandleRef.current
+  //   const backCharacterHandle = backCharacterHandleRef.current
+  //   const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
+  //   const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
+  //   const readySetPullHandle = readySetPullHandleRef.current
+  //   const gameBarHandle = gameBarRefHandle.current
 
-    if (!(readySetPullHandle && gameBarHandle)) {
-      return
-    }
+  //   if (!(readySetPullHandle && gameBarHandle)) {
+  //     return
+  //   }
 
-    if (isStartedGame) {
-      const { value, isRunning } = await gameBarHandle.getState()
+  //   if (isStartedGame) {
+  //     const { value, isRunning } = await gameBarHandle.getState()
 
-      if (isRunning) {
-        if (
-          !(
-            frontCharacterHandle &&
-            backCharacterHandle &&
-            frontGunHandle &&
-            backGunHandle
-          )
-        ) {
-          return
-        }
+  //     if (isRunning) {
+  //       if (
+  //         !(
+  //           frontCharacterHandle &&
+  //           backCharacterHandle &&
+  //           frontGunHandle &&
+  //           backGunHandle
+  //         )
+  //       ) {
+  //         return
+  //       }
 
-        addPullRound()
+  //       addPullRound()
 
-        const isSkull = value === SKULL_VALUE
-        const winProbabilityPercentage = value
-        const random = randomIntFromInterval(0, 99)
-        const inWinGame = !isSkull && random < winProbabilityPercentage
+  //       const isSkull = value === SKULL_VALUE
+  //       const winProbabilityPercentage = value
+  //       const random = randomIntFromInterval(0, 99)
+  //       const inWinGame = !isSkull && random < winProbabilityPercentage
 
-        await gameBarHandle.highlight()
+  //       await gameBarHandle.highlight()
 
-        await backGunHandle.trigger()
-        await backGunHandle.spin()
-        await backGunHandle.click()
+  //       await backGunHandle.trigger()
+  //       await backGunHandle.spin()
+  //       await backGunHandle.click()
 
-        if (inWinGame) {
-          await backGunHandle.shot()
-          await frontCharacterHandle.dead()
-          return winGame()
-        }
+  //       if (inWinGame) {
+  //         await backGunHandle.shot()
+  //         await frontCharacterHandle.dead()
+  //         return winGame()
+  //       }
 
-        const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
+  //       const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
 
-        if (isSkull) {
-          await frontGunHandle.trigger()
-          await frontGunHandle.spin()
-          await frontGunHandle.click()
-        }
+  //       if (isSkull) {
+  //         await frontGunHandle.trigger()
+  //         await frontGunHandle.spin()
+  //         await frontGunHandle.click()
+  //       }
 
-        if (isGameOver) {
-          await frontGunHandle.shot()
-          await backCharacterHandle.dead()
-          return gameOver()
-        }
-      } else {
-        const duration = randomIntFromInterval(25, 50)
-        await gameBarHandle.start(duration)
-      }
-    } else {
-      await gameBarHandle.stop()
-      await gameBarHandle.reset()
-      await readySetPullHandle.startAll()
-      const duration = randomIntFromInterval(25, 50)
-      await gameBarHandle.start(duration)
-    }
-  }, [gameOver, isStartedGame, winGame, addPullRound])
+  //       if (isGameOver) {
+  //         await frontGunHandle.shot()
+  //         await backCharacterHandle.dead()
+  //         return gameOver()
+  //       }
+  //     } else {
+  //       const duration = randomIntFromInterval(25, 50)
+  //       await gameBarHandle.start(duration)
+  //     }
+  //   } else {
+  //     await gameBarHandle.stop()
+  //     await gameBarHandle.reset()
+  //     await readySetPullHandle.startAll()
+  //     const duration = randomIntFromInterval(25, 50)
+  //     await gameBarHandle.start(duration)
+  //   }
+  // }, [gameOver, isStartedGame, winGame, addPullRound])
 
   const nextSolo = useCallback(async () => {
     if (!gameId) {
@@ -337,29 +315,26 @@ const useGame = (variant: VariantGame) => {
     await pullGame(gameId)
   }, [gameId, pullGame, startGame])
 
-  const next = useCallback(
-    async (format: 'solo' | 'duel') => {
-      if (disabledRef.current) {
+  const next = useCallback(async () => {
+    if (disabledRef.current) {
+      return
+    }
+
+    try {
+      disabledRef.current = true
+
+      if (state === 'win' || state === 'game-over') {
+        await newGame()
         return
       }
 
-      try {
-        disabledRef.current = true
-
-        if (state === 'win' || state === 'game-over') {
-          await newGame()
-          return
-        }
-
-        format === 'solo' ? await nextSolo() : await nextDuel()
-      } catch (e) {
-        console.log(e)
-      } finally {
-        disabledRef.current = false
-      }
-    },
-    [newGame, nextDuel, nextSolo, state],
-  )
+      await nextSolo()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      disabledRef.current = false
+    }
+  }, [newGame, nextSolo, state])
 
   const nextRound = async () => {
     const DRAW_ROUND = 50
@@ -548,10 +523,6 @@ const useGame = (variant: VariantGame) => {
     newGame,
     nextRound,
     revolverRefHandle,
-    frontCharacterHandleRef,
-    backCharacterHandleRef,
-    gameBarRefHandle,
-    readySetPullHandleRef,
     watchGame,
     gameOver,
     winGame,
