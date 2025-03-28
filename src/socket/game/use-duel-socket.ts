@@ -7,7 +7,7 @@ import { showCustomAlert } from '@/socket/utils'
 import { Events, DuelEvents } from '@/socket/game/duel-events'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait, waitEndAudio } from '@/lib/utils'
-import { CharacterHandle } from '@/components/character'
+import { CharacterHandle, CharacterState } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { createTestEvents } from './test-events'
@@ -92,7 +92,7 @@ export const useDuelSocket = ({
     socket.emit('game:leave', payload)
   }, [gameId, playerId])
 
-  const newGame = useCallback(async () => {
+  const reset = useCallback(async () => {
     const gameBarHandle = gameBarRefHandle.current
     const frontCharacterHandle = frontCharacterHandleRef.current
     const backCharacterHandle = backCharacterHandleRef.current
@@ -106,36 +106,44 @@ export const useDuelSocket = ({
     if (backCharacterHandle) {
       await backCharacterHandle.reset()
     }
+  }, [])
+
+  const newGame = useCallback(async () => {
     setGameState('preperation')
   }, [])
 
   const gameOver = useCallback(async () => {
+    await backCharacterHandleRef?.current?.setState('eliminated')
+    await frontCharacterHandleRef?.current?.setState('winner')
     setGameState('lose')
   }, [])
 
-  const winGame = useCallback(async () => {
-    setGameState('win')
+  const winGame = useCallback(
+    async (characterState: CharacterState = 'eliminated') => {
+      await frontCharacterHandleRef?.current?.setState(characterState)
+      await backCharacterHandleRef?.current?.setState('winner')
+      setGameState('win')
 
-    const winSoundAudio = await playAudio('winsound', false)
-    const chachingAudio = await playAudio('chaching', false)
+      const winSoundAudio = await playAudio('winsound', false)
+      const chachingAudio = await playAudio('chaching', false)
 
-    const startAudio = await new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(false), 100)
-      chachingAudio.addEventListener('play', () => resolve(true))
-    })
+      const startAudio = await new Promise<boolean>((resolve) => {
+        setTimeout(() => resolve(false), 100)
+        chachingAudio.addEventListener('play', () => resolve(true))
+      })
 
-    startAudio && (await waitEndAudio(chachingAudio))
-    startAudio && (await waitEndAudio(winSoundAudio))
-    !startAudio && (await wait(2000))
+      startAudio && (await waitEndAudio(chachingAudio))
+      startAudio && (await waitEndAudio(winSoundAudio))
+      !startAudio && (await wait(2000))
 
-    newGame()
-  }, [playAudio, newGame])
+      newGame()
+    },
+    [playAudio, newGame],
+  )
 
   const drawGame = useCallback(() => {
     setGameState('draw')
   }, [])
-
-  const showResult = useRef(false)
 
   const callback = useCallback(
     async (event: Events) => {
@@ -202,7 +210,6 @@ export const useDuelSocket = ({
             await gameBarRefHandle.current?.highlight(payload.index)
           }
 
-          showResult.current = payload.fired
           await pull(payload.fired)
 
           if (payload.fired) {
@@ -252,15 +259,19 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_cancelled': {
-          break
+          setRequestIndicator({ opponnent: false, player: true })
+          return
         }
         case 'game:countdown_update': {
           console.log('game:countdown_update')
           return
         }
-        case 'game:player_left':
+        case 'game:player_left': {
+          await winGame('left')
+          return
+        }
         case 'game:player_disconnected': {
-          break
+          return
         }
         case 'error': {
           const { event } = payload
@@ -365,5 +376,6 @@ export const useDuelSocket = ({
     rematchState,
     requestIndicator,
     leaveDuelGame,
+    reset,
   }
 }

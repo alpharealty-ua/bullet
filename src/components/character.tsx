@@ -1,10 +1,13 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
 import { IoSkull } from 'react-icons/io5'
+import { ImExit } from 'react-icons/im'
+import { FaCrown } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
 import { GunCharacter, GunHandle } from '@/components/character-gun'
 
+export type CharacterState = 'eliminated' | 'alive' | 'left' | 'winner'
 interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   name: CharacterName
   type: CharacterType
@@ -13,7 +16,7 @@ interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 export interface CharacterHandle {
-  dead: () => Promise<void>
+  setState: (state: CharacterState) => Promise<void>
   reset: () => Promise<void>
   frontGunHandleRef?: React.RefObject<GunHandle>
   backGunHandleRef?: React.RefObject<GunHandle>
@@ -26,15 +29,15 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   ) => {
     const frontGunHandleRef = useRef<GunHandle>(null)
     const backGunHandleRef = useRef<GunHandle>(null)
-    const [isDead, setIsDead] = useState(false)
+    const [state, setState] = useState<CharacterState>('alive')
 
     useImperativeHandle(characterHandleRef, () => {
       return {
-        dead: async () => {
-          setIsDead(true)
+        setState: async (state: CharacterState) => {
+          setState(state)
         },
         reset: async () => {
-          setIsDead(false)
+          setState('alive')
         },
         frontGunHandleRef,
         backGunHandleRef,
@@ -91,15 +94,31 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             hideGun={true}
           />
         </div>
-        {isDead && (
+        {state !== 'alive' && (
           <div
             className={cn(
-              'absolute -top-10 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center',
+              'absolute -top-10 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center gap-2',
               'fade-in animate-in zoom-in-80 duration-500',
             )}
           >
-            <div className='text-3xl'>Dead</div>
-            <IoSkull className='text-red relative mx-auto text-9xl' />
+            {state === 'eliminated' && (
+              <>
+                <div className='text-3xl'>Dead</div>
+                <IoSkull className='text-red relative mx-auto text-9xl' />
+              </>
+            )}
+            {state === 'left' && (
+              <>
+                <div className='text-3xl'>Left</div>
+                <ImExit className='text-red relative mx-auto text-9xl' />
+              </>
+            )}
+            {state === 'winner' && (
+              <>
+                <div className='text-3xl'>Winner</div>
+                <FaCrown className='text-green relative mx-auto text-9xl' />
+              </>
+            )}
           </div>
         )}
       </div>
