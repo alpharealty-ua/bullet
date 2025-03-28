@@ -69,7 +69,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col items-center justify-center'>
         <div className='absolute top-4 z-3 flex flex-col items-center justify-center gap-4 text-center'>
-          {rematchState !== 'hide' && (
+          {gameState === 'preperation' && rematchState !== 'hide' && (
             <>
               <div className='text-2xl'>Request rematch</div>
               <Indicators
