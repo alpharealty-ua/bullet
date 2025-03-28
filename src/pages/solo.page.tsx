@@ -28,6 +28,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
   const multiplier = useGameStore(({ multiplier }) => multiplier)
+  const state = useGameStore(({ state }) => state)
+  const isGameOver = state === 'game-over'
+  const isWin = state === 'win'
+  const isDraw = state === 'draw'
 
   const modal = useCustomModal()
 
@@ -144,8 +148,8 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       </div>
-      <Victory hideLvl />
-      <GameOver onClick={newGame} onTimeout={newGame} />
+      <Victory show={isDraw || isWin} type={isWin ? 'win' : 'draw'} hideLvl />
+      <GameOver show={isGameOver} onClick={newGame} onTimeout={newGame} />
       <Footer />
     </>
   )

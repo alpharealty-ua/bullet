@@ -9,17 +9,19 @@ import { AnimationInOut } from '@/components/animation-in-out'
 const Victory = ({
   hideWon,
   hideLvl,
+  type,
+  show,
 }: {
   hideWon?: boolean
   hideLvl?: boolean
+  type: 'win' | 'draw'
+  show: boolean
 }) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const state = useGameStore(({ state }) => state)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
-  const isWin = state === 'win'
-  const isDraw = state === 'draw'
-  const show = isDraw || isWin
+  const isWin = type === 'win'
+  const isDraw = type === 'draw'
 
   useEffect(() => {
     if (!(show && isWin)) {
