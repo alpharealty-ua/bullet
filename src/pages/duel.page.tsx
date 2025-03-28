@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
+import { useDuelSocket } from '@/socket/game/use-duel-socket'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
-import { GameSocket } from '@/socket/game/game-socket'
-import { useGame } from '@/hooks/use-game'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -20,107 +19,37 @@ import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
+  const { gameId } = useParams() as { gameId: string }
+  const user = useUser()
+  const characterName = useGameStore(({ characterName }) => characterName)
+  const [showPlayerInfo, setShowPlayerInfo] = useState(false)
+  const playerId = user.id
+  const token = useAuthStore(({ token }) => token)
+
   const {
-    newGame,
-    winGame,
-    gameOver,
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
-  } = useGame(variant)
-  const { gameId } = useParams() as { gameId: string }
-  const characterName = useGameStore(({ characterName }) => characterName)
-  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
-  const round = useGameStore(({ round }) => round)
-  const pullRound = useGameStore(({ pullRound }) => pullRound)
-  const [showPlayerInfo, setShowPlayerInfo] = useState(false)
+    round,
+    pullTrigger,
+    joinDuelGame,
+    isStartedGame,
+    hasPull,
+    gameState,
+    newGame,
+  } = useDuelSocket({ token: token!, gameId, playerId })
+
   const visiblePlayerInfo = !isStartedGame || showPlayerInfo
-  const user = useUser()
-  const playerId = user.id
-  const token = useAuthStore(({ token }) => token)
-  const hasPull = pullRound[pullRound.length - 1] !== round
-  const gameInstance = useMemo(
-    () =>
-      new GameSocket(token!, user.id, gameId, {
-        onPullResult: async (result) => {
-          const isPlayer = playerId === result.playerId
-
-          const pull = isPlayer ? playerPull : opponentPull
-
-          await pull(result.fired)
-          if (result.fired) {
-            isPlayer ? winGame() : gameOver()
-          }
-        },
-        onProbability: (data) => {
-          gameBarRefHandle.current?.setActive(data.index)
-        },
-        onReadyTakePull: (data) => {
-          readySetPullHandleRef.current?.start(data)
-        },
-        onPlayerWon: (data) => {
-          const isWin = data.playerId === playerId
-          console.log({ isWin })
-        },
-        onEnded: (data) => {
-          if (data.winner) {
-            if (data.winner.id === playerId) {
-              console.log(`I WON THE GAME!`)
-            } else {
-              console.log(`I lost the game.`)
-            }
-          } else {
-            // draw()
-          }
-        },
-        onRoundCurrent: () => {},
-      }),
-    [token, gameBarRefHandle, readySetPullHandleRef],
-  )
 
   const matchDetails = { opponent: { username: 'opponent' } }
 
   const handlePull = async () => {
-    gameInstance.pullTrigger()
-    await gameBarRefHandle.current?.highlight()
-  }
-
-  const opponentPull = async (shot: boolean) => {
-    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
-    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
-    await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.click()
-    shot &&
-      (await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.shot())
-  }
-
-  const playerPull = async (shot: boolean) => {
-    await backCharacterHandleRef.current?.backGunHandleRef?.current?.trigger()
-    await backCharacterHandleRef.current?.backGunHandleRef?.current?.spin()
-    await backCharacterHandleRef.current?.backGunHandleRef?.current?.click()
-    shot &&
-      (await backCharacterHandleRef.current?.backGunHandleRef?.current?.shot())
+    // joinDuelGame()
+    pullTrigger()
   }
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
-
-  const isUnmounted = useRef(false)
-
-  useEffect(() => {
-    gameInstance.connect()
-    isUnmounted.current = false
-
-    return () => {
-      gameInstance.dettachEventListeners()
-      isUnmounted.current = true
-      Promise.resolve().then(() => {
-        if (!isUnmounted.current) {
-          return
-        }
-        gameInstance.disconnect()
-      })
-    }
-  }, [gameInstance, playerId, gameId])
 
   return (
     <>
@@ -195,7 +124,17 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                     />
                   }
                 />
-                <div className='absolute right-0 bottom-0 flex items-center justify-between px-4'>
+                <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
+                  <div>
+                    <ButtonWithAudio
+                      as='button'
+                      className='w-26'
+                      bg='green'
+                      text='join duel game'
+                      onClick={joinDuelGame}
+                      skipWaitAnimation
+                    />
+                  </div>
                   <div className='relative'>
                     <ButtonWithAudio
                       as='button'
@@ -216,9 +155,14 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           />
         </div>
       </div>
-      <Victory hideWon />
-      <GameOver hasImage={false} onClick={newGame} onTimeout={newGame} />
-      <Footer hasPull={hasPull} />
+      <Victory show={gameState === 'win'} type='win' hideWon />
+      <Victory show={gameState === 'draw'} type='draw' hideWon />
+      <GameOver
+        show={gameState === 'lose'}
+        onClick={newGame}
+        onTimeout={() => {}}
+      />
+      <Footer round={round} hasPull={hasPull} />
     </>
   )
 }
