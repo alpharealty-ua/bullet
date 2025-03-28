@@ -10,7 +10,7 @@ type ResetOptions = {
 
 export interface GameBarHandle {
   getState: () => Promise<{ value: number; isRunning: boolean }>
-  highlight: () => Promise<void>
+  highlight: (index: number) => Promise<void>
   start: (duration: number) => Promise<void>
   stop: () => Promise<void>
   reset: (options?: ResetOptions) => Promise<void>
@@ -159,8 +159,16 @@ const DuelGameBar = ({
     nextActive.classList.add('is-active')
   }
 
-  const highlight = async () => {
-    const nextActiveDom = stateRef.current.nextActive
+  const highlight = async (index: number) => {
+    const barDom = wrapperRef.current
+
+    if (barDom === null) {
+      return
+    }
+
+    const cells = barDom.rows[0].cells
+
+    const nextActiveDom = cells[index]
 
     if (nextActiveDom === null) {
       return

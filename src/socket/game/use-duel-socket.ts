@@ -156,6 +156,7 @@ export const useDuelSocket = ({
 
           const pull = isPlayer ? playerPull : opponentPull
 
+          await gameBarRefHandle.current?.highlight(payload.index)
           showResult.current = payload.fired
           await pull(payload.fired)
 
@@ -235,7 +236,6 @@ export const useDuelSocket = ({
       playerId,
     }
 
-    await gameBarRefHandle.current?.highlight()
     socket.emit('game:pull_trigger', payload)
   }
 

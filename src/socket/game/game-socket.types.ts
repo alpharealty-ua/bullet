@@ -29,8 +29,12 @@ export interface GameJoinedResponse {
 }
 export interface PullResultResponse {
   playerId: string
+  gameId: string
   fired: boolean
   isFirstPlayerToPull: boolean
+  message: string
+  index: number
+  probability: number
 }
 export interface PlayerWonResponse {
   gameId: string
