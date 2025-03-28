@@ -175,6 +175,8 @@ export const matchmakerSocket = (
     const handleJoinedMatchmaking = (data: JoinedMatchmakingResponse) => {
       addLogEntry(`Joined matchmaking: ${JSON.stringify(data)}`, 'success')
 
+      notify('You have Joined the matchmaking queue', 'success')
+
       // Update matchmaking status
       if (matchmakingStatus === 'not-in-queue') {
         updateMatchmakingStatus('searching')
@@ -202,7 +204,6 @@ export const matchmakerSocket = (
       updateMatchmakingStatus('not-in-queue')
 
       updatePlayerId(null)
-      console.log('call left disconnect')
     }
 
     const handleMatchFound = (matchData: MatchFoundResponse) => {
