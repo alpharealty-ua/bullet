@@ -11,8 +11,9 @@ import {
   PingResponse,
   PingUpdateResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
+import { SocketEvents } from '@/socket/utils'
 
-class MatchmakerPingClient {
+class MatchmakerPingClient extends SocketEvents {
   socket: Socket
   options: Record<string, any>
   pingHistory: { ping: number; jitter: number; timestamp: number }[]
@@ -23,6 +24,7 @@ class MatchmakerPingClient {
   eventListener: (() => any)[] = []
 
   constructor(socket: Socket, options = {}) {
+    super(socket)
     this.socket = socket
     this.options = {
       debug: false,
@@ -68,25 +70,6 @@ class MatchmakerPingClient {
         })
       }
     })
-  }
-
-  dettachEventListeners() {
-    let off = null
-    while ((off = this.eventListener.pop())) {
-      off()
-    }
-  }
-
-  on<T>(event: string, handler: (...args: T[]) => void) {
-    this.socket.on(event, handler)
-
-    this.eventListener.push(() => {
-      this.off(event, handler)
-    })
-  }
-
-  off<T>(event: string, handler: (...args: T[]) => void) {
-    this.socket.off(event, handler)
   }
 
   updatePingHistory(ping: number, jitter: number) {
