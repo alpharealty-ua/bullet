@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
-import { useDuelSocket } from '@/socket/game/use-duel-socket'
+import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'

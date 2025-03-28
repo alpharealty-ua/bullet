@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import { ROUTES } from '@/routes/path'
 
 import { socketDuel as socket } from '@/socket/socket'
-import { DuelSocketEvents } from '@/socket/game/duel-socket-events'
+import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useInUnmounted } from '@/hooks/use-is-unmounted'
 import { useSettingsStore } from '@/store/settings.store'
 import { notify } from '@/socket/utils'
