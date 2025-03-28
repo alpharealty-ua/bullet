@@ -22,8 +22,6 @@ import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
 import { addLogEntry, showCustomAlert, debug } from '../utils'
 import { useGameStore } from '@/store/game.store'
 
-const autoConfirm = true
-
 // TODO: TRANSFORM TO CLASS
 // TODO: REMOVED DISPATCH TYPE
 export const matchmakerSocket = (
@@ -235,14 +233,6 @@ export const matchmakerSocket = (
 
       // Play match found sound
       playAudio('matchFoundSound')
-
-      if (autoConfirm) {
-        socket.emit('confirmMatch', {
-          matchId: currentMatchId,
-        })
-
-        return
-      }
 
       // TODO: SET ALL RESPONSE DATA
       if (matchData.confirmationRequired) {
