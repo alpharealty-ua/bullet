@@ -190,7 +190,10 @@ export const useDuelSocket = ({
 
           const pull = isPlayer ? playerPull : opponentPull
 
-          await gameBarRefHandle.current?.highlight(payload.index)
+          if (isPlayer) {
+            await gameBarRefHandle.current?.highlight(payload.index)
+          }
+
           showResult.current = payload.fired
           await pull(payload.fired)
 
