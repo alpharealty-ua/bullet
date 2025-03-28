@@ -38,7 +38,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     round,
     pullTrigger,
     requestRematch,
-    isStartedGame,
     hasPull,
     gameState,
     newGame,
@@ -47,8 +46,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   } = useDuelSocket({ token: token!, gameId, playerId })
 
   const visiblePlayerInfo = showPlayerInfo
-
-  // const matchDetails = { opponent: { username: 'opponent' } }
 
   const handlePull = async () => {
     pullTrigger()

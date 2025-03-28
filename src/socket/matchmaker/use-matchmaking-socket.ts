@@ -10,7 +10,6 @@ import {
   MatchmakingStatus,
   ConnectionStatus,
   Indicator,
-  MatchDetails,
   Info,
   Statistics,
   AdditionalPlayerMetadata,
