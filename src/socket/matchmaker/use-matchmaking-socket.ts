@@ -54,7 +54,7 @@ const useMatchmakingSocket = (
   const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
-  const isUnmount = useRef(false)
+  const isUnmounted = useRef(false)
   const currentPing = info.ping
 
   const initState = useMemo(
@@ -221,14 +221,14 @@ const useMatchmakingSocket = (
     }
 
     connect()
-    isUnmount.current = true
+    isUnmounted.current = false
 
     return () => {
       offRef.current()
 
-      isUnmount.current = false
+      isUnmounted.current = true
       Promise.resolve().then(() => {
-        if (isUnmount.current) {
+        if (!isUnmounted.current) {
           return
         }
 
