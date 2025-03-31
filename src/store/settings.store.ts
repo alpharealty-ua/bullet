@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { AUDIOS, SettingsKeys } from '@/lib/constants'
+import { AUDIOS, DEFAULT_SETTINGS, SettingsKeys } from '@/lib/constants'
 import { getAudio } from '@/lib/utils'
 
 export type PlaySound = (
@@ -18,13 +18,7 @@ interface SettingsState extends Record<SettingsKeys, boolean> {
 const useSettingsStore = create<SettingsState>()(
   persist(
     (set, get) => ({
-      music: true,
-      soundEffects: true,
-      invertButtons: false,
-      blood: false,
-      declineAllDeals: false,
-      autoConnect: true,
-      autoJoin: true,
+      ...DEFAULT_SETTINGS,
       change: (payload: Partial<Record<SettingsKeys, boolean>>) =>
         set({ ...payload }),
       playAudio: async (

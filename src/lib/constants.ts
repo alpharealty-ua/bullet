@@ -154,6 +154,16 @@ export const SETTINGS = {
   autoJoin: 'Auto join to metchmaker',
 } as const
 
+export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
+  music: true,
+  soundEffects: true,
+  invertButtons: false,
+  blood: false,
+  declineAllDeals: false,
+  autoConnect: true,
+  autoJoin: false,
+}
+
 export const settingsEntries = Object.entries(SETTINGS) as [
   SettingsKeys,
   string,
