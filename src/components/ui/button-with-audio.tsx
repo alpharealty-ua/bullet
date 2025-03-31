@@ -43,12 +43,14 @@ const ButtonWithAudio = React.forwardRef<
     await playAudio('mouseclick')
 
     buttonDom.classList.add('animate-button-click')
+    buttonDom.style.animationIterationCount = '1'
 
     await new Promise<Event>((resolve) => {
       buttonDom.addEventListener('animationend', resolve, { once: true })
     })
 
     buttonDom.classList.remove('animate-button-click')
+    buttonDom.style.animationIterationCount = ''
 
     setStartedAnimtion(false)
 
