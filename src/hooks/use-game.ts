@@ -21,6 +21,7 @@ import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 
 // TODO: SPLIT DUEL AND SOLO
+// TODO: STAY ONLY SOLO
 const useGame = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -47,7 +48,6 @@ const useGame = (variant: VariantGame) => {
   const setIsStartedGame = useGameStore(
     ({ setIsStartedGame }) => setIsStartedGame,
   )
-  const setNoMoney = useGameStore(({ setNoMoney }) => setNoMoney)
   const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
   const addRound = useGameStore(({ addRound }) => addRound)
