@@ -17,16 +17,8 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useGameStore } from '@/store/game.store'
 
-const useMatchmakingSocket = (
-  token: string,
-  {
-    username,
-    characterName,
-    region,
-  }: { username: string; characterName: string; region: string },
-) => {
+const useMatchmakingSocket = (token: string) => {
   const autoConnect = useSettingsStore(({ autoConnect }) => autoConnect)
-  const autoJoin = useSettingsStore(({ autoJoin }) => autoJoin)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -74,6 +66,7 @@ const useMatchmakingSocket = (
   const on = useMemo(
     () =>
       matchmakerSocket(socket, {
+        // TODO: ADDED ON EVENT
         playAudio,
         setAuthenticated,
         setMatchmakingStatus,
@@ -221,27 +214,6 @@ const useMatchmakingSocket = (
       })
     }
   }, [connect, disconnect, autoConnect])
-
-  useEffect(() => {
-    if (!autoJoin) {
-      return
-    }
-
-    if (!authenticated) {
-      return
-    }
-
-    joinMatchmaking({
-      username,
-      characterName,
-      region,
-    })
-
-    return () => {
-      leaveMatchmaking()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated, username, characterName, region, autoJoin])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 

@@ -44,7 +44,7 @@ const MatchmakerPage = () => {
     info,
     connectionStatus,
     gameId,
-  } = useMatchmakingSocket(token!, { username, characterName, region })
+  } = useMatchmakingSocket(token!)
 
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'
