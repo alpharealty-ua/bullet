@@ -88,57 +88,6 @@ const RegisterForm = () => {
           />
           <FormField
             control={form.control}
-            name='username'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <FormInput
-                    placeholder='Username'
-                    disabled={disabled || isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='username'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <FormInput
-                    placeholder='Username'
-                    disabled={disabled || isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='username'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <FormInput
-                    placeholder='Username'
-                    disabled={disabled || isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name='email'
             render={({ field: { disabled, ...field } }) => (
               <FormItem>
