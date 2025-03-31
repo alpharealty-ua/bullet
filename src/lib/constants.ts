@@ -151,7 +151,6 @@ export const SETTINGS = {
   blood: 'Toggles off blood',
   declineAllDeals: 'Decline all deals',
   autoConnect: 'Auto connect to matchmaker',
-  autoJoin: 'Auto join to metchmaker',
 } as const
 
 export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
@@ -161,7 +160,6 @@ export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
   blood: false,
   declineAllDeals: false,
   autoConnect: true,
-  autoJoin: false,
 }
 
 export const settingsEntries = Object.entries(SETTINGS) as [
