@@ -11,7 +11,6 @@ interface GameState {
   multiplier: number
   prevState: StateGame
   isStartedGame: boolean
-  noMoney: boolean
   jackpot: number
   bet: number
   maxBet: number
@@ -27,7 +26,6 @@ interface GameState {
   setBalance: (balance: number) => void
   setMultiplier: (multiplier: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
-  setNoMoney: (noMoney: boolean) => void
   setJackpot: (jackpot: number) => void
   setBet: (setBet: number) => void
   setMaxBet: (setBet: number) => void
@@ -54,7 +52,6 @@ const useGameStore = create<GameState>()(
       round: 1,
       multiplier: 0,
       isStartedGame: false,
-      noMoney: false,
       jackpot: 0,
       bet: 0,
       maxBet: 0,
@@ -68,7 +65,6 @@ const useGameStore = create<GameState>()(
       setBalance: (balance: number) => set({ balance }),
       setMultiplier: (multiplier: number) => set({ multiplier }),
       setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
-      setNoMoney: (noMoney: boolean) => set({ noMoney }),
       setJackpot: (jackpot: number) => set({ jackpot }),
       setBet: (bet: number) => set({ bet }),
       setMaxBet: (maxBet: number) => set({ maxBet }),

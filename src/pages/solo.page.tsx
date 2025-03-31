@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
@@ -20,20 +21,20 @@ import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { next, deal, revolverRefHandle, newGame, watchGame } = useGame(variant)
+  const { data: balance } = useBalance()
+  const modal = useCustomModal()
   const [showHelpers, setShowHelpers] = useState(true)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
-  const noMoney = useGameStore(({ noMoney }) => noMoney)
   const bet = useGameStore(({ bet }) => bet)
   const offer = useGameStore(({ offer }) => offer)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
   const multiplier = useGameStore(({ multiplier }) => multiplier)
   const state = useGameStore(({ state }) => state)
+  const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const isGameOver = state === 'game-over'
   const isWin = state === 'win'
   const isDraw = state === 'draw'
-
-  const modal = useCustomModal()
 
   const handlePull = async () => {
     setShowHelpers(false)
@@ -52,8 +53,8 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Header logoText={'Solo'} />
-      <div className='min-h-40'>
+      <Header logoText='Solo' noMoney={noMoney} />
+      <div className='min-h-60'>
         {variant === 'watch' && watchGame && (
           <div className='flex flex-col gap-6 p-4'>
             <div className='text-3xl'>Largest prize game</div>
@@ -151,7 +152,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory show={isDraw || isWin} type={isWin ? 'win' : 'draw'} hideLvl />
       <GameOver show={isGameOver} onClick={newGame} onTimeout={newGame} />
-      <Footer />
+      <Footer disabledBet={isStartedGame || noMoney} />
     </>
   )
 }

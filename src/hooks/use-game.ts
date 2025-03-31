@@ -401,11 +401,6 @@ const useGame = (variant: VariantGame) => {
   ])
 
   useEffect(() => {
-    const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
-    setNoMoney(noMoney)
-  }, [setNoMoney, isStartedGame, balance, bet])
-
-  useEffect(() => {
     setIsStartedGame(Boolean(gameId))
 
     if (gameId) {

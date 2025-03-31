@@ -4,14 +4,11 @@ import { IMAGES } from '@/lib/constants'
 import { Bet } from '@/components/bet'
 import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
-import { Helper } from '@/components/helper'
 import { Leaderboard } from '@/components/leaderboard'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-const Footer = () => {
+const Footer = ({ disabledBet }: { disabledBet: boolean }) => {
   const setBet = useGameStore(({ setBet }) => setBet)
-  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
-  const noMoney = useGameStore(({ noMoney }) => noMoney)
   const bet = useGameStore(({ bet }) => bet)
   const maxBet = useGameStore(({ maxBet }) => maxBet)
   const countBullet = useGameStore(({ countBullet }) => countBullet)
@@ -35,14 +32,8 @@ const Footer = () => {
           <div className='text-green pl-7 text-left text-2xl leading-[1] tracking-tight uppercase'>
             Wager
           </div>
-          {/* TODO: REMOVE  */}
-          <Helper
-            image='wagehere'
-            // show={showHelpers && bet === 0 && !isStartedGame}
-            show={false}
-          />
           <Bet
-            disabled={isStartedGame || noMoney}
+            disabled={disabledBet}
             maxBet={maxBet}
             bet={bet}
             onBet={setBet}

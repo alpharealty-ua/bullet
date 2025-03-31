@@ -194,3 +194,5 @@ export const LOCAL_STORAGE_KEYS = {
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
 
 export const ADD_MONEY = 5000
+
+export const MIN_DUEL_BET = 1000

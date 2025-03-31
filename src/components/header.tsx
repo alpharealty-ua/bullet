@@ -8,13 +8,14 @@ import { ProfileLink } from '@/components/profile-link'
 export const Header = ({
   logoText,
   headerProfile = false,
+  noMoney = true,
 }: {
   logoText?: string
   headerProfile?: boolean
+  noMoney?: boolean
 }) => {
   const { data: balance, isLoading } = useBalance()
 
-  const noMoney = useGameStore(({ noMoney }) => noMoney)
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   return (

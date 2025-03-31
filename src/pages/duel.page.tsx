@@ -63,7 +63,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Header logoText={variant === 'play' ? 'duel' : ''} headerProfile />
+      <Header
+        logoText={variant === 'play' ? 'duel' : ''}
+        noMoney={false}
+        headerProfile
+      />
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col items-center justify-center'>
         {gameState === 'preperation' && rematchState !== 'hide' && (

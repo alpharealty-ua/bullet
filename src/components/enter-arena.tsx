@@ -18,6 +18,7 @@ interface EnterArenaProps {
   indicators: Indicator[]
   matchmakingStatus: MatchmakingStatus
   confirmationTimeoutSeconds: number
+  defaultValue: string
 }
 
 const matchmakingStatusMap: Record<MatchmakingStatus, string> = {
@@ -36,6 +37,7 @@ const EnterArena = ({
   indicators,
   confirmationTimeoutSeconds,
   matchmakingStatus,
+  defaultValue,
 }: EnterArenaProps) => {
   const isSearching = matchmakingStatus === 'searching'
   const isFound = matchmakingStatus === 'match-found'
@@ -78,7 +80,7 @@ const EnterArena = ({
             <div className={cn('shrink-0', isSearching && 'opacity-75')}>$</div>
             <input
               className='h-10 w-full bg-transparent outline-none disabled:opacity-75'
-              defaultValue='1000'
+              defaultValue={defaultValue}
               type='number'
               disabled
               autoFocus
