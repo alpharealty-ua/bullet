@@ -72,7 +72,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             </div>
           </div>
         )}
-        {variant === 'play' && (
+        {variant === 'play' && !noMoney && (
           <div className='flex flex-col gap-3 pt-2'>
             <Result
               title={'Prizepool'}
@@ -91,17 +91,18 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             />
           </div>
         )}
+        {noMoney && (
+          <div className='relative flex flex-col items-center justify-center pt-8'>
+            <ButtonWithAudio
+              as='button'
+              image='button'
+              text='Add money'
+              onClick={handleAddMoney}
+            />
+          </div>
+        )}
       </div>
-      {noMoney && (
-        <div className='relative flex flex-col items-center justify-center pt-8'>
-          <ButtonWithAudio
-            as='button'
-            image='button'
-            text='Add money'
-            onClick={handleAddMoney}
-          />
-        </div>
-      )}
+
       <div className='relative mt-auto flex flex-1 items-end px-8 pt-2'>
         <Revolver
           gunHandleRef={revolverRefHandle}
