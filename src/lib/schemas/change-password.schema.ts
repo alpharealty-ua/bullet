@@ -2,12 +2,12 @@ import { z } from 'zod'
 
 export const changePasswordSchema = z
   .object({
-    password: z.string().min(6, 'Password must be more than 6 characters'),
+    newPassword: z.string().min(6, 'Password must be more than 6 characters'),
     passwordConfirm: z.string({
       required_error: 'Confirm password is required',
     }),
   })
-  .refine(({ password, passwordConfirm }) => password === passwordConfirm, {
+  .refine(({ newPassword: password, passwordConfirm }) => password === passwordConfirm, {
     message: 'Passwords must match',
     path: ['passwordConfirm'],
   })

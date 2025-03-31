@@ -1,48 +1,37 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useLocation, useNavigate } from 'react-router'
-
-import { useLogin } from '@/api/auth.api'
-import { ROUTES } from '@/routes/path'
-import { loginSchema, LoginSchema } from '@/lib/schemas/login.schema'
+import { useForgotPassword } from '@/api/auth.api'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
   FormControl,
   FormField,
   FormInput,
-  FormInputPassword,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 import { ChangeForm } from '@/components/ui/change-form'
+import { forgotPasswordSchema, ForgotPasswordSchema } from '@/lib/schemas/forgot-password.schema.ts'
 
-const LoginForm = () => {
-  const { mutateAsync: loginMutation, error, isPending, isSuccess } = useLogin()
-  const navigate = useNavigate()
-  const { state } = useLocation()
+const ForgotPasswordForm = () => {
+  const { mutateAsync: forgotPasswordMutation, error, isPending, isSuccess, data } = useForgotPassword()
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<ForgotPasswordSchema>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: import.meta.env.BULLET_TEST_LOGIN ?? '',
-      password: import.meta.env.BULLET_TEST_PASSWORD ?? '',
     },
   })
 
-  const onSubmit = async (values: LoginSchema) => {
-    await loginMutation(values)
-    const redirect = state?.redirect ?? ROUTES.root
-    setTimeout(() => {
-      navigate(redirect, { state: { ...state, redirect: undefined } })
-    }, 1000)
+  const onSubmit = async (values: ForgotPasswordSchema) => {
+    await forgotPasswordMutation(values)
   }
 
   return (
     <div className='relative flex w-full flex-col items-center gap-8'>
-      <h3 className='text-3xl'>Login</h3>
+      <h3 className='text-3xl'>Forgot Password</h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -66,42 +55,23 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <FormInputPassword
-                    placeholder='Password'
-                    disabled={disabled || isPending}
-                    type='password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Notification
             type='success'
-            message={isSuccess ? 'You have successfully logged in.' : ''}
+            message={isSuccess ? data?.message : ''}
           />
           <Notification type='error' message={error?.message} />
           <ButtonWithAudio
             as='button'
             image='button'
-            text='Login'
+            text='Reset'
             type='submit'
             disabled={isPending}
           />
-          <ChangeForm type='forgotPassword' />
-          <ChangeForm type='login' />
+          <ChangeForm type='register' />
         </form>
       </Form>
     </div>
   )
 }
 
-export { LoginForm }
+export { ForgotPasswordForm }

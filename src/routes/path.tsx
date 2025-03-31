@@ -3,6 +3,8 @@ export const ROUTES = {
   auth: {
     register: '/register',
     login: '/login',
+    forgotPassword: '/forgot-password',
+    resetPassword: '/reset-password',
   },
   cabinet: {
     root: '/cabinet',

@@ -8,6 +8,8 @@ import { DuelPage } from '@/pages/duel.page'
 import { GameSelectorPage } from '@/pages/game-selector.page'
 import { ProfilePage } from '@/pages/profile.page'
 import { MatchmakerPage } from '@/pages/matchmaker.page'
+import { ForgotPasswordPage } from '@/pages/forgot-password.page.tsx'
+import { ResetPasswordPage } from '@/pages/reset-password.page.tsx'
 
 export const PUBLIC_ROUTES = [
   {
@@ -25,6 +27,13 @@ export const PUBLIC_ROUTES = [
   {
     path: ROUTES.auth.register,
     element: <RegisterPage />,
+  },
+  {
+    path: ROUTES.auth.forgotPassword,
+    element: <ForgotPasswordPage />,
+  },{
+    path: ROUTES.auth.resetPassword,
+    element: <ResetPasswordPage />,
   },
 ]
 
