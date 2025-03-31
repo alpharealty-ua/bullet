@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { getItem, removeItem, setItem } from '@/lib/localstorage'
 import { addZerro, cn } from '@/lib/utils'
+import { ADD_MONEY } from '@/lib/constants'
 import { Balance } from '@/components/balance'
 
 const AddMoney = ({
@@ -13,6 +14,7 @@ const AddMoney = ({
 }) => {
   const [time, setTime] = useState('')
   const [endTime, setEndTime] = useState(Number(getItem('endTime') ?? 0))
+
   const handleClick = () => {
     const endDate = new Date()
     endDate.setHours(endDate.getHours() + 12)
@@ -21,7 +23,7 @@ const AddMoney = ({
 
     setItem('endTime', String(endTime))
     setEndTime(endTime)
-    onAddMoney(1000)
+    onAddMoney(ADD_MONEY)
   }
 
   useEffect(() => {
@@ -68,7 +70,7 @@ const AddMoney = ({
         onClick={handleClick}
       >
         <span className='absolute inset-0 inline-flex items-center justify-center text-lg uppercase'>
-          {endTime ? time : 'add $1000'}
+          {endTime ? time : `add $${ADD_MONEY}`}
         </span>
         <svg
           width='110'

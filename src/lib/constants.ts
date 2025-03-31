@@ -192,3 +192,5 @@ export const LOCAL_STORAGE_KEYS = {
 } as const
 
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
+
+export const ADD_MONEY = 5000
