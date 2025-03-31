@@ -6,7 +6,13 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard'
 import { ProfileLink } from '@/components/profile-link'
 
-const Footer = ({ round, hasPull }: { round?: number; hasPull?: boolean }) => {
+const Footer = ({
+  round,
+  hasPull = true,
+}: {
+  round?: number
+  hasPull?: boolean
+}) => {
   const modal = useCustomModal()
 
   const handleSettingsClick = () => {
