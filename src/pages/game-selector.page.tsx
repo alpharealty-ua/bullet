@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
+import { FaArrowLeft } from 'react-icons/fa'
 
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
@@ -38,7 +40,20 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
 
   return (
     <PageWrapper>
-      <Logo as='link' to='/' size='xl' text={isDuel ? 'Duel' : 'Solo'} />
+      {/* TODO: EXTRACTED TO COMPONENT / THE SAME LEADERBOARD PAGE  */}
+      <header className='flex items-center justify-center gap-4 px-8'>
+        <Link to={ROUTES.root} className='flex w-0 justify-end'>
+          <div className='w-8'>
+            <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
+          </div>
+        </Link>
+        <Logo
+          as='link'
+          to={ROUTES.root}
+          size='xl'
+          text={isDuel ? 'Duel' : 'Solo'}
+        />
+      </header>
       <div className='flex flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
           <ButtonWithAudio

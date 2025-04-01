@@ -7,9 +7,9 @@ import { Link, LinkProps } from 'react-router'
 type LogoSize = 'md' | 'lg' | 'xl'
 
 const sizes = {
-  md: ' w-[141px]',
-  lg: ' w-[171px]',
-  xl: 'w-[270px]',
+  md: 'max-w-[141px]',
+  lg: 'max-w-[171px]',
+  xl: 'max-w-[270px]',
 } satisfies Record<LogoSize, string>
 
 interface LogoProps {
@@ -33,7 +33,7 @@ const Logo = ({
   return (
     <Comp
       className={cn(
-        'relative inline-flex bg-contain bg-center bg-no-repeat',
+        'relative inline-flex w-full bg-contain bg-center bg-no-repeat',
         sizes[size],
         Boolean(componentProps.onClick) && 'cursor-pointer',
       )}
