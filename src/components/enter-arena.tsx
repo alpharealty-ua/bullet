@@ -4,7 +4,7 @@ import {
   Indicator,
   MatchmakingStatus,
 } from '@/socket/matchmaker/matchmaker-soket.types'
-import { IMAGES } from '@/lib/constants'
+import { START_GAME_COUNTDOWN, IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/countdown'
@@ -160,7 +160,7 @@ const EnterArena = ({
         )}
         {isMatchCreated && (
           <Countdown
-            time={3}
+            time={START_GAME_COUNTDOWN}
             onEnd={onCountdownEnd}
             className='my-4 flex items-center justify-center text-5xl'
           />
