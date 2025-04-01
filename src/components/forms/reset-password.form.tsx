@@ -26,6 +26,8 @@ const ResetPasswordForm = () => {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       token: searchParams.get('token') || '',
+      newPassword: '',
+      passwordConfirm: '',
     },
   })
 
