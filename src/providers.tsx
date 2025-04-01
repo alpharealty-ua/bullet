@@ -1,17 +1,12 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ToastContainer } from 'react-toastify'
 import NiceModal from '@ebay/nice-modal-react'
 import 'react-toastify/ReactToastify.css'
 
 import { IMAGES } from '@/lib/constants'
+import { queryClient } from '@/api/query-client'
 import { Audios } from '@/components/audios'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: 0 },
-  },
-})
 
 export function Providers({
   children,
