@@ -174,32 +174,24 @@ const DuelGameBar = ({
       return
     }
 
-    const cells = barDom.rows[0].cells
+    const cellEls = barDom.rows[0].cells
 
-    const nextActiveDom = cells[index]
+    const cellEl = cellEls[index]
 
-    if (nextActiveDom === null) {
-      return
-    }
-
-    const valueDom = nextActiveDom.querySelector(
-      '[data-value]',
-    ) as HTMLDivElement
-
-    if (valueDom === null) {
+    if (cellEl === null) {
       return
     }
 
     // TODO: JOIN CLASS
-    valueDom.classList.add('is-selected')
-    valueDom.classList.add('animate-[bar-select]')
+    cellEl.classList.add('is-selected')
+    cellEl.classList.add('animate-[bar-select]')
 
     await new Promise((resolve) =>
-      valueDom.addEventListener('animationend', resolve, { once: true }),
+      cellEl.addEventListener('animationend', resolve, { once: true }),
     )
 
-    valueDom.classList.remove('is-selected')
-    valueDom.classList.remove('animate-[bar-select]')
+    cellEl.classList.remove('is-selected')
+    cellEl.classList.remove('animate-[bar-select]')
   }
 
   const reset = async (options: ResetOptions = {}) => {
@@ -226,11 +218,11 @@ const DuelGameBar = ({
   }))
 
   return (
-    <div className='overflow-hidden'>
+    <>
       {/* table for precision border left and border right */}
       <table
         ref={wrapperRef}
-        className='relative -mx-0.5 h-10 w-[calc(100%+4px)] table-fixed border-collapse justify-center bg-[#f7f7c0]'
+        className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
       >
         <thead>
           <tr>
@@ -246,23 +238,16 @@ const DuelGameBar = ({
                   <td
                     key={i}
                     className={cn(
-                      'relative border-2 border-black text-center align-middle text-[9px] text-white',
+                      'relative border-2 border-black bg-[#f7f7c0] text-center align-middle text-[9px] text-white select-none first:border-l-0 last:border-r-0',
                       'transition-colors duration-20 ease-linear',
-                      '[&.is-active]:text-black',
+                      'zoom-in-200 fill-mode-both repeat-1 duration-500',
+                      isDefaultNumber && 'text-transparent',
+                      isSkullNumber && 'zoom-in-400',
+                      className,
                     )}
                   >
-                    <div
-                      className={cn(
-                        'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
-                        'repeat-1 zoom-in-200 duration-500',
-                        'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
-                        isDefaultNumber &&
-                          'text-transparent [&.is-selected]:text-transparent',
-                        isSkullNumber && '[&.is-selected]:zoom-in-400',
-                        className,
-                      )}
-                      data-value
-                    >
+                    <div className='absolute inset-0 bg-[#30ff00] opacity-0 [.is-active_&]:opacity-100 [.is-selected_&]:opacity-0'></div>
+                    <div className='relative'>
                       {number === 50 ? (
                         <IoSkull className='relative -top-[1px] inline-block text-base' />
                       ) : (
@@ -275,7 +260,7 @@ const DuelGameBar = ({
           </tr>
         </thead>
       </table>
-    </div>
+    </>
   )
 }
 
