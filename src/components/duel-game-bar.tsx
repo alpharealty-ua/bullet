@@ -218,9 +218,11 @@ const DuelGameBar = ({
   }))
 
   return (
+    <div className='overflow-hidden'>
+      {/* table for precision border left and border right */}
     <table
       ref={wrapperRef}
-      className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
+        className='relative -mx-0.5 h-10 w-[calc(100%+4px)] table-fixed border-collapse justify-center bg-[#f7f7c0]'
     >
       <thead>
         <tr>
@@ -265,6 +267,7 @@ const DuelGameBar = ({
         </tr>
       </thead>
     </table>
+    </div>
   )
 }
 
