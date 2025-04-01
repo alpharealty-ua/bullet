@@ -100,7 +100,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             </div>
           </div>
         )}
-        <div className='mt-auto pt-6'>
+        <div className='mt-auto w-full pt-6'>
           <div className='relative mt-auto flex flex-col gap-10'>
             <div
               className={cn(
