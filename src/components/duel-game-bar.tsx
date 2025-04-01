@@ -17,7 +17,7 @@ export interface GameBarHandle {
   setActive: (index: number) => Promise<void>
 }
 
-const LENGTH = 23
+const LENGTH = 21
 const DEFAUTL_VALUE = 0
 const SKULL_VALUE = 50
 const NUMBERS = [SKULL_VALUE, 20, 10]
