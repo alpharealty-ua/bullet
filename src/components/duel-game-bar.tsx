@@ -145,6 +145,10 @@ const DuelGameBar = ({
   }
 
   const setActive = async (index: number) => {
+    if (!(index < LENGTH && index >= 0)) {
+      return
+    }
+
     const barDom = wrapperRef.current
 
     if (barDom === null) {
