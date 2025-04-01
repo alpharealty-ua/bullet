@@ -60,6 +60,7 @@ const DuelGameBar = ({
     stateRef.current.onChangeDirection = onChangeDirection
   }, [onChangeDirection])
 
+  // TODO: REMOVE. NOT USE
   const getState = async () => {
     return {
       value: getItem(stateRef.current.activeIndex).number,
@@ -67,6 +68,7 @@ const DuelGameBar = ({
     }
   }
 
+  // TODO: REMOVE. NOT USE
   const start = async (duration: number) => {
     const barDom = wrapperRef.current
 
@@ -87,15 +89,7 @@ const DuelGameBar = ({
     const cells = barDom.rows[0].cells
 
     // TODO: USE DELAGATION
-    const start = () => {
-      if (!stateRef.current.isRunning) {
-        return
-      }
-
-      if (currentStartNumber !== stateRef.current.startNumber) {
-        return
-      }
-
+    const start = async () => {
       const prevActiveIndex = stateRef.current.activeIndex
       const prevDirection = stateRef.current.direction
       let nextDirection = prevDirection
@@ -123,19 +117,29 @@ const DuelGameBar = ({
       nextActive.classList.add('is-active')
       nextActive.style.transitionDuration = `${duration}ms`
 
-      const transitionend = () => {
-        nextActive.style.transitionDuration = ''
-        start()
+      await new Promise((resolve) =>
+        nextActive.addEventListener('transitionend', resolve, {
+          once: true,
+        }),
+      )
+
+      nextActive.style.transitionDuration = ''
+
+      if (currentStartNumber !== stateRef.current.startNumber) {
+        return
       }
 
-      nextActive.addEventListener('transitionend', transitionend, {
-        once: true,
-      })
+      if (!stateRef.current.isRunning) {
+        return
+      }
+
+      start()
     }
 
     start()
   }
 
+  // TODO: REMOVE. NOT USE
   const stop = async () => {
     stateRef.current.isRunning = false
   }
@@ -220,53 +224,53 @@ const DuelGameBar = ({
   return (
     <div className='overflow-hidden'>
       {/* table for precision border left and border right */}
-    <table
-      ref={wrapperRef}
+      <table
+        ref={wrapperRef}
         className='relative -mx-0.5 h-10 w-[calc(100%+4px)] table-fixed border-collapse justify-center bg-[#f7f7c0]'
-    >
-      <thead>
-        <tr>
-          {Array(LENGTH)
-            .fill(null)
-            .map((_, i) => {
-              const { number, className } = getItem(i)
+      >
+        <thead>
+          <tr>
+            {Array(LENGTH)
+              .fill(null)
+              .map((_, i) => {
+                const { number, className } = getItem(i)
 
-              const isDefaultNumber = number === DEFAUTL_VALUE
-              const isSkullNumber = number === SKULL_VALUE
+                const isDefaultNumber = number === DEFAUTL_VALUE
+                const isSkullNumber = number === SKULL_VALUE
 
-              return (
-                <td
-                  key={i}
-                  className={cn(
-                    'relative border-2 border-black text-center align-middle text-[9px] text-white',
-                    'transition-colors duration-20 ease-linear',
-                    '[&.is-active]:text-black',
-                  )}
-                >
-                  <div
+                return (
+                  <td
+                    key={i}
                     className={cn(
-                      'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
-                      'repeat-1 zoom-in-200 duration-500',
-                      'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
-                      isDefaultNumber &&
-                        'text-transparent [&.is-selected]:text-transparent',
-                      isSkullNumber && '[&.is-selected]:zoom-in-400',
-                      className,
+                      'relative border-2 border-black text-center align-middle text-[9px] text-white',
+                      'transition-colors duration-20 ease-linear',
+                      '[&.is-active]:text-black',
                     )}
-                    data-value
                   >
-                    {number === 50 ? (
-                      <IoSkull className='relative -top-[1px] inline-block text-base' />
-                    ) : (
-                      number
-                    )}
-                  </div>
-                </td>
-              )
-            })}
-        </tr>
-      </thead>
-    </table>
+                    <div
+                      className={cn(
+                        'fill-mode-both absolute inset-0 z-2 flex items-center justify-center bg-[#f7f7c0] text-white select-none',
+                        'repeat-1 zoom-in-200 duration-500',
+                        'before:absolute before:inset-0 before:-z-1 before:bg-[#30ff00] before:opacity-0 [&.is-selected]:before:opacity-0! [.is-active_&]:before:opacity-100',
+                        isDefaultNumber &&
+                          'text-transparent [&.is-selected]:text-transparent',
+                        isSkullNumber && '[&.is-selected]:zoom-in-400',
+                        className,
+                      )}
+                      data-value
+                    >
+                      {number === 50 ? (
+                        <IoSkull className='relative -top-[1px] inline-block text-base' />
+                      ) : (
+                        number
+                      )}
+                    </div>
+                  </td>
+                )
+              })}
+          </tr>
+        </thead>
+      </table>
     </div>
   )
 }
