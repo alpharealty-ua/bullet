@@ -65,6 +65,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     <>
       <Header
         logoText={variant === 'play' ? 'duel' : ''}
+        // TODO: CALC FLAG
         noMoney={false}
         headerProfile
       />

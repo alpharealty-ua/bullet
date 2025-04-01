@@ -145,6 +145,7 @@ export const useDuelSocket = ({
         case 'connect_error': {
           break
         }
+        // TODO: NEVER CALL - COMPONENT ALREADY UNMOUNTED AND DETACH ALL EVENTS
         case 'disconnect': {
           return
         }

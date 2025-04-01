@@ -24,7 +24,7 @@ import {
   JoinedResponse,
   RoundStartedResponse,
   BaseDuelPayload,
-} from './game-socket.types'
+} from '@/socket/duel/duel-socket.types'
 import { notify, SocketEvents } from '@/socket/utils'
 
 export type OnEvents =
@@ -126,7 +126,7 @@ class DuelSocketEvents extends SocketEvents {
     this.dettachEventListeners()
 
     this.on('connect', () => {
-      console.log(`Connected to duel game service`)
+      notify(`Connected to duel game service.`, 'info')
       this.onEvent({ type: 'connect', payload: undefined })
     })
 
@@ -196,7 +196,6 @@ class DuelSocketEvents extends SocketEvents {
 
     this.on('game:countdown_update', (data: CountdownUpdateResponse) => {
       this.onEvent({ type: 'game:countdown_update', payload: data })
-      console.log(`Countdown: ${data.remainingSeconds} seconds`)
     })
 
     this.on('game:player_left', (data: PlayerLeftResponse) => {
