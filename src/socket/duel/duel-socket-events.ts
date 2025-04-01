@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io-client'
+
 import { ReadyTakePull } from '@/components/ready-set-pull'
 import {
   RoundCurrent,
@@ -21,9 +23,9 @@ import {
   ErrorResponse,
   JoinedResponse,
   RoundStartedResponse,
+  BaseDuelPayload,
 } from './game-socket.types'
-import { Socket } from 'socket.io-client'
-import { notify, SocketEvents } from '../utils'
+import { notify, SocketEvents } from '@/socket/utils'
 
 export type OnEvents =
   | { type: 'connect'; payload: undefined }
@@ -92,9 +94,7 @@ class DuelSocketEvents extends SocketEvents {
   }
 
   joinDuelGame() {
-    type JoinPayload = { gameId: string; playerId: string }
-
-    const payload: JoinPayload = {
+    const payload: BaseDuelPayload = {
       gameId: this.gameId,
       playerId: this.playerId,
     }
@@ -105,9 +105,7 @@ class DuelSocketEvents extends SocketEvents {
   leaveDuelGame() {
     notify(`Leaving duel game ${this.gameId}...`, 'info')
 
-    type LeaveRematch = { gameId: string; playerId: string }
-
-    const payload: LeaveRematch = {
+    const payload: BaseDuelPayload = {
       gameId: this.gameId,
       playerId: this.playerId,
     }
@@ -116,7 +114,7 @@ class DuelSocketEvents extends SocketEvents {
   }
 
   pullTrigger() {
-    const payload = {
+    const payload: BaseDuelPayload = {
       gameId: this.gameId,
       playerId: this.playerId,
     }

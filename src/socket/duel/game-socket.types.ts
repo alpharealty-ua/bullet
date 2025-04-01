@@ -123,3 +123,8 @@ export type Probability = ProbabilityResponse
 export type Won = PlayerWonResponse
 export type Ended = EndedResponse
 export type RoundCurrent = RoundCurrentResponse
+
+export interface BaseDuelPayload {
+  gameId: string
+  playerId: string
+}
