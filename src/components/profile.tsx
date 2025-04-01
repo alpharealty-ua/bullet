@@ -31,7 +31,7 @@ const Profile = ({ user }: { user: User }) => {
   const form = useForm<ChangePasswordSchema>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      password: '',
+      newPassword: '',
       passwordConfirm: '',
     },
   })
@@ -57,7 +57,6 @@ const Profile = ({ user }: { user: User }) => {
         <div className='flex flex-col gap-2 text-lg'>
           {[
             ['Email', user.email],
-            ['Name', user.name],
             ['Username', user.username],
             ['LVL', '53'],
             ['Precision', '55'],
@@ -84,7 +83,7 @@ const Profile = ({ user }: { user: User }) => {
           >
             <FormField
               control={form.control}
-              name='password'
+              name='newPassword'
               render={({ field: { disabled, ...field } }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>

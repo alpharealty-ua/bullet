@@ -54,23 +54,6 @@ const RegisterForm = () => {
         >
           <FormField
             control={form.control}
-            name='name'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <FormInput
-                    placeholder='Name'
-                    disabled={disabled || isPending}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name='username'
             render={({ field: { disabled, ...field } }) => (
               <FormItem>

@@ -4,6 +4,8 @@ import { api, QUERY_KEYS } from '@/api/api'
 import { useAuthStore } from '@/store/auth.store'
 import { LoginSchema } from '@/lib/schemas/login.schema'
 import { RegisterSchema } from '@/lib/schemas/register.schema'
+import { ForgotPasswordSchema } from '@/lib/schemas/forgot-password.schema.ts'
+import { ResetPasswordSchema } from '@/lib/schemas/reset-password.schema.ts'
 
 interface LoginResponse {
   accessToken: string
@@ -15,10 +17,20 @@ interface RegisterResponse {
   user: User
 }
 
+interface ForgotPasswordResponse {
+  message: string
+}
+
+interface ResetPasswordResponse {
+  message: string
+}
+
 const routes = {
   login: '/auth/login',
   register: '/auth/register',
   profile: '/auth/profile',
+  forgotPassword: '/auth/forgot-password',
+  resetPassword: '/auth/reset-password',
 } as const
 
 export const login = async (values: LoginSchema): Promise<LoginResponse> => {
@@ -35,6 +47,26 @@ export const register = async (
 
 export const fetchProfile = async (): Promise<User> => {
   const { data } = await api.get<User>(routes.profile)
+  return data
+}
+
+export const forgotPassword = async (
+  values: ForgotPasswordSchema,
+): Promise<ForgotPasswordResponse> => {
+  const { data } = await api.post<ForgotPasswordResponse>(
+    routes.forgotPassword,
+    values,
+  )
+  return data
+}
+
+export const resetPassword = async (
+  values: ResetPasswordSchema,
+): Promise<ResetPasswordResponse> => {
+  const { data } = await api.post<ResetPasswordResponse>(
+    routes.resetPassword,
+    values,
+  )
   return data
 }
 
@@ -74,4 +106,16 @@ export const useUser = () => {
   }
 
   return user
+}
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: forgotPassword,
+  })
+}
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: resetPassword,
+  })
 }
