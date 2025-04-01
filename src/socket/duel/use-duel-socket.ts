@@ -194,8 +194,11 @@ export const useDuelSocket = ({
 
           const pull = isPlayer ? playerPull : opponentPull
 
-          if (isPlayer) {
+          if (payload.fired) {
             await gameBarRefHandle.current?.setActive(payload.index)
+          }
+
+          if (isPlayer) {
             await gameBarRefHandle.current?.highlight(payload.index)
           }
 
