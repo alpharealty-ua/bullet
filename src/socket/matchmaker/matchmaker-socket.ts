@@ -18,7 +18,7 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { PlaySound } from '@/store/settings.store'
-import { Info, Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
+import { Statistics } from '@/socket/matchmaker/matchmaker-soket.types'
 import { addLogEntry, notify } from '@/socket/utils'
 import { useGameStore } from '@/store/game.store'
 
@@ -36,10 +36,10 @@ export const matchmakerSocket = (
     setMatchDetails,
     setIndicators,
     setConfirmationTimeoutSeconds,
-    setInfo,
     setMatchId,
     setGameId,
   }: {
+    // TODO: REFACTOR
     playAudio: PlaySound
     setAuthenticated: (value: boolean) => void
     setMatchmakingStatus: (value: MatchmakingStatus) => void
@@ -49,7 +49,6 @@ export const matchmakerSocket = (
     setMatchDetails: (value: MatchDetails | null) => void
     setIndicators: React.Dispatch<React.SetStateAction<Indicator[]>>
     setConfirmationTimeoutSeconds: (value: number) => void
-    setInfo: React.Dispatch<React.SetStateAction<Info>>
     setMatchId: (value: string | null) => void
     setGameId: (value: string | null) => void
   },
@@ -183,8 +182,6 @@ export const matchmakerSocket = (
         setMatchDetails(null)
       }
 
-      // Store your player info for display
-      setInfo((p) => ({ ...p, playerId: data.playerId, ping: data.ping }))
       updatePlayerId(data.playerId)
 
       // Log if this is a re-join after match cancellation

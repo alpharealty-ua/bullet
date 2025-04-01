@@ -10,7 +10,6 @@ import {
   MatchmakingStatus,
   ConnectionStatus,
   Indicator,
-  Info,
   Statistics,
   AdditionalPlayerMetadata,
   JoinMatchmaking,
@@ -42,11 +41,10 @@ const useMatchmakingSocket = (token: string) => {
   const [indicators, setIndicators] = useState<Indicator[]>([])
   const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
-  const [info, setInfo] = useState<Info>({ playerId: null, ping: 0 })
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
   const isUnmounted = useRef(false)
-  const currentPing = info.ping
+  const currentPing = pingData.ping
 
   const initState = useMemo(
     () => ({
@@ -76,7 +74,6 @@ const useMatchmakingSocket = (token: string) => {
         setMatchDetails,
         setIndicators,
         setConfirmationTimeoutSeconds,
-        setInfo,
         setMatchId,
         setGameId,
       }),
@@ -233,7 +230,6 @@ const useMatchmakingSocket = (token: string) => {
     indicators,
     matchDetails,
     confirmationTimeoutSeconds,
-    info,
     getStats,
     gameId,
   }

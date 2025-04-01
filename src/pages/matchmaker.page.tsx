@@ -39,9 +39,7 @@ const MatchmakerPage = () => {
     statistics,
     matchmakingStatus,
     indicators,
-    matchDetails,
     confirmationTimeoutSeconds,
-    info,
     connectionStatus,
     gameId,
   } = useMatchmakingSocket(token!)
@@ -109,34 +107,6 @@ const MatchmakerPage = () => {
               onCountdownEnd={handleCountdownEnd}
               defaultValue={`${MIN_DUEL_BET}`}
             />
-            {matchDetails && (
-              <div className='flex w-full flex-col gap-2'>
-                <div className='px-2'>Match info</div>
-                <div className='flex gap-1'>
-                  <div className='flex flex-1 flex-col gap-1 bg-white p-1 text-[10px] shadow'>
-                    <div>You</div>
-                    <div>Ping: {info.ping} ms</div>
-                    <div>Username: {username}</div>
-                    <div>Region: {region}</div>
-                    <div>Character name: {characterName}</div>
-                  </div>
-                  <div className='flex flex-1 flex-col gap-1 bg-white p-1 text-[10px] shadow'>
-                    <div>Opponent</div>
-                    <div>Ping: {matchDetails.opponent.ping} ms</div>
-                    <div>Username: {matchDetails.opponent.username}</div>
-                    <div>Region: {matchDetails.opponent.region}</div>
-                    <div>
-                      Character name: {matchDetails.opponent.characterName}
-                    </div>
-                  </div>
-                  <div className='flex flex-1 flex-col gap-1 bg-white p-1 text-[10px] shadow'>
-                    <div>Match ID: {matchDetails.matchId}</div>
-                    <div>Ping Difference: {matchDetails.pingDifference} ms</div>
-                    <div>Average Ping: {matchDetails.averagePing}</div>
-                  </div>
-                </div>
-              </div>
-            )}
             <div className='flex w-full flex-col gap-2'>
               <div className='px-2'>Your Connection</div>
               <div
