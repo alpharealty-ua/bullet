@@ -17,9 +17,9 @@ export interface GameBarHandle {
   setActive: (index: number) => Promise<void>
 }
 
-const LENGTH = 13
+const LENGTH = 23
 const DEFAUTL_VALUE = 0
-export const SKULL_VALUE = 50
+const SKULL_VALUE = 50
 const NUMBERS = [SKULL_VALUE, 20, 10]
 const CLASS_NAMES = ['bg-red', 'bg-[#ff6c00]', 'bg-[#ff9d10]']
 
