@@ -7,9 +7,13 @@ export const changePasswordSchema = z
       required_error: 'Confirm password is required',
     }),
   })
-  .refine(({ newPassword: password, passwordConfirm }) => password === passwordConfirm, {
-    message: 'Passwords must match',
-    path: ['passwordConfirm'],
-  })
+  .refine(
+    ({ newPassword: password, passwordConfirm }) =>
+      password === passwordConfirm,
+    {
+      message: 'Passwords must match',
+      path: ['passwordConfirm'],
+    },
+  )
 
 export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>

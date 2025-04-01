@@ -1,7 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+
 import { useForgotPassword } from '@/api/auth.api'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import {
+  forgotPasswordSchema,
+  ForgotPasswordSchema,
+} from '@/lib/schemas/forgot-password.schema.ts'
 import {
   Form,
   FormControl,
@@ -13,10 +17,16 @@ import {
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 import { ChangeForm } from '@/components/ui/change-form'
-import { forgotPasswordSchema, ForgotPasswordSchema } from '@/lib/schemas/forgot-password.schema.ts'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const ForgotPasswordForm = () => {
-  const { mutateAsync: forgotPasswordMutation, error, isPending, isSuccess, data } = useForgotPassword()
+  const {
+    mutateAsync: forgotPasswordMutation,
+    error,
+    isPending,
+    isSuccess,
+    data,
+  } = useForgotPassword()
 
   const form = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),

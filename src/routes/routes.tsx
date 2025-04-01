@@ -31,7 +31,8 @@ export const PUBLIC_ROUTES = [
   {
     path: ROUTES.auth.forgotPassword,
     element: <ForgotPasswordPage />,
-  },{
+  },
+  {
     path: ROUTES.auth.resetPassword,
     element: <ResetPasswordPage />,
   },

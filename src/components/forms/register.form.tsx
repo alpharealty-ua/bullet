@@ -52,7 +52,6 @@ const RegisterForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className='flex w-full flex-col gap-4'
         >
-
           <FormField
             control={form.control}
             name='username'

@@ -1,5 +1,6 @@
-import { ROUTES } from '@/routes/path'
 import { Link } from 'react-router'
+
+import { ROUTES } from '@/routes/path'
 
 type FormType = 'login' | 'register' | 'forgotPassword'
 
@@ -11,7 +12,7 @@ interface FormTypeConfig {
 
 const formTypes: Record<FormType, FormTypeConfig> = {
   login: {
-    title: 'Don\'t have an account yet?',
+    title: "Don't have an account yet?",
     route: ROUTES.auth.register,
     buttonText: 'Sign up',
   },
@@ -24,20 +25,15 @@ const formTypes: Record<FormType, FormTypeConfig> = {
     title: 'Forgot password?',
     route: ROUTES.auth.forgotPassword,
     buttonText: 'Reset password',
-  }
+  },
 }
 
 const ChangeForm = ({ type }: { type: FormType }) => {
   const formConfig = formTypes[type]
   return (
     <div className='flex flex-col items-center gap-1'>
-      <span>
-        {formConfig.title}
-      </span>
-      <Link
-        to={formConfig.route}
-        className='text-primary'
-      >
+      <span>{formConfig.title}</span>
+      <Link to={formConfig.route} className='text-primary'>
         {formConfig.buttonText}
       </Link>
     </div>

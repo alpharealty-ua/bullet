@@ -1,6 +1,13 @@
+import { useNavigate, useSearchParams } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+
 import { useResetPassword } from '@/api/auth.api'
+import {
+  resetPasswordSchema,
+  ResetPasswordSchema,
+} from '@/lib/schemas/reset-password.schema.ts'
+import { ROUTES } from '@/routes/path.tsx'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
@@ -13,14 +20,17 @@ import {
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 import { ChangeForm } from '@/components/ui/change-form'
-import { resetPasswordSchema, ResetPasswordSchema } from '@/lib/schemas/reset-password.schema.ts'
-import { useNavigate, useSearchParams } from 'react-router'
-import { ROUTES } from '@/routes/path.tsx'
 
 const ResetPasswordForm = () => {
-  const { mutateAsync: resetPasswordMutation, error, isPending, isSuccess, data } = useResetPassword()
+  const {
+    mutateAsync: resetPasswordMutation,
+    error,
+    isPending,
+    isSuccess,
+    data,
+  } = useResetPassword()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams()
 
   const form = useForm<ResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),

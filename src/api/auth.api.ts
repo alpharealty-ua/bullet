@@ -50,13 +50,23 @@ export const fetchProfile = async (): Promise<User> => {
   return data
 }
 
-export const forgotPassword = async (values: ForgotPasswordSchema): Promise<ForgotPasswordResponse> => {
-  const { data } = await api.post<ForgotPasswordResponse>(routes.forgotPassword, values)
+export const forgotPassword = async (
+  values: ForgotPasswordSchema,
+): Promise<ForgotPasswordResponse> => {
+  const { data } = await api.post<ForgotPasswordResponse>(
+    routes.forgotPassword,
+    values,
+  )
   return data
 }
 
-export const resetPassword = async (values: ResetPasswordSchema): Promise<ResetPasswordResponse> => {
-  const { data } = await api.post<ResetPasswordResponse>(routes.resetPassword, values)
+export const resetPassword = async (
+  values: ResetPasswordSchema,
+): Promise<ResetPasswordResponse> => {
+  const { data } = await api.post<ResetPasswordResponse>(
+    routes.resetPassword,
+    values,
+  )
   return data
 }
 
