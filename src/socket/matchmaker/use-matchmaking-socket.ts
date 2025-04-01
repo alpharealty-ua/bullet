@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { socketMatchmaker as socket } from '@/socket/socket'
-import { addLogEntry, notify } from '@/socket/utils'
-import { matchmakerSocket } from '@/socket/matchmaker/matchmaker-socket'
-import { useInterval } from '@/hooks/use-interval'
-import { useSettingsStore } from '@/store/settings.store'
 import {
   PingData,
   MatchmakingStatus,
@@ -13,8 +9,13 @@ import {
   Statistics,
   AdditionalPlayerMetadata,
   JoinMatchmaking,
+  MatchDetails,
 } from '@/socket/matchmaker/matchmaker-soket.types'
+import { useInterval } from '@/hooks/use-interval'
+import { addLogEntry, notify } from '@/socket/utils'
+import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
+import { useSettingsStore } from '@/store/settings.store'
 
 const useMatchmakingSocket = (token: string) => {
   const autoConnect = useSettingsStore(({ autoConnect }) => autoConnect)
@@ -45,54 +46,274 @@ const useMatchmakingSocket = (token: string) => {
   const [gameId, setGameId] = useState<string | null>(null)
   const isUnmounted = useRef(false)
   const currentPing = pingData.ping
+  const [playerId, setPlayerId] = useState<string | null>(null)
 
-  const initState = useMemo(
-    () => ({
-      token,
-      currentPing: 0,
-      playerId: null,
-      currentMatchId: null,
-      matchmakingStatus,
-      authenticated,
-    }),
-    // INIT STATE NEED FOR HOT MODULE RELOAD
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const matchmakerEvents = useMemo(
+    () => new MatchmakerSocketEvents(socket, token),
     [token],
   )
-  const offRef = useRef(() => {})
 
-  const on = useMemo(
-    () =>
-      matchmakerSocket(socket, {
-        // TODO: ADDED ON EVENT
-        playAudio,
-        setAuthenticated,
-        setMatchmakingStatus,
-        setConnectionStatus,
-        setPingData,
-        setStatistics,
-        setMatchDetails,
-        setIndicators,
-        setConfirmationTimeoutSeconds,
-        setMatchId,
-        setGameId,
-      }),
-    [playAudio, setMatchDetails],
-  )
+  // TODO: REFACTOR
+  const refState = useRef({
+    currentMatchId,
+    matchmakingStatus,
+  })
+  refState.current.currentMatchId = currentMatchId
+  refState.current.matchmakingStatus = matchmakingStatus
 
-  const connect = useCallback(() => {
-    socket.auth = { token }
-    socket.connect()
-    offRef.current = on(initState)
-  }, [token, on, initState])
+  useEffect(() => {
+    matchmakerEvents.updateEvents(async (event) => {
+      const { type, payload } = event
+      const { currentMatchId, matchmakingStatus } = refState.current
 
-  const disconnect = useCallback(() => {
-    socket.disconnect()
-  }, [])
+      switch (type) {
+        case 'connect': {
+          notify('Connected to duel game service', 'info')
+          setConnectionStatus('authenticating')
+          setGameId(null)
+          return
+        }
+        case 'connect_error': {
+          setConnectionStatus('disconnected')
+          break
+        }
+        // TODO: NEVER CALL - COMPONENT ALREADY UNMOUNTED AND DETACH ALL EVENTS
+        case 'disconnect': {
+          setConnectionStatus('disconnected')
+          setMatchmakingStatus('not-in-queue')
+          refState.current.matchmakingStatus = 'not-in-queue'
+
+          setPingData({
+            ping: 0,
+            jitter: 0,
+            measurements: 0,
+            history: [],
+            sequence: 0,
+          })
+          setAuthenticated(false)
+          setGameId(null)
+          return
+        }
+        case 'pingData': {
+          setPingData(payload)
+          return
+        }
+        case 'info': {
+          if (payload.authenticated) {
+            setAuthenticated(true)
+            setConnectionStatus('authenticated')
+
+            // Update stats
+            setStatistics((p) => ({
+              ...p,
+              playersInQueue: payload.playersInQueue || 0,
+            }))
+
+            // Update ping if available
+            if (payload.currentPing) {
+              setPingData((p) => ({
+                ...p,
+                ping: payload.currentPing ?? p.ping,
+                jitter: payload.currentJitter ?? p.jitter,
+                measurements: payload.measurementsCount || p.measurements,
+              }))
+            }
+          } else {
+            setAuthenticated(false)
+            setConnectionStatus('not-authenticated')
+          }
+          return
+        }
+        case 'joinedMatchmaking': {
+          notify('You have Joined the matchmaking queue', 'success')
+
+          // Update matchmaking status
+          if (matchmakingStatus === 'not-in-queue') {
+            setMatchmakingStatus('searching')
+            refState.current.matchmakingStatus = 'searching'
+            setMatchDetails(null)
+          }
+
+          setPlayerId(payload.playerId)
+
+          // Log if this is a re-join after match cancellation
+          if (
+            payload.message &&
+            payload.message.includes('Returned to matchmaking after')
+          ) {
+            notify(payload.message, 'info')
+          }
+          return
+        }
+        case 'leftMatchmaking': {
+          notify('You have left the matchmaking queue', 'info')
+
+          setMatchmakingStatus('not-in-queue')
+          refState.current.matchmakingStatus = 'not-in-queue'
+
+          setPlayerId(null)
+
+          return
+        }
+        case 'matchFound': {
+          // Show a notification
+          notify('Match found! Please confirm to join the game.', 'success')
+
+          // Update matchmaking status
+          setMatchmakingStatus('match-found')
+          refState.current.matchmakingStatus = 'match-found'
+
+          setMatchId(payload.matchId)
+
+          // Create player confirmation indicators
+          setIndicators(
+            payload.players.map((playerId) => ({ playerId, confirm: false })),
+          )
+
+          // Play match found sound
+          playAudio('matchFoundSound')
+
+          // TODO: SET ALL RESPONSE DATA
+          if (payload.confirmationRequired) {
+            const confirmationTimeoutSeconds =
+              payload.confirmationTimeoutSeconds || 10
+
+            setConfirmationTimeoutSeconds(confirmationTimeoutSeconds)
+          }
+
+          return
+        }
+        case 'matchConfirmationUpdate': {
+          if (payload.matchId !== currentMatchId) {
+            return
+          }
+
+          // Update player confirmation indicators
+          setIndicators((prevIndicators) =>
+            prevIndicators.map((indicator) => ({
+              ...indicator,
+              confirm: payload.confirmedPlayers.includes(indicator.playerId),
+            })),
+          )
+
+          return
+        }
+        case 'matchCanceled': {
+          // Update matchmaking status based on whether the player was returned to queue
+          const status =
+            payload.reason === 'player_declined' &&
+            payload.declinedBy !== playerId
+              ? 'searching'
+              : 'not-in-queue'
+          setMatchmakingStatus(status)
+          refState.current.matchmakingStatus = status
+
+          // Play match canceled sound
+          playAudio('matchCanceledSound')
+
+          // Show reason in a more user-friendly way
+          let reason = 'Unknown reason'
+          if (payload.reason === 'confirmation_timeout') {
+            reason = 'Not all players confirmed in time'
+          } else if (payload.reason === 'player_declined') {
+            reason = 'A player declined the match'
+          }
+
+          notify(`Match canceled: ${reason}`, 'warning')
+
+          return
+        }
+        case 'matchCreated': {
+          // Update matchmaking status
+
+          setMatchmakingStatus('match-created')
+          refState.current.matchmakingStatus = 'match-created'
+
+          playAudio('matchConfirmedSound')
+
+          // Show a notification
+          notify(
+            'Match created successfully! Game is being prepared.',
+            'success',
+          )
+
+          // Find opponent's player ID
+          const opponentPlayerId = payload.players.find((id) => id !== playerId)
+
+          const matchDetails: MatchDetails = {
+            matchId: payload.matchId,
+            pingDifference: payload.metadata?.pingDifference ?? '',
+            averagePing: payload.metadata?.averagePing ?? '',
+            gameId: payload.metadata?.gameId ?? '',
+            opponent: {
+              ping: 0,
+              username: '',
+              region: '',
+              characterName: 'fatty',
+            },
+          }
+
+          // Set opponent details if available
+          if (opponentPlayerId && payload.metadata?.playerMetadata) {
+            const opponentData =
+              payload.metadata.playerMetadata[opponentPlayerId]
+            if (opponentData) {
+              // TODO: FIX ANY
+              matchDetails.opponent.ping = opponentData.ping ?? '--'
+              matchDetails.opponent.username = opponentData.username ?? ''
+              matchDetails.opponent.region = opponentData.region ?? ''
+              matchDetails.opponent.characterName =
+                opponentData.characterName ?? ''
+            }
+          }
+
+          setMatchDetails(matchDetails)
+          setMatchId(null)
+
+          return
+        }
+        case 'duelGameCreated': {
+          setGameId(payload.gameId)
+          return
+        }
+        case 'stats': {
+          setStatistics({
+            playersInQueue: payload.playersInQueue || 0,
+            totalMatches: payload.totalMatches || 0,
+            averageWaitTime: Math.round(payload.averageWaitTime || 0),
+          })
+          return
+        }
+        case 'error': {
+          const { event, message } = payload
+
+          switch (message) {
+            case 'Authentication failed': {
+              notify(message, 'error')
+              setConnectionStatus('authentication-failed')
+              setAuthenticated(false)
+              return
+            }
+            case 'Cannot leave matchmaking while a match confirmation is pending': {
+              // Re-enable the leave button if the server rejected the leave request
+              return
+            }
+          }
+          console.error(payload)
+          notify('Unhandled error ' + event, 'info')
+          return
+        }
+      }
+      console.error(event)
+      notify('Unhandled event ' + event.type, 'info')
+    })
+  }, [matchmakerEvents, playAudio, playerId, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
-    socket.connected ? disconnect() : connect()
-  }, [connect, disconnect])
+    socket.connected
+      ? matchmakerEvents.disconnect()
+      : matchmakerEvents.connect()
+  }, [matchmakerEvents])
 
   const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
     if (!socket || !socket.connected || !authenticated) {
@@ -125,12 +346,7 @@ const useMatchmakingSocket = (token: string) => {
       matchConfirmationRequired: false,
     }
 
-    socket.emit('joinMatchmakingWithBet', joinMatchmaking)
-
-    addLogEntry(
-      `Joining matchmaking as ${metadata.username} with server-measured ping ${currentPing}ms`,
-      'info',
-    )
+    matchmakerEvents.joinMatchmaking(joinMatchmaking)
   }
 
   const leaveMatchmaking = () => {
@@ -146,48 +362,27 @@ const useMatchmakingSocket = (token: string) => {
       return
     }
 
-    socket.emit('leaveMatchmaking')
-    addLogEntry('Leaving matchmaking', 'info')
+    matchmakerEvents.leaveMatchmaking()
   }
 
   const confirmMatch = () => {
-    if (!socket.connected || !authenticated || !currentMatchId) {
-      addLogEntry(
-        'Cannot confirm match: not connected or authenticated',
-        'error',
-      )
-      notify('Cannot confirm match: not connected or authenticated', 'error')
+    if (currentMatchId === null) {
       return
     }
 
-    socket.emit('confirmMatch', {
-      matchId: currentMatchId,
-    })
-    addLogEntry(`Confirming match ${currentMatchId}`, 'info')
+    matchmakerEvents.confirmMatch(currentMatchId)
   }
 
   const declineMatch = () => {
-    if (!socket || !socket.connected || !authenticated || !currentMatchId) {
-      addLogEntry(
-        'Cannot decline match: not connected or authenticated',
-        'error',
-      )
-      notify('Cannot decline match: not connected or authenticated', 'error')
+    if (currentMatchId === null) {
       return
     }
 
-    socket.emit('declineMatch', { matchId: currentMatchId })
-    addLogEntry(`Declining match ${currentMatchId}`, 'info')
+    matchmakerEvents.declineMatch(currentMatchId)
   }
 
   const getStats = () => {
-    if (!socket || !socket.connected || !authenticated) {
-      addLogEntry('Not connected or authenticated', 'error')
-      return
-    }
-
-    socket.emit('getStats')
-    addLogEntry('Requesting matchmaking stats', 'info')
+    matchmakerEvents.getStats()
   }
 
   useEffect(() => {
@@ -195,11 +390,13 @@ const useMatchmakingSocket = (token: string) => {
       return
     }
 
-    connect()
+    matchmakerEvents.connect()
+    matchmakerEvents.attachEventListeners()
     isUnmounted.current = false
 
     return () => {
-      offRef.current()
+      matchmakerEvents.dettachEventListeners()
+      console.log('dettach')
 
       isUnmounted.current = true
       Promise.resolve().then(() => {
@@ -207,16 +404,14 @@ const useMatchmakingSocket = (token: string) => {
           return
         }
 
-        disconnect()
+        matchmakerEvents.disconnect()
       })
     }
-  }, [connect, disconnect, autoConnect])
+  }, [matchmakerEvents, autoConnect])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 
   return {
-    connect,
-    disconnect,
     toggleConnection,
     matchmakingStatus,
     connectionStatus,

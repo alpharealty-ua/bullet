@@ -146,6 +146,12 @@ export type DuelGameCreatedResponse = {
   metadata?: any
 }
 
+export type ErrorResponse = {
+  event: string
+  message: string
+  timestamp: string
+}
+
 export type Indicator = {
   playerId: string
   confirm: boolean
