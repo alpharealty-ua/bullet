@@ -12,6 +12,7 @@ import {
   Cell,
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import leaderboardData from '@/data/leaderboard.json'
 
 const flags = {
   NA: '🇺🇸',
@@ -21,7 +22,9 @@ const flags = {
   OCE: '🇦🇺',
 } as const
 
-const getRegionFlag = (region: keyof typeof flags) => {
+type FlagKeys = keyof typeof flags
+
+const getRegionFlag = (region: FlagKeys) => {
   return flags[region] ?? '🌍'
 }
 
@@ -35,210 +38,6 @@ const getFlagColor = (lvl: number) => {
 }
 
 const CURRENT_LEVEL = 53
-
-const global = [
-  {
-    rank: 1,
-    username: 'XxTimingGodxX',
-    lvl: 98,
-    precision: 99,
-    consistency: 97,
-    speed: 98,
-    region: 'NA',
-    wins: 1247,
-    losses: 98,
-  },
-  {
-    rank: 2,
-    username: 'PrecisionKing',
-    lvl: 97,
-    precision: 99,
-    consistency: 95,
-    speed: 97,
-    region: 'EU',
-    wins: 1089,
-    losses: 102,
-  },
-  {
-    rank: 3,
-    username: 'FlawlessAim',
-    lvl: 96,
-    precision: 98,
-    consistency: 96,
-    speed: 94,
-    region: 'ASIA',
-    wins: 952,
-    losses: 87,
-  },
-  {
-    rank: 4,
-    username: 'ReflexProdigy',
-    lvl: 95,
-    precision: 97,
-    consistency: 96,
-    speed: 93,
-    region: 'NA',
-    wins: 886,
-    losses: 91,
-  },
-  {
-    rank: 5,
-    username: 'TimeWarp',
-    lvl: 94,
-    precision: 95,
-    consistency: 94,
-    speed: 95,
-    region: 'EU',
-    wins: 842,
-    losses: 101,
-  },
-  {
-    rank: 6,
-    username: 'ShotCaller',
-    lvl: 93,
-    precision: 95,
-    consistency: 91,
-    speed: 94,
-    region: 'NA',
-    wins: 764,
-    losses: 98,
-  },
-  {
-    rank: 7,
-    username: 'DeadEye',
-    lvl: 92,
-    precision: 96,
-    consistency: 89,
-    speed: 93,
-    region: 'ASIA',
-    wins: 731,
-    losses: 105,
-  },
-  {
-    rank: 8,
-    username: 'TimingGenius',
-    lvl: 91,
-    precision: 94,
-    consistency: 90,
-    speed: 91,
-    region: 'EU',
-    wins: 712,
-    losses: 112,
-  },
-  {
-    rank: 9,
-    username: 'AimGod',
-    lvl: 90,
-    precision: 93,
-    consistency: 91,
-    speed: 90,
-    region: 'NA',
-    wins: 689,
-    losses: 114,
-  },
-  {
-    rank: 10,
-    username: 'QuickScope',
-    lvl: 89,
-    precision: 92,
-    consistency: 89,
-    speed: 92,
-    region: 'OCE',
-    wins: 651,
-    losses: 98,
-  },
-  {
-    rank: 25,
-    username: 'SteadyAim',
-    lvl: 85,
-    precision: 87,
-    consistency: 89,
-    speed: 82,
-    region: 'NA',
-    wins: 512,
-    losses: 105,
-  },
-  {
-    rank: 50,
-    username: 'PrecisionShot',
-    lvl: 81,
-    precision: 84,
-    consistency: 81,
-    speed: 78,
-    region: 'EU',
-    wins: 431,
-    losses: 132,
-  },
-  {
-    rank: 100,
-    username: 'AccurateTimer',
-    lvl: 78,
-    precision: 80,
-    consistency: 77,
-    speed: 76,
-    region: 'ASIA',
-    wins: 371,
-    losses: 129,
-  },
-  {
-    rank: 500,
-    username: 'GoodEnough',
-    lvl: 69,
-    precision: 72,
-    consistency: 68,
-    speed: 67,
-    region: 'NA',
-    wins: 241,
-    losses: 154,
-  },
-  {
-    rank: 1000,
-    username: 'CasualAimer',
-    lvl: 62,
-    precision: 65,
-    consistency: 61,
-    speed: 60,
-    region: 'SA',
-    wins: 187,
-    losses: 172,
-  },
-] as const
-
-const leaderboardData = {
-  global,
-  // Distribution statistics
-  distribution: [
-    { range: '1-20', count: 500, color: '#9CA3AF' },
-    { range: '21-40', count: 2000, color: '#F59E0B' },
-    { range: '41-60', count: 4500, color: '#10B981' },
-    { range: '61-80', count: 2300, color: '#3B82F6' },
-    { range: '81-90', count: 600, color: '#8B5CF6' },
-    { range: '91-100', count: 100, color: '#7E22CE' },
-  ],
-  // Region breakdown
-  regions: [
-    { name: 'North America', count: 3500, percentage: 35 },
-    { name: 'Europe', count: 3000, percentage: 30 },
-    { name: 'Asia', count: 2200, percentage: 22 },
-    { name: 'South America', count: 800, percentage: 8 },
-    { name: 'Oceania', count: 500, percentage: 5 },
-  ],
-}
-
-const milestones = [
-  { lvl: 95, rank: 5, percentile: 99.95 },
-  { lvl: 91, rank: 100, percentile: 99.0 },
-  { lvl: 85, rank: 300, percentile: 97.0 },
-  { lvl: 81, rank: 700, percentile: 93.0 },
-  { lvl: 75, rank: 1200, percentile: 88.0 },
-  { lvl: 70, rank: 1800, percentile: 82.0 },
-  { lvl: 65, rank: 2400, percentile: 76.0 },
-  { lvl: 61, rank: 3000, percentile: 70.0 },
-  { lvl: 55, rank: 5000, percentile: 50.0 },
-  { lvl: 45, rank: 7000, percentile: 30.0 },
-  { lvl: 35, rank: 8500, percentile: 15.0 },
-  { lvl: 25, rank: 9500, percentile: 5.0 },
-]
 
 const Leaderboard = () => {
   return (
@@ -306,7 +105,7 @@ const Leaderboard = () => {
                   <td className='px-2 py-3 whitespace-nowrap'>
                     <div className='flex items-center'>
                       <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-100'>
-                        {getRegionFlag(player.region)}
+                        {getRegionFlag(player.region as FlagKeys)}
                       </div>
                       <div className='ml-4'>
                         <div className='text-sm font-medium text-gray-900'>
@@ -477,7 +276,7 @@ const Leaderboard = () => {
           <CardContent>
             <div className='mb-6 h-64'>
               <ResponsiveContainer width='100%' height='100%'>
-                <LineChart data={milestones}>
+                <LineChart data={leaderboardData.milestones}>
                   <CartesianGrid strokeDasharray='3 3' />
                   <XAxis
                     dataKey='lvl'
@@ -550,7 +349,7 @@ const Leaderboard = () => {
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-gray-200 bg-white'>
-                  {milestones.map((milestone) => (
+                  {leaderboardData.milestones.map((milestone) => (
                     <tr
                       key={milestone.lvl}
                       className={
@@ -584,7 +383,6 @@ const Leaderboard = () => {
                 </tbody>
               </table>
             </div>
-
             <div className='mt-4 text-center text-sm text-gray-500'>
               Your current LVL ({CURRENT_LEVEL}) places you in the top 35% of
               all players.
