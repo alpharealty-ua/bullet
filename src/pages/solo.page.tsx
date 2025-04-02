@@ -29,16 +29,14 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
   const multiplier = useGameStore(({ multiplier }) => multiplier)
-  const state = useGameStore(({ state }) => state)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
-  const isGameOver = state === 'game-over'
 
   const {
+    gameOverHandleRef,
     victoryHandleRef,
-    revolverRefHandle,
+    revolverHandleRef,
     next,
     deal,
-    newGame,
     watchGame,
   } = useSolo(variant)
 
@@ -109,10 +107,9 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         )}
       </div>
-
       <div className='relative mt-auto flex flex-1 items-end px-8 pt-2'>
         <Revolver
-          gunHandleRef={revolverRefHandle}
+          gunHandleRef={revolverHandleRef}
           disabled={isStartedGame}
           className='h-full max-h-[800px] max-w-full'
         />
@@ -157,7 +154,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
-      <GameOver show={isGameOver} onClick={newGame} onTimeout={newGame} />
+      <GameOver gameOverHandleRef={gameOverHandleRef} />
       <Footer disabledBet={isStartedGame || noMoney} />
     </>
   )

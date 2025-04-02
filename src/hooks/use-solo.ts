@@ -13,10 +13,11 @@ import {
   useStartGame,
 } from '@/api/game.api'
 import { useBalance } from '@/api/wallet.api'
+import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
-import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval, wait } from '@/lib/utils'
+import { useWait } from '@/hooks/use-wait'
+import { randomIntFromInterval } from '@/lib/utils'
 import {
   MAX_BET,
   MULTIPLIERS,
@@ -25,14 +26,16 @@ import {
 } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { VictoryHandle } from '@/components/victory'
+import { GameOverHandle } from '@/components/game-over'
 
 // TODO: SPLIT DUEL AND SOLO
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
+  const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
-  const revolverRefHandle = useRef<RevolverHandle>(null)
+  const revolverHandleRef = useRef<RevolverHandle>(null)
   const disabledRef = useRef(false)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const { data: gameDetails } = useGameDetails(variant === 'play')
@@ -61,6 +64,7 @@ const useSolo = (variant: VariantGame) => {
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
+  const wait = useWait()
   const isPlay = variant === 'play'
   const [watchGame, setWatchGame] = useState<{
     gameId: string
@@ -81,7 +85,7 @@ const useSolo = (variant: VariantGame) => {
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
-      const revolverHandle = revolverRefHandle.current
+      const revolverHandle = revolverHandleRef.current
 
       if (revolverHandle === null) {
         return
@@ -170,7 +174,24 @@ const useSolo = (variant: VariantGame) => {
 
   const gameOver = useCallback(async () => {
     setState('game-over')
-  }, [setState])
+
+    const timeout = wait(3000)
+    const soundGen = gameOverHandleRef.current?.runSound()
+    await soundGen?.next()
+    await gameOverHandleRef.current?.updateState({
+      show: true,
+      disabled: true,
+      on: async (event) => {
+        if (event === 'click') {
+          await gameOverHandleRef.current?.updateState({ show: false })
+        }
+      },
+    })
+    await soundGen?.next()
+    await gameOverHandleRef.current?.updateState({ disabled: false })
+    await timeout
+    await gameOverHandleRef.current?.updateState({ show: false })
+  }, [setState, wait])
 
   const winGame = useCallback(async () => {
     setState('win')
@@ -198,7 +219,7 @@ const useSolo = (variant: VariantGame) => {
       gameId: string,
       result?: { success: boolean; position: number; offer: Offer | null },
     ) => {
-      const revolverHandle = revolverRefHandle.current
+      const revolverHandle = revolverHandleRef.current
 
       if (revolverHandle === null) {
         return
@@ -423,8 +444,9 @@ const useSolo = (variant: VariantGame) => {
   }, [variant, gameId])
 
   return {
+    gameOverHandleRef,
     victoryHandleRef,
-    revolverRefHandle,
+    revolverHandleRef,
     next,
     deal,
     newGame,

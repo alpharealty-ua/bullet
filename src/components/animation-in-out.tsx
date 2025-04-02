@@ -3,6 +3,7 @@ import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
 
+// TODO: ADD ComponentProps<'div'>
 const AnimationInOut = ({
   children,
   className,
