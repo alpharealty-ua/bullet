@@ -12,6 +12,7 @@ import {
   MatchDetails,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
+import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { addLogEntry, notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
@@ -44,7 +45,7 @@ const useMatchmakingSocket = (token: string) => {
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
-  const isUnmounted = useRef(false)
+  const isUnmounted = useUnmountedState()
   const currentPing = pingData.ping
   const [playerId, setPlayerId] = useState<string | null>(null)
 
@@ -389,25 +390,22 @@ const useMatchmakingSocket = (token: string) => {
     if (!autoConnect) {
       return
     }
-    isUnmounted.current = false
 
     matchmakerEvents.connect()
     matchmakerEvents.attachEventListeners()
 
     return () => {
-      isUnmounted.current = true
-
       matchmakerEvents.dettachEventListeners()
 
       queueMicrotask(() => {
-        if (!isUnmounted.current) {
+        if (!isUnmounted()) {
           return
         }
 
         matchmakerEvents.disconnect()
       })
     }
-  }, [matchmakerEvents, autoConnect])
+  }, [matchmakerEvents, autoConnect, isUnmounted])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 

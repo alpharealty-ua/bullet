@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
+import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { socketDuel as socket } from '@/socket/socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useGameStore } from '@/store/game.store'
@@ -27,7 +28,7 @@ export const useDuelSocket = ({
   playerId: string
 }) => {
   const navigate = useNavigate()
-  const isUnmounted = useRef(false)
+  const isUnmounted = useUnmountedState()
   const queryClient = useQueryClient()
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [gameState, setGameState] = useState<StateGame>('preperation')
@@ -312,25 +313,21 @@ export const useDuelSocket = ({
   ])
 
   useEffect(() => {
-    isUnmounted.current = false
-
     duelSocketEvents.connect()
     duelSocketEvents.attachEventListeners()
 
     return () => {
-      isUnmounted.current = true
-
       duelSocketEvents.dettachEventListeners()
 
       queueMicrotask(() => {
-        if (!isUnmounted.current) {
+        if (!isUnmounted()) {
           return
         }
 
         duelSocketEvents.disconnect()
       })
     }
-  }, [duelSocketEvents])
+  }, [duelSocketEvents, isUnmounted])
 
   return {
     victoryHandleRef,
