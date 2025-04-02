@@ -299,13 +299,16 @@ export const useDuelSocket = ({
   ])
 
   useEffect(() => {
+    isUnmounted.current = false
+
     duelSocketEvents.connect()
     duelSocketEvents.attachEventListeners()
 
     return () => {
+      isUnmounted.current = true
+
       duelSocketEvents.dettachEventListeners()
 
-      isUnmounted.current = true
       queueMicrotask(() => {
         if (!isUnmounted.current) {
           return

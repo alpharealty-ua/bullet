@@ -389,15 +389,16 @@ const useMatchmakingSocket = (token: string) => {
     if (!autoConnect) {
       return
     }
+    isUnmounted.current = false
 
     matchmakerEvents.connect()
     matchmakerEvents.attachEventListeners()
-    isUnmounted.current = false
 
     return () => {
+      isUnmounted.current = true
+
       matchmakerEvents.dettachEventListeners()
 
-      isUnmounted.current = true
       queueMicrotask(() => {
         if (!isUnmounted.current) {
           return
