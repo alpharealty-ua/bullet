@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { socketGame } from '@/socket/socket'
@@ -21,16 +21,13 @@ import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 
 // TODO: SPLIT DUEL AND SOLO
-// TODO: STAY ONLY SOLO
-const useGame = (variant: VariantGame) => {
+const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
-  const isSolo = pathname.includes(ROUTES.solo.root)
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
   const revolverRefHandle = useRef<RevolverHandle>(null)
   const disabledRef = useRef(false)
-  const { data: gameDetails } = useGameDetails(isSolo && variant === 'play')
+  const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
@@ -64,7 +61,7 @@ const useGame = (variant: VariantGame) => {
   } | null>(null)
 
   const newGame = useCallback(async () => {
-    if (gameId && isSolo) {
+    if (gameId) {
       navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
       })
@@ -73,7 +70,7 @@ const useGame = (variant: VariantGame) => {
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     restartGame()
-  }, [restartGame, isSolo, navigate, queryClient, gameId, variant])
+  }, [restartGame, navigate, queryClient, gameId, variant])
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
@@ -146,10 +143,10 @@ const useGame = (variant: VariantGame) => {
         (await startGameMutation({
           betAmount: String(bet),
         }))
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
 
       // TODO: REMOVE
       setState('running')
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       const multiplierIndex = MULTIPLIERS.findIndex(
         (value) => value === Number(multiplier),
       )
@@ -181,8 +178,8 @@ const useGame = (variant: VariantGame) => {
 
     startAudio && (await waitEndAudio(chachingAudio))
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-
     startAudio && (await waitEndAudio(winSoundAudio))
+    !startAudio && (await wait(2000))
 
     newGame()
   }, [setState, newGame, playAudio, queryClient])
@@ -233,88 +230,6 @@ const useGame = (variant: VariantGame) => {
     ],
   )
 
-  // TODO: REMOVE
-  // const nextDuel = useCallback(async () => {
-  //   const frontCharacterHandle = frontCharacterHandleRef.current
-  //   const backCharacterHandle = backCharacterHandleRef.current
-  //   const frontGunHandle = frontCharacterHandle?.frontGunHandleRef?.current
-  //   const backGunHandle = backCharacterHandle?.backGunHandleRef?.current
-  //   const readySetPullHandle = readySetPullHandleRef.current
-  //   const gameBarHandle = gameBarRefHandle.current
-
-  //   if (!(readySetPullHandle && gameBarHandle)) {
-  //     return
-  //   }
-
-  //   if (isStartedGame) {
-  //     const { value, isRunning } = await gameBarHandle.getState()
-
-  //     if (isRunning) {
-  //       if (
-  //         !(
-  //           frontCharacterHandle &&
-  //           backCharacterHandle &&
-  //           frontGunHandle &&
-  //           backGunHandle
-  //         )
-  //       ) {
-  //         return
-  //       }
-
-  //       addPullRound()
-
-  //       const isSkull = value === SKULL_VALUE
-  //       const winProbabilityPercentage = value
-  //       const random = randomIntFromInterval(0, 99)
-  //       const inWinGame = !isSkull && random < winProbabilityPercentage
-
-  //       await gameBarHandle.highlight()
-
-  //       await backGunHandle.trigger()
-  //       await backGunHandle.spin()
-  //       await backGunHandle.click()
-
-  //       if (inWinGame) {
-  //         await backGunHandle.shot()
-  //         await frontCharacterHandle.dead()
-  //         return winGame()
-  //       }
-
-  //       const isGameOver = isSkull && randomIntFromInterval(1, 2) === 1
-
-  //       if (isSkull) {
-  //         await frontGunHandle.trigger()
-  //         await frontGunHandle.spin()
-  //         await frontGunHandle.click()
-  //       }
-
-  //       if (isGameOver) {
-  //         await frontGunHandle.shot()
-  //         await backCharacterHandle.dead()
-  //         return gameOver()
-  //       }
-  //     } else {
-  //       const duration = randomIntFromInterval(25, 50)
-  //       await gameBarHandle.start(duration)
-  //     }
-  //   } else {
-  //     await gameBarHandle.stop()
-  //     await gameBarHandle.reset()
-  //     await readySetPullHandle.startAll()
-  //     const duration = randomIntFromInterval(25, 50)
-  //     await gameBarHandle.start(duration)
-  //   }
-  // }, [gameOver, isStartedGame, winGame, addPullRound])
-
-  const nextSolo = useCallback(async () => {
-    if (!gameId) {
-      await startGame()
-      return
-    }
-
-    await pullGame(gameId)
-  }, [gameId, pullGame, startGame])
-
   const next = useCallback(async () => {
     if (disabledRef.current) {
       return
@@ -328,13 +243,18 @@ const useGame = (variant: VariantGame) => {
         return
       }
 
-      await nextSolo()
+      if (!gameId) {
+        await startGame()
+        return
+      }
+
+      await pullGame(gameId)
     } catch (e) {
       console.log(e)
     } finally {
       disabledRef.current = false
     }
-  }, [newGame, nextSolo, state])
+  }, [gameId, newGame, pullGame, startGame, state])
 
   const nextRound = async () => {
     const DRAW_ROUND = 50
@@ -478,30 +398,23 @@ const useGame = (variant: VariantGame) => {
     if (gameId || variant === 'play') {
       return
     }
-    let id: NodeJS.Timeout | null = null
+    let id: number | null = null
     let isUnmounted = false
     const call = () => {
-      socketGame.emit('watch_largest_prize', (response: unknown) => {
-        if (isUnmounted) {
-          return
-        }
-        // TODO: USE ZOD
-        if (
-          !(
-            response &&
-            typeof response === 'object' &&
-            'gameId' in response &&
-            'potentialWin' in response
-          )
-        ) {
-          return
-        }
-        setWatchGame({
-          gameId: String(response.gameId),
-          jackpot: Number(response.potentialWin!),
-        })
-      })
-      id = setTimeout(call, 1000)
+      socketGame.emit(
+        'watch_largest_prize',
+        (response: { gameId: string; potentialWin: string }) => {
+          if (isUnmounted) {
+            return
+          }
+
+          setWatchGame({
+            gameId: String(response.gameId),
+            jackpot: Number(response.potentialWin!),
+          })
+        },
+      )
+      id = window.setTimeout(call, 1000)
     }
     call()
     return () => {
@@ -525,4 +438,4 @@ const useGame = (variant: VariantGame) => {
   }
 }
 
-export { useGame }
+export { useSolo }
