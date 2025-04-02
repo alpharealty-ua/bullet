@@ -54,7 +54,7 @@ const ButtonWithAudio = React.forwardRef<
 
     setStartedAnimtion(false)
 
-    await wait(0) // need for set disabled state
+    await wait(0).promise // need for set disabled state
   }
 
   const handleMouseDown = async () => {

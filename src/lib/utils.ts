@@ -35,8 +35,14 @@ export const formatNumber = (value: number) =>
 
 export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
 
-export const wait = (timeout: number) =>
-  new Promise((res) => setTimeout(res, timeout))
+export const wait = (timeout: number) => {
+  let timeoutId: number = 0
+  const promise = new Promise<void>(
+    (res) => (timeoutId = window.setTimeout(res, timeout)),
+  )
+
+  return { promise, timeoutId }
+}
 
 export const getAudio = (key: keyof typeof AUDIOS): HTMLAudioElement => {
   const audiosDom = document.getElementById('audios')

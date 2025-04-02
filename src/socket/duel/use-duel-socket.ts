@@ -138,7 +138,7 @@ export const useDuelSocket = ({
     await frontCharacterHandleRef?.current?.updateState('alive')
     await backCharacterHandleRef?.current?.updateState('alive')
     await victoryHandleRef.current?.updateState({ show: true, type: 'draw' })
-    await wait(2000)
+    await wait(2000).promise
 
     await victoryHandleRef.current?.updateState({ show: false })
   }, [])
