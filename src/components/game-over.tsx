@@ -2,19 +2,15 @@ import { useEffect, useState } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
-import { cn, preloadImage, waitEndAudio } from '@/lib/utils'
-
-let imageVersion = Date.now()
+import { cn, waitEndAudio } from '@/lib/utils'
 
 const GameOver = ({
   timeout = 3000,
-  hasImage = true,
   onClick,
   onTimeout,
   show,
 }: {
   timeout?: number
-  hasImage?: boolean
   onClick: () => void
   onTimeout: () => void
   show: boolean
@@ -22,7 +18,6 @@ const GameOver = ({
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
   const [disabled, setDisabled] = useState(true)
-  const [image, setImage] = useState<string>(IMAGES.gameover)
   const [runAnimation, setRunAnimation] = useState(false)
 
   const handleClick = () => {
@@ -35,7 +30,6 @@ const GameOver = ({
     }
 
     setRunAnimation(false)
-    setImage(`${IMAGES.gameover}?v=${imageVersion++}`)
   }, [show])
 
   useEffect(() => {
@@ -70,15 +64,7 @@ const GameOver = ({
       setRunAnimation(true)
     }
     runAnimation()
-  }, [show, playAudio, hasImage])
-
-  useEffect(() => {
-    if (!hasImage) {
-      return
-    }
-
-    preloadImage(image)
-  }, [image, hasImage])
+  }, [show, playAudio])
 
   return (
     <button
