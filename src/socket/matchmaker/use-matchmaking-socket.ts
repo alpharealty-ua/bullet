@@ -396,10 +396,9 @@ const useMatchmakingSocket = (token: string) => {
 
     return () => {
       matchmakerEvents.dettachEventListeners()
-      console.log('dettach')
 
       isUnmounted.current = true
-      Promise.resolve().then(() => {
+      queueMicrotask(() => {
         if (!isUnmounted.current) {
           return
         }

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { ROUTES } from '@/routes/path'
+import { useQueryClient } from '@tanstack/react-query'
 
+import { QUERY_KEYS } from '@/api/api'
+import { ROUTES } from '@/routes/path'
 import { socketDuel as socket } from '@/socket/socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
-import { useInUnmounted } from '@/hooks/use-is-unmounted'
 import { useSettingsStore } from '@/store/settings.store'
 import { notify } from '@/socket/utils'
 import { wait, waitEndAudio } from '@/lib/utils'
@@ -24,7 +25,8 @@ export const useDuelSocket = ({
   playerId: string
 }) => {
   const navigate = useNavigate()
-  const isUnmounted = useInUnmounted()
+  const isUnmounted = useRef(false)
+  const queryClient = useQueryClient()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [gameState, setGameState] = useState<StateGame>('preperation')
   const [pulls, setPulls] = useState<number[]>([])
@@ -42,7 +44,7 @@ export const useDuelSocket = ({
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const hasPull = !pulls.includes(round)
 
-  const duelEvents = useMemo(
+  const duelSocketEvents = useMemo(
     () => new DuelSocketEvents(socket, token, gameId, playerId),
     [token, gameId, playerId],
   )
@@ -115,12 +117,13 @@ export const useDuelSocket = ({
       })
 
       startAudio && (await waitEndAudio(chachingAudio))
+      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
       startAudio && (await waitEndAudio(winSoundAudio))
       !startAudio && (await wait(2000))
 
       newGame()
     },
-    [playAudio, newGame],
+    [playAudio, queryClient, newGame],
   )
 
   const drawGame = useCallback(() => {
@@ -130,16 +133,16 @@ export const useDuelSocket = ({
   const pullTrigger = async () => {
     setPulls((p) => [...p, round])
 
-    duelEvents.pullTrigger()
+    duelSocketEvents.pullTrigger()
   }
 
   useEffect(() => {
-    duelEvents.updateEvents(async (event) => {
+    duelSocketEvents.updateEvents(async (event) => {
       const { type, payload } = event
       switch (type) {
         case 'connect': {
           notify('Connected to duel game service', 'info')
-          duelEvents.joinDuelGame()
+          duelSocketEvents.joinDuelGame()
           return
         }
         case 'connect_error': {
@@ -282,7 +285,7 @@ export const useDuelSocket = ({
       notify('Unhandled event ' + event.type, 'info')
     })
   }, [
-    duelEvents,
+    duelSocketEvents,
     playerId,
     winGame,
     gameOver,
@@ -293,20 +296,22 @@ export const useDuelSocket = ({
   ])
 
   useEffect(() => {
-    duelEvents.connect()
-    duelEvents.attachEventListeners()
+    duelSocketEvents.connect()
+    duelSocketEvents.attachEventListeners()
 
     return () => {
-      duelEvents.dettachEventListeners()
+      duelSocketEvents.dettachEventListeners()
+
+      isUnmounted.current = true
       queueMicrotask(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         if (!isUnmounted.current) {
           return
         }
-        duelEvents.disconnect()
+
+        duelSocketEvents.disconnect()
       })
     }
-  }, [duelEvents, isUnmounted])
+  }, [duelSocketEvents])
 
   return {
     frontCharacterHandleRef,
