@@ -48,7 +48,6 @@ export const IMAGES = {
   settings: '/assets/images/settings.svg',
   bullet: '/assets/images/bullet.png',
   sliderbar: '/assets/images/sliderbar.svg',
-  '1000x': '/assets/images/compressed/1000x.png',
   characternubcatfront: '/assets/images/character-nubcat-front.png',
   charactermickeyfront: '/assets/images/character-mickey-front.png',
   characterfattyfront: '/assets/images/character-fatty-front.png',
