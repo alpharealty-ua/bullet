@@ -125,13 +125,11 @@ export const AUDIOS = {
   ready: '/assets/audios/ready.mp3',
   set: '/assets/audios/set.mp3',
   pull: '/assets/audios/pull.mp3',
+  matchFound: '/assets/audios/match-found.mp3',
   // TODO: DOWNLOAD TO PROJECT
-  matchFoundSound:
-    'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
-  matchConfirmedSound:
+  matchConfirmed:
     'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3',
-  matchCanceledSound:
-    'https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3',
+  matchCanceled: '/assets/audios/match-canceled.mp3',
 } as const
 
 export const audiosEntries = Object.entries(AUDIOS)

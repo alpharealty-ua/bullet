@@ -171,7 +171,7 @@ const useMatchmakingSocket = (token: string) => {
           )
 
           // Play match found sound
-          playAudio('matchFoundSound')
+          playAudio('matchFound')
 
           // TODO: SET ALL RESPONSE DATA
           if (payload.confirmationRequired) {
@@ -209,7 +209,7 @@ const useMatchmakingSocket = (token: string) => {
           refState.current.matchmakingStatus = status
 
           // Play match canceled sound
-          playAudio('matchCanceledSound')
+          playAudio('matchCanceled')
 
           // Show reason in a more user-friendly way
           let reason = 'Unknown reason'
@@ -229,7 +229,7 @@ const useMatchmakingSocket = (token: string) => {
           setMatchmakingStatus('match-created')
           refState.current.matchmakingStatus = 'match-created'
 
-          playAudio('matchConfirmedSound')
+          playAudio('matchConfirmed')
 
           // Show a notification
           notify(
