@@ -1,49 +1,56 @@
-import { useEffect } from 'react'
+import { useImperativeHandle, useState } from 'react'
 
-import { IMAGES, TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
+import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
-import { useGameStore } from '@/store/game.store'
 import { AnimationInOut } from '@/components/animation-in-out'
 
-const Victory = ({
-  hideWon,
-  hideLvl,
-  type,
-  show,
-}: {
-  hideWon?: boolean
-  hideLvl?: boolean
-  type: 'win' | 'draw'
+export interface VictoryHandle {
+  updateState: (state: Partial<VictoryState>) => Promise<void>
+  runSound: () => AsyncGenerator<void>
+}
+
+interface VictoryProps {
+  victoryHandleRef?: React.ForwardedRef<VictoryHandle>
+}
+
+interface VictoryState {
   show: boolean
-}) => {
+  type: 'win' | 'draw'
+  win: number | null
+  oldLevel: number | null
+  newLevel: number | null
+}
+
+const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const jackpot = useGameStore(({ jackpot }) => jackpot)
-  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
+  const [{ show, type, win, oldLevel, newLevel }, setState] =
+    useState<VictoryState>({
+      show: false,
+      type: 'win',
+      win: null,
+      oldLevel: null,
+      newLevel: null,
+    })
   const isWin = type === 'win'
   const isDraw = type === 'draw'
 
-  useEffect(() => {
-    if (!(show && isWin)) {
-      return
-    }
+  const runSound = async function* () {
+    const winSoundAudio = await playAudio('winsound', false)
+    const chachingAudio = await playAudio('chaching')
 
-    const runAnimation = async () => {
-      const winSoundAudio = await playAudio('winsound', false)
-      const chachingAudio = await playAudio('chaching')
+    yield void (await waitEndAudio(chachingAudio))
+    await winSoundAudio.play()
+    await waitEndAudio(winSoundAudio)
+  }
 
-      // TODO: GET DURATION FROM AUDIO
-      setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
+  const updateState = async (state: Partial<VictoryState>) =>
+    setState((p) => ({ ...p, ...state }))
 
-      await waitEndAudio(chachingAudio)
-      await winSoundAudio.play()
-      await waitEndAudio(winSoundAudio)
-
-      setIncreaseTime(undefined)
-    }
-
-    runAnimation()
-  }, [show, isWin, playAudio, jackpot, setIncreaseTime])
+  useImperativeHandle(victoryHandleRef, () => ({
+    updateState,
+    runSound,
+  }))
 
   return (
     <AnimationInOut
@@ -61,7 +68,6 @@ const Victory = ({
         className='flex flex-col gap-4 bg-white bg-cover bg-center bg-no-repeat p-4'
         style={{ backgroundImage: `url(${IMAGES.texture})` }}
       >
-        {/* <div className='text-green text-4xl'>Victory</div> */}
         <div
           className={cn(
             'text-primary text-4xl',
@@ -72,17 +78,17 @@ const Victory = ({
           {isWin && 'Victory'}
           {isDraw && 'Draw'}
         </div>
-        {!hideWon && (
+        {typeof win === 'number' && (
           <div className='text-4xl'>
-            You won - <span className='text-green'>${jackpot}</span>
+            You won - <span className='text-green'>${win}</span>
           </div>
         )}
-        {!hideLvl && (
+        {(typeof oldLevel === 'number' || typeof newLevel === 'number') && (
           <div className='flex gap-10'>
             <div className='text-4xl'>Lvl</div>
             <ul className='pt-4 text-right'>
-              <li className='text-lg'>Old rating: 722</li>
-              <li className='text-xl'>new rating: 754</li>
+              <li className='text-lg'>Old rating: {oldLevel}</li>
+              <li className='text-xl'>new rating: {newLevel}</li>
             </ul>
           </div>
         )}

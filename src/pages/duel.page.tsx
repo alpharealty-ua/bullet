@@ -31,6 +31,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
 
   const {
+    victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,
@@ -169,8 +170,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           />
         </div>
       </div>
-      <Victory show={gameState === 'win'} type='win' hideWon />
-      <Victory show={gameState === 'draw'} type='draw' hideWon />
+      <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver
         show={gameState === 'lose'}
         onClick={newGame}

@@ -6,12 +6,14 @@ import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 import { socketDuel as socket } from '@/socket/socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
-import { useSettingsStore } from '@/store/settings.store'
+import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
-import { wait, waitEndAudio } from '@/lib/utils'
+import { wait } from '@/lib/utils'
+import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { CharacterHandle, CharacterState } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
+import { VictoryHandle } from '@/components/victory'
 
 type StateGame = 'preperation' | 'running' | 'win' | 'lose' | 'draw'
 
@@ -27,7 +29,7 @@ export const useDuelSocket = ({
   const navigate = useNavigate()
   const isUnmounted = useRef(false)
   const queryClient = useQueryClient()
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [gameState, setGameState] = useState<StateGame>('preperation')
   const [pulls, setPulls] = useState<number[]>([])
   const [round, setRound] = useState(1)
@@ -38,6 +40,7 @@ export const useDuelSocket = ({
     player: false,
     opponnent: false,
   })
+  const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
   const gameBarRefHandle = useRef<GameBarHandle>(null)
@@ -97,37 +100,47 @@ export const useDuelSocket = ({
   }, [])
 
   const gameOver = useCallback(async () => {
-    await backCharacterHandleRef?.current?.setState('eliminated')
-    await frontCharacterHandleRef?.current?.setState('winner')
+    await backCharacterHandleRef?.current?.updateState('eliminated')
+    await frontCharacterHandleRef?.current?.updateState('winner')
     setGameState('lose')
   }, [])
 
   const winGame = useCallback(
     async (characterState: CharacterState = 'eliminated') => {
-      await frontCharacterHandleRef?.current?.setState(characterState)
-      await backCharacterHandleRef?.current?.setState('winner')
       setGameState('win')
+      setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
-      const winSoundAudio = await playAudio('winsound', false)
-      const chachingAudio = await playAudio('chaching', false)
+      const genRunSound = victoryHandleRef.current?.runSound()
 
-      const startAudio = await new Promise<boolean>((resolve) => {
-        setTimeout(() => resolve(false), 100)
-        chachingAudio.addEventListener('play', () => resolve(true))
+      await frontCharacterHandleRef?.current?.updateState(characterState)
+      await backCharacterHandleRef?.current?.updateState('winner')
+      await victoryHandleRef.current?.updateState({
+        show: true,
+        type: 'win',
+        oldLevel: 722,
+        newLevel: 754,
       })
-
-      startAudio && (await waitEndAudio(chachingAudio))
+      await genRunSound?.next()
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-      startAudio && (await waitEndAudio(winSoundAudio))
-      !startAudio && (await wait(2000))
+      await genRunSound?.next()
 
-      newGame()
+      setIncreaseTime(undefined)
+      await victoryHandleRef.current?.updateState({
+        show: false,
+      })
+      await frontCharacterHandleRef?.current?.updateState('alive')
+      await backCharacterHandleRef?.current?.updateState('alive')
     },
-    [playAudio, queryClient, newGame],
+    [queryClient, setIncreaseTime],
   )
 
-  const drawGame = useCallback(() => {
-    setGameState('draw')
+  const drawGame = useCallback(async () => {
+    await frontCharacterHandleRef?.current?.updateState('alive')
+    await backCharacterHandleRef?.current?.updateState('alive')
+    await victoryHandleRef.current?.updateState({ show: true, type: 'draw' })
+    await wait(2000)
+
+    await victoryHandleRef.current?.updateState({ show: false })
   }, [])
 
   const pullTrigger = async () => {
@@ -320,6 +333,7 @@ export const useDuelSocket = ({
   }, [duelSocketEvents])
 
   return {
+    victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
     gameBarRefHandle,

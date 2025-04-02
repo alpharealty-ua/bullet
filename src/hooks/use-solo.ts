@@ -16,17 +16,25 @@ import { useBalance } from '@/api/wallet.api'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
-import { randomIntFromInterval, wait, waitEndAudio } from '@/lib/utils'
-import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
+import { randomIntFromInterval, wait } from '@/lib/utils'
+import {
+  MAX_BET,
+  MULTIPLIERS,
+  TIME_WIN_INCREASE_NUMBER,
+  VariantGame,
+} from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
+import { VictoryHandle } from '@/components/victory'
 
 // TODO: SPLIT DUEL AND SOLO
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { gameId } = useParams<{ gameId: string }>()
   const queryClient = useQueryClient()
+  const victoryHandleRef = useRef<VictoryHandle>(null)
   const revolverRefHandle = useRef<RevolverHandle>(null)
   const disabledRef = useRef(false)
+  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
@@ -54,6 +62,7 @@ const useSolo = (variant: VariantGame) => {
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
   const round = useGameStore(({ round }) => round)
+  const jackpot = useGameStore(({ jackpot }) => jackpot)
   const isPlay = variant === 'play'
   const [watchGame, setWatchGame] = useState<{
     gameId: string
@@ -167,22 +176,24 @@ const useSolo = (variant: VariantGame) => {
 
   const winGame = useCallback(async () => {
     setState('win')
+    setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
-    const winSoundAudio = await playAudio('winsound', false)
-    const chachingAudio = await playAudio('chaching', false)
+    const genRunSound = victoryHandleRef.current?.runSound()
 
-    const startAudio = await new Promise<boolean>((resolve) => {
-      setTimeout(() => resolve(false))
-      chachingAudio.addEventListener('play', () => resolve(true))
+    await victoryHandleRef.current?.updateState({
+      show: true,
+      type: 'win',
+      win: jackpot,
     })
-
-    startAudio && (await waitEndAudio(chachingAudio))
+    await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-    startAudio && (await waitEndAudio(winSoundAudio))
-    !startAudio && (await wait(2000))
+    await genRunSound?.next()
 
-    newGame()
-  }, [setState, newGame, playAudio, queryClient])
+    setIncreaseTime(undefined)
+    await victoryHandleRef.current?.updateState({
+      show: false,
+    })
+  }, [setState, setIncreaseTime, queryClient, jackpot])
 
   const pullGame = useCallback(
     async (
@@ -426,11 +437,12 @@ const useSolo = (variant: VariantGame) => {
   }, [variant, gameId])
 
   return {
+    victoryHandleRef,
+    revolverRefHandle,
     next,
     deal,
     newGame,
     nextRound,
-    revolverRefHandle,
     watchGame,
     gameOver,
     winGame,

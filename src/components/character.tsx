@@ -16,7 +16,7 @@ interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 export interface CharacterHandle {
-  setState: (state: CharacterState) => Promise<void>
+  updateState: (state: CharacterState) => Promise<void>
   reset: () => Promise<void>
   frontGunHandleRef?: React.RefObject<GunHandle>
   backGunHandleRef?: React.RefObject<GunHandle>
@@ -33,7 +33,7 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
 
     useImperativeHandle(characterHandleRef, () => {
       return {
-        setState: async (state: CharacterState) => {
+        updateState: async (state: CharacterState) => {
           setState(state)
         },
         reset: async () => {

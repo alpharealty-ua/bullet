@@ -20,7 +20,6 @@ import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const { next, deal, revolverRefHandle, newGame, watchGame } = useSolo(variant)
   const { data: balance } = useBalance()
   const modal = useCustomModal()
   const [showHelpers, setShowHelpers] = useState(true)
@@ -33,8 +32,15 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const state = useGameStore(({ state }) => state)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const isGameOver = state === 'game-over'
-  const isWin = state === 'win'
-  const isDraw = state === 'draw'
+
+  const {
+    victoryHandleRef,
+    revolverRefHandle,
+    next,
+    deal,
+    newGame,
+    watchGame,
+  } = useSolo(variant)
 
   const handlePull = async () => {
     setShowHelpers(false)
@@ -150,7 +156,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         </div>
       </div>
-      <Victory show={isDraw || isWin} type={isWin ? 'win' : 'draw'} hideLvl />
+      <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver show={isGameOver} onClick={newGame} onTimeout={newGame} />
       <Footer disabledBet={isStartedGame || noMoney} />
     </>
