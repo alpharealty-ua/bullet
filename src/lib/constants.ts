@@ -189,6 +189,7 @@ export type Language = (typeof LANGUAGE_LIST)[number]['language']
 export const LOCAL_STORAGE_KEYS = {
   token: 'TOKEN',
   endTime: 'END_TIME',
+  showDebug: 'SHOW_DEBUG',
 } as const
 
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS

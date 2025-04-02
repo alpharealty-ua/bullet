@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/api/api'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
+import { getItem, removeItem } from '@/lib/localstorage'
 import { StateGame, STATES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Button as ButtonWithAudio } from '@/components/ui/button'
@@ -21,8 +22,7 @@ const Debug = () => {
   }
 
   const handleResetAddMoney = () => {
-    // TODO: RENAEM KEY
-    localStorage.removeItem('endTime')
+    removeItem('endTime')
   }
 
   const handleLogout = async () => {
@@ -30,7 +30,7 @@ const Debug = () => {
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 
-  if (!localStorage.getItem('SHOW_DEBUG')) {
+  if (!getItem('showDebug')) {
     return null
   }
 
