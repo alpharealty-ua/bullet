@@ -273,6 +273,9 @@ export const useDuelSocket = ({
             case 'game:join':
             case 'game:pull_trigger':
             case 'game:request_rematch':
+              if (event === 'game:pull_trigger') {
+                setPulls((p) => p.filter((_, i, arr) => i !== arr.length - 1))
+              }
               notify(payload.message, 'error')
               return
           }
