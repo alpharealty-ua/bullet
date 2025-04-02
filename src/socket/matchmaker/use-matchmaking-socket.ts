@@ -128,6 +128,7 @@ const useMatchmakingSocket = (token: string) => {
         case 'joinedMatchmaking': {
           notify('You have Joined the matchmaking queue', 'success')
 
+          // TODO: NOT UPDATE STATE
           // Update matchmaking status
           if (matchmakingStatus === 'not-in-queue') {
             setMatchmakingStatus('searching')

@@ -49,6 +49,7 @@ const HomePage = () => {
           </>
         )}
       </header>
+      {/* TODO: REFATOR */}
       <PageWrapper>
         <Logo as='button' size='xl' />
         <div className='flex flex-col items-center justify-center gap-6'>
