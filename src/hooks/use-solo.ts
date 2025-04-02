@@ -55,13 +55,11 @@ const useSolo = (variant: VariantGame) => {
   )
   const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
-  const addRound = useGameStore(({ addRound }) => addRound)
   const restartGame = useGameStore(({ newGame }) => newGame)
   const state = useGameStore(({ state }) => state)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
-  const round = useGameStore(({ round }) => round)
   const jackpot = useGameStore(({ jackpot }) => jackpot)
   const isPlay = variant === 'play'
   const [watchGame, setWatchGame] = useState<{
@@ -267,18 +265,6 @@ const useSolo = (variant: VariantGame) => {
     }
   }, [gameId, newGame, pullGame, startGame, state])
 
-  const nextRound = async () => {
-    const DRAW_ROUND = 50
-
-    if (round === DRAW_ROUND) {
-      draw()
-
-      return
-    }
-
-    addRound()
-  }
-
   const draw = async () => {
     setState('draw')
 
@@ -442,7 +428,6 @@ const useSolo = (variant: VariantGame) => {
     next,
     deal,
     newGame,
-    nextRound,
     watchGame,
     gameOver,
     winGame,
