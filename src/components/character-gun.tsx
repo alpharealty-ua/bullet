@@ -1,18 +1,14 @@
-import React, {
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
+import React, { useImperativeHandle, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import mergeRefs from 'merge-refs'
 
 import { CharacterName, CharacterType, IMAGES } from '@/lib/constants'
-import { cn, waitEndAudio } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
 import { useSpin } from '@/components/guns/use-spin'
+import { useShot } from '@/components/guns/use-shot'
 
 export interface GunHandle {
   spin: (duration?: number) => Promise<void>
@@ -78,15 +74,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
 
     const images = imagesMap[characterName]
 
-    const shot = useCallback(async () => {
-      const gunShotAudio = await playAudio('gunshot')
-
-      setShowShot(true)
-
-      await waitEndAudio(gunShotAudio)
-
-      setShowShot(false)
-    }, [playAudio])
+    const shot = useShot(playAudio, setShowShot)
 
     const spin = useSpin(gunRef, rotateRef)
 

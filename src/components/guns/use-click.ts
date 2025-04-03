@@ -1,7 +1,5 @@
-import { useCallback } from 'react'
-
 const useClick = (gunRef: React.RefObject<HTMLDivElement>) => {
-  return useCallback(async () => {
+  return async () => {
     const gunDom = gunRef.current
 
     if (gunDom === null) {
@@ -19,7 +17,7 @@ const useClick = (gunRef: React.RefObject<HTMLDivElement>) => {
         click.classList.remove('animate-click')
       }),
     )
-  }, [gunRef])
+  }
 }
 
 export { useClick }

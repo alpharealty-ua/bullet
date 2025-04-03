@@ -1,43 +1,40 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 const useSpin = (
   gunRef: React.RefObject<HTMLDivElement>,
   rotateRef: React.MutableRefObject<number>,
 ) => {
-  return useCallback(
-    async (duration = 200): Promise<void> => {
-      const gunDom = gunRef.current
+  return async (duration = 200): Promise<void> => {
+    const gunDom = gunRef.current
 
-      if (gunDom === null) {
-        return
-      }
+    if (gunDom === null) {
+      return
+    }
 
-      const chamberDom = gunDom.querySelector(
-        '[data-chamber-rotate]',
-      ) as HTMLDivElement
+    const chamberDom = gunDom.querySelector(
+      '[data-chamber-rotate]',
+    ) as HTMLDivElement
 
-      if (chamberDom === null) {
-        return
-      }
+    if (chamberDom === null) {
+      return
+    }
 
-      return new Promise<void>((resolve) => {
-        const transitionend = (event: TransitionEvent) => {
-          if (event.propertyName !== 'rotate') {
-            return
-          }
-
-          chamberDom.style.transitionDuration = ``
-          chamberDom.removeEventListener('transitionend', transitionend)
-          resolve()
+    return new Promise<void>((resolve) => {
+      const transitionend = (event: TransitionEvent) => {
+        if (event.propertyName !== 'rotate') {
+          return
         }
 
-        chamberDom.style.rotate = (rotateRef.current += 60) + 'deg'
-        chamberDom.style.transitionDuration = `${duration}ms`
-        chamberDom.addEventListener('transitionend', transitionend)
-      })
-    },
-    [gunRef, rotateRef],
-  )
+        chamberDom.style.transitionDuration = ``
+        chamberDom.removeEventListener('transitionend', transitionend)
+        resolve()
+      }
+
+      chamberDom.style.rotate = (rotateRef.current += 60) + 'deg'
+      chamberDom.style.transitionDuration = `${duration}ms`
+      chamberDom.addEventListener('transitionend', transitionend)
+    })
+  }
 }
 
 export { useSpin }

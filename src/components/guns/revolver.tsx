@@ -3,10 +3,11 @@ import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
-import { cn, waitEndAudio } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Click } from '@/components/guns/click'
 import { useClick } from '@/components/guns/use-click'
 import { useSpin } from '@/components/guns/use-spin'
+import { useShot } from '@/components/guns/use-shot'
 
 const START_ROTATE = 15
 const MIN_ADD_SPEED = 10
@@ -216,18 +217,7 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
-  const shot = async () => {
-    const gunShotAudio = await playAudio('gunshot')
-
-    setShowShot(true)
-
-    console.time()
-    console.log(gunShotAudio.duration)
-    await waitEndAudio(gunShotAudio)
-    console.timeEnd()
-
-    setShowShot(false)
-  }
+  const shot = useShot(playAudio, setShowShot)
 
   const spin = useSpin(gunRef, rotateRef)
 
