@@ -44,7 +44,8 @@ export const useDuelSocket = ({
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
-  const gameBarHandleRef = useRef<GameBarHandle>(null)
+  const topGameBarHandleRef = useRef<GameBarHandle>(null)
+  const bottomGameBarHandleRef = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
   const hasPull = !pulls.includes(round)
@@ -82,19 +83,10 @@ export const useDuelSocket = ({
   }
 
   const reset = useCallback(async () => {
-    const gameBarHandle = gameBarHandleRef.current
-    const frontCharacterHandle = frontCharacterHandleRef.current
-    const backCharacterHandle = backCharacterHandleRef.current
-
-    if (gameBarHandle) {
-      await gameBarHandle.reset()
-    }
-    if (frontCharacterHandle) {
-      await frontCharacterHandle.reset()
-    }
-    if (backCharacterHandle) {
-      await backCharacterHandle.reset()
-    }
+    await topGameBarHandleRef.current?.reset()
+    await bottomGameBarHandleRef.current?.reset()
+    await frontCharacterHandleRef.current?.reset()
+    await backCharacterHandleRef.current?.reset()
   }, [])
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
@@ -230,13 +222,15 @@ export const useDuelSocket = ({
 
           const pull = isPlayer ? playerPull : opponentPull
 
+          const gameBarHandleRef = isPlayer
+            ? bottomGameBarHandleRef
+            : topGameBarHandleRef
+
           if (payload.fired) {
             await gameBarHandleRef.current?.setActive(payload.index)
           }
 
-          if (isPlayer) {
-            await gameBarHandleRef.current?.highlight(payload.index)
-          }
+          await gameBarHandleRef.current?.highlight(payload.index)
 
           await pull(payload.fired)
 
@@ -261,7 +255,8 @@ export const useDuelSocket = ({
           return
         }
         case 'probability': {
-          gameBarHandleRef.current?.setActive(payload.index)
+          await topGameBarHandleRef.current?.setActive(payload.index)
+          await bottomGameBarHandleRef.current?.setActive(payload.index)
           return
         }
         case 'game:rematch_requested': {
@@ -352,7 +347,8 @@ export const useDuelSocket = ({
     victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
-    gameBarHandleRef,
+    topGameBarHandleRef,
+    bottomGameBarHandleRef,
     readySetPullHandleRef,
     rematchRequestHandleRef,
     pull,

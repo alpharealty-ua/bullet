@@ -1,4 +1,4 @@
-import { useImperativeHandle, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
@@ -12,7 +12,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Bar } from '@/components/bar/bar'
-import { DuelGameBar, GameBarHandle } from '@/components/duel-game-bar'
+import { DuelGameBar } from '@/components/duel-game-bar'
 import { Character } from '@/components/character'
 import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull } from '@/components/ready-set-pull'
@@ -35,7 +35,8 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
-    gameBarHandleRef,
+    topGameBarHandleRef,
+    bottomGameBarHandleRef,
     readySetPullHandleRef,
     rematchRequestHandleRef,
     round,
@@ -61,23 +62,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
 
-  const gameBarTopHandleRef = useRef<GameBarHandle>(null)
-  const gameBarBottomHandleRef = useRef<GameBarHandle>(null)
-  useImperativeHandle(gameBarHandleRef, () => ({
-    highlight: async (index) => {
-      gameBarTopHandleRef.current?.highlight(index)
-      gameBarBottomHandleRef.current?.highlight(index)
-    },
-    reset: async () => {
-      gameBarTopHandleRef.current?.reset()
-      gameBarBottomHandleRef.current?.reset()
-    },
-    setActive: async (index) => {
-      gameBarTopHandleRef.current?.setActive(index)
-      gameBarBottomHandleRef.current?.setActive(index)
-    },
-  }))
-
   return (
     <>
       <Header
@@ -97,7 +81,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         rematchRequestHandleRef={rematchRequestHandleRef}
       />
       <div className='relative flex grow flex-col items-center justify-center pt-2'>
-        <DuelGameBar gameBarRef={gameBarTopHandleRef} />
+        <DuelGameBar gameBarRef={topGameBarHandleRef} />
         <div className='mt-auto w-full pt-6'>
           <div className='relative mt-auto flex flex-col gap-10'>
             <div
@@ -162,7 +146,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             </div>
           </div>
         </div>
-        <DuelGameBar gameBarRef={gameBarBottomHandleRef} />
+        <DuelGameBar gameBarRef={bottomGameBarHandleRef} />
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
