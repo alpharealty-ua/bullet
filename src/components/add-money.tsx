@@ -69,7 +69,12 @@ const AddMoney = ({
         disabled={Boolean(endTime)}
         onClick={handleClick}
       >
-        <span className='absolute inset-0 inline-flex items-center justify-center text-lg uppercase'>
+        <span
+          className={cn(
+            'absolute inset-0 inline-flex items-center justify-center text-base uppercase',
+            endTime && 'text-xl',
+          )}
+        >
           {endTime ? time : `add $${ADD_MONEY}`}
         </span>
         <svg
