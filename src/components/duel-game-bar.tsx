@@ -10,6 +10,7 @@ export interface GameBarHandle {
 }
 
 const LENGTH = 21
+const BAR_LIST = Array(LENGTH).fill(null)
 const DEFAUTL_VALUE = 0
 const SKULL_VALUE = 50
 const NUMBERS = [SKULL_VALUE, 20, 10]
@@ -120,37 +121,35 @@ const DuelGameBar = ({
       >
         <thead>
           <tr>
-            {Array(LENGTH)
-              .fill(null)
-              .map((_, i) => {
-                const { number, className } = getItem(i)
+            {BAR_LIST.map((_, i) => {
+              const { number, className } = getItem(i)
 
-                const isDefaultNumber = number === DEFAUTL_VALUE
-                const isSkullNumber = number === SKULL_VALUE
+              const isDefaultNumber = number === DEFAUTL_VALUE
+              const isSkullNumber = number === SKULL_VALUE
 
-                return (
-                  <td
-                    key={i}
-                    className={cn(
-                      'relative border-2 border-black bg-[#f7f7c0] text-center align-middle text-[9px] text-white select-none first:border-l-0 last:border-r-0',
-                      'transition-colors duration-20 ease-linear',
-                      'zoom-in-200 fill-mode-both repeat-1 duration-500',
-                      isDefaultNumber && 'text-transparent',
-                      isSkullNumber && 'zoom-in-400',
-                      className,
+              return (
+                <td
+                  key={i}
+                  className={cn(
+                    'relative border-2 border-black bg-[#f7f7c0] text-center align-middle text-[9px] text-white select-none first:border-l-0 last:border-r-0',
+                    'transition-colors duration-20 ease-linear',
+                    'zoom-in-200 fill-mode-both repeat-1 duration-500',
+                    isDefaultNumber && 'text-transparent',
+                    isSkullNumber && 'zoom-in-400',
+                    className,
+                  )}
+                >
+                  <div className='absolute inset-0 bg-[#30ff00] opacity-0 [.is-active_&]:opacity-100 [.is-selected_&]:opacity-0'></div>
+                  <div className='relative'>
+                    {number === 50 ? (
+                      <IoSkull className='relative -top-[1px] inline-block text-base' />
+                    ) : (
+                      number
                     )}
-                  >
-                    <div className='absolute inset-0 bg-[#30ff00] opacity-0 [.is-active_&]:opacity-100 [.is-selected_&]:opacity-0'></div>
-                    <div className='relative'>
-                      {number === 50 ? (
-                        <IoSkull className='relative -top-[1px] inline-block text-base' />
-                      ) : (
-                        number
-                      )}
-                    </div>
-                  </td>
-                )
-              })}
+                  </div>
+                </td>
+              )
+            })}
           </tr>
         </thead>
       </table>
