@@ -52,7 +52,7 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
       in={show}
       unmountOnExit
       timeout={400}
-      className={cn('absolute inset-0 z-50 flex', 'duration-200')}
+      className={cn('absolute inset-0 z-50 flex', 'duration-0')}
     >
       <button
         className={cn('h-full w-full', !disabled && 'cursor-pointer')}

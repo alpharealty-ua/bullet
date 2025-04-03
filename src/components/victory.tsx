@@ -59,7 +59,7 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
       timeout={400}
       className={cn(
         'absolute top-1/2 right-0 left-0 z-10 -translate-y-1/2 py-[10px]',
-        'zoom-in-200 duration-500',
+        'zoom-in-200 zoom-out-200 duration-400',
         isWin && 'bg-green/50',
         isDraw && 'bg-primary/50',
       )}
