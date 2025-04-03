@@ -59,8 +59,6 @@ const useMatchmakingSocket = (token: string) => {
     currentMatchId,
     matchmakingStatus,
   })
-  refState.current.currentMatchId = currentMatchId
-  refState.current.matchmakingStatus = matchmakingStatus
 
   useEffect(() => {
     matchmakerEvents.updateEvents(async (event) => {
