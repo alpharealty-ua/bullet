@@ -11,7 +11,8 @@ const connectionStatusMap: Record<ConnectionStatus, string> = {
   'authentication-failed': 'Authentication failed',
 }
 
-export const MatchmakerConnection = ({
+// TODO: NOT USE. REMOVE LATER
+const MatchmakerConnection = ({
   connectionStatus,
   authenticated,
   onClick,
@@ -52,3 +53,5 @@ export const MatchmakerConnection = ({
     </div>
   )
 }
+
+export { MatchmakerConnection }

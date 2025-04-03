@@ -12,7 +12,6 @@ import { MIN_DUEL_BET } from '@/lib/constants'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { EnterArena } from '@/components/enter-arena'
-import { MatchmakerConnection } from '@/components/matchmaker-connection'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AddMoneyModal } from '@/components/add-money-modal'
 import { MatchmakerPing } from '@/components/matchmaker-ping'
@@ -30,7 +29,6 @@ const MatchmakerPage = () => {
   const canJoin = !(balance < MIN_DUEL_BET)
 
   const {
-    toggleConnection,
     authenticated,
     joinMatchmaking,
     leaveMatchmaking,
@@ -41,7 +39,6 @@ const MatchmakerPage = () => {
     matchmakingStatus,
     indicators,
     confirmationTimeoutSeconds,
-    connectionStatus,
     gameId,
   } = useMatchmakingSocket(token!)
 
@@ -49,10 +46,6 @@ const MatchmakerPage = () => {
     matchmakingStatus === 'not-in-queue'
       ? joinMatchmaking({ username, characterName, region })
       : matchmakingStatus === 'searching' && leaveMatchmaking()
-  }
-
-  const handleToggleConnection = () => {
-    toggleConnection()
   }
 
   const navigate = useNavigate()
@@ -88,14 +81,6 @@ const MatchmakerPage = () => {
             />
           </div>
         )}
-        {canJoin && (
-          <MatchmakerConnection
-            connectionStatus={connectionStatus}
-            authenticated={authenticated}
-            onClick={handleToggleConnection}
-          />
-        )}
-
         {canJoin && authenticated && (
           <div className='flex w-full flex-col items-center justify-center gap-3'>
             <EnterArena
