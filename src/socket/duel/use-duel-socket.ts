@@ -115,6 +115,9 @@ export const useDuelSocket = ({
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
     await gameOverHandleRef.current?.updateState({ show: false })
+
+    await frontCharacterHandleRef.current?.reset()
+    await backCharacterHandleRef.current?.reset()
   }, [])
 
   const winGame = useCallback(
@@ -139,15 +142,15 @@ export const useDuelSocket = ({
       await victoryHandleRef.current?.updateState({
         show: false,
       })
-      await frontCharacterHandleRef?.current?.updateState('alive')
-      await backCharacterHandleRef?.current?.updateState('alive')
+      await frontCharacterHandleRef.current?.reset()
+      await backCharacterHandleRef.current?.reset()
     },
     [queryClient, setIncreaseTime],
   )
 
   const drawGame = useCallback(async () => {
-    await frontCharacterHandleRef?.current?.updateState('alive')
-    await backCharacterHandleRef?.current?.updateState('alive')
+    await frontCharacterHandleRef.current?.reset()
+    await backCharacterHandleRef.current?.reset()
     await victoryHandleRef.current?.updateState({ show: true, type: 'draw' })
     await wait(2000).promise
 
