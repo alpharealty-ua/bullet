@@ -43,7 +43,7 @@ export const useDuelSocket = ({
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
-  const gameBarRefHandle = useRef<GameBarHandle>(null)
+  const gameBarHandleRef = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const hasPull = !pulls.includes(round)
 
@@ -80,7 +80,7 @@ export const useDuelSocket = ({
   }
 
   const reset = useCallback(async () => {
-    const gameBarHandle = gameBarRefHandle.current
+    const gameBarHandle = gameBarHandleRef.current
     const frontCharacterHandle = frontCharacterHandleRef.current
     const backCharacterHandle = backCharacterHandleRef.current
 
@@ -222,11 +222,11 @@ export const useDuelSocket = ({
           const pull = isPlayer ? playerPull : opponentPull
 
           if (payload.fired) {
-            await gameBarRefHandle.current?.setActive(payload.index)
+            await gameBarHandleRef.current?.setActive(payload.index)
           }
 
           if (isPlayer) {
-            await gameBarRefHandle.current?.highlight(payload.index)
+            await gameBarHandleRef.current?.highlight(payload.index)
           }
 
           await pull(payload.fired)
@@ -253,7 +253,7 @@ export const useDuelSocket = ({
           return
         }
         case 'probability': {
-          gameBarRefHandle.current?.setActive(payload.index)
+          gameBarHandleRef.current?.setActive(payload.index)
           return
         }
         case 'game:rematch_requested': {
@@ -343,7 +343,7 @@ export const useDuelSocket = ({
     victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
-    gameBarRefHandle,
+    gameBarHandleRef,
     readySetPullHandleRef,
     pull,
     requestRematch,

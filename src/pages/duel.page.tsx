@@ -35,7 +35,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
-    gameBarRefHandle,
+    gameBarHandleRef,
     readySetPullHandleRef,
     round,
     pull,
@@ -63,7 +63,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const gameBarTopHandleRef = useRef<GameBarHandle>(null)
   const gameBarBottomHandleRef = useRef<GameBarHandle>(null)
-  useImperativeHandle(gameBarRefHandle, () => ({
+  useImperativeHandle(gameBarHandleRef, () => ({
     highlight: async (index) => {
       gameBarTopHandleRef.current?.highlight(index)
       gameBarBottomHandleRef.current?.highlight(index)
