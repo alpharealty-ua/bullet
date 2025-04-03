@@ -288,7 +288,7 @@ export const useDuelSocket = ({
         }
         case 'game:player_left': {
           console.log('game:player_left', payload)
-          // await winGame('left')
+          await winGame('left')
           return
         }
         case 'game:player_disconnected': {
