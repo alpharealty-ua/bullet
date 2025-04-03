@@ -43,6 +43,7 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
     runSound,
   }))
 
+  // TODO: MAYBE CHANGED TO PROPS ON_CLICK LIKE REMATCH REQUEST
   const handleClick = () => {
     on && on('click')
   }

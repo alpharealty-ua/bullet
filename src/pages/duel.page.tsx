@@ -37,11 +37,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     backCharacterHandleRef,
     gameBarHandleRef,
     readySetPullHandleRef,
+    rematchRequestHandleRef,
     round,
     pull,
     requestRematch,
     hasPull,
-    rematchState,
     requestIndicator,
   } = useDuelSocket({ token: token!, gameId, playerId })
 
@@ -87,16 +87,15 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         headerProfile
       />
       {variant === 'watch' && <Bar />}
-      {rematchState !== 'hide' && (
-        <RematchRequest
-          indicators={[
-            { confirm: requestIndicator.player },
-            { confirm: requestIndicator.opponnent },
-          ]}
-          onRequest={handleRequestRematch}
-          onCancel={handleCancelRematch}
-        />
-      )}
+      <RematchRequest
+        indicators={[
+          { confirm: requestIndicator.player },
+          { confirm: requestIndicator.opponnent },
+        ]}
+        onRequest={handleRequestRematch}
+        onCancel={handleCancelRematch}
+        rematchRequestHandleRef={rematchRequestHandleRef}
+      />
       <div className='relative flex grow flex-col items-center justify-center pt-2'>
         <DuelGameBar gameBarRef={gameBarTopHandleRef} />
         <div className='mt-auto w-full pt-6'>

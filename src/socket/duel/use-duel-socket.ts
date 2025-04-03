@@ -16,6 +16,7 @@ import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
+import { RematchRequestHandle } from '@/components/rematch-request'
 
 export const useDuelSocket = ({
   token,
@@ -32,9 +33,9 @@ export const useDuelSocket = ({
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
   const [round, setRound] = useState(1)
-  const [rematchState, setRematchState] = useState<
-    'hide' | 'show' | 'requested' | 'created'
-  >('hide')
+  const [_, setRematchState] = useState<'hide' | 'requested' | 'created'>(
+    'hide',
+  )
   const [requestIndicator, setRequestIndicator] = useState({
     player: false,
     opponnent: false,
@@ -45,6 +46,7 @@ export const useDuelSocket = ({
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
   const gameBarHandleRef = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
+  const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
   const hasPull = !pulls.includes(round)
 
   const duelSocketEvents = useMemo(
@@ -97,6 +99,14 @@ export const useDuelSocket = ({
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
+    const resetGameOver = async () => {
+      await gameOverHandleRef.current?.updateState({ show: false })
+      await rematchRequestHandleRef.current?.updateState({ show: true })
+
+      await frontCharacterHandleRef.current?.reset()
+      await backCharacterHandleRef.current?.reset()
+    }
+
     await backCharacterHandleRef.current?.updateState('eliminated')
     await frontCharacterHandleRef.current?.updateState('winner')
 
@@ -107,17 +117,15 @@ export const useDuelSocket = ({
       disabled: true,
       on: async (event) => {
         if (event === 'click') {
-          await gameOverHandleRef.current?.updateState({ show: false })
+          resetGameOver()
         }
       },
     })
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
-    await gameOverHandleRef.current?.updateState({ show: false })
 
-    await frontCharacterHandleRef.current?.reset()
-    await backCharacterHandleRef.current?.reset()
+    resetGameOver()
   }, [])
 
   const winGame = useCallback(
@@ -139,6 +147,7 @@ export const useDuelSocket = ({
       await genRunSound?.next()
 
       setIncreaseTime(undefined)
+      await rematchRequestHandleRef.current?.updateState({ show: true })
       await victoryHandleRef.current?.updateState({
         show: false,
       })
@@ -249,7 +258,6 @@ export const useDuelSocket = ({
             notify(payload.message, 'info')
             drawGame()
           }
-          setRematchState('show')
           return
         }
         case 'probability': {
@@ -345,12 +353,12 @@ export const useDuelSocket = ({
     backCharacterHandleRef,
     gameBarHandleRef,
     readySetPullHandleRef,
+    rematchRequestHandleRef,
     pull,
     requestRematch,
     reset,
     hasPull,
     round,
-    rematchState,
     requestIndicator,
   }
 }
