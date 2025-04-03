@@ -288,11 +288,12 @@ export const useDuelSocket = ({
           return
         }
         case 'game:countdown_update': {
-          console.log('game:countdown_update')
+          console.log('game:countdown_update', payload)
           return
         }
         case 'game:player_left': {
-          await winGame('left')
+          console.log('game:player_left', payload)
+          // await winGame('left')
           return
         }
         case 'game:player_disconnected': {
