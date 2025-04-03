@@ -1,19 +1,11 @@
-import { useEffect, useImperativeHandle, useRef } from 'react'
+import { useImperativeHandle, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
 import { IoSkull } from 'react-icons/io5'
 
-type ResetOptions = {
-  direction?: number
-  activeIndex?: number
-}
-
 export interface GameBarHandle {
-  getState: () => Promise<{ value: number; isRunning: boolean }>
   highlight: (index: number) => Promise<void>
-  start: (duration: number) => Promise<void>
-  stop: () => Promise<void>
-  reset: (options?: ResetOptions) => Promise<void>
+  reset: () => Promise<void>
   setActive: (index: number) => Promise<void>
 }
 
@@ -34,149 +26,58 @@ const getItem = (i: number) => {
 
 const DuelGameBar = ({
   gameBarRef,
-  onChangeDirection,
 }: {
   gameBarRef: React.ForwardedRef<GameBarHandle>
-  onChangeDirection: (prevDirection: number, nextDirection: number) => void
 }) => {
   const wrapperRef = useRef<HTMLTableElement>(null)
   const stateRef = useRef<{
-    direction: number
-    activeIndex: number
-    isRunning: boolean
-    nextActive: HTMLTableCellElement | null
+    activeEl: HTMLTableCellElement | null
     startNumber: number
-    onChangeDirection: (prevDirection: number, nextDirection: number) => void
   }>({
-    direction: 1,
-    activeIndex: -1,
-    isRunning: false,
-    nextActive: null,
+    activeEl: null,
     startNumber: -1,
-    onChangeDirection,
   })
 
-  useEffect(() => {
-    stateRef.current.onChangeDirection = onChangeDirection
-  }, [onChangeDirection])
-
-  // TODO: REMOVE. NOT USE
-  const getState = async () => {
-    return {
-      value: getItem(stateRef.current.activeIndex).number,
-      isRunning: stateRef.current.isRunning,
-    }
-  }
-
-  // TODO: REMOVE. NOT USE
-  const start = async (duration: number) => {
-    const barDom = wrapperRef.current
-
-    if (barDom === null) {
-      return
+  const getCellByIndex = (index: number) => {
+    if (!(index < LENGTH && index >= 0)) {
+      return null
     }
 
-    if (stateRef.current.isRunning) {
-      return
+    const barEl = wrapperRef.current
+
+    if (barEl === null) {
+      return null
     }
 
-    stateRef.current.isRunning = true
+    const cellEls = barEl.rows[0].cells
 
-    // TODO: REFACTOR
-    stateRef.current.startNumber++
-    const currentStartNumber = stateRef.current.startNumber
+    const cellEl = cellEls[index]
 
-    const cells = barDom.rows[0].cells
-
-    // TODO: USE DELAGATION
-    const start = async () => {
-      const prevActiveIndex = stateRef.current.activeIndex
-      const prevDirection = stateRef.current.direction
-      let nextDirection = prevDirection
-      if (prevActiveIndex === 0) nextDirection = 1
-      else if (prevActiveIndex === cells.length - 1) nextDirection = -1
-
-      if (prevDirection !== nextDirection) {
-        stateRef.current.onChangeDirection(prevDirection, nextDirection)
-      }
-
-      if (!stateRef.current.isRunning) {
-        return
-      }
-
-      const nextActiveIndex = prevActiveIndex + nextDirection
-      stateRef.current.direction = nextDirection
-      stateRef.current.activeIndex = nextActiveIndex
-
-      const prevActive =
-        stateRef.current.nextActive ?? document.createElement('td')
-      const nextActive = cells[nextActiveIndex]
-      stateRef.current.nextActive = nextActive
-
-      prevActive.classList.remove('is-active')
-      nextActive.classList.add('is-active')
-      nextActive.style.transitionDuration = `${duration}ms`
-
-      await new Promise((resolve) =>
-        nextActive.addEventListener('transitionend', resolve, {
-          once: true,
-        }),
-      )
-
-      nextActive.style.transitionDuration = ''
-
-      if (currentStartNumber !== stateRef.current.startNumber) {
-        return
-      }
-
-      if (!stateRef.current.isRunning) {
-        return
-      }
-
-      start()
+    if (cellEl === null) {
+      return null
     }
 
-    start()
-  }
-
-  // TODO: REMOVE. NOT USE
-  const stop = async () => {
-    stateRef.current.isRunning = false
+    return cellEl
   }
 
   const setActive = async (index: number) => {
-    if (!(index < LENGTH && index >= 0)) {
+    const cellEl = getCellByIndex(index)
+
+    if (cellEl === null) {
       return
     }
 
-    const barDom = wrapperRef.current
+    const prevActiveEl =
+      stateRef.current.activeEl ?? document.createElement('td')
 
-    if (barDom === null) {
-      return
-    }
+    stateRef.current.activeEl = cellEl
 
-    const cells = barDom.rows[0].cells
-
-    const prevActive =
-      stateRef.current.nextActive ?? document.createElement('td')
-
-    const nextActive = cells[index]
-    stateRef.current.nextActive = nextActive
-
-    prevActive.classList.remove('is-active')
-    nextActive.classList.add('is-active')
+    prevActiveEl.classList.remove('is-active')
+    cellEl.classList.add('is-active')
   }
 
   const highlight = async (index: number) => {
-    const barDom = wrapperRef.current
-
-    if (barDom === null) {
-      return
-    }
-
-    const cellEls = barDom.rows[0].cells
-
-    const cellEl = cellEls[index]
+    const cellEl = getCellByIndex(index)
 
     if (cellEl === null) {
       return
@@ -194,24 +95,17 @@ const DuelGameBar = ({
     cellEl.classList.remove('animate-[bar-select]')
   }
 
-  const reset = async (options: ResetOptions = {}) => {
-    const nextActive = stateRef.current.nextActive
+  const reset = async () => {
+    const activeEl = stateRef.current.activeEl
 
-    if (nextActive) {
-      nextActive.style.transitionDuration = ''
-      nextActive.classList.remove('is-active')
+    if (activeEl) {
+      activeEl.classList.remove('is-active')
     }
 
-    stateRef.current.direction = options.direction ?? 1
-    stateRef.current.activeIndex = options.activeIndex ?? -1
-    stateRef.current.isRunning = false
-    stateRef.current.nextActive = null
+    stateRef.current.activeEl = null
   }
 
   useImperativeHandle(gameBarRef, () => ({
-    getState,
-    start,
-    stop,
     highlight,
     reset,
     setActive,
