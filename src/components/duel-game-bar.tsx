@@ -33,10 +33,8 @@ const DuelGameBar = ({
   const wrapperRef = useRef<HTMLTableElement>(null)
   const stateRef = useRef<{
     activeEl: HTMLTableCellElement | null
-    startNumber: number
   }>({
     activeEl: null,
-    startNumber: -1,
   })
 
   const getCellByIndex = (index: number) => {
