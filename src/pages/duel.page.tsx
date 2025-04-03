@@ -38,7 +38,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     gameBarRefHandle,
     readySetPullHandleRef,
     round,
-    pullTrigger,
+    pull,
     requestRematch,
     hasPull,
     rematchState,
@@ -48,7 +48,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const visiblePlayerInfo = showPlayerInfo
 
   const handlePull = async () => {
-    pullTrigger()
+    pull()
   }
 
   const handleRequestRematch = async () => {

@@ -154,7 +154,7 @@ export const useDuelSocket = ({
     await victoryHandleRef.current?.updateState({ show: false })
   }, [])
 
-  const pullTrigger = async () => {
+  const pull = async () => {
     setPulls((p) => [...p, round])
 
     duelSocketEvents.pullTrigger()
@@ -342,7 +342,7 @@ export const useDuelSocket = ({
     backCharacterHandleRef,
     gameBarRefHandle,
     readySetPullHandleRef,
-    pullTrigger,
+    pull,
     requestRematch,
     reset,
     hasPull,
