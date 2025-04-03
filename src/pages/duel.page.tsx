@@ -18,7 +18,7 @@ import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
-import { Indicators } from '@/components/indicators'
+import { RematchRequest } from '@/components/rematch-request'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const navigate = useNavigate()
@@ -70,36 +70,17 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         headerProfile
       />
       {variant === 'watch' && <Bar />}
+      {rematchState !== 'hide' && (
+        <RematchRequest
+          indicators={[
+            { confirm: requestIndicator.player },
+            { confirm: requestIndicator.opponnent },
+          ]}
+          onRequest={handleRequestRematch}
+          onCancel={handleCancelRematch}
+        />
+      )}
       <div className='relative flex grow flex-col items-center justify-center'>
-        {rematchState !== 'hide' && (
-          <div className='absolute top-1/2 left-1/2 z-3 flex w-full max-w-80 -translate-1/2 flex-col items-center justify-center gap-4 bg-white/90 p-4 text-center shadow-2xl'>
-            <div className='text-2xl'>Request rematch</div>
-            <Indicators
-              indicators={[
-                { confirm: requestIndicator.player },
-                { confirm: requestIndicator.opponnent },
-              ]}
-            />
-            <div className='flex justify-between gap-4'>
-              <ButtonWithAudio
-                as='button'
-                bg='green'
-                className='w-full text-sm'
-                onClick={handleRequestRematch}
-              >
-                Request
-              </ButtonWithAudio>
-              <ButtonWithAudio
-                as='button'
-                bg='red'
-                className='w-full text-sm'
-                onClick={handleCancelRematch}
-              >
-                Cancel
-              </ButtonWithAudio>
-            </div>
-          </div>
-        )}
         <div className='mt-auto w-full pt-6'>
           <div className='relative mt-auto flex flex-col gap-10'>
             <div

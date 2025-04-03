@@ -1,6 +1,8 @@
 import { cn } from '@/lib/utils'
 
-const Indicators = ({ indicators }: { indicators: { confirm: boolean }[] }) => {
+export type Indicator = { confirm: boolean }
+
+const Indicators = ({ indicators }: { indicators: Indicator[] }) => {
   return (
     <div className='flex items-center justify-center gap-2'>
       {indicators.map((indicator, i) => (
