@@ -45,7 +45,6 @@ const useMatchmakingSocket = (token: string) => {
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
   const isUnmounted = useUnmountedState()
-  const currentPing = pingData.ping
   const [playerId, setPlayerId] = useState<string | null>(null)
 
   const matchmakerEvents = useMemo(
@@ -315,25 +314,6 @@ const useMatchmakingSocket = (token: string) => {
   }, [matchmakerEvents])
 
   const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
-    if (!socket || !socket.connected || !authenticated) {
-      addLogEntry('Not connected or authenticated', 'error')
-      notify('Not connected or authenticated', 'error')
-      return
-    }
-
-    // Check if ping is too high
-    if (currentPing > 500) {
-      addLogEntry(
-        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
-        'error',
-      )
-      notify(
-        `Cannot join matchmaking: ping too high (${currentPing}ms)`,
-        'error',
-      )
-      return
-    }
-
     const joinMatchmaking: JoinMatchmaking = {
       betOptions: {
         networkId: 'local',
