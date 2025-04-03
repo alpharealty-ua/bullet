@@ -173,9 +173,9 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const gameOver = useCallback(async () => {
+    // TODO: REMOVE STATE
     setState('game-over')
 
-    const timeout = wait(3000)
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({
@@ -189,7 +189,7 @@ const useSolo = (variant: VariantGame) => {
     })
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
-    await timeout
+    await wait(1000)
     await gameOverHandleRef.current?.updateState({ show: false })
   }, [setState, wait])
 
