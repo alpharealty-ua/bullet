@@ -19,7 +19,6 @@ import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
 
 const useMatchmakingSocket = (token: string) => {
-  const autoConnect = useSettingsStore(({ autoConnect }) => autoConnect)
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -386,10 +385,6 @@ const useMatchmakingSocket = (token: string) => {
   }
 
   useEffect(() => {
-    if (!autoConnect) {
-      return
-    }
-
     matchmakerEvents.connect()
     matchmakerEvents.attachEventListeners()
 
@@ -404,7 +399,7 @@ const useMatchmakingSocket = (token: string) => {
         matchmakerEvents.disconnect()
       })
     }
-  }, [matchmakerEvents, autoConnect, isUnmounted])
+  }, [matchmakerEvents, isUnmounted])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 

@@ -146,7 +146,6 @@ export const SETTINGS = {
   invertButtons: 'Invert PULL AND DEAL button positions',
   blood: 'Toggles off blood',
   declineAllDeals: 'Decline all deals',
-  autoConnect: 'Auto connect to matchmaker',
 } as const
 
 export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
@@ -155,7 +154,6 @@ export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
   invertButtons: false,
   blood: false,
   declineAllDeals: false,
-  autoConnect: true,
 }
 
 export const settingsEntries = Object.entries(SETTINGS) as [
