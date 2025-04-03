@@ -15,8 +15,7 @@ import { CharacterHandle, CharacterState } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { VictoryHandle } from '@/components/victory'
-
-type StateGame = 'preperation' | 'running' | 'win' | 'lose' | 'draw'
+import { GameOverHandle } from '@/components/game-over'
 
 export const useDuelSocket = ({
   token,
@@ -31,7 +30,6 @@ export const useDuelSocket = ({
   const isUnmounted = useUnmountedState()
   const queryClient = useQueryClient()
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
-  const [gameState, setGameState] = useState<StateGame>('preperation')
   const [pulls, setPulls] = useState<number[]>([])
   const [round, setRound] = useState(1)
   const [rematchState, setRematchState] = useState<
@@ -41,6 +39,7 @@ export const useDuelSocket = ({
     player: false,
     opponnent: false,
   })
+  const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
   const backCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -96,25 +95,36 @@ export const useDuelSocket = ({
     }
   }, [])
 
-  const newGame = useCallback(async () => {
-    setGameState('preperation')
-  }, [])
-
+  // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
-    await backCharacterHandleRef?.current?.updateState('eliminated')
-    await frontCharacterHandleRef?.current?.updateState('winner')
-    setGameState('lose')
+    await backCharacterHandleRef.current?.updateState('eliminated')
+    await frontCharacterHandleRef.current?.updateState('winner')
+
+    const soundGen = gameOverHandleRef.current?.runSound()
+    await soundGen?.next()
+    await gameOverHandleRef.current?.updateState({
+      show: true,
+      disabled: true,
+      on: async (event) => {
+        if (event === 'click') {
+          await gameOverHandleRef.current?.updateState({ show: false })
+        }
+      },
+    })
+    await soundGen?.next()
+    await gameOverHandleRef.current?.updateState({ disabled: false })
+    await wait(1000).promise
+    await gameOverHandleRef.current?.updateState({ show: false })
   }, [])
 
   const winGame = useCallback(
     async (characterState: CharacterState = 'eliminated') => {
-      setGameState('win')
       setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
       const genRunSound = victoryHandleRef.current?.runSound()
 
-      await frontCharacterHandleRef?.current?.updateState(characterState)
-      await backCharacterHandleRef?.current?.updateState('winner')
+      await frontCharacterHandleRef.current?.updateState(characterState)
+      await backCharacterHandleRef.current?.updateState('winner')
       await victoryHandleRef.current?.updateState({
         show: true,
         type: 'win',
@@ -179,8 +189,6 @@ export const useDuelSocket = ({
 
             isWin ? await winGame() : await gameOver()
 
-            setRematchState('show')
-
             return
           }
           notify(payload.message, 'info')
@@ -192,7 +200,6 @@ export const useDuelSocket = ({
         case 'game:round_started':
         case 'game:round_current': {
           setRound(payload.roundNumber)
-          setGameState('running')
           return
         }
         case 'game:ready':
@@ -258,7 +265,6 @@ export const useDuelSocket = ({
         case 'game:rematch_created': {
           setRequestIndicator({ opponnent: true, player: true })
           setRematchState('created')
-          setGameState('preperation')
           notify(payload.message, 'info')
           const rematchGameId = payload.rematchGame.id
           navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
@@ -330,6 +336,7 @@ export const useDuelSocket = ({
   }, [duelSocketEvents, isUnmounted])
 
   return {
+    gameOverHandleRef,
     victoryHandleRef,
     frontCharacterHandleRef,
     backCharacterHandleRef,
@@ -338,9 +345,7 @@ export const useDuelSocket = ({
     pullTrigger,
     requestRematch,
     reset,
-    gameState,
     hasPull,
-    newGame,
     round,
     rematchState,
     requestIndicator,
