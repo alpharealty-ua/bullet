@@ -14,7 +14,6 @@ import { Footer } from '@/components/footer'
 import { EnterArena } from '@/components/enter-arena'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AddMoneyModal } from '@/components/add-money-modal'
-import { MatchmakerPing } from '@/components/matchmaker-ping'
 import { MatchmakerStatistics } from '@/components/matchmaker-statistics'
 
 const region = 'us-west'
@@ -34,7 +33,6 @@ const MatchmakerPage = () => {
     leaveMatchmaking,
     declineMatch,
     confirmMatch,
-    pingData,
     statistics,
     matchmakingStatus,
     indicators,
@@ -93,7 +91,6 @@ const MatchmakerPage = () => {
               onCountdownEnd={handleCountdownEnd}
               defaultValue={`${MIN_DUEL_BET}`}
             />
-            <MatchmakerPing pingData={pingData} />
             <MatchmakerStatistics statistics={statistics} />
           </div>
         )}
