@@ -286,13 +286,6 @@ const useSolo = (variant: VariantGame) => {
     }
   }, [gameId, newGame, pullGame, startGame, state])
 
-  const draw = async () => {
-    setState('draw')
-
-    await wait(2000)
-    await newGame()
-  }
-
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !gameId) {
@@ -449,11 +442,7 @@ const useSolo = (variant: VariantGame) => {
     revolverHandleRef,
     next,
     deal,
-    newGame,
     watchGame,
-    gameOver,
-    winGame,
-    draw,
   }
 }
 
