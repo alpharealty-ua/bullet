@@ -115,6 +115,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           ref={mergeRefs(ref, gunRef)}
           className={cn(
             'absolute z-1 aspect-[1/1.5]',
+            // TODO: CREATE MAP STYLES
             isFront && isNubcat && 'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
             isFront &&
               isMickey &&

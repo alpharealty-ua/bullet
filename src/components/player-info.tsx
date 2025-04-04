@@ -3,7 +3,8 @@ import React from 'react'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-interface PlayerInfoProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+export interface PlayerInfoProps
+  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   side: 'left' | 'right'
   level: number
   login: string

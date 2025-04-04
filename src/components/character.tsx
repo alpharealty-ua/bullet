@@ -6,17 +6,29 @@ import { FaCrown } from 'react-icons/fa'
 import { cn } from '@/lib/utils'
 import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
 import { GunCharacter, GunHandle } from '@/components/character-gun'
+import { PlayerInfo, PlayerInfoProps } from '@/components/player-info'
 
-export type CharacterState = 'eliminated' | 'alive' | 'left' | 'winner'
+export type CharacterState = {
+  characterState: 'eliminated' | 'alive' | 'left' | 'winner'
+  showInfo: boolean
+}
+
+const initState = {
+  characterState: 'alive',
+  showInfo: true,
+} satisfies CharacterState
+
 interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
   name: CharacterName
   type: CharacterType
+  playerInfoProps?: Omit<PlayerInfoProps, 'visible'>
   beforeSlot?: React.ReactNode
   characterHandleRef?: React.ForwardedRef<CharacterHandle>
 }
 
 export interface CharacterHandle {
-  updateState: (state: CharacterState) => Promise<void>
+  updateState: (state: Partial<CharacterState>) => Promise<void>
+  toggleInfo: () => Promise<void>
   reset: () => Promise<void>
   frontGunHandleRef?: React.RefObject<GunHandle>
   backGunHandleRef?: React.RefObject<GunHandle>
@@ -24,20 +36,31 @@ export interface CharacterHandle {
 
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   (
-    { name, className, beforeSlot, characterHandleRef, type, ...props },
+    {
+      name,
+      className,
+      beforeSlot,
+      playerInfoProps,
+      characterHandleRef,
+      type,
+      ...props
+    },
     ref,
   ) => {
     const frontGunHandleRef = useRef<GunHandle>(null)
     const backGunHandleRef = useRef<GunHandle>(null)
-    const [state, setState] = useState<CharacterState>('alive')
+    const [{ characterState, showInfo }, setState] =
+      useState<CharacterState>(initState)
 
     useImperativeHandle(characterHandleRef, () => {
       return {
-        updateState: async (state: CharacterState) => {
-          setState(state)
+        updateState: async (state: Partial<CharacterState>) => {
+          setState((p) => ({ ...p, ...state }))
         },
+        toggleInfo: async () =>
+          setState((p) => ({ ...p, showInfo: !p.showInfo })),
         reset: async () => {
-          setState('alive')
+          setState(initState)
         },
         frontGunHandleRef,
         backGunHandleRef,
@@ -54,7 +77,9 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
         )}
         {...props}
       >
-        {beforeSlot}
+        {playerInfoProps && (
+          <PlayerInfo {...playerInfoProps} visible={showInfo} />
+        )}
         <div
           className={cn(
             'absolute inset-0',
@@ -94,26 +119,26 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             hideGun={true}
           />
         </div>
-        {state !== 'alive' && (
+        {characterState !== 'alive' && (
           <div
             className={cn(
               'absolute -top-10 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center gap-2',
               'fade-in animate-in zoom-in-80 duration-500',
             )}
           >
-            {state === 'eliminated' && (
+            {characterState === 'eliminated' && (
               <>
                 <div className='text-3xl'>Dead</div>
                 <IoSkull className='text-red relative mx-auto text-9xl' />
               </>
             )}
-            {state === 'left' && (
+            {characterState === 'left' && (
               <>
                 <div className='text-3xl'>Left</div>
                 <ImExit className='text-red relative mx-auto text-9xl' />
               </>
             )}
-            {state === 'winner' && (
+            {characterState === 'winner' && (
               <>
                 <div className='text-3xl'>Winner</div>
                 <FaCrown className='text-green relative mx-auto text-9xl' />

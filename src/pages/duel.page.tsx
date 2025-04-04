@@ -14,7 +14,6 @@ import { Footer } from '@/components/footer'
 import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from '@/components/duel-game-bar'
 import { Character } from '@/components/character'
-import { PlayerInfo } from '@/components/player-info'
 import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
@@ -25,7 +24,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId } = useParams() as { gameId: string }
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)
-  const [showPlayerInfo, setShowPlayerInfo] = useState(false)
   const playerId = user.id
   const token = useAuthStore(({ token }) => token)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
@@ -46,8 +44,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     requestIndicator,
   } = useDuelSocket({ token: token!, gameId, playerId })
 
-  const visiblePlayerInfo = showPlayerInfo
-
   const handlePull = async () => {
     pull()
   }
@@ -60,7 +56,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     navigate(ROUTES.duel.play)
   }
 
-  const handlePlayerClick = () => setShowPlayerInfo((p) => !p)
+  const handlePlayerClick = () => {
+    frontCharacterHandleRef.current?.toggleInfo()
+    backCharacterHandleRef.current?.toggleInfo()
+  }
 
   return (
     <>
@@ -100,15 +99,12 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 type='front'
                 onClick={handlePlayerClick}
                 characterHandleRef={frontCharacterHandleRef}
-                beforeSlot={
-                  <PlayerInfo
-                    side='left'
-                    level={53}
-                    login={matchDetails?.opponent.username ?? 'username'}
-                    win={52}
-                    visible={visiblePlayerInfo}
-                  />
-                }
+                playerInfoProps={{
+                  side: 'left',
+                  level: 53,
+                  login: matchDetails?.opponent.username ?? 'username',
+                  win: 52,
+                }}
               />
               <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
             </div>
@@ -119,15 +115,12 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 type='back'
                 onClick={handlePlayerClick}
                 characterHandleRef={backCharacterHandleRef}
-                beforeSlot={
-                  <PlayerInfo
-                    side='right'
-                    level={53}
-                    login={user.username}
-                    win={52}
-                    visible={visiblePlayerInfo}
-                  />
-                }
+                playerInfoProps={{
+                  side: 'right',
+                  level: 53,
+                  login: user.username,
+                  win: 52,
+                }}
               />
               <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
                 <div className='relative ml-auto'>

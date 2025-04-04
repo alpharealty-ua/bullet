@@ -99,8 +99,12 @@ export const useDuelSocket = ({
       await backCharacterHandleRef.current?.reset()
     }
 
-    await backCharacterHandleRef.current?.updateState('eliminated')
-    await frontCharacterHandleRef.current?.updateState('winner')
+    await backCharacterHandleRef.current?.updateState({
+      characterState: 'eliminated',
+    })
+    await frontCharacterHandleRef.current?.updateState({
+      characterState: 'winner',
+    })
 
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
@@ -121,13 +125,15 @@ export const useDuelSocket = ({
   }, [])
 
   const winGame = useCallback(
-    async (characterState: CharacterState = 'eliminated') => {
+    async (characterState: CharacterState['characterState'] = 'eliminated') => {
       setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
       const genRunSound = victoryHandleRef.current?.runSound()
 
-      await frontCharacterHandleRef.current?.updateState(characterState)
-      await backCharacterHandleRef.current?.updateState('winner')
+      await frontCharacterHandleRef.current?.updateState({ characterState })
+      await backCharacterHandleRef.current?.updateState({
+        characterState: 'winner',
+      })
       await victoryHandleRef.current?.updateState({
         show: true,
         type: 'win',
