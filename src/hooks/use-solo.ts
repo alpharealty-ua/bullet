@@ -51,7 +51,6 @@ const useSolo = (variant: VariantGame) => {
   const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
   const setOffer = useGameStore(({ setOffer }) => setOffer)
   const setBet = useGameStore(({ setBet }) => setBet)
-  const setState = useGameStore(({ setState }) => setState)
   const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
   const setIsStartedGame = useGameStore(
     ({ setIsStartedGame }) => setIsStartedGame,
@@ -59,7 +58,6 @@ const useSolo = (variant: VariantGame) => {
   const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
   const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
   const restartGame = useGameStore(({ newGame }) => newGame)
-  const state = useGameStore(({ state }) => state)
   const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
   const offer = useGameStore(({ offer }) => offer)
   const bet = useGameStore(({ bet }) => bet)
@@ -72,6 +70,9 @@ const useSolo = (variant: VariantGame) => {
   } | null>(null)
 
   const newGame = useCallback(async () => {
+    await victoryHandleRef.current?.updateState({ show: false })
+    await gameOverHandleRef.current?.updateState({ show: false })
+
     if (gameId) {
       navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
@@ -156,8 +157,6 @@ const useSolo = (variant: VariantGame) => {
         }))
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
 
-      // TODO: REMOVE
-      setState('running')
       const multiplierIndex = MULTIPLIERS.findIndex(
         (value) => value === Number(multiplier),
       )
@@ -169,13 +168,10 @@ const useSolo = (variant: VariantGame) => {
       await getMultiplier(multiplierIndex)
       navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
     },
-    [bet, getMultiplier, navigate, queryClient, setState, startGameMutation],
+    [bet, getMultiplier, navigate, queryClient, startGameMutation],
   )
 
   const gameOver = useCallback(async () => {
-    // TODO: REMOVE STATE
-    setState('game-over')
-
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({
@@ -183,18 +179,17 @@ const useSolo = (variant: VariantGame) => {
       disabled: true,
       on: async (event) => {
         if (event === 'click') {
-          await gameOverHandleRef.current?.updateState({ show: false })
+          newGame()
         }
       },
     })
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000)
-    await gameOverHandleRef.current?.updateState({ show: false })
-  }, [setState, wait])
+    newGame()
+  }, [wait, newGame])
 
   const winGame = useCallback(async () => {
-    setState('win')
     setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
     const genRunSound = victoryHandleRef.current?.runSound()
@@ -209,10 +204,8 @@ const useSolo = (variant: VariantGame) => {
     await genRunSound?.next()
 
     setIncreaseTime(undefined)
-    await victoryHandleRef.current?.updateState({
-      show: false,
-    })
-  }, [setState, setIncreaseTime, queryClient, jackpot])
+    newGame()
+  }, [setIncreaseTime, queryClient, jackpot, newGame])
 
   const pullGame = useCallback(
     async (
@@ -268,11 +261,6 @@ const useSolo = (variant: VariantGame) => {
     try {
       disabledRef.current = true
 
-      if (state === 'win' || state === 'game-over') {
-        await newGame()
-        return
-      }
-
       if (!gameId) {
         await startGame()
         return
@@ -284,15 +272,14 @@ const useSolo = (variant: VariantGame) => {
     } finally {
       disabledRef.current = false
     }
-  }, [gameId, newGame, pullGame, startGame, state])
+  }, [gameId, pullGame, startGame])
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !gameId) {
-      // setState('running')
       // navigate(`${ROUTES.solo.play}/${activeGame.id}`, { preventScrollReset: true })
     }
-  }, [allGames, navigate, gameId, setState])
+  }, [allGames, navigate, gameId])
 
   useEffect(() => {
     const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
@@ -308,8 +295,6 @@ const useSolo = (variant: VariantGame) => {
     const bet = Number(gameDetails.betAmount ?? 0)
     const multiplier = Number(gameDetails.multiplier ?? 0)
     const countBullet = 5 - Number(gameDetails.currentPosition ?? 0)
-    const isActive = gameDetails.status === 'ACTIVE'
-    const isPending = gameDetails.status === 'PENDING'
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
     const isWin = gameDetails.status === 'COMPLETED_WIN'
 
@@ -317,18 +302,18 @@ const useSolo = (variant: VariantGame) => {
     setBet(bet)
     setCountBullet(countBullet)
     setMultiplier(multiplier)
-    ;(isActive || isPending) && setState('running')
-    isGameOver && setState('game-over')
-    isWin && setState('win')
+    if (isGameOver) gameOver()
+    if (isWin) winGame()
   }, [
     gameDetails,
-    setState,
     setJackpot,
     setBet,
     setCountBullet,
     setMultiplier,
     setIsStartedGame,
     gameId,
+    gameOver,
+    winGame,
   ])
 
   useEffect(() => {

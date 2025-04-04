@@ -3,13 +3,11 @@ import { persist } from 'zustand/middleware'
 
 import { Offer } from '@/api/game.api'
 import { MatchDetails } from '@/socket/matchmaker/matchmaker-soket.types'
-import { CharacterName, StateGame } from '@/lib/constants'
+import { CharacterName } from '@/lib/constants'
 
 interface GameState {
-  state: StateGame
   balance: number
   multiplier: number
-  prevState: StateGame
   isStartedGame: boolean
   jackpot: number
   bet: number
@@ -22,7 +20,6 @@ interface GameState {
   pullRound: number[]
   playerId: string | null
   matchDetails: MatchDetails | null
-  setState: (state: StateGame) => void
   setBalance: (balance: number) => void
   setMultiplier: (multiplier: number) => void
   setIsStartedGame: (isStartedGame: boolean) => void
@@ -45,8 +42,6 @@ interface GameState {
 const useGameStore = create<GameState>()(
   persist(
     (set, get) => ({
-      state: 'preparation',
-      prevState: 'preparation',
       balance: 0,
       characterName: 'nubcat',
       round: 1,
@@ -61,7 +56,6 @@ const useGameStore = create<GameState>()(
       pullRound: [],
       playerId: null,
       matchDetails: null,
-      setState: (state: StateGame) => set({ state }),
       setBalance: (balance: number) => set({ balance }),
       setMultiplier: (multiplier: number) => set({ multiplier }),
       setIsStartedGame: (isStartedGame: boolean) => set({ isStartedGame }),
@@ -83,7 +77,6 @@ const useGameStore = create<GameState>()(
         set({ matchDetails }),
       newGame: () => {
         const {
-          setState,
           setJackpot,
           setBet,
           setOffer,
@@ -98,7 +91,6 @@ const useGameStore = create<GameState>()(
         const hasPrevBet = bet !== 0
         const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
-        setState('preparation')
         setJackpot(0)
         setBet(prevBet)
         setOffer(null)
