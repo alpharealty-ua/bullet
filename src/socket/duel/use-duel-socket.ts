@@ -89,6 +89,12 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.reset()
   }, [])
 
+  const playerLeft = useCallback(async () => {
+    await frontCharacterHandleRef.current?.updateState({
+      characterState: 'left',
+    })
+  }, [])
+
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
     const resetGameOver = async () => {
@@ -124,36 +130,35 @@ export const useDuelSocket = ({
     resetGameOver()
   }, [])
 
-  const winGame = useCallback(
-    async (characterState: CharacterState['characterState'] = 'eliminated') => {
-      setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
+  const winGame = useCallback(async () => {
+    setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
 
-      const genRunSound = victoryHandleRef.current?.runSound()
+    const genRunSound = victoryHandleRef.current?.runSound()
 
-      await frontCharacterHandleRef.current?.updateState({ characterState })
-      await backCharacterHandleRef.current?.updateState({
-        characterState: 'winner',
-      })
-      await victoryHandleRef.current?.updateState({
-        show: true,
-        type: 'win',
-        oldLevel: 722,
-        newLevel: 754,
-      })
-      await genRunSound?.next()
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-      await genRunSound?.next()
+    await frontCharacterHandleRef.current?.updateState({
+      characterState: 'eliminated',
+    })
+    await backCharacterHandleRef.current?.updateState({
+      characterState: 'winner',
+    })
+    await victoryHandleRef.current?.updateState({
+      show: true,
+      type: 'win',
+      oldLevel: 722,
+      newLevel: 754,
+    })
+    await genRunSound?.next()
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+    await genRunSound?.next()
 
-      setIncreaseTime(undefined)
-      await rematchRequestHandleRef.current?.updateState({ show: true })
-      await victoryHandleRef.current?.updateState({
-        show: false,
-      })
-      await frontCharacterHandleRef.current?.reset()
-      await backCharacterHandleRef.current?.reset()
-    },
-    [queryClient, setIncreaseTime],
-  )
+    setIncreaseTime(undefined)
+    await rematchRequestHandleRef.current?.updateState({ show: true })
+    await victoryHandleRef.current?.updateState({
+      show: false,
+    })
+    await frontCharacterHandleRef.current?.reset()
+    await backCharacterHandleRef.current?.reset()
+  }, [queryClient, setIncreaseTime])
 
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()
@@ -293,8 +298,7 @@ export const useDuelSocket = ({
           return
         }
         case 'game:player_left': {
-          console.log('game:player_left', payload)
-          await winGame('left')
+          playerLeft()
           return
         }
         case 'game:player_disconnected': {
@@ -329,6 +333,7 @@ export const useDuelSocket = ({
     opponentPull,
     drawGame,
     navigate,
+    playerLeft,
   ])
 
   useEffect(() => {
