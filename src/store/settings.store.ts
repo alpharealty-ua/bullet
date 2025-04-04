@@ -40,18 +40,19 @@ const useSettingsStore = create<SettingsState>()(
         audio.muted = !get().soundEffects
         audio.currentTime = 0
 
-        try {
-          if (play) {
-            await audio.play()
+        const nativePlay = audio.play
+
+        audio.play = async () => {
+          try {
+            await nativePlay.call(audio)
+          } catch (error) {
+            const duration = (audio.duration || 1) * 1000
+            setTimeout(() => audio.dispatchEvent(new Event('ended')), duration)
           }
-        } catch (error) {
-          if (play) {
-            setTimeout(
-              () => audio.dispatchEvent(new Event('ended')),
-              (audio.duration || 1) * 1000,
-            )
-          }
-          console.log(error)
+        }
+
+        if (play) {
+          await audio.play()
         }
 
         return audio

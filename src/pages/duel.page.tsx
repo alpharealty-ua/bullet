@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
@@ -71,10 +70,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       />
       {variant === 'watch' && <Bar />}
       <RematchRequest
-        indicators={[
-          { confirm: requestIndicator.player },
-          { confirm: requestIndicator.opponnent },
-        ]}
+        indicators={[requestIndicator.player, requestIndicator.opponnent]}
         onRequest={handleRequestRematch}
         onCancel={handleCancelRematch}
         rematchRequestHandleRef={rematchRequestHandleRef}
