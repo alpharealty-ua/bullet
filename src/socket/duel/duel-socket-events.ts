@@ -24,6 +24,7 @@ import {
   JoinedResponse,
   RoundStartedResponse,
   BaseDuelPayload,
+  StartedResponse,
 } from '@/socket/duel/duel-socket.types'
 import { notify, SocketEvents } from '@/socket/utils'
 
@@ -49,6 +50,7 @@ export type OnEvents =
     }
   | { type: 'game:pull_result'; payload: PullResult }
   | { type: 'game:player_won'; payload: Won }
+  | { type: 'game:started'; payload: StartedResponse }
   | { type: 'game:ended'; payload: Ended }
   | { type: 'probability'; payload: Probability }
   | { type: 'game:rematch_requested'; payload: RematchRequestResponse }
@@ -125,6 +127,7 @@ class DuelSocketEvents extends SocketEvents {
   attachEventListeners() {
     this.dettachEventListeners()
 
+    // TODO: ADD ZOD VALIDATION
     this.on('connect', () => {
       notify(`Connected to duel game service.`, 'info')
       this.onEvent({ type: 'connect', payload: undefined })
@@ -172,6 +175,10 @@ class DuelSocketEvents extends SocketEvents {
 
     this.on('game:player_won', (data: PlayerWonResponse) => {
       this.onEvent({ type: 'game:player_won', payload: data })
+    })
+
+    this.on('game:started', (data: StartedResponse) => {
+      this.onEvent({ type: 'game:started', payload: data })
     })
 
     this.on('game:ended', (data: EndedResponse) => {

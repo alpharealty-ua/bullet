@@ -41,6 +41,11 @@ export interface PlayerWonResponse {
   message: string
   playerId: string
 }
+export interface StartedResponse {
+  game: Game
+  gameId: string
+  message: string
+}
 export interface EndedResponse {
   gameId: string
   message: string

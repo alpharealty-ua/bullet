@@ -11,7 +11,7 @@ import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
 import { wait } from '@/lib/utils'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
-import { CharacterHandle, CharacterState } from '@/components/character'
+import { CharacterHandle } from '@/components/character'
 import { GameBarHandle } from '@/components/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { VictoryHandle } from '@/components/victory'
@@ -212,6 +212,7 @@ export const useDuelSocket = ({
         case 'game:reconnected': {
           break
         }
+        // TODO: REMOVE round_current
         case 'game:round_started':
         case 'game:round_current': {
           setRound(payload.roundNumber)
@@ -257,6 +258,9 @@ export const useDuelSocket = ({
         case 'game:player_won': {
           const isWin = payload.playerId === playerId
           notify(payload.message, isWin ? 'success' : 'error')
+          return
+        }
+        case 'game:started': {
           return
         }
         case 'game:ended': {
