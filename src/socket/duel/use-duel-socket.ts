@@ -221,7 +221,11 @@ export const useDuelSocket = ({
         case 'game:take':
         case 'game:pull': {
           if (payload.roundNumber === 1) {
-            readySetPullHandleRef.current?.start(payload.event)
+            await readySetPullHandleRef.current?.start(payload.event)
+            if (type === 'game:pull') {
+              frontCharacterHandleRef.current?.updateState({ showInfo: false })
+              backCharacterHandleRef.current?.updateState({ showInfo: false })
+            }
           }
 
           return
