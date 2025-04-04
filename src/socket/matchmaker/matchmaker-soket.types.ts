@@ -152,11 +152,6 @@ export type ErrorResponse = {
   timestamp: string
 }
 
-export type Indicator = {
-  playerId: string
-  confirm: boolean
-}
-
 export type Player = {
   id: string // Player ID
   username: string // Player username

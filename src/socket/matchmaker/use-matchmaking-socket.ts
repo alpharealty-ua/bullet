@@ -5,7 +5,6 @@ import {
   PingData,
   MatchmakingStatus,
   ConnectionStatus,
-  Indicator,
   Statistics,
   AdditionalPlayerMetadata,
   JoinMatchmaking,
@@ -17,6 +16,7 @@ import { addLogEntry, notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
+import { Indicator } from '@/components/indicators'
 
 const useMatchmakingSocket = (token: string) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
@@ -39,7 +39,9 @@ const useMatchmakingSocket = (token: string) => {
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>('disconnected')
   const [authenticated, setAuthenticated] = useState(false)
-  const [indicators, setIndicators] = useState<Indicator[]>([])
+  const [indicators, setIndicators] = useState<
+    (Indicator & { playerId: string })[]
+  >([])
   const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
   const [currentMatchId, setMatchId] = useState<string | null>(null)
@@ -165,7 +167,11 @@ const useMatchmakingSocket = (token: string) => {
 
           // Create player confirmation indicators
           setIndicators(
-            payload.players.map((playerId) => ({ playerId, confirm: false })),
+            payload.players.map((playerId) => ({
+              playerId,
+              confirm: undefined,
+              cancel: undefined,
+            })),
           )
 
           // Play match found sound
@@ -187,11 +193,12 @@ const useMatchmakingSocket = (token: string) => {
           }
 
           // Update player confirmation indicators
-          setIndicators((prevIndicators) =>
-            prevIndicators.map((indicator) => ({
-              ...indicator,
-              confirm: payload.confirmedPlayers.includes(indicator.playerId),
-            })),
+          setIndicators((prev) =>
+            prev.map((indicator) =>
+              payload.confirmedPlayers.includes(indicator.playerId)
+                ? { ...indicator, cancel: undefined, confirm: true }
+                : { ...indicator },
+            ),
           )
 
           return

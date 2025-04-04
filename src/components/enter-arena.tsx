@@ -1,14 +1,11 @@
 import { IoPlay } from 'react-icons/io5'
 
-import {
-  Indicator,
-  MatchmakingStatus,
-} from '@/socket/matchmaker/matchmaker-soket.types'
+import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 import { START_GAME_COUNTDOWN, IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/countdown'
-import { Indicators } from '@/components/indicators'
+import { Indicator, Indicators } from '@/components/indicators'
 
 interface EnterArenaProps {
   onDecline: () => void

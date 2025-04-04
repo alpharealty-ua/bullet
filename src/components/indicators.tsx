@@ -1,6 +1,9 @@
 import { cn } from '@/lib/utils'
 
-export type Indicator = { confirm: boolean }
+export type Indicator =
+  | { confirm: boolean; cancel: undefined }
+  | { confirm: undefined; cancel: boolean }
+  | { confirm: undefined; cancel: undefined }
 
 const Indicators = ({ indicators }: { indicators: Indicator[] }) => {
   return (
@@ -11,6 +14,7 @@ const Indicators = ({ indicators }: { indicators: Indicator[] }) => {
           className={cn(
             'border-primary h-6 w-6 rounded-full border bg-[#ecf0f1] shadow-lg',
             indicator.confirm && 'border-transparent bg-[#2ecc71]',
+            indicator.cancel && 'bg-red border-transparent',
           )}
         ></div>
       ))}

@@ -17,6 +17,7 @@ import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
 import { RematchRequestHandle } from '@/components/rematch-request'
+import { Indicator } from '@/components/indicators'
 
 export const useDuelSocket = ({
   token,
@@ -36,9 +37,11 @@ export const useDuelSocket = ({
   const [_, setRematchState] = useState<'hide' | 'requested' | 'created'>(
     'hide',
   )
-  const [requestIndicator, setRequestIndicator] = useState({
-    player: false,
-    opponnent: false,
+  const [requestIndicator, setRequestIndicator] = useState<
+    Record<'player' | 'opponnent', Indicator>
+  >({
+    player: { confirm: undefined, cancel: undefined },
+    opponnent: { confirm: undefined, cancel: undefined },
   })
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
@@ -280,15 +283,30 @@ export const useDuelSocket = ({
         }
         case 'game:rematch_requested': {
           const isPlayer = payload.playerId === playerId
-          isPlayer
-            ? setRequestIndicator((p) => ({ ...p, player: true }))
-            : setRequestIndicator((p) => ({ ...p, opponnent: true }))
+
+          setRequestIndicator((p) => ({
+            ...p,
+            [isPlayer ? 'player' : 'opponnent']: {
+              confirm: true,
+              cancel: undefined,
+            } satisfies Indicator,
+          }))
+
           setRematchState('requested')
           notify(payload.message, 'info')
           return
         }
         case 'game:rematch_created': {
-          setRequestIndicator({ opponnent: true, player: true })
+          setRequestIndicator({
+            player: {
+              confirm: true,
+              cancel: undefined,
+            },
+            opponnent: {
+              confirm: true,
+              cancel: undefined,
+            },
+          })
           setRematchState('created')
           notify(payload.message, 'info')
           const rematchGameId = payload.rematchGame.id
@@ -298,7 +316,15 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_cancelled': {
-          setRequestIndicator({ opponnent: false, player: true })
+          const isPlayer = payload.playerId === playerId
+          setRequestIndicator((p) => ({
+            ...p,
+            [isPlayer ? 'player' : 'opponnent']: {
+              confirm: undefined,
+              cancel: true,
+            } satisfies Indicator,
+          }))
+
           return
         }
         case 'game:countdown_update': {
