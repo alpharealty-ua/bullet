@@ -17,8 +17,10 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
       <div
         ref={ref}
         className={cn(
-          'relative w-[145px]',
+          'absolute top-0 w-[145px]',
           'fill-mode-both fade-out fade-in duration-500',
+          side === 'left' && 'right-full translate-x-2',
+          side === 'right' && 'left-full -translate-x-2',
           side === 'left' && 'slide-in-from-right-20 slide-out-to-right-20',
           side === 'right' && 'slide-in-from-left-20 slide-out-to-left-20',
           visible ? 'animate-in' : 'animate-out',

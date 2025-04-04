@@ -102,7 +102,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 characterHandleRef={frontCharacterHandleRef}
                 beforeSlot={
                   <PlayerInfo
-                    className='absolute top-0 right-full translate-x-2'
                     side='left'
                     level={53}
                     login={matchDetails?.opponent.username ?? 'username'}
@@ -122,7 +121,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 characterHandleRef={backCharacterHandleRef}
                 beforeSlot={
                   <PlayerInfo
-                    className='absolute top-0 left-full translate-x-2'
                     side='right'
                     level={53}
                     login={user.username}
