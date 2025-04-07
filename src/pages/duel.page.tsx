@@ -44,7 +44,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   } = useDuelSocket({ token: token!, gameId, playerId })
 
   const handlePull = async () => {
-    pull()
+    await pull()
   }
 
   const handleRequestRematch = async () => {
