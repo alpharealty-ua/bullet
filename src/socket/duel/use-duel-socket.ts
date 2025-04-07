@@ -184,7 +184,8 @@ export const useDuelSocket = ({
     await wait(2000).promise
 
     await victoryHandleRef.current?.updateState({ show: false })
-  }, [])
+    navigate(ROUTES.duel.play, { preventScrollReset: true })
+  }, [navigate])
 
   const pull = async () => {
     setPulls((p) => [...p, round])
