@@ -133,6 +133,7 @@ export const useDuelSocket = ({
         }
       },
     })
+    await Promise.all([hideRematchRequestPromise, showGameOverPromise])
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
