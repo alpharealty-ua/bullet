@@ -137,7 +137,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
-      <Footer round={round} hasPull={hasPull} />
+      <Footer round={round} hasPull={hasPull} prizepool={2000} />
     </>
   )
 }

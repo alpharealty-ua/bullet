@@ -9,9 +9,11 @@ import { ProfileLink } from '@/components/profile-link'
 const Footer = ({
   round,
   hasPull = true,
+  prizepool,
 }: {
   round?: number
   hasPull?: boolean
+  prizepool?: number
 }) => {
   const modal = useCustomModal()
 
@@ -60,14 +62,16 @@ const Footer = ({
         </div>
       </div>
       <div className='relative flex flex-1 flex-col items-end gap-0.5'>
-        <div className='flex flex-col gap-0.5'>
-          <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
-            Prizepool
+        {prizepool && (
+          <div className='flex flex-col gap-0.5'>
+            <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
+              Prizepool
+            </div>
+            <div className='relative flex justify-center text-center text-lg leading-[1] tracking-tight'>
+              ${prizepool}
+            </div>
           </div>
-          <div className='relative flex justify-center text-center text-lg leading-[1] tracking-tight'>
-            $2000
-          </div>
-        </div>
+        )}
       </div>
       <div className='absolute right-1 bottom-1'>
         <ButtonWithAudio
