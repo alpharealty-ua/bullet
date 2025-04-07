@@ -101,11 +101,14 @@ export const useDuelSocket = ({
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
     const resetGameOver = async () => {
-      await gameOverHandleRef.current?.updateState({ show: false })
-      await rematchRequestHandleRef.current?.updateState({ show: true })
+      const hideGameOverPromise = gameOverHandleRef.current?.updateState({
+        show: false,
+      })
+      const showRematchPromsie = rematchRequestHandleRef.current?.updateState({
+        show: true,
+      })
 
-      await frontCharacterHandleRef.current?.reset()
-      await backCharacterHandleRef.current?.reset()
+      await Promise.all([hideGameOverPromise, showRematchPromsie])
     }
 
     await backCharacterHandleRef.current?.updateState({
@@ -117,7 +120,11 @@ export const useDuelSocket = ({
 
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
-    await gameOverHandleRef.current?.updateState({
+    const hideRematchRequestPromise =
+      rematchRequestHandleRef.current?.updateState({
+        show: false,
+      })
+    const showGameOverPromise = gameOverHandleRef.current?.updateState({
       show: true,
       disabled: true,
       on: async (event) => {
@@ -144,23 +151,30 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.updateState({
       characterState: 'winner',
     })
-    await victoryHandleRef.current?.updateState({
+    const hideRematchRequestPromise =
+      rematchRequestHandleRef.current?.updateState({
+        show: false,
+      })
+    const showVictoryPromise = victoryHandleRef.current?.updateState({
       show: true,
       type: 'win',
       oldLevel: 722,
       newLevel: 754,
     })
+    await Promise.all([hideRematchRequestPromise, showVictoryPromise])
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
-
-    setIncreaseTime(undefined)
-    await rematchRequestHandleRef.current?.updateState({ show: true })
-    await victoryHandleRef.current?.updateState({
+    const hideVictoryPromise = victoryHandleRef.current?.updateState({
       show: false,
     })
-    await frontCharacterHandleRef.current?.reset()
-    await backCharacterHandleRef.current?.reset()
+    const showRematchRequestPromise =
+      rematchRequestHandleRef.current?.updateState({
+        show: true,
+      })
+    await Promise.all([hideVictoryPromise, showRematchRequestPromise])
+
+    setIncreaseTime(undefined)
   }, [queryClient, setIncreaseTime])
 
   const drawGame = useCallback(async () => {
