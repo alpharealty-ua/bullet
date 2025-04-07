@@ -1,5 +1,6 @@
-import { useImperativeHandle, useState } from 'react'
+import { useImperativeHandle } from 'react'
 
+import { useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
@@ -23,14 +24,12 @@ interface GameOverProps {
 const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
-  const [{ show, disabled, on }, setState] = useState<GameOverState>({
-    show: false,
-    disabled: false,
-    on: null,
-  })
-
-  const updateState = async (state: Partial<GameOverState>) =>
-    setState((p) => ({ ...p, ...state }))
+  const [{ show, disabled, on }, updateState, timeout] =
+    useUpdateShow<GameOverState>({
+      show: false,
+      disabled: false,
+      on: null,
+    })
 
   const runSound = async function* () {
     const audio = await playAudio('drumbeat')
@@ -52,7 +51,7 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
     <AnimationInOut
       in={show}
       unmountOnExit
-      timeout={400}
+      timeout={timeout}
       className={cn('absolute inset-0 z-50 flex', 'duration-0')}
     >
       <button

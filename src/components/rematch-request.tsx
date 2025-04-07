@@ -1,5 +1,6 @@
-import { useImperativeHandle, useState } from 'react'
+import { useImperativeHandle } from 'react'
 
+import { useUpdateShow } from '@/hooks/use-update-show'
 import { cn } from '@/lib/utils'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Indicator, Indicators } from '@/components/indicators'
@@ -26,12 +27,9 @@ const RematchRequest = ({
   onRequest,
   onCancel,
 }: RematchRequestProps) => {
-  const [{ show }, setState] = useState<RematchRequestState>({
+  const [{ show }, updateState, timeout] = useUpdateShow<RematchRequestState>({
     show: false,
   })
-
-  const updateState = async (state: Partial<RematchRequestState>) =>
-    setState((p) => ({ ...p, ...state }))
 
   useImperativeHandle(rematchRequestHandleRef, () => ({
     updateState,
@@ -41,7 +39,7 @@ const RematchRequest = ({
     <AnimationInOut
       in={show}
       unmountOnExit
-      timeout={400}
+      timeout={timeout}
       className={cn(
         'absolute top-1/2 left-1/2 z-3 flex w-full max-w-80 -translate-1/2 flex-col items-center justify-center gap-4 bg-white/90 p-4 text-center shadow-2xl',
         'zoom-in-0 zoom-out-0 duration-400',

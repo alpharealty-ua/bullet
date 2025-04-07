@@ -1,8 +1,9 @@
-import { useImperativeHandle, useState } from 'react'
+import { useImperativeHandle } from 'react'
 
+import { useUpdateShow } from '@/hooks/use-update-show'
+import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
-import { useSettingsStore } from '@/store/settings.store'
 import { AnimationInOut } from '@/components/animation-in-out'
 
 export interface VictoryHandle {
@@ -24,14 +25,15 @@ interface VictoryState {
 
 const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const [{ show, type, win, oldLevel, newLevel }, setState] =
-    useState<VictoryState>({
+  const [{ show, type, win, oldLevel, newLevel }, updateState, timeout] =
+    useUpdateShow<VictoryState>({
       show: false,
       type: 'win',
       win: null,
       oldLevel: null,
       newLevel: null,
     })
+
   const isWin = type === 'win'
   const isDraw = type === 'draw'
 
@@ -44,9 +46,6 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
     await waitEndAudio(winSoundAudio)
   }
 
-  const updateState = async (state: Partial<VictoryState>) =>
-    setState((p) => ({ ...p, ...state }))
-
   useImperativeHandle(victoryHandleRef, () => ({
     updateState,
     runSound,
@@ -56,7 +55,7 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
     <AnimationInOut
       in={show}
       unmountOnExit
-      timeout={400}
+      timeout={timeout}
       className={cn(
         'absolute top-1/2 right-0 left-0 z-10 -translate-y-1/2 py-[10px]',
         'zoom-in-200 zoom-out-200 duration-400',
