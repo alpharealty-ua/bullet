@@ -1,3 +1,4 @@
+import { useGameStats } from '@/api/leadboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   LineChart,
@@ -12,7 +13,7 @@ import {
   Cell,
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import leaderboardData from '@/data/leaderboard.json'
+import { Loading } from '@/components/loading'
 
 const flags = {
   NA: '🇺🇸',
@@ -20,9 +21,10 @@ const flags = {
   ASIA: '🇯🇵',
   SA: '🇧🇷',
   OCE: '🇦🇺',
+  RU: 'RU',
 } as const
 
-type FlagKeys = keyof typeof flags
+export type FlagKeys = keyof typeof flags
 
 const getRegionFlag = (region: FlagKeys) => {
   return flags[region] ?? '🌍'
@@ -40,6 +42,12 @@ const getFlagColor = (lvl: number) => {
 const CURRENT_LEVEL = 53
 
 const Leaderboard = () => {
+  const { data: leaderboardData, isLoading, isSuccess } = useGameStats()
+
+  if (isLoading || !isSuccess) {
+    return <Loading />
+  }
+
   return (
     <Tabs className='flex flex-col overflow-hidden' defaultValue='top'>
       <TabsList>
@@ -97,7 +105,7 @@ const Leaderboard = () => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-200 bg-white'>
-              {leaderboardData.global.map((player) => (
+              {leaderboardData.topPlayers.map((player) => (
                 <tr key={player.username} className='hover:bg-gray-50'>
                   <td className='px-2 py-3 text-sm font-medium whitespace-nowrap text-gray-900'>
                     #{player.rank}
@@ -194,7 +202,7 @@ const Leaderboard = () => {
             <CardContent>
               <div className='h-64'>
                 <ResponsiveContainer width='100%' height='100%'>
-                  <BarChart data={leaderboardData.distribution}>
+                  <BarChart data={leaderboardData.levelDistribution}>
                     <CartesianGrid strokeDasharray='3 3' />
                     <XAxis dataKey='range' />
                     <YAxis />
@@ -202,7 +210,7 @@ const Leaderboard = () => {
                       formatter={(value) => [`${value} Players`, 'Count']}
                     />
                     <Bar dataKey='count' name='Players'>
-                      {leaderboardData.distribution.map((entry, index) => (
+                      {leaderboardData.levelDistribution.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Bar>
@@ -210,7 +218,7 @@ const Leaderboard = () => {
                 </ResponsiveContainer>
               </div>
               <div className='mt-4 grid grid-cols-3 gap-2'>
-                {leaderboardData.distribution.map((tier) => (
+                {leaderboardData.levelDistribution.map((tier) => (
                   <div
                     key={tier.range}
                     className='flex items-center rounded p-2'
@@ -229,7 +237,6 @@ const Leaderboard = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardHeader>
               <CardTitle>Regional Distribution</CardTitle>
@@ -253,7 +260,6 @@ const Leaderboard = () => {
                   </div>
                 ))}
               </div>
-
               <div className='mt-6'>
                 <h4 className='mb-2 font-bold'>Population Insights:</h4>
                 <ul className='space-y-1 text-sm'>
@@ -349,9 +355,9 @@ const Leaderboard = () => {
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-gray-200 bg-white'>
-                  {leaderboardData.milestones.map((milestone) => (
+                  {leaderboardData.milestones.map((milestone, i) => (
                     <tr
-                      key={milestone.lvl}
+                      key={i}
                       className={
                         milestone.lvl === CURRENT_LEVEL ? 'bg-blue-50' : ''
                       }
