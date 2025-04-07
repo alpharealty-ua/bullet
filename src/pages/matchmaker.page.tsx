@@ -67,7 +67,7 @@ const MatchmakerPage = () => {
   return (
     <>
       <Header logoText='duel' noMoney={noMoney} headerProfile />
-      <div className='flex grow flex-col items-center pt-2'>
+      <div className='flex grow flex-col items-center justify-center'>
         {!canJoin && (
           <div className='relative flex flex-col items-center justify-center pt-6'>
             {/*  TODO: EXTRACTED TO COMPONENT  */}
