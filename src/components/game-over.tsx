@@ -1,13 +1,12 @@
 import { useImperativeHandle } from 'react'
 
-import { useUpdateShow } from '@/hooks/use-update-show'
+import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { AnimationInOut } from '@/components/animation-in-out'
 
-export interface GameOverHandle {
-  updateState: (state: Partial<GameOverState>) => Promise<void>
+export interface GameOverHandle extends UpdateShowMethods<GameOverState> {
   runSound: () => AsyncGenerator<void>
 }
 
@@ -24,12 +23,15 @@ interface GameOverProps {
 const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
-  const [{ show, disabled, on }, updateState, timeout] =
-    useUpdateShow<GameOverState>({
-      show: false,
-      disabled: false,
-      on: null,
-    })
+  const {
+    state: { show, disabled, on },
+    timeout,
+    ...methods
+  } = useUpdateShow<GameOverState>({
+    show: false,
+    disabled: false,
+    on: null,
+  })
 
   const runSound = async function* () {
     const audio = await playAudio('drumbeat')
@@ -38,8 +40,8 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
   }
 
   useImperativeHandle(gameOverHandleRef, () => ({
-    updateState,
     runSound,
+    ...methods,
   }))
 
   // TODO: MAYBE CHANGED TO PROPS ON_CLICK LIKE REMATCH REQUEST

@@ -1,13 +1,12 @@
 import { useImperativeHandle } from 'react'
 
-import { useUpdateShow } from '@/hooks/use-update-show'
+import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { AnimationInOut } from '@/components/animation-in-out'
 
-export interface VictoryHandle {
-  updateState: (state: Partial<VictoryState>) => Promise<void>
+export interface VictoryHandle extends UpdateShowMethods<VictoryState> {
   runSound: () => AsyncGenerator<void>
 }
 
@@ -25,14 +24,17 @@ interface VictoryState {
 
 const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const [{ show, type, win, oldLevel, newLevel }, updateState, timeout] =
-    useUpdateShow<VictoryState>({
-      show: false,
-      type: 'win',
-      win: null,
-      oldLevel: null,
-      newLevel: null,
-    })
+  const {
+    state: { show, type, win, oldLevel, newLevel },
+    timeout,
+    ...methods
+  } = useUpdateShow<VictoryState>({
+    show: false,
+    type: 'win',
+    win: null,
+    oldLevel: null,
+    newLevel: null,
+  })
 
   const isWin = type === 'win'
   const isDraw = type === 'draw'
@@ -47,8 +49,8 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
   }
 
   useImperativeHandle(victoryHandleRef, () => ({
-    updateState,
     runSound,
+    ...methods,
   }))
 
   return (

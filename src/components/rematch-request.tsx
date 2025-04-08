@@ -1,38 +1,62 @@
 import { useImperativeHandle } from 'react'
 
-import { useUpdateShow } from '@/hooks/use-update-show'
+import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { cn } from '@/lib/utils'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Indicator, Indicators } from '@/components/indicators'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-export interface RematchRequestHandle {
-  updateState: (state: Partial<RematchRequestState>) => Promise<void>
+export interface RematchRequestHandle
+  extends UpdateShowMethods<RematchRequestState> {
+  action: (playerOrOpponnent: IndicatorSide, action: Indicator) => Promise<void>
 }
+
+type IndicatorSide = 'player' | 'opponnent'
 
 interface RematchRequestState {
   show: boolean
+  indicators: Record<IndicatorSide, Indicator>
 }
 
 interface RematchRequestProps {
   rematchRequestHandleRef?: React.ForwardedRef<RematchRequestHandle>
-  indicators: Indicator[]
   onRequest: () => void
   onCancel: () => void
 }
 
 const RematchRequest = ({
   rematchRequestHandleRef,
-  indicators,
   onRequest,
   onCancel,
 }: RematchRequestProps) => {
-  const [{ show }, updateState, timeout] = useUpdateShow<RematchRequestState>({
+  const {
+    state: { show, indicators },
+    timeout,
+    ...methods
+  } = useUpdateShow<RematchRequestState>({
     show: false,
+    indicators: {
+      player: 'init',
+      opponnent: 'init',
+    },
   })
 
+  const action = async (
+    playerOrOpponnent: IndicatorSide,
+    action: Indicator,
+  ) => {
+    methods.updateState((p) => ({
+      ...p,
+      indicators: {
+        ...p.indicators,
+        [playerOrOpponnent]: action,
+      },
+    }))
+  }
+
   useImperativeHandle(rematchRequestHandleRef, () => ({
-    updateState,
+    ...methods,
+    action,
   }))
 
   return (

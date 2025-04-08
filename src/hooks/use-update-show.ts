@@ -6,6 +6,12 @@ const SHOW_TIMEOUT = 400
 
 type UpdateShowAction<A> = Partial<A> | ((s: A) => A)
 
+export interface UpdateShowMethods<T> {
+  updateState: DispatchUpdateShow<T>
+  show: () => Promise<void>
+  hide: () => Promise<void>
+}
+
 export interface DispatchUpdateShow<ComponentState> {
   (newState: UpdateShowAction<ComponentState>): Promise<void>
 }
@@ -31,7 +37,11 @@ const useUpdateShow = <ComponentState extends { show: boolean }>(
     }
   }
 
-  return [state, updateState, timeout] as const
+  const show = () => updateState({ show: true } as Partial<ComponentState>)
+
+  const hide = () => updateState({ show: false } as Partial<ComponentState>)
+
+  return { state, updateState, show, hide, timeout }
 }
 
 export { useUpdateShow }
