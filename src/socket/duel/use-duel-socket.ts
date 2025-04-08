@@ -34,15 +34,6 @@ export const useDuelSocket = ({
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
   const [round, setRound] = useState(1)
-  const [_, setRematchState] = useState<'hide' | 'requested' | 'created'>(
-    'hide',
-  )
-  const [requestIndicator, setRequestIndicator] = useState<
-    Record<'player' | 'opponnent', Indicator>
-  >({
-    player: 'init',
-    opponnent: 'init',
-  })
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -101,12 +92,8 @@ export const useDuelSocket = ({
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
     const resetGameOver = async () => {
-      const hideGameOverPromise = gameOverHandleRef.current?.updateState({
-        show: false,
-      })
-      const showRematchPromsie = rematchRequestHandleRef.current?.updateState({
-        show: true,
-      })
+      const hideGameOverPromise = gameOverHandleRef.current?.hide()
+      const showRematchPromsie = rematchRequestHandleRef.current?.show()
 
       await Promise.all([hideGameOverPromise, showRematchPromsie])
     }
@@ -120,12 +107,8 @@ export const useDuelSocket = ({
 
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
-    const hideRematchRequestPromise =
-      rematchRequestHandleRef.current?.updateState({
-        show: false,
-      })
-    const showGameOverPromise = gameOverHandleRef.current?.updateState({
-      show: true,
+    const hideRematchRequestPromise = rematchRequestHandleRef.current?.hide()
+    gameOverHandleRef.current?.updateState({
       disabled: true,
       on: async (event) => {
         if (event === 'click') {
@@ -133,6 +116,7 @@ export const useDuelSocket = ({
         }
       },
     })
+    const showGameOverPromise = gameOverHandleRef.current?.show()
     await Promise.all([hideRematchRequestPromise, showGameOverPromise])
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
@@ -152,27 +136,19 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.updateState({
       characterState: 'winner',
     })
-    const hideRematchRequestPromise =
-      rematchRequestHandleRef.current?.updateState({
-        show: false,
-      })
-    const showVictoryPromise = victoryHandleRef.current?.updateState({
-      show: true,
+    const hideRematchRequestPromise = rematchRequestHandleRef.current?.hide()
+    victoryHandleRef.current?.updateState({
       type: 'win',
       oldLevel: 722,
       newLevel: 754,
     })
+    const showVictoryPromise = victoryHandleRef.current?.show()
     await Promise.all([hideRematchRequestPromise, showVictoryPromise])
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
-    const hideVictoryPromise = victoryHandleRef.current?.updateState({
-      show: false,
-    })
-    const showRematchRequestPromise =
-      rematchRequestHandleRef.current?.updateState({
-        show: true,
-      })
+    const hideVictoryPromise = victoryHandleRef.current?.hide()
+    const showRematchRequestPromise = rematchRequestHandleRef.current?.show()
     await Promise.all([hideVictoryPromise, showRematchRequestPromise])
 
     setIncreaseTime(undefined)
@@ -181,10 +157,11 @@ export const useDuelSocket = ({
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()
     await backCharacterHandleRef.current?.reset()
-    await victoryHandleRef.current?.updateState({ show: true, type: 'draw' })
+    await victoryHandleRef.current?.updateState({ type: 'draw' })
+    await victoryHandleRef.current?.show()
     await wait(2000).promise
 
-    await victoryHandleRef.current?.updateState({ show: false })
+    await victoryHandleRef.current?.hide()
     navigate(ROUTES.duel.play, { preventScrollReset: true })
   }, [navigate])
 
@@ -299,23 +276,27 @@ export const useDuelSocket = ({
         }
         case 'game:rematch_requested': {
           const isPlayer = payload.playerId === playerId
+          const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
 
-          setRequestIndicator((p) => ({
-            ...p,
-            [isPlayer ? 'player' : 'opponnent']: 'confirm',
-          }))
+          await rematchRequestHandleRef.current?.action(
+            playerOrOpponent,
+            'confirm',
+          )
 
-          setRematchState('requested')
           notify(payload.message, 'info')
           return
         }
         case 'game:rematch_created': {
-          setRequestIndicator({
-            player: 'confirm',
-            opponnent: 'confirm',
-          })
-          setRematchState('created')
+          await rematchRequestHandleRef.current?.action('player', 'confirm')
+          await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
+
           notify(payload.message, 'info')
+
+          await wait(1500).promise
+          await rematchRequestHandleRef.current?.hide()
+          rematchRequestHandleRef.current?.action('player', 'init')
+          rematchRequestHandleRef.current?.action('opponnent', 'init')
+
           const rematchGameId = payload.rematchGame.id
           navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
             preventScrollReset: true,
@@ -324,10 +305,12 @@ export const useDuelSocket = ({
         }
         case 'game:rematch_cancelled': {
           const isPlayer = payload.playerId === playerId
-          setRequestIndicator((p) => ({
-            ...p,
-            [isPlayer ? 'player' : 'opponnent']: 'cancel',
-          }))
+          const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
+
+          await rematchRequestHandleRef.current?.action(
+            playerOrOpponent,
+            'cancel',
+          )
 
           return
         }
@@ -405,6 +388,5 @@ export const useDuelSocket = ({
     reset,
     hasPull,
     round,
-    requestIndicator,
   }
 }
