@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
-import { socketDuel as socket } from '@/socket/socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
@@ -19,13 +18,13 @@ import { GameOverHandle } from '@/components/game-over'
 import { RematchRequestHandle } from '@/components/rematch-request'
 
 export const useDuelSocket = ({
-  token,
   gameId,
   playerId,
+  duelSocketEvents,
 }: {
-  token: string
   gameId: string
   playerId: string
+  duelSocketEvents: DuelSocketEvents
 }) => {
   const navigate = useNavigate()
   const isUnmounted = useUnmountedState()
@@ -42,11 +41,6 @@ export const useDuelSocket = ({
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
   const hasPull = !pulls.includes(round)
-
-  const duelSocketEvents = useMemo(
-    () => new DuelSocketEvents(socket, token, gameId, playerId),
-    [token, gameId, playerId],
-  )
 
   const opponentPull = useCallback(async (shot: boolean) => {
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
@@ -65,14 +59,7 @@ export const useDuelSocket = ({
   }, [])
 
   const requestRematch = () => {
-    type RequestRematch = { gameId: string; playerId: string }
-
-    const payload: RequestRematch = {
-      gameId,
-      playerId,
-    }
-
-    socket.emit('game:request_rematch', payload)
+    duelSocketEvents.requestRematch()
   }
 
   const reset = useCallback(async () => {
@@ -357,19 +344,10 @@ export const useDuelSocket = ({
   ])
 
   useEffect(() => {
-    duelSocketEvents.connect()
     duelSocketEvents.attachEventListeners()
 
     return () => {
       duelSocketEvents.dettachEventListeners()
-
-      queueMicrotask(() => {
-        if (!isUnmounted()) {
-          return
-        }
-
-        duelSocketEvents.disconnect()
-      })
     }
   }, [duelSocketEvents, isUnmounted])
 

@@ -1,8 +1,12 @@
+import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
+import { socketDuel as socketDuel } from '@/socket/socket'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
+import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
+import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
@@ -27,6 +31,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const token = useAuthStore(({ token }) => token)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
 
+  const duelSocketEvents = useMemo(
+    () => new DuelSocketEvents(socketDuel, token!, gameId, playerId),
+    [token, gameId, playerId],
+  )
   const {
     gameOverHandleRef,
     victoryHandleRef,
@@ -40,7 +48,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     pull,
     requestRematch,
     hasPull,
-  } = useDuelSocket({ token: token!, gameId, playerId })
+  } = useDuelSocket({
+    gameId,
+    playerId,
+    duelSocketEvents,
+  })
 
   const handlePull = async () => {
     await pull()
@@ -58,6 +70,21 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     frontCharacterHandleRef.current?.toggleInfo()
     backCharacterHandleRef.current?.toggleInfo()
   }
+
+  const isUnmounted = useUnmountedState()
+  useEffect(() => {
+    duelSocketEvents.connect()
+
+    return () => {
+      queueMicrotask(() => {
+        if (!isUnmounted()) {
+          return
+        }
+
+        duelSocketEvents.disconnect()
+      })
+    }
+  }, [duelSocketEvents, isUnmounted])
 
   return (
     <>
@@ -97,9 +124,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               />
               <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
             </div>
-            <div className='relative mb-1 pb-10'>
+            <div className='relative'>
               <Character
-                className={cn('ml-6 max-h-[220px] max-w-[180px]')}
+                className={cn('mb-10 ml-6 max-h-[220px] max-w-[180px]')}
                 name={characterName}
                 type='back'
                 onClick={handlePlayerClick}

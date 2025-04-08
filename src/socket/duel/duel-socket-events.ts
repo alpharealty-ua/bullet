@@ -115,6 +115,17 @@ class DuelSocketEvents extends SocketEvents {
     this.socket.emit('game:leave', payload)
   }
 
+  requestRematch = () => {
+    notify(`Request rematch`, 'info')
+
+    const payload: BaseDuelPayload = {
+      gameId: this.gameId,
+      playerId: this.playerId,
+    }
+
+    this.socket.emit('game:request_rematch', payload)
+  }
+
   pullTrigger() {
     const payload: BaseDuelPayload = {
       gameId: this.gameId,
