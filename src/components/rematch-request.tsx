@@ -65,30 +65,31 @@ const RematchRequest = ({
       unmountOnExit
       timeout={timeout}
       className={cn(
-        'absolute top-1/2 left-1/2 z-3 flex w-full max-w-80 -translate-1/2 flex-col items-center justify-center gap-4 bg-white/90 p-4 text-center shadow-2xl',
-        'zoom-in-0 zoom-out-0 duration-400',
+        'absolute bottom-10 left-0 flex',
+        'slide-in-from-bottom slide-out-to-bottom duration-400',
       )}
     >
-      <div className='text-2xl'>Request rematch</div>
-      <Indicators indicators={indicators} />
-      <div className='flex justify-between gap-4'>
-        <ButtonWithAudio
-          as='button'
-          bg='green'
-          className='w-full text-sm'
-          onClick={onRequest}
-        >
-          Request
-        </ButtonWithAudio>
-        <ButtonWithAudio
-          as='button'
-          bg='red'
-          className='w-full text-sm'
-          onClick={onCancel}
-        >
-          Cancel
-        </ButtonWithAudio>
+      <div className='flex items-center gap-2 border-t-3 border-black bg-white p-2'>
+        <div className='text-2xl'>Rematch?</div>
+        <div className='flex justify-between gap-1'>
+          <ButtonWithAudio
+            as='button'
+            bg='green'
+            className='h-4 w-4 rounded-full p-0 text-xs'
+            onClick={onRequest}
+          ></ButtonWithAudio>
+          <ButtonWithAudio
+            as='button'
+            bg='red'
+            className='h-4 w-4 rounded-full p-0 text-xs'
+            onClick={onCancel}
+          ></ButtonWithAudio>
+        </div>
       </div>
+      <Indicators
+        className='w-11 border-b-0'
+        indicators={[indicators.player, indicators.opponnent]}
+      />
     </AnimationInOut>
   )
 }

@@ -17,7 +17,6 @@ import { ReadySetPullHandle } from '@/components/ready-set-pull'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
 import { RematchRequestHandle } from '@/components/rematch-request'
-import { Indicator } from '@/components/indicators'
 
 export const useDuelSocket = ({
   token,

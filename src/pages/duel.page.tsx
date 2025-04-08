@@ -68,12 +68,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         headerProfile
       />
       {variant === 'watch' && <Bar />}
-      <RematchRequest
-        indicators={[requestIndicator.player, requestIndicator.opponnent]}
-        onRequest={handleRequestRematch}
-        onCancel={handleCancelRematch}
-        rematchRequestHandleRef={rematchRequestHandleRef}
-      />
       <div className='relative flex grow flex-col items-center justify-center pt-2'>
         <DuelGameBar gameBarRef={topGameBarHandleRef} />
         <div className='mt-auto w-full pt-6'>
@@ -132,6 +126,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             </div>
           </div>
         </div>
+        <RematchRequest
+          onRequest={handleRequestRematch}
+          onCancel={handleCancelRematch}
+          rematchRequestHandleRef={rematchRequestHandleRef}
+        />
         <DuelGameBar gameBarRef={bottomGameBarHandleRef} />
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
