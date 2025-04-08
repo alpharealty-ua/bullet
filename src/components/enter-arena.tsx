@@ -123,17 +123,6 @@ const EnterArena = ({
               A match has been found. Please confirm to join the&nbsp;game.
             </div>
             <Indicators indicators={indicators} />
-            <div className='flex items-center justify-center gap-2'>
-              {indicators.map((indicator, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    'border-primary h-6 w-6 rounded-full border bg-[#ecf0f1] shadow-lg',
-                    indicator.confirm && 'border-transparent bg-[#2ecc71]',
-                  )}
-                ></div>
-              ))}
-            </div>
             <Countdown time={confirmationTimeoutSeconds} />
             <div className='flex justify-between gap-4'>
               <ButtonWithAudio

@@ -40,7 +40,7 @@ const useMatchmakingSocket = (token: string) => {
     useState<ConnectionStatus>('disconnected')
   const [authenticated, setAuthenticated] = useState(false)
   const [indicators, setIndicators] = useState<
-    (Indicator & { playerId: string })[]
+    { action: Indicator; playerId: string }[]
   >([])
   const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
@@ -169,8 +169,7 @@ const useMatchmakingSocket = (token: string) => {
           setIndicators(
             payload.players.map((playerId) => ({
               playerId,
-              confirm: undefined,
-              cancel: undefined,
+              action: 'init',
             })),
           )
 
@@ -196,7 +195,7 @@ const useMatchmakingSocket = (token: string) => {
           setIndicators((prev) =>
             prev.map((indicator) =>
               payload.confirmedPlayers.includes(indicator.playerId)
-                ? { ...indicator, cancel: undefined, confirm: true }
+                ? { ...indicator, action: 'confirm' }
                 : { ...indicator },
             ),
           )
@@ -401,7 +400,8 @@ const useMatchmakingSocket = (token: string) => {
     declineMatch,
     pingData,
     statistics,
-    indicators,
+    // TODO: USE REF
+    indicators: indicators.map((i) => i.action),
     matchDetails,
     confirmationTimeoutSeconds,
     getStats,

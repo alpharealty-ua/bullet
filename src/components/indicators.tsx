@@ -1,20 +1,29 @@
 import { cn } from '@/lib/utils'
 
-export type Indicator =
-  | { confirm: boolean; cancel: undefined }
-  | { confirm: undefined; cancel: boolean }
-  | { confirm: undefined; cancel: undefined }
+export type Indicator = 'confirm' | 'cancel' | 'init'
 
-const Indicators = ({ indicators }: { indicators: Indicator[] }) => {
+const Indicators = ({
+  indicators,
+  className,
+  ...props
+}: {
+  indicators: Indicator[]
+} & React.ComponentProps<'div'>) => {
   return (
-    <div className='flex items-center justify-center gap-2'>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center rounded-tr-2xl border-3 border-black',
+        className,
+      )}
+      {...props}
+    >
       {indicators.map((indicator, i) => (
         <div
           key={i}
           className={cn(
-            'border-primary h-6 w-6 rounded-full border bg-[#ecf0f1] shadow-lg',
-            indicator.confirm && 'border-transparent bg-[#2ecc71]',
-            indicator.cancel && 'bg-red border-transparent',
+            'bg-primary h-7 w-full border-t-4 border-black shadow-lg first:h-6 first:rounded-tr-xl first:border-t-0',
+            indicator === 'confirm' && 'bg-green',
+            indicator === 'cancel' && 'bg-red',
           )}
         ></div>
       ))}

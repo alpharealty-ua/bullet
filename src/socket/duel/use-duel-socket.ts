@@ -40,8 +40,8 @@ export const useDuelSocket = ({
   const [requestIndicator, setRequestIndicator] = useState<
     Record<'player' | 'opponnent', Indicator>
   >({
-    player: { confirm: undefined, cancel: undefined },
-    opponnent: { confirm: undefined, cancel: undefined },
+    player: 'init',
+    opponnent: 'init',
   })
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
@@ -302,10 +302,7 @@ export const useDuelSocket = ({
 
           setRequestIndicator((p) => ({
             ...p,
-            [isPlayer ? 'player' : 'opponnent']: {
-              confirm: true,
-              cancel: undefined,
-            } satisfies Indicator,
+            [isPlayer ? 'player' : 'opponnent']: 'confirm',
           }))
 
           setRematchState('requested')
@@ -314,14 +311,8 @@ export const useDuelSocket = ({
         }
         case 'game:rematch_created': {
           setRequestIndicator({
-            player: {
-              confirm: true,
-              cancel: undefined,
-            },
-            opponnent: {
-              confirm: true,
-              cancel: undefined,
-            },
+            player: 'confirm',
+            opponnent: 'confirm',
           })
           setRematchState('created')
           notify(payload.message, 'info')
@@ -335,10 +326,7 @@ export const useDuelSocket = ({
           const isPlayer = payload.playerId === playerId
           setRequestIndicator((p) => ({
             ...p,
-            [isPlayer ? 'player' : 'opponnent']: {
-              confirm: undefined,
-              cancel: true,
-            } satisfies Indicator,
+            [isPlayer ? 'player' : 'opponnent']: 'cancel',
           }))
 
           return
