@@ -23,6 +23,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-explicit-any': 0,
+      '@typescript-eslint/no-empty-object-type': 0,
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
