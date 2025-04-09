@@ -103,6 +103,15 @@
   }
 }
 
+@keyframes spin-with-opacity {
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @font-face {
   font-family: Verdana;
   src: url('/assets/fonts/Verdana.woff2');

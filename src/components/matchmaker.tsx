@@ -7,7 +7,8 @@ import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { useWait } from '@/hooks/use-wait'
 import { ROUTES } from '@/routes/path'
-import { MIN_DUEL_BET, START_GAME_COUNTDOWN } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+import { IMAGES, MIN_DUEL_BET, START_GAME_COUNTDOWN } from '@/lib/constants'
 import { EnterArena } from '@/components/enter-arena'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AddMoneyModal } from '@/components/add-money-modal'
@@ -106,16 +107,21 @@ const Matchmaker = ({
         <div className='flex w-full flex-col items-center justify-center gap-3'>
           {isNextSearch && (
             <div className='relative mx-auto flex w-full flex-col items-center justify-center gap-2'>
-              <div className='animate-in fade-in px-3 duration-500'>
-                <div className='px-5 text-lg'>
-                  <div className='text-2xl'>
-                    {matchmakingStatus === 'not-in-queue' ||
-                    matchmakingStatus === 'searching'
-                      ? 'Finding next opponent...'
-                      : matchmakingStatus === 'match-created'
-                        ? 'OPPONENT FOUND!'
-                        : ''}
-                  </div>
+              <div className='flex flex-col gap-2 px-3 py-20'>
+                <div
+                  className={cn(
+                    'absolute top-0 right-20 ml-auto aspect-[1/1.5] h-10 bg-contain bg-center bg-no-repeat',
+                    'repeat-infinite fill-mode-both animate-[spin-with-opacity] duration-2000 ease-linear',
+                  )}
+                  style={{ backgroundImage: `url(${IMAGES.bullet})` }}
+                ></div>
+                <div className='px-6 text-2xl'>
+                  {matchmakingStatus === 'not-in-queue' ||
+                  matchmakingStatus === 'searching'
+                    ? 'Finding next opponent...'
+                    : matchmakingStatus === 'match-created'
+                      ? 'OPPONENT FOUND!'
+                      : ''}
                 </div>
                 {matchmakingStatus === 'match-created' && (
                   <Countdown
