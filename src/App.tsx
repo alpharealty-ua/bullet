@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { useGameStore } from '@/store/game.store'
 
 const App = () => {
-  const token = useAuthStore(({ accessToken: token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   useProfile(Boolean(token))
   const { data: balance } = useBalance(Boolean(token))
   const setBalance = useGameStore(({ setBalance }) => setBalance)

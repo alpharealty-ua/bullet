@@ -23,7 +23,7 @@ import { RematchRequest } from '@/components/rematch-request'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId } = useParams() as { gameId: string }
-  const token = useAuthStore(({ token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)
   const playerId = user.id

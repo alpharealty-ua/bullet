@@ -13,7 +13,7 @@ import { PageWrapper } from '@/components/page-wrapper'
 
 const HomePage = () => {
   const modal = useCustomModal()
-  const token = useAuthStore(({ token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { data: user, isPending } = useProfile()
 

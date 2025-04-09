@@ -16,7 +16,7 @@ import { useUser } from '@/api/auth.api'
 const MatchmakerPage = () => {
   const [params] = useSearchParams()
   const isNextSearch = params.get('next') != null
-  const token = useAuthStore(({ token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   const { data: balance } = useBalance()
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)

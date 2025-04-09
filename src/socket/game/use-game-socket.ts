@@ -17,7 +17,7 @@ type PullGameFn = (
 const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
   const { gameId } = useParams<{ gameId: string }>()
 
-  const token = useAuthStore(({ token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   const [watchGame, setWatchGame] = useState<{
     gameId: string
     jackpot: number

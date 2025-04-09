@@ -8,14 +8,14 @@ import { Button as ButtonWithAudio } from '@/components/ui/button'
 
 const Debug = () => {
   const queryClient = useQueryClient()
-  const resetToken = useAuthStore(({ resetToken }) => resetToken)
+  const resetTokens = useAuthStore(({ resetTokens }) => resetTokens)
 
   const handleResetAddMoney = () => {
     removeItem('endTime')
   }
 
   const handleLogout = async () => {
-    resetToken()
+    resetTokens()
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 

@@ -7,14 +7,24 @@ import { RegisterSchema } from '@/lib/schemas/register.schema'
 import { ForgotPasswordSchema } from '@/lib/schemas/forgot-password.schema.ts'
 import { ResetPasswordSchema } from '@/lib/schemas/reset-password.schema.ts'
 
+interface RefreshTokenPayload {
+  refreshToken: string
+}
+
 interface LoginResponse {
   accessToken: string
+  refreshToken: string
   user: User
 }
 
 interface RegisterResponse {
   accessToken: string
   user: User
+}
+
+interface RefreshTokenResponse {
+  accessToken: string
+  refreshToken: string
 }
 
 interface ForgotPasswordResponse {
@@ -28,6 +38,7 @@ interface ResetPasswordResponse {
 const routes = {
   login: '/auth/login',
   register: '/auth/register',
+  refreshToken: '/auth/refresh-token',
   profile: '/auth/profile',
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
@@ -40,8 +51,18 @@ export const login = async (values: LoginSchema): Promise<LoginResponse> => {
 
 export const register = async (
   values: RegisterSchema,
-): Promise<LoginResponse> => {
+): Promise<RegisterResponse> => {
   const { data } = await api.post<RegisterResponse>(routes.register, values)
+  return data
+}
+
+export const refreshToken = async (
+  values: RefreshTokenPayload,
+): Promise<RefreshTokenResponse> => {
+  const { data } = await api.post<RefreshTokenResponse>(
+    routes.refreshToken,
+    values,
+  )
   return data
 }
 
@@ -71,12 +92,12 @@ export const resetPassword = async (
 }
 
 export const useLogin = () => {
-  const setToken = useAuthStore(({ setToken }) => setToken)
+  const setTokens = useAuthStore(({ setTokens }) => setTokens)
 
   return useMutation({
     mutationFn: login,
-    onSuccess: ({ accessToken }) => {
-      setToken(accessToken)
+    onSuccess: ({ accessToken, refreshToken }) => {
+      setTokens({ accessToken, refreshToken })
     },
   })
 }

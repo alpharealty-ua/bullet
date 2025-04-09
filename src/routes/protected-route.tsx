@@ -11,7 +11,7 @@ type ProtectedRouteProps = {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const token = useAuthStore(({ token }) => token)
+  const token = useAuthStore(({ accessToken }) => accessToken)
   const { data: user, isPending: profileIsPending } = useProfile()
   const { isPending: balanceIsPending } = useBalance()
   const { pathname } = useLocation()

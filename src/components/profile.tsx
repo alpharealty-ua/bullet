@@ -26,7 +26,7 @@ const Profile = ({ user }: { user: User }) => {
   const queryClient = useQueryClient()
   const { error, isPending } = useLogin()
   const [isSuccess, setIsSuccess] = useState(false)
-  const resetToken = useAuthStore(({ resetToken }) => resetToken)
+  const resetTokens = useAuthStore(({ resetTokens }) => resetTokens)
 
   const form = useForm<ChangePasswordSchema>({
     resolver: zodResolver(changePasswordSchema),
@@ -37,7 +37,7 @@ const Profile = ({ user }: { user: User }) => {
   })
 
   const handleLogout = async () => {
-    resetToken()
+    resetTokens()
     await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 
