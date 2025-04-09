@@ -335,14 +335,7 @@ export const useDuelSocket = ({
     navigate,
   ])
 
-  const firstRender = useRef(true)
   useEffect(() => {
-    if (firstRender.current) {
-      return () => {
-        firstRender.current = false
-      }
-    }
-
     if (!gameId) {
       return
     }
