@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { socketMatchmaker as socket } from '@/socket/socket'
 import {
@@ -6,19 +6,16 @@ import {
   MatchmakingStatus,
   ConnectionStatus,
   Statistics,
-  AdditionalPlayerMetadata,
-  JoinMatchmaking,
   MatchDetails,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
-import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { addLogEntry, notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
 import { Indicator } from '@/components/indicators'
 
-const useMatchmakingSocket = (token: string) => {
+const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -46,13 +43,7 @@ const useMatchmakingSocket = (token: string) => {
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
   const [currentMatchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
-  const isUnmounted = useUnmountedState()
   const [playerId, setPlayerId] = useState<string | null>(null)
-
-  const matchmakerEvents = useMemo(
-    () => new MatchmakerSocketEvents(socket, token),
-    [token],
-  )
 
   // TODO: REFACTOR
   const refState = useRef({
@@ -67,7 +58,7 @@ const useMatchmakingSocket = (token: string) => {
 
       switch (type) {
         case 'connect': {
-          notify('Connected to duel game service', 'info')
+          notify('Connected to matchmaker service', 'info')
           setConnectionStatus('authenticating')
           setGameId(null)
           return
@@ -319,22 +310,12 @@ const useMatchmakingSocket = (token: string) => {
       : matchmakerEvents.connect()
   }, [matchmakerEvents])
 
-  const joinMatchmaking = (metadata: AdditionalPlayerMetadata) => {
-    const joinMatchmaking: JoinMatchmaking = {
-      betOptions: {
-        networkId: 'local',
-        coinId: 'usd',
-        betAmount: '0.01',
-        maxRounds: 10,
-      },
-      metadata,
-      matchConfirmationRequired: false,
-    }
+  const joinMatchmaking = useCallback(() => {
+    matchmakerEvents.joinMatchmaking()
+  }, [matchmakerEvents])
 
-    matchmakerEvents.joinMatchmaking(joinMatchmaking)
-  }
-
-  const leaveMatchmaking = () => {
+  const leaveMatchmaking = useCallback(() => {
+    const { matchmakingStatus } = refState.current
     if (matchmakingStatus === 'match-found') {
       addLogEntry(
         'Cannot leave matchmaking while a match confirmation is active',
@@ -348,7 +329,7 @@ const useMatchmakingSocket = (token: string) => {
     }
 
     matchmakerEvents.leaveMatchmaking()
-  }
+  }, [matchmakerEvents])
 
   const confirmMatch = () => {
     if (currentMatchId === null) {
@@ -369,23 +350,6 @@ const useMatchmakingSocket = (token: string) => {
   const getStats = () => {
     matchmakerEvents.getStats()
   }
-
-  useEffect(() => {
-    matchmakerEvents.connect()
-    matchmakerEvents.attachEventListeners()
-
-    return () => {
-      matchmakerEvents.dettachEventListeners()
-
-      queueMicrotask(() => {
-        if (!isUnmounted()) {
-          return
-        }
-
-        matchmakerEvents.disconnect()
-      })
-    }
-  }, [matchmakerEvents, isUnmounted])
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
 

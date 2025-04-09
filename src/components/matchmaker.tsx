@@ -1,32 +1,34 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useUser } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
-import { useCustomModal } from '@/hooks/use-custom-modal'
 import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
-import { useGameStore } from '@/store/game.store'
-import { useAuthStore } from '@/store/auth.store'
+import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
+import { useCustomModal } from '@/hooks/use-custom-modal'
+import { useWait } from '@/hooks/use-wait'
 import { ROUTES } from '@/routes/path'
-import { MIN_DUEL_BET } from '@/lib/constants'
+import { MIN_DUEL_BET, START_GAME_COUNTDOWN } from '@/lib/constants'
 import { EnterArena } from '@/components/enter-arena'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AddMoneyModal } from '@/components/add-money-modal'
 import { MatchmakerStatistics } from '@/components/matchmaker-statistics'
+import { Countdown } from '@/components/countdown'
 
-const region = 'us-west'
-
-const Matchmaker = () => {
+const Matchmaker = ({
+  matchmakerEvents,
+  autoJoin,
+  isNextSearch,
+}: {
+  matchmakerEvents: MatchmakerSocketEvents
+  autoJoin?: boolean
+  isNextSearch?: boolean
+}) => {
   const navigate = useNavigate()
-  const { username } = useUser()
   const { data: balance } = useBalance()
   const modal = useCustomModal()
-  const characterName = useGameStore(({ characterName }) => characterName)
-  const token = useAuthStore(({ token }) => token)
   const canJoin = !(balance < MIN_DUEL_BET)
 
   const {
-    authenticated,
     joinMatchmaking,
     leaveMatchmaking,
     declineMatch,
@@ -36,15 +38,15 @@ const Matchmaker = () => {
     indicators,
     confirmationTimeoutSeconds,
     gameId,
-  } = useMatchmakingSocket(token!)
+  } = useMatchmakingSocket(matchmakerEvents)
 
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'
-      ? joinMatchmaking({ username, characterName, region })
+      ? joinMatchmaking()
       : matchmakingStatus === 'searching' && leaveMatchmaking()
   }
 
-  const handleCountdownEnd = useCallback(async () => {
+  const handleMatchCreatedCountdownEnd = useCallback(async () => {
     if (!gameId) {
       return
     }
@@ -60,8 +62,35 @@ const Matchmaker = () => {
     })
   }
 
+  const handleLeave = () => {
+    leaveMatchmaking()
+    navigate(ROUTES.duel.play)
+  }
+
+  const wait = useWait()
+  useEffect(() => {
+    if (!autoJoin) {
+      return
+    }
+
+    let called = false
+    ;(async () => {
+      await wait(3000)
+      called = true
+      joinMatchmaking()
+    })()
+
+    return () => {
+      if (!called) {
+        return
+      }
+
+      leaveMatchmaking()
+    }
+  }, [autoJoin, joinMatchmaking, leaveMatchmaking, wait])
+
   return (
-    <>
+    <div className='my-auto w-full'>
       {!canJoin && (
         <div className='relative flex flex-col items-center justify-center pt-6'>
           {/*  TODO: EXTRACTED TO COMPONENT  */}
@@ -73,22 +102,60 @@ const Matchmaker = () => {
           />
         </div>
       )}
-      {canJoin && authenticated && (
+      {canJoin && (
         <div className='flex w-full flex-col items-center justify-center gap-3'>
-          <EnterArena
-            onDecline={declineMatch}
-            onConfirm={confirmMatch}
-            onSearch={handleSearch}
-            indicators={indicators}
-            confirmationTimeoutSeconds={confirmationTimeoutSeconds}
-            matchmakingStatus={matchmakingStatus}
-            onCountdownEnd={handleCountdownEnd}
-            defaultValue={`${MIN_DUEL_BET}`}
-          />
-          <MatchmakerStatistics statistics={statistics} />
+          {isNextSearch && (
+            <div className='relative mx-auto flex w-full flex-col items-center justify-center gap-2'>
+              <div className='animate-in fade-in px-3 duration-500'>
+                <div className='px-5 text-lg'>
+                  <div className='text-2xl'>
+                    {matchmakingStatus === 'not-in-queue' ||
+                    matchmakingStatus === 'searching'
+                      ? 'Finding next opponent...'
+                      : matchmakingStatus === 'match-created'
+                        ? 'OPPONENT FOUND!'
+                        : ''}
+                  </div>
+                </div>
+                {matchmakingStatus === 'match-created' && (
+                  <Countdown
+                    time={START_GAME_COUNTDOWN}
+                    onEnd={handleMatchCreatedCountdownEnd}
+                    className='my-4 flex items-center justify-center text-5xl'
+                  />
+                )}
+
+                {(matchmakingStatus === 'not-in-queue' ||
+                  matchmakingStatus === 'searching') && (
+                  <div className='text-red flex w-full items-center justify-end gap-1'>
+                    Leave queue
+                    <ButtonWithAudio
+                      as='button'
+                      bg='red'
+                      className='h-5 w-5 rounded-full p-0 text-xs'
+                      onClick={handleLeave}
+                    ></ButtonWithAudio>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {!isNextSearch && (
+            <EnterArena
+              onDecline={declineMatch}
+              onConfirm={confirmMatch}
+              onSearch={handleSearch}
+              onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
+              indicators={indicators}
+              confirmationTimeoutSeconds={confirmationTimeoutSeconds}
+              matchmakingStatus={matchmakingStatus}
+              defaultValue={`${MIN_DUEL_BET}`}
+            />
+          )}
+          {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

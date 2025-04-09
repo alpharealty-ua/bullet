@@ -43,6 +43,11 @@ class MatchmakerSocketEvents extends SocketEvents {
   constructor(
     protected socket: Socket,
     public token: string,
+    public metadata: {
+      username: string
+      characterName: string
+      region: string
+    },
   ) {
     super(socket)
   }
@@ -131,7 +136,18 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.matchmakerPingClient?.dettachEventListeners()
   }
 
-  joinMatchmaking(payload: JoinMatchmaking) {
+  joinMatchmaking() {
+    const payload: JoinMatchmaking = {
+      betOptions: {
+        networkId: 'local',
+        coinId: 'usd',
+        betAmount: '0.01',
+        maxRounds: 10,
+      },
+      metadata: this.metadata,
+      matchConfirmationRequired: false,
+    }
+
     this.socket.emit('joinMatchmakingWithBet', payload)
   }
 

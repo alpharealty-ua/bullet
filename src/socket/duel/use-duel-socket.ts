@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
-import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
@@ -27,7 +26,6 @@ export const useDuelSocket = ({
   duelSocketEvents: DuelSocketEvents
 }) => {
   const navigate = useNavigate()
-  const isUnmounted = useUnmountedState()
   const queryClient = useQueryClient()
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
@@ -62,17 +60,15 @@ export const useDuelSocket = ({
     duelSocketEvents.requestRematch()
   }
 
+  const cancelRematch = () => {
+    navigate(`${ROUTES.duel.play}?next`)
+  }
+
   const reset = useCallback(async () => {
     await topGameBarHandleRef.current?.reset()
     await bottomGameBarHandleRef.current?.reset()
     await frontCharacterHandleRef.current?.reset()
     await backCharacterHandleRef.current?.reset()
-  }, [])
-
-  const playerLeft = useCallback(async () => {
-    await frontCharacterHandleRef.current?.updateState({
-      characterState: 'left',
-    })
   }, [])
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
@@ -148,7 +144,7 @@ export const useDuelSocket = ({
     await wait(2000).promise
 
     await victoryHandleRef.current?.hide()
-    navigate(ROUTES.duel.play, { preventScrollReset: true })
+    navigate(`${ROUTES.duel.play}?next`)
   }, [navigate])
 
   const pull = async () => {
@@ -163,7 +159,6 @@ export const useDuelSocket = ({
       switch (type) {
         case 'connect': {
           notify('Connected to duel game service', 'info')
-          duelSocketEvents.joinDuelGame()
           return
         }
         case 'connect_error': {
@@ -304,11 +299,9 @@ export const useDuelSocket = ({
           console.log('game:countdown_update', payload)
           return
         }
-        case 'game:player_left': {
-          playerLeft()
-          return
-        }
+        case 'game:player_left':
         case 'game:player_disconnected': {
+          navigate(`${ROUTES.duel.play}?next`)
           return
         }
         case 'error': {
@@ -340,16 +333,22 @@ export const useDuelSocket = ({
     opponentPull,
     drawGame,
     navigate,
-    playerLeft,
   ])
 
+  const firstRender = useRef(true)
   useEffect(() => {
-    duelSocketEvents.attachEventListeners()
-
-    return () => {
-      duelSocketEvents.dettachEventListeners()
+    if (firstRender.current) {
+      return () => {
+        firstRender.current = false
+      }
     }
-  }, [duelSocketEvents, isUnmounted])
+
+    if (!gameId) {
+      return
+    }
+
+    duelSocketEvents.joinDuelGame()
+  }, [duelSocketEvents, gameId])
 
   return {
     gameOverHandleRef,
@@ -362,6 +361,7 @@ export const useDuelSocket = ({
     rematchRequestHandleRef,
     pull,
     requestRematch,
+    cancelRematch,
     reset,
     hasPull,
     round,

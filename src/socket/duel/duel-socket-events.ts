@@ -140,7 +140,6 @@ class DuelSocketEvents extends SocketEvents {
 
     // TODO: ADD ZOD VALIDATION
     this.on('connect', () => {
-      notify(`Connected to duel game service.`, 'info')
       this.onEvent({ type: 'connect', payload: undefined })
     })
 
