@@ -13,6 +13,7 @@ export const QUERY_KEYS = {
   allGames: 'allGames',
   gameDetails: 'gameDetails',
   gameStats: 'gameStats',
+  characters: 'characters',
 } as const
 
 export const api = axios.create({

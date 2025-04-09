@@ -96,10 +96,6 @@ export type CharacterName =
 
 export type CharacterType = 'back' | 'front'
 
-export const CHARACTER_NAMES = Object.keys(CHARACTER_LIST) as CharacterName[]
-
-export const DISABLED_CHARACTER_NAMES: CharacterName[] = ['anime-2']
-
 export const AUDIOS = {
   revolverspin: '/assets/audios/revolverspin.mp3',
   trigger: '/assets/audios/trigger.wav',

@@ -2,39 +2,33 @@ import { useState } from 'react'
 import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
-import { cn, formatNumber } from '@/lib/utils'
-import {
-  CHARACTER_NAMES,
-  CharacterType,
-  IMAGES,
-  CharacterName,
-} from '@/lib/constants'
+import { cn } from '@/lib/utils'
+import { CharacterType, IMAGES } from '@/lib/constants'
 import { Character } from '@/components/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { CharacterEntity } from '@/api/duel.api'
 
 const CharacterSelector = ({
   label,
-  characterNames,
-  disabledCharacter,
+  characters,
   onSelect,
   defaultName,
 }: {
   label: string
-  characterNames: CharacterName[]
-  disabledCharacter: CharacterName[]
+  characters: CharacterEntity[]
   defaultName: string
-  onSelect: (index: number) => void
+  onSelect: (character: CharacterEntity) => void
 }) => {
   const [activeIndex, setActiveIndex] = useState(
-    characterNames.findIndex((n) => n === defaultName) ?? 0,
+    characters.findIndex((n) => n.id === defaultName) ?? 0,
   )
   const [type, setType] = useState<CharacterType>('front')
 
   const changeIndex = (index: number) => {
     const newIndex =
-      index < 0 ? characterNames.length - 1 : index % characterNames.length
+      index < 0 ? characters.length - 1 : index % characters.length
     setActiveIndex(newIndex)
-    onSelect(newIndex)
+    onSelect(characters[newIndex])
   }
 
   const handlePrevButtonClick = () => {
@@ -62,8 +56,8 @@ const CharacterSelector = ({
           <PiArrowFatLeftFill />
         </ButtonWithAudio>
         <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
-          {CHARACTER_NAMES.map((name, i) => {
-            const disabled = disabledCharacter.includes(name)
+          {characters.map((character, i) => {
+            const disabled = Boolean(character.price)
             const active = i === activeIndex
 
             return (
@@ -83,7 +77,7 @@ const CharacterSelector = ({
                   disabled={disabled}
                 >
                   <Character
-                    name={name}
+                    name={character.id}
                     type={type}
                     className='animate-in fade-in zoom-in-150 h-full'
                   />
@@ -91,7 +85,7 @@ const CharacterSelector = ({
                 {disabled && (
                   <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-full bg-black/30 text-white duration-500'>
                     <IoLockClosed className='text-7xl drop-shadow-2xl' />
-                    <div className='text-3xl'>$ {formatNumber(100000)}</div>
+                    <div className='text-3xl'>$ {character.price}</div>
                     <ButtonWithAudio as='button' bg='primary' text='Unlock' />
                   </div>
                 )}

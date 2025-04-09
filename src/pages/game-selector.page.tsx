@@ -2,16 +2,18 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { FaArrowLeft } from 'react-icons/fa'
 
+import { CharacterEntity, useCharacters } from '@/api/duel.api'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { cn } from '@/lib/utils'
-import { CHARACTER_NAMES, DISABLED_CHARACTER_NAMES } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
 import { PageWrapper } from '@/components/page-wrapper'
+import { Loading } from '@/components/loading'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
+  const { data: characters, isLoading, isSuccess } = useCharacters()
   const setCharacterName = useGameStore(
     ({ setCharacterName }) => setCharacterName,
   )
@@ -20,9 +22,9 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
 
-  const handleSelectCharacter = (index: number) => {
-    const characterName = CHARACTER_NAMES[index]
-    const disabled = DISABLED_CHARACTER_NAMES.includes(characterName)
+  const handleSelectCharacter = (character: CharacterEntity) => {
+    const characterName = character.id
+    const disabled = character.price !== 0
     setDisabled(disabled)
 
     if (!disabled) {
@@ -71,15 +73,17 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             image='watch'
           />
         </div>
-        {isDuel && (
-          <CharacterSelector
-            label='Choose your character'
-            characterNames={CHARACTER_NAMES}
-            disabledCharacter={DISABLED_CHARACTER_NAMES}
-            onSelect={handleSelectCharacter}
-            defaultName={characterName}
-          />
-        )}
+        {isDuel &&
+          (isLoading || !isSuccess ? (
+            <Loading />
+          ) : (
+            <CharacterSelector
+              label='Choose your character'
+              characters={characters}
+              onSelect={handleSelectCharacter}
+              defaultName={characterName}
+            />
+          ))}
       </div>
     </PageWrapper>
   )
