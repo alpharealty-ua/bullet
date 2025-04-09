@@ -90,6 +90,9 @@ const Matchmaker = ({
     }
   }, [autoJoin, joinMatchmaking, leaveMatchmaking, wait])
 
+  const isFinding =
+    matchmakingStatus === 'not-in-queue' || matchmakingStatus === 'searching'
+
   return (
     <div className='my-auto w-full'>
       {!canJoin && (
@@ -108,16 +111,17 @@ const Matchmaker = ({
           {isNextSearch && (
             <div className='relative mx-auto flex w-full flex-col items-center justify-center gap-2'>
               <div className='flex flex-col gap-2 px-3 py-20'>
-                <div
-                  className={cn(
-                    'absolute top-0 right-20 ml-auto aspect-[1/1.5] h-10 bg-contain bg-center bg-no-repeat',
-                    'repeat-infinite fill-mode-both animate-[spin-with-opacity] duration-2000 ease-linear',
-                  )}
-                  style={{ backgroundImage: `url(${IMAGES.bullet})` }}
-                ></div>
+                {isFinding && (
+                  <div
+                    className={cn(
+                      'absolute top-0 right-20 aspect-[1/1.5] h-10 bg-contain bg-center bg-no-repeat',
+                      'repeat-infinite fill-mode-both animate-[spin-with-opacity] duration-2000 ease-linear',
+                    )}
+                    style={{ backgroundImage: `url(${IMAGES.bullet})` }}
+                  ></div>
+                )}
                 <div className='px-6 text-2xl'>
-                  {matchmakingStatus === 'not-in-queue' ||
-                  matchmakingStatus === 'searching'
+                  {isFinding
                     ? 'Finding next opponent...'
                     : matchmakingStatus === 'match-created'
                       ? 'OPPONENT FOUND!'
@@ -130,9 +134,7 @@ const Matchmaker = ({
                     className='my-4 flex items-center justify-center text-5xl'
                   />
                 )}
-
-                {(matchmakingStatus === 'not-in-queue' ||
-                  matchmakingStatus === 'searching') && (
+                {isFinding && (
                   <div className='text-red flex w-full items-center justify-end gap-1'>
                     Leave queue
                     <ButtonWithAudio
