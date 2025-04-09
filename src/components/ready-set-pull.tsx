@@ -10,11 +10,11 @@ export interface ReadySetPullHandle {
 
 export type ReadyTakePull = 'ready' | 'take' | 'pull'
 
-const ReadySetPull = ({
-  readySetPullHandle,
-}: {
-  readySetPullHandle: React.ForwardedRef<ReadySetPullHandle>
-}) => {
+export interface ReadySetPullProps {
+  readySetPullHandle?: React.ForwardedRef<ReadySetPullHandle>
+}
+
+const ReadySetPull = ({ readySetPullHandle }: ReadySetPullProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 

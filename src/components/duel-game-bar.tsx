@@ -25,11 +25,11 @@ const getItem = (i: number) => {
   return { number, className }
 }
 
-const DuelGameBar = ({
-  gameBarRef,
-}: {
-  gameBarRef: React.ForwardedRef<GameBarHandle>
-}) => {
+interface DuelGameBarProps {
+  gameBarRef?: React.ForwardedRef<GameBarHandle>
+}
+
+const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
   const wrapperRef = useRef<HTMLTableElement>(null)
   const stateRef = useRef<{
     activeEl: HTMLTableCellElement | null
