@@ -40,6 +40,12 @@ export const useDuelSocket = ({
   const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
   const hasPull = !pulls.includes(round)
 
+  const refState = useRef<{
+    rematchStatus: 'idle' | 'requested' | 'cancelled' | 'created'
+  }>({
+    rematchStatus: 'idle',
+  })
+
   const opponentPull = useCallback(async (shot: boolean) => {
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
@@ -71,15 +77,30 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.reset()
   }, [])
 
-  // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
-  const gameOver = useCallback(async () => {
-    const resetGameOver = async () => {
-      const hideGameOverPromise = gameOverHandleRef.current?.hide()
-      const showRematchPromsie = rematchRequestHandleRef.current?.show()
+  const showRequestRematch = useCallback(async () => {
+    const hideVictoryPromise = victoryHandleRef.current?.hide()
+    const hideGameOverPromise = gameOverHandleRef.current?.hide()
+    const showRematchPromsie = rematchRequestHandleRef.current?.show()
 
-      await Promise.all([hideGameOverPromise, showRematchPromsie])
+    await Promise.all([
+      hideVictoryPromise,
+      hideGameOverPromise,
+      showRematchPromsie,
+    ])
+
+    await wait(5000).promise
+    const { rematchStatus } = refState.current
+
+    if (rematchStatus == 'created') {
+      return
     }
 
+    await rematchRequestHandleRef.current?.hide()
+    navigate(`${ROUTES.duel.play}?next`)
+  }, [navigate])
+
+  // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
+  const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
       characterState: 'eliminated',
     })
@@ -94,7 +115,7 @@ export const useDuelSocket = ({
       disabled: true,
       on: async (event) => {
         if (event === 'click') {
-          resetGameOver()
+          showRequestRematch()
         }
       },
     })
@@ -104,8 +125,8 @@ export const useDuelSocket = ({
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
 
-    resetGameOver()
-  }, [])
+    await showRequestRematch()
+  }, [showRequestRematch])
 
   const winGame = useCallback(async () => {
     setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
@@ -129,12 +150,11 @@ export const useDuelSocket = ({
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
-    const hideVictoryPromise = victoryHandleRef.current?.hide()
-    const showRematchRequestPromise = rematchRequestHandleRef.current?.show()
-    await Promise.all([hideVictoryPromise, showRematchRequestPromise])
 
     setIncreaseTime(undefined)
-  }, [queryClient, setIncreaseTime])
+
+    await showRequestRematch()
+  }, [queryClient, setIncreaseTime, showRequestRematch])
 
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()
@@ -256,6 +276,8 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_requested': {
+          refState.current.rematchStatus = 'requested'
+
           const isPlayer = payload.playerId === playerId
           const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
 
@@ -268,10 +290,11 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_created': {
+          refState.current.rematchStatus = 'created'
+          notify(payload.message, 'info')
+
           await rematchRequestHandleRef.current?.action('player', 'confirm')
           await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
-
-          notify(payload.message, 'info')
 
           await wait(1500).promise
           await rematchRequestHandleRef.current?.hide()
@@ -285,6 +308,9 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_cancelled': {
+          refState.current.rematchStatus = 'cancelled'
+          notify(payload.message, 'info')
+
           const isPlayer = payload.playerId === playerId
           const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
 
