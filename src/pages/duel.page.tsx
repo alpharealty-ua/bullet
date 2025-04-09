@@ -109,7 +109,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         <div className='relative flex w-full grow flex-col justify-end gap-10'>
           <div
             className={cn(
-              'relative flex min-h-[280px] grow flex-col gap-2 pt-4',
+              'relative flex min-h-[240px] grow flex-col gap-2 pt-4',
               'animate-in fade-in duration-500',
             )}
           >
@@ -128,7 +128,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
             />
             <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
           </div>
-          <div className='relative flex min-h-[280px] grow items-end'>
+          <div className='relative flex min-h-[240px] grow items-end'>
             <Character
               className={cn('mb-10 ml-6 max-h-[220px] w-full max-w-[180px]')}
               name={characterName}
