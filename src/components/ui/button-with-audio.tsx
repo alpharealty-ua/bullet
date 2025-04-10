@@ -48,6 +48,10 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
+    if (buttonEl.dataset.disabled === 'true') {
+      return
+    }
+
     if (isMouseDownFiredRef.current) {
       return
     }

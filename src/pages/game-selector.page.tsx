@@ -5,7 +5,6 @@ import { FaArrowLeft } from 'react-icons/fa'
 import { CharacterEntity, useCharacters } from '@/api/duel.api'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
-import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
@@ -62,15 +61,17 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             as='link'
             to={isSolo ? ROUTES.solo.play : ROUTES.duel.play}
             onClick={handleButtonClick}
-            className={cn('w-30', disabled && 'cursor-not-allowed')}
+            className='w-30'
             image='play'
+            data-disabled={disabled}
           />
           <ButtonWithAudio
             as='link'
             to={isSolo ? ROUTES.solo.watch : ROUTES.duel.watch}
             onClick={handleButtonClick}
-            className={cn('w-30', disabled && 'cursor-not-allowed')}
+            className='w-30'
             image='watch'
+            data-disabled={disabled}
           />
         </div>
         {isDuel &&
