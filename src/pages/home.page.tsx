@@ -40,8 +40,8 @@ const HomePage = () => {
             onClick={handleGameRules}
           />
         </div>
-      </div>
-      <footer className='flex w-full justify-end overflow-hidden p-4'>
+      </main>
+      <footer className='flex w-full shrink-0 justify-end overflow-hidden p-4'>
         {/* TODO: MAYBE ADD PORTAL  */}
         <LeadboardIcon />
       </footer>
