@@ -4,7 +4,6 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
 import { LeadboardIcon } from '@/components/leadboard-icon'
-import { PageWrapper } from '@/components/page-wrapper'
 import { Header } from '@/components/header'
 
 const HomePage = () => {
@@ -17,7 +16,7 @@ const HomePage = () => {
   }
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header hideLogo />
       <main className='flex w-full grow flex-col items-center justify-center gap-10'>
         <Logo as='div' size='xl' />
@@ -46,7 +45,7 @@ const HomePage = () => {
         {/* TODO: MAYBE ADD PORTAL  */}
         <LeadboardIcon />
       </footer>
-    </PageWrapper>
+    </>
   )
 }
 

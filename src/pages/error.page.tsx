@@ -1,7 +1,6 @@
 import { useRouteError } from 'react-router'
 
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { PageWrapper } from '@/components/page-wrapper'
 import { Header } from '@/components/header'
 
 const ErrorPage = () => {
@@ -14,7 +13,7 @@ const ErrorPage = () => {
     (data.message as string)
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header />
       <div className='flex grow flex-col justify-center gap-4 text-center'>
         <h3 className='text-3xl'>Opps, something went wrong!</h3>
@@ -29,7 +28,7 @@ const ErrorPage = () => {
           />
         </div>
       </div>
-    </PageWrapper>
+    </>
   )
 }
 

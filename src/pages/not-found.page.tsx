@@ -1,10 +1,9 @@
 import { Header } from '@/components/header'
-import { PageWrapper } from '@/components/page-wrapper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const NotFoundPage = () => {
   return (
-    <PageWrapper noCentered>
+    <>
       <Header />
       <div className='flex grow flex-col justify-center gap-4 text-center'>
         <h1 className='text-3xl'>Not found</h1>
@@ -19,7 +18,7 @@ const NotFoundPage = () => {
           />
         </div>
       </div>
-    </PageWrapper>
+    </>
   )
 }
 

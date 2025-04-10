@@ -21,10 +21,12 @@ export function Providers({
         className='relative mx-auto flex h-dvh min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[780px]'
         style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
       >
-        <NiceModal.Provider>
-          <Audios />
-          {children}
-        </NiceModal.Provider>
+        <div className='custom-scroll flex w-full grow flex-col overflow-x-hidden'>
+          <NiceModal.Provider>
+            <Audios />
+            {children}
+          </NiceModal.Provider>
+        </div>
       </div>
       <ToastContainer theme='colored' />
     </QueryClientProvider>

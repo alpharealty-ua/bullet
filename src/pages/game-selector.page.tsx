@@ -5,7 +5,6 @@ import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { CharacterSelector } from '@/components/character-selector'
-import { PageWrapper } from '@/components/page-wrapper'
 import { Loading } from '@/components/loading'
 import { Header } from '@/components/header'
 
@@ -38,7 +37,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   }
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header logoText={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex grow flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
@@ -71,7 +70,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             />
           ))}
       </div>
-    </PageWrapper>
+    </>
   )
 }
 

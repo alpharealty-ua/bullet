@@ -11,7 +11,6 @@ import { Matchmaker } from '@/components/matchmaker'
 import { DuelGameBar } from '@/components/duel-game-bar'
 import { useGameStore } from '@/store/game.store'
 import { useUser } from '@/api/auth.api'
-import { PageWrapper } from '@/components/page-wrapper'
 
 const MatchmakerPage = () => {
   const [params] = useSearchParams()
@@ -54,7 +53,7 @@ const MatchmakerPage = () => {
   }, [matchmakerEvents])
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header logoText='duel' />
       <div className='flex grow flex-col items-center justify-center'>
         {isNextSearch && <DuelGameBar />}
@@ -66,7 +65,7 @@ const MatchmakerPage = () => {
         {isNextSearch && <DuelGameBar />}
       </div>
       <Footer />
-    </PageWrapper>
+    </>
   )
 }
 

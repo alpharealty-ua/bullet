@@ -18,7 +18,6 @@ import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
-import { PageWrapper } from '@/components/page-wrapper'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { data: balance } = useBalance()
@@ -57,7 +56,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   }
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header logoText='Solo' showNoMoney={!noMoney} />
       <div className='min-h-60'>
         {variant === 'watch' && watchGame && (
@@ -157,7 +156,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
       <Footer disabledBet={isStartedGame || noMoney} />
-    </PageWrapper>
+    </>
   )
 }
 

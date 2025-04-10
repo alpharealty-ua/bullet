@@ -20,7 +20,6 @@ import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 import { RematchRequest } from '@/components/rematch-request'
-import { PageWrapper } from '@/components/page-wrapper'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId } = useParams() as { gameId: string }
@@ -96,7 +95,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   }, [duelSocketEvents])
 
   return (
-    <PageWrapper noCentered>
+    <>
       <Header logoText='Duel' />
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col'>
@@ -162,7 +161,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
       <Footer round={round} hasPull={hasPull} prizepool={2000} />
-    </PageWrapper>
+    </>
   )
 }
 
