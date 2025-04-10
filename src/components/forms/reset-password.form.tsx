@@ -51,65 +51,59 @@ const ResetPasswordForm = () => {
   }
 
   return (
-    <div className='relative flex w-full flex-col items-center gap-8'>
-      <h3 className='text-3xl'>Reset Password</h3>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='flex w-full flex-col gap-4'
-        >
-          <FormField
-            control={form.control}
-            name='newPassword'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <FormInputPassword
-                    placeholder='******'
-                    disabled={disabled || isPending}
-                    type='password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='passwordConfirm'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <FormInputPassword
-                    placeholder='******'
-                    disabled={disabled || isPending}
-                    type='password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Notification
-            type='success'
-            message={isSuccess ? data?.message : ''}
-          />
-          <Notification type='error' message={error?.message} />
-          <ButtonWithAudio
-            as='button'
-            image='button'
-            text='Reset'
-            type='submit'
-            disabled={isPending}
-          />
-          <ChangeForm type='register' />
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex w-full flex-col gap-4'
+      >
+        <FormField
+          control={form.control}
+          name='newPassword'
+          render={({ field: { disabled, ...field } }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <FormInputPassword
+                  placeholder='******'
+                  disabled={disabled || isPending}
+                  type='password'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='passwordConfirm'
+          render={({ field: { disabled, ...field } }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <FormInputPassword
+                  placeholder='******'
+                  disabled={disabled || isPending}
+                  type='password'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Notification type='success' message={isSuccess ? data?.message : ''} />
+        <Notification type='error' message={error?.message} />
+        <ButtonWithAudio
+          as='button'
+          image='button'
+          text='Reset'
+          type='submit'
+          disabled={isPending}
+        />
+        <ChangeForm type='register' />
+      </form>
+    </Form>
   )
 }
 

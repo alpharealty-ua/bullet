@@ -1,12 +1,11 @@
-import { Logo } from '@/components/logo'
 import { ResetPasswordForm } from '@/components/forms/reset-password.form.tsx'
+import { AuthFormWrapper } from '@/components/auth-form-wrapper'
 
 const ResetPasswordPage = () => {
   return (
-    <>
-      <Logo as='link' to='/' size='xl' />
+    <AuthFormWrapper label='Reset Password'>
       <ResetPasswordForm />
-    </>
+    </AuthFormWrapper>
   )
 }
 

@@ -41,66 +41,63 @@ const LoginForm = () => {
   }
 
   return (
-    <div className='relative flex w-full flex-col items-center gap-8'>
-      <h3 className='text-3xl'>Login</h3>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='flex w-full flex-col gap-4'
-        >
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <FormInput
-                    placeholder='Email'
-                    disabled={disabled || isPending}
-                    type='email'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field: { disabled, ...field } }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <FormInputPassword
-                    placeholder='Password'
-                    disabled={disabled || isPending}
-                    type='password'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Notification
-            type='success'
-            message={isSuccess ? 'You have successfully logged in.' : ''}
-          />
-          <Notification type='error' message={error?.message} />
-          <ButtonWithAudio
-            as='button'
-            image='button'
-            text='Login'
-            type='submit'
-            disabled={isPending}
-          />
-          <ChangeForm type='forgotPassword' />
-          <ChangeForm type='login' />
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex w-full flex-col gap-4'
+      >
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field: { disabled, ...field } }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <FormInput
+                  placeholder='Email'
+                  disabled={disabled || isPending}
+                  type='email'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name='password'
+          render={({ field: { disabled, ...field } }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <FormInputPassword
+                  placeholder='Password'
+                  disabled={disabled || isPending}
+                  type='password'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Notification
+          type='success'
+          message={isSuccess ? 'You have successfully logged in.' : ''}
+        />
+        <Notification type='error' message={error?.message} />
+        <ButtonWithAudio
+          as='button'
+          image='button'
+          text='Login'
+          type='submit'
+          disabled={isPending}
+        />
+        <ChangeForm type='forgotPassword' />
+        <ChangeForm type='login' />
+      </form>
+    </Form>
   )
 }
 
