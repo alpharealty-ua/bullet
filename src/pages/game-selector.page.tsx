@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
-import { FaArrowLeft } from 'react-icons/fa'
 
 import { CharacterEntity, useCharacters } from '@/api/duel.api'
 import { useGameStore } from '@/store/game.store'
 import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from '@/components/logo'
 import { CharacterSelector } from '@/components/character-selector'
 import { PageWrapper } from '@/components/page-wrapper'
 import { Loading } from '@/components/loading'
+import { Header } from '@/components/header'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const { data: characters, isLoading, isSuccess } = useCharacters()
@@ -40,22 +38,9 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   }
 
   return (
-    <PageWrapper>
-      {/* TODO: EXTRACTED TO COMPONENT / THE SAME LEADERBOARD PAGE  */}
-      <header className='flex items-center justify-center gap-4 px-8'>
-        <Link to={ROUTES.root} className='flex w-0 justify-end'>
-          <div className='w-8'>
-            <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
-          </div>
-        </Link>
-        <Logo
-          as='link'
-          to={ROUTES.root}
-          size='xl'
-          text={isDuel ? 'Duel' : 'Solo'}
-        />
-      </header>
-      <div className='flex flex-col items-center justify-center gap-6'>
+    <PageWrapper noCentered>
+      <Header logoText={isDuel ? 'Duel' : 'Solo'} />
+      <div className='flex grow flex-col items-center justify-center gap-6'>
         <div className='flex gap-6'>
           <ButtonWithAudio
             as='link'

@@ -26,7 +26,7 @@ const Footer = ({
   }
 
   return (
-    <footer className='relative flex h-[74px] justify-between bg-[#f2f2f2] px-2 py-1'>
+    <footer className='relative flex h-[74px] shrink-0 justify-between bg-[#f2f2f2] px-2 py-1'>
       <div className='relative flex flex-1 flex-col gap-0.5'>
         <div className='flex items-center gap-1'>
           <ButtonWithAudio

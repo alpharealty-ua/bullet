@@ -1,9 +1,20 @@
-const PageWrapper = ({ children }: { children: React.ReactNode }) => {
+// TODO: MOVE TO PROVIDERS
+const PageWrapper = ({
+  children,
+  noCentered,
+}: {
+  children: React.ReactNode
+  noCentered?: boolean
+}) => {
   return (
-    <div className='flex h-full w-full flex-col items-center justify-center overflow-hidden'>
-      <div className='custom-scroll flex w-full flex-col items-center gap-10 px-10 py-12'>
-        {children}
-      </div>
+    <div className='custom-scroll flex w-full grow flex-col'>
+      {noCentered ? (
+        children
+      ) : (
+        <div className='flex w-full grow flex-col items-center justify-center gap-10 px-10 py-15'>
+          {children}
+        </div>
+      )}
     </div>
   )
 }

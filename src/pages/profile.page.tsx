@@ -7,7 +7,7 @@ const ProfilePage = () => {
   const user = useUser()
 
   return (
-    <PageWrapper>
+    <PageWrapper noCentered>
       <Logo as='link' to='/' size='xl' />
       <Profile user={user} />
     </PageWrapper>

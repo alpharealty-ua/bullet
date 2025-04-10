@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router'
 
-import { useBalance } from '@/api/wallet.api'
 import { socketMatchmaker } from '@/socket/socket'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
@@ -12,15 +11,14 @@ import { Matchmaker } from '@/components/matchmaker'
 import { DuelGameBar } from '@/components/duel-game-bar'
 import { useGameStore } from '@/store/game.store'
 import { useUser } from '@/api/auth.api'
+import { PageWrapper } from '@/components/page-wrapper'
 
 const MatchmakerPage = () => {
   const [params] = useSearchParams()
   const isNextSearch = params.get('next') != null
   const token = useAuthStore(({ accessToken }) => accessToken)
-  const { data: balance } = useBalance()
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)
-  const noMoney = !(balance > 0)
 
   const matchmakerEvents = useMemo(
     () =>
@@ -56,8 +54,8 @@ const MatchmakerPage = () => {
   }, [matchmakerEvents])
 
   return (
-    <>
-      <Header logoText='duel' noMoney={noMoney} headerProfile />
+    <PageWrapper noCentered>
+      <Header logoText='duel' hideProfile />
       <div className='flex grow flex-col items-center justify-center'>
         {isNextSearch && <DuelGameBar />}
         <Matchmaker
@@ -68,7 +66,7 @@ const MatchmakerPage = () => {
         {isNextSearch && <DuelGameBar />}
       </div>
       <Footer />
-    </>
+    </PageWrapper>
   )
 }
 

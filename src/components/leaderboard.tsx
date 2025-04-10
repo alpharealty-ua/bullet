@@ -49,13 +49,13 @@ const Leaderboard = () => {
   }
 
   return (
-    <Tabs className='flex flex-col overflow-hidden' defaultValue='top'>
+    <Tabs className='flex grow flex-col overflow-hidden' defaultValue='top'>
       <TabsList>
         <TabsTrigger value='top'>Top Players</TabsTrigger>
         <TabsTrigger value='stats'>Population Stats</TabsTrigger>
         <TabsTrigger value='milestones'>LVL Milestones</TabsTrigger>
       </TabsList>
-      <TabsContent value='top' className='custom-scroll overflow-scroll'>
+      <TabsContent value='top' className='custom-scroll grow'>
         <div className='rounded-lg bg-white shadow'>
           <table className='w-full divide-y divide-gray-200'>
             <thead>
@@ -193,7 +193,7 @@ const Leaderboard = () => {
           </table>
         </div>
       </TabsContent>
-      <TabsContent value='stats' className='custom-scroll overflow-scroll'>
+      <TabsContent value='stats' className='custom-scroll grow'>
         <div className='flex flex-col gap-6'>
           <Card>
             <CardHeader>
@@ -274,7 +274,7 @@ const Leaderboard = () => {
           </Card>
         </div>
       </TabsContent>
-      <TabsContent value='milestones' className='custom-scroll overflow-scroll'>
+      <TabsContent value='milestones' className='custom-scroll grow'>
         <Card>
           <CardHeader>
             <CardTitle>LVL Milestones & Rankings</CardTitle>

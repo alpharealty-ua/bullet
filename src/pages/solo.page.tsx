@@ -18,6 +18,7 @@ import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
+import { PageWrapper } from '@/components/page-wrapper'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const { data: balance } = useBalance()
@@ -56,8 +57,8 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   }
 
   return (
-    <>
-      <Header logoText='Solo' noMoney={noMoney} />
+    <PageWrapper noCentered>
+      <Header logoText='Solo' showNoMoney={!noMoney} />
       <div className='min-h-60'>
         {variant === 'watch' && watchGame && (
           <div className='flex flex-col gap-6 p-4'>
@@ -107,11 +108,11 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         )}
       </div>
-      <div className='relative mt-auto flex flex-1 items-end px-8 pt-2'>
+      <div className='relative mt-auto flex min-h-80 flex-1 items-end px-8 pt-2'>
         <Revolver
           gunHandleRef={revolverHandleRef}
           disabled={isStartedGame}
-          className='h-full max-h-[800px] max-w-full'
+          className='h-full max-h-200 max-w-full'
         />
         <div
           className={cn(
@@ -156,7 +157,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
       <Footer disabledBet={isStartedGame || noMoney} />
-    </>
+    </PageWrapper>
   )
 }
 
