@@ -161,7 +161,7 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
   ({ type, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState(false)
 
-    const handleMouseDownPassword = (event: React.PointerEvent) => {
+    const handlePasswordPoitnerDown = (event: React.PointerEvent) => {
       const { nativeEvent } = event
       const button = nativeEvent.target as HTMLButtonElement
 
@@ -172,7 +172,24 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
       button.setPointerCapture(nativeEvent.pointerId)
       setShowPassword(true)
     }
-    const handleMouseUpPassword = () => setShowPassword(false)
+    const handlePasswordPointerUp = () => setShowPassword(false)
+
+    const handlePasswordKeyDown = (
+      event: React.KeyboardEvent<HTMLButtonElement>,
+    ) => {
+      const { nativeEvent } = event
+      const buttonEl = nativeEvent.target as HTMLButtonElement
+
+      if (buttonEl === null) {
+        return
+      }
+
+      if (event.key !== 'Enter') {
+        return
+      }
+
+      setShowPassword((p) => !p)
+    }
 
     return (
       <FormInput
@@ -182,8 +199,9 @@ const FormInputPassword = React.forwardRef<HTMLInputElement, FormInputProps>(
         afterSlot={
           <button
             className='absolute top-1/2 right-4 -translate-y-1/2 text-black'
-            onPointerDown={handleMouseDownPassword}
-            onPointerUp={handleMouseUpPassword}
+            onPointerDown={handlePasswordPoitnerDown}
+            onPointerUp={handlePasswordPointerUp}
+            onKeyDown={handlePasswordKeyDown}
             type='button'
           >
             {showPassword ? (
