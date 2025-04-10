@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard'
-import { ProfileLink } from '@/components/profile-link'
 
 const Footer = ({
   round,
@@ -35,9 +34,8 @@ const Footer = ({
             onClick={handleLeaderboardClick}
             className='w-10 cursor-pointer'
           />
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-2'>
             <div className='text-base leading-[1] tracking-tight'>Lvl 921</div>
-            <ProfileLink className='self-start' />
           </div>
         </div>
       </div>

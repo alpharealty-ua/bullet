@@ -55,7 +55,7 @@ const MatchmakerPage = () => {
 
   return (
     <PageWrapper noCentered>
-      <Header logoText='duel' hideProfile />
+      <Header logoText='duel' />
       <div className='flex grow flex-col items-center justify-center'>
         {isNextSearch && <DuelGameBar />}
         <Matchmaker
