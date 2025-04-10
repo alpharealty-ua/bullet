@@ -71,7 +71,16 @@ const ButtonWithAudio = React.forwardRef<
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
       React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    if (!isMouseDownFiredRef.current) {
+    const isMouseDownFired = isMouseDownFiredRef.current
+    const isTrusted = event.isTrusted
+    const dispatchedAfterAnimation = !isTrusted && isMouseDownFired
+    const dispatchedOutside = !(isTrusted || isMouseDownFired)
+
+    if (dispatchedOutside) {
+      return
+    }
+
+    if (!dispatchedAfterAnimation) {
       event.preventDefault()
 
       const buttonEl = buttonRef.current
@@ -83,11 +92,11 @@ const ButtonWithAudio = React.forwardRef<
       buttonEl.dispatchEvent(
         new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
       )
-      return
     }
 
-    if (event.isTrusted) {
+    if (isTrusted) {
       event.preventDefault()
+
       return
     }
 

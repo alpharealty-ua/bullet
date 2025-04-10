@@ -6,15 +6,10 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const LeadboardIcon = () => {
   const buttonRef = useRef<HTMLAnchorElement>(null)
-  const isTrustedRef = useRef(true)
 
   const handleLeadboardClick = async (
     event: React.MouseEvent<HTMLAnchorElement>,
   ) => {
-    if (!isTrustedRef.current) {
-      return
-    }
-
     event.preventDefault()
 
     const targetEl = event.currentTarget
@@ -29,9 +24,9 @@ const LeadboardIcon = () => {
     )
     targetEl.classList.remove('is-animate')
 
-    isTrustedRef.current = false
-    targetEl.click()
-    isTrustedRef.current = true
+    targetEl.dispatchEvent(
+      new PointerEvent('click', { bubbles: true, cancelable: true }),
+    )
   }
 
   return (
