@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { wait } from '@/lib/utils'
 import { Button, ButtonProps } from '@/components/ui/button'
 
 type OmitClick<T> = T extends { as: string } ? Omit<T, 'onClick'> : T
@@ -20,15 +19,12 @@ const ButtonWithAudio = React.forwardRef<
   ButtonWithAudioProps
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const [startedAnimation, setStartedAnimtion] = useState(false)
+  const startedAnimationRef = useRef(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const allProps = {
     ...props,
-    disabled:
-      props.as === 'button'
-        ? props.disabled || disabled || startedAnimation
-        : undefined,
+    disabled: props.as === 'button' ? props.disabled || disabled : undefined,
   }
 
   const mouseClick = async (): Promise<void> => {
@@ -38,7 +34,11 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
-    setStartedAnimtion(true)
+    if (startedAnimationRef.current) {
+      return
+    }
+
+    startedAnimationRef.current = true
 
     await playAudio('mouseclick')
 
@@ -52,12 +52,10 @@ const ButtonWithAudio = React.forwardRef<
     buttonDom.classList.remove('animate-button-click')
     buttonDom.style.animationIterationCount = ''
 
-    setStartedAnimtion(false)
-
-    await wait(0).promise // need for set disabled state
+    startedAnimationRef.current = false
   }
 
-  const handleMouseDown = async () => {
+  const handlePointerDown = async () => {
     const buttonDom = buttonRef.current
 
     if (buttonDom === null) {
@@ -66,7 +64,9 @@ const ButtonWithAudio = React.forwardRef<
 
     skipWaitAnimation ? mouseClick() : await mouseClick()
 
-    buttonDom.click()
+    buttonDom.dispatchEvent(
+      new PointerEvent('click', { bubbles: true, cancelable: true }),
+    )
   }
 
   const handleClick = async (
@@ -88,7 +88,7 @@ const ButtonWithAudio = React.forwardRef<
   return (
     <Button
       ref={mergeRefs(buttonRef, ref)}
-      onMouseDown={handleMouseDown}
+      onPointerDown={handlePointerDown}
       onClick={handleClick}
       {...allProps}
     />
