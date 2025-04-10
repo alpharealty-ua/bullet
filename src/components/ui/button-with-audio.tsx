@@ -20,6 +20,7 @@ const ButtonWithAudio = React.forwardRef<
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const startedAnimationRef = useRef(false)
+  const isMouseDownFiredRef = useRef(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const allProps = {
@@ -62,6 +63,7 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
+    isMouseDownFiredRef.current = true
     skipWaitAnimation ? mouseClick() : await mouseClick()
 
     buttonDom.dispatchEvent(
@@ -73,6 +75,21 @@ const ButtonWithAudio = React.forwardRef<
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
       React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
+    if (!isMouseDownFiredRef.current) {
+      event.preventDefault()
+
+      const buttonEl = buttonRef.current
+
+      if (buttonEl === null) {
+        return
+      }
+
+      buttonEl.dispatchEvent(
+        new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      return
+    }
+
     if (event.isTrusted) {
       event.preventDefault()
       return
@@ -83,6 +100,8 @@ const ButtonWithAudio = React.forwardRef<
     onClick && (await onClick(event))
 
     setDisabled(false)
+
+    isMouseDownFiredRef.current = false
   }
 
   return (
