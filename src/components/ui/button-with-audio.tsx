@@ -19,7 +19,6 @@ const ButtonWithAudio = React.forwardRef<
   ButtonWithAudioProps
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const startedAnimationRef = useRef(false)
   const isMouseDownFiredRef = useRef(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -28,47 +27,40 @@ const ButtonWithAudio = React.forwardRef<
     disabled: props.as === 'button' ? props.disabled || disabled : undefined,
   }
 
-  const mouseClick = async (): Promise<void> => {
-    const buttonDom = buttonRef.current
-
-    if (buttonDom === null) {
-      return
-    }
-
-    if (startedAnimationRef.current) {
-      return
-    }
-
-    startedAnimationRef.current = true
-
+  const mouseClick = async (buttonEl: HTMLButtonElement): Promise<void> => {
     await playAudio('mouseclick')
 
-    buttonDom.classList.add('animate-button-click')
-    buttonDom.style.animationIterationCount = '1'
+    buttonEl.classList.add('animate-button-click')
+    buttonEl.style.animationIterationCount = '1'
 
     await new Promise<Event>((resolve) => {
-      buttonDom.addEventListener('animationend', resolve, { once: true })
+      buttonEl.addEventListener('animationend', resolve, { once: true })
     })
 
-    buttonDom.classList.remove('animate-button-click')
-    buttonDom.style.animationIterationCount = ''
-
-    startedAnimationRef.current = false
+    buttonEl.classList.remove('animate-button-click')
+    buttonEl.style.animationIterationCount = ''
   }
 
   const handlePointerDown = async () => {
-    const buttonDom = buttonRef.current
+    const buttonEl = buttonRef.current
 
-    if (buttonDom === null) {
+    if (buttonEl === null) {
+      return
+    }
+
+    if (isMouseDownFiredRef.current) {
       return
     }
 
     isMouseDownFiredRef.current = true
-    skipWaitAnimation ? mouseClick() : await mouseClick()
 
-    buttonDom.dispatchEvent(
+    skipWaitAnimation ? mouseClick(buttonEl) : await mouseClick(buttonEl)
+
+    buttonEl.dispatchEvent(
       new PointerEvent('click', { bubbles: true, cancelable: true }),
     )
+
+    isMouseDownFiredRef.current = false
   }
 
   const handleClick = async (
@@ -100,8 +92,6 @@ const ButtonWithAudio = React.forwardRef<
     onClick && (await onClick(event))
 
     setDisabled(false)
-
-    isMouseDownFiredRef.current = false
   }
 
   return (
