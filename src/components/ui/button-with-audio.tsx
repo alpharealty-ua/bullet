@@ -80,31 +80,27 @@ const ButtonWithAudio = React.forwardRef<
       return
     }
 
-    if (!dispatchedAfterAnimation) {
-      event.preventDefault()
+    if (dispatchedAfterAnimation) {
+      setDisabled(true)
 
-      const buttonEl = buttonRef.current
+      onClick && (await onClick(event))
 
-      if (buttonEl === null) {
-        return
-      }
-
-      buttonEl.dispatchEvent(
-        new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
-      )
-    }
-
-    if (isTrusted) {
-      event.preventDefault()
+      setDisabled(false)
 
       return
     }
 
-    setDisabled(true)
+    event.preventDefault()
 
-    onClick && (await onClick(event))
+    const buttonEl = buttonRef.current
 
-    setDisabled(false)
+    if (buttonEl === null) {
+      return
+    }
+
+    buttonEl.dispatchEvent(
+      new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
+    )
   }
 
   return (
