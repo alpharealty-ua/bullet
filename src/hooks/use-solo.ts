@@ -249,24 +249,12 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const next = useCallback(async () => {
-    if (disabledRef.current) {
+    if (!gameId) {
+      await startGame()
       return
     }
 
-    try {
-      disabledRef.current = true
-
-      if (!gameId) {
-        await startGame()
-        return
-      }
-
-      await pullGame(gameId)
-    } catch (e) {
-      console.log(e)
-    } finally {
-      disabledRef.current = false
-    }
+    await pullGame(gameId)
   }, [gameId, pullGame, startGame])
 
   useEffect(() => {
@@ -310,18 +298,9 @@ const useSolo = (variant: VariantGame) => {
     gameOver,
     winGame,
   ])
-
   useEffect(() => {
     setIsStartedGame(Boolean(gameId))
-
-    if (gameId) {
-      return
-    }
-
-    // TODO: REMOVE
-    variant === 'play' && newGame()
   }, [gameId, newGame, setIsStartedGame, variant])
-
   const { watchGame } = useGameSocket(isPlay, pullGame)
 
   return {
