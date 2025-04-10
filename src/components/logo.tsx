@@ -24,11 +24,12 @@ const Logo = ({
 }: (
   | ({ as: 'link' } & LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>)
   | ({ as: 'button' } & React.ButtonHTMLAttributes<HTMLButtonElement>)
+  | ({ as: 'div' } & React.HTMLAttributes<HTMLDivElement>)
 ) &
   LogoProps) => {
   const { as, ...componentProps } = props
   // eslint-disable-next-line
-  const Comp: any = as === 'link' ? Link : 'button'
+  const Comp: any = as === 'link' ? Link : as
 
   return (
     <Comp

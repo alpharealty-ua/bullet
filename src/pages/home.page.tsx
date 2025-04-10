@@ -19,8 +19,8 @@ const HomePage = () => {
   return (
     <PageWrapper noCentered>
       <Header hideLogo />
-      <div className='flex w-full grow flex-col items-center justify-center gap-10'>
-        <Logo as='button' size='xl' />
+      <main className='flex w-full grow flex-col items-center justify-center gap-10'>
+        <Logo as='div' size='xl' />
         <div className='flex flex-col items-center justify-center gap-6'>
           <ButtonWithAudio
             as='link'
