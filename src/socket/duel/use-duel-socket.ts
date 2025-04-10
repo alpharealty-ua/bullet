@@ -302,7 +302,7 @@ export const useDuelSocket = ({
           rematchRequestHandleRef.current?.action('opponnent', 'init')
 
           const rematchGameId = payload.rematchGame.id
-          navigate(`${ROUTES.duel.play}/${rematchGameId}`, {
+          navigate(`${ROUTES.duel.root}/${rematchGameId}`, {
             preventScrollReset: true,
           })
           return

@@ -119,7 +119,7 @@ export const useStartGame = () => {
         error.response.data.gameId
       ) {
         const gameId = error.response.data.gameId
-        navigate(`${ROUTES.solo.play}/${gameId}`, { preventScrollReset: true })
+        navigate(`${ROUTES.solo.root}/${gameId}`, { preventScrollReset: true })
       }
     },
   })

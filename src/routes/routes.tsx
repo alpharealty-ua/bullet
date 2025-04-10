@@ -52,7 +52,7 @@ export const PRIVATE_ROUTES = [
     element: <SoloPage variant='play' />,
   },
   {
-    path: `${ROUTES.solo.play}/:gameId`,
+    path: `${ROUTES.solo.root}/:gameId`,
     element: <SoloPage variant='play' />,
   },
   {
@@ -60,7 +60,7 @@ export const PRIVATE_ROUTES = [
     element: <SoloPage variant='watch' />,
   },
   {
-    path: `${ROUTES.solo.watch}/:gameId`,
+    path: `${ROUTES.solo.root}/:gameId/watch`,
     element: <SoloPage variant='watch' />,
   },
   {
@@ -72,7 +72,7 @@ export const PRIVATE_ROUTES = [
     element: <MatchmakerPage />,
   },
   {
-    path: `${ROUTES.duel.play}/:gameId`,
+    path: `${ROUTES.duel.root}/:gameId`,
     element: <DuelPage variant='play' />,
   },
   {
