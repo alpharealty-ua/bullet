@@ -2,7 +2,7 @@
 @plugin 'tailwindcss-animate';
 
 :root {
-  --width: 420px;
+  --width: 28rem;
 }
 
 @theme {

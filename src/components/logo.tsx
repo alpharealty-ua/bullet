@@ -7,9 +7,9 @@ import { Link, LinkProps } from 'react-router'
 type LogoSize = 'md' | 'lg' | 'xl'
 
 const sizes = {
-  md: 'max-w-[141px]',
-  lg: 'max-w-[171px]',
-  xl: 'max-w-[270px]',
+  md: 'max-w-30',
+  lg: 'max-w-45',
+  xl: 'max-w-70',
 } satisfies Record<LogoSize, string>
 
 interface LogoProps {

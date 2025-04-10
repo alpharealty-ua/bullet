@@ -70,7 +70,7 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
         >
           <div
             className={cn(
-              'w-[143px absolute bottom-[70%] left-[30%] h-[143px] w-[143px] bg-contain bg-center text-5xl text-transparent uppercase select-none',
+              'absolute bottom-[72%] left-[30%] h-35 w-35 bg-contain bg-center text-5xl text-transparent uppercase select-none',
               'animate-in fade-in fill-mode-both delay-100 duration-100',
             )}
             style={{ backgroundImage: `url(${IMAGES.you})` }}
@@ -79,7 +79,7 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
           </div>
           <div
             className={cn(
-              'uppercasee absolute top-[46%] right-[8%] h-[153px] w-[158px] bg-contain bg-center text-5xl text-transparent select-none',
+              'uppercasee absolute top-[46%] right-[8%] h-38 w-39 bg-contain bg-center text-5xl text-transparent select-none',
               'animate-in fade-in fill-mode-both delay-200 duration-100',
             )}
             style={{ backgroundImage: `url(${IMAGES.died})` }}

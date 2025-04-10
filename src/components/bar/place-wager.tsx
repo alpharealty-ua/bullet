@@ -3,7 +3,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const PlaceWager = () => {
   return (
-    <div className='flex w-[220px] shrink-0 flex-col gap-2'>
+    <div className='flex w-55 shrink-0 flex-col gap-2'>
       <h3>PLACE WAGERS ON LIVE GAMES</h3>
       <div className='mt-6 py-6'>
         <Bet
@@ -24,7 +24,7 @@ const PlaceWager = () => {
                   as='button'
                   text='Place bet'
                   bg='primary'
-                  className='h-full px-1 text-[10px]'
+                  className='h-full px-1 text-[0.625rem]'
                 />
               </div>
             </div>

@@ -39,7 +39,7 @@ const MatchmakerPing = ({ pingData, className, ...props }: MatchmakerPing) => {
         ].map((el, i) => (
           <div
             key={i}
-            className='flex-1 bg-white p-1 text-center text-[10px] shadow'
+            className='flex-1 bg-white p-1 text-center text-[0.625rem] shadow'
           >
             {el.label}: {el.value}
           </div>
@@ -71,13 +71,13 @@ const MatchmakerPing = ({ pingData, className, ...props }: MatchmakerPing) => {
             ></div>
           )
         })}
-        <div className='text-red border-red absolute right-0 bottom-1/3 left-0 border-t text-right text-[7px]'>
+        <div className='text-red border-red absolute right-0 bottom-1/3 left-0 border-t text-right text-[0.438rem]'>
           <span className='absolute top-0.5 right-0'>100ms</span>
         </div>
-        <div className='text-red border-red absolute right-0 bottom-2/3 left-0 border-t text-right text-[7px]'>
+        <div className='text-red border-red absolute right-0 bottom-2/3 left-0 border-t text-right text-[0.438rem]'>
           <span className='absolute top-0.5 right-0'>200ms</span>
         </div>
-        <div className='text-red border-red absolute right-0 bottom-3/3 left-0 border-t text-right text-[7px]'>
+        <div className='text-red border-red absolute right-0 bottom-3/3 left-0 border-t text-right text-[0.438rem]'>
           <span className='absolute top-0.5 right-0'>300ms</span>
         </div>
       </div>

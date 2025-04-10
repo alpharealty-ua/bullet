@@ -46,7 +46,7 @@ const CharacterSelector = ({
   return (
     <>
       <h3 className='text-center text-xl'>{label}</h3>
-      <div className='flex h-[250px] items-center gap-2'>
+      <div className='flex h-60 items-center gap-2'>
         <ButtonWithAudio
           as='button'
           bg='red'
@@ -55,7 +55,7 @@ const CharacterSelector = ({
         >
           <PiArrowFatLeftFill />
         </ButtonWithAudio>
-        <div className='relative flex h-full w-[250px] shrink-0 items-center justify-center'>
+        <div className='relative flex h-full w-60 shrink-0 items-center justify-center'>
           {characters.map((character, i) => {
             const disabled = Boolean(character.price)
             const active = i === activeIndex

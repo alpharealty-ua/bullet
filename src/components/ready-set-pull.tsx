@@ -105,7 +105,7 @@ const ReadySetPull = ({ readySetPullHandle }: ReadySetPullProps) => {
   return (
     <div
       ref={wrapperRef}
-      className='absolute bottom-0 left-10 flex flex-col gap-1 text-[40px]'
+      className='absolute bottom-0 left-10 flex flex-col gap-1 text-[2.5rem]'
     >
       <div
         className={cn(

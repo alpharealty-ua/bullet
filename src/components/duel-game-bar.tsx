@@ -129,7 +129,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                 <td
                   key={i}
                   className={cn(
-                    'relative border-3 border-black bg-[#f7f7c0] text-center align-middle text-[9px] text-white select-none first:border-l-0 last:border-r-0',
+                    'relative border-3 border-black bg-[#f7f7c0] text-center align-middle text-[0.563rem] text-white select-none first:border-l-0 last:border-r-0',
                     'transition-colors duration-20 ease-linear',
                     'zoom-in-200 fill-mode-both repeat-1 duration-500',
                     isDefaultNumber && 'text-transparent',

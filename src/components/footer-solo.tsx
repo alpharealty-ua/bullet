@@ -24,7 +24,7 @@ const Footer = ({ disabledBet }: { disabledBet: boolean }) => {
 
   return (
     <footer
-      className='relative flex h-[100px] justify-between border-t-2 border-black bg-[#f2f2f2] px-2 py-1'
+      className='relative flex h-25 justify-between border-t-2 border-black bg-[#f2f2f2] px-2 py-1'
       style={{ backgroundImage: `url(${IMAGES.texture})` }}
     >
       <div className='relative flex w-full max-w-1/2 flex-col items-center'>

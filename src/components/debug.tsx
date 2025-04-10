@@ -24,7 +24,7 @@ const Debug = () => {
   }
 
   return createPortal(
-    <div className='absolute top-0 right-[calc(50%+var(--width)/2)] flex w-[200px] flex-col gap-2 bg-amber-100 p-4'>
+    <div className='absolute top-0 right-[calc(50%+var(--width)/2)] flex w-50 flex-col gap-2 bg-amber-100 p-4'>
       <ButtonWithAudio
         as='button'
         className='text-base'

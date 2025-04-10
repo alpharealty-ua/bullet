@@ -33,12 +33,12 @@ const BetForm = ({ onSubmit, disabled }: BetFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className='animate-in fade-in-0 relative left-1 z-[3] mt-4 mb-auto flex justify-center gap-2 px-[30px] duration-500 lg:mt-10'
+      className='animate-in fade-in-0 relative left-1 z-[3] mt-4 mb-auto flex justify-center gap-2 px-7.5 duration-500 lg:mt-10'
     >
-      <div className='relative w-[220px]'>
+      <div className='relative w-55'>
         <input
           onKeyDown={handleKeyDown}
-          className='absolute top-0 right-0 bottom-0 left-0 appearance-auto px-[10px] py-[14px] text-2xl uppercase outline-none placeholder:text-black/60'
+          className='absolute top-0 right-0 bottom-0 left-0 appearance-auto px-2.5 py-3.5 text-2xl uppercase outline-none placeholder:text-black/60'
           placeholder='Bet Amount'
           defaultValue='100'
           type='type'

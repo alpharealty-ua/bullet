@@ -20,7 +20,7 @@ const Helper = ({
       unmountOnExit
       timeout={400}
       className={cn(
-        'slide-out-to-top-4 fade-in slide-in-from-top-4 absolute bottom-full w-[90px] bg-contain bg-center bg-no-repeat duration-400',
+        'slide-out-to-top-4 fade-in slide-in-from-top-4 absolute bottom-full w-22.5 bg-contain bg-center bg-no-repeat duration-400',
         image === 'wagehere' && 'left-4',
         image === 'startgame' && 'right-0',
       )}

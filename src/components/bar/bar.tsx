@@ -37,7 +37,7 @@ const Bar = () => {
   }, [setOpenSide, toggle])
 
   return (
-    <div className='absolute top-[100px] right-0 left-0 mb-auto h-[250px] overflow-hidden'>
+    <div className='absolute top-25 right-0 left-0 mb-auto h-62.5 overflow-hidden'>
       <BarSide
         side='left'
         label='Chat'
@@ -48,7 +48,7 @@ const Bar = () => {
           languageProps={{
             className: cn(
               'top-auto bottom-2 opacity-0 transition-all duration-1000',
-              openSide === 'left' && 'translate-x-full pl-[7px] opacity-100',
+              openSide === 'left' && 'translate-x-full pl-1.5 opacity-100',
             ),
           }}
         />
