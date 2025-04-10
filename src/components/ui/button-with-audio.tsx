@@ -42,6 +42,10 @@ const ButtonWithAudio = React.forwardRef<
   }
 
   const handlePointerDown = async () => {
+    if ('disabled' in allProps && allProps.disabled) {
+      return
+    }
+
     const buttonEl = buttonRef.current
 
     if (buttonEl === null) {
@@ -64,6 +68,7 @@ const ButtonWithAudio = React.forwardRef<
       new PointerEvent('click', { bubbles: true, cancelable: true }),
     )
 
+    console.log('call 1')
     isMouseDownFiredRef.current = false
   }
 
@@ -81,10 +86,12 @@ const ButtonWithAudio = React.forwardRef<
     }
 
     if (dispatchedAfterAnimation) {
+      console.log('call 0')
       setDisabled(true)
 
       onClick && (await onClick(event))
 
+      console.log('call 0')
       setDisabled(false)
 
       return
