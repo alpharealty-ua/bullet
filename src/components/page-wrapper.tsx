@@ -7,7 +7,7 @@ const PageWrapper = ({
   noCentered?: boolean
 }) => {
   return (
-    <div className='custom-scroll flex w-full grow flex-col'>
+    <div className='custom-scroll flex w-full grow flex-col overflow-x-hidden'>
       {noCentered ? (
         children
       ) : (
