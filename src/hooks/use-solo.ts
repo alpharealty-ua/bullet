@@ -27,6 +27,7 @@ import {
 import { RevolverHandle } from '@/components/guns/revolver'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
+import { FooterHandle } from '@/components/footer-solo'
 
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ const useSolo = (variant: VariantGame) => {
   const { data: balance } = useBalance()
   const queryClient = useQueryClient()
   const wait = useWait()
+  const footerHandleRef = useRef<FooterHandle>(null)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const revolverHandleRef = useRef<RevolverHandle>(null)
@@ -49,10 +51,10 @@ const useSolo = (variant: VariantGame) => {
   )
   const [countBullet, setCountBullet] = useState(5)
   const [bet, setBet] = useState(0)
-  const [jackpot, setJackpot] = useState(0)
+  const [jackpot, setJackpot] = useState(-1)
   const [offer, setOffer] = useState<Offer | null>(null)
   const [multiplier, setMultiplier] = useState(-1)
-  const isStartedGame = Boolean(gameId)
+  const [isStartedGame, setIsStartedGame] = useState(Boolean(gameId))
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
   const [showHelpers, setShowHelpers] = useState(true)
@@ -73,11 +75,11 @@ const useSolo = (variant: VariantGame) => {
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
-    setJackpot(0)
+    setJackpot(-1)
     setBet(prevBet)
     setOffer(null)
     setCountBullet(5)
-    setMultiplier(0)
+    setMultiplier(-1)
   }, [gameId, queryClient, bet, balance, navigate, variant])
 
   const getMultiplier = useCallback(
@@ -146,6 +148,7 @@ const useSolo = (variant: VariantGame) => {
 
   const startGame = useCallback(
     async (result?: { gameId: string; multiplier: string }) => {
+      setIsStartedGame(true)
       const { gameId, multiplier } =
         result ??
         (await startGameMutation({
@@ -250,13 +253,18 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const next = useCallback(async () => {
+    if (!gameId && bet === 0) {
+      footerHandleRef.current?.wiggleWager()
+      return
+    }
+
     if (!gameId) {
       await startGame()
       return
     }
 
     await pullGame(gameId)
-  }, [gameId, pullGame, startGame])
+  }, [bet, gameId, pullGame, startGame])
 
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
@@ -299,9 +307,14 @@ const useSolo = (variant: VariantGame) => {
     isStartedGame,
   ])
 
+  useEffect(() => {
+    setIsStartedGame(Boolean(gameId))
+  }, [gameId])
+
   const { watchGame } = useGameSocket(isPlay, pullGame)
 
   return {
+    footerHandleRef,
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,

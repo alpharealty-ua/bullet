@@ -19,6 +19,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
 
   const {
+    footerHandleRef,
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,
@@ -142,7 +143,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             />
             <ButtonWithAudio
               as='button'
-              disabled={bet === 0 && !isStartedGame}
               className='w-24'
               image='pull'
               onClick={handlePull}
@@ -154,6 +154,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
       <Footer
+        footerHandleRef={footerHandleRef}
         disabledBet={isStartedGame || noMoney}
         maxBet={maxBet}
         bet={bet}
