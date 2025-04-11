@@ -10,7 +10,7 @@ export const notify = (
   message: string,
   type: 'info' | 'success' | 'error' | 'warning',
 ) => {
-  toast[type](message)
+  !import.meta.env.PROD && toast[type](message)
 }
 
 export class SocketEvents {
