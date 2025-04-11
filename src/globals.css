@@ -13,6 +13,9 @@
   --color-red: #ff0b0b;
   --color-primary: #ee8100;
 
+  --breakpoint-2xs: 24rem;
+  --breakpoint-xs: 30rem;
+
   --animate-wiggle: wiggle 1s linear infinite;
   --animate-click: click 0.2s linear both;
   --animate-button-click: button-click 0.2s linear both;

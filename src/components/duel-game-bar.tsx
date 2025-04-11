@@ -129,7 +129,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                 <td
                   key={i}
                   className={cn(
-                    'relative border-3 border-black bg-[#f7f7c0] text-center align-middle text-[0.563rem] text-white select-none first:border-l-0 last:border-r-0',
+                    '2xs:border-3 relative border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
                     'transition-colors duration-20 ease-linear',
                     'zoom-in-200 fill-mode-both repeat-1 duration-500',
                     isDefaultNumber && 'text-transparent',
@@ -140,7 +140,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                   <div className='absolute inset-0 bg-[#30ff00] opacity-0 [.is-active_&]:opacity-100 [.is-selected_&]:opacity-0'></div>
                   <div className='relative'>
                     {number === 50 ? (
-                      <IoSkull className='relative -top-[1px] inline-block text-base' />
+                      <IoSkull className='2xs:text-base relative -top-[1px] inline-block text-sm' />
                     ) : (
                       number
                     )}

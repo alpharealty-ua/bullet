@@ -69,7 +69,7 @@ const RematchRequest = ({
         'slide-in-from-bottom slide-out-to-bottom duration-400',
       )}
     >
-      <div className='flex items-center gap-2 border-t-3 border-black bg-white p-2'>
+      <div className='2xs:border-t-3 flex items-center gap-2 border-t-2 border-black bg-white p-2'>
         <div className='text-2xl'>Rematch?</div>
         <div className='flex justify-between gap-1'>
           <ButtonWithAudio
