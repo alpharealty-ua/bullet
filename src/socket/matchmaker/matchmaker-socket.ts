@@ -19,7 +19,7 @@ import { addLogEntry, notify, SocketEvents } from '@/socket/utils'
 
 type OnEvents =
   | { type: 'connect'; payload: undefined }
-  | { type: 'connect_error'; payload: any }
+  | { type: 'connect_error'; payload: { message: string } }
   | { type: 'disconnect'; payload: undefined }
   | { type: 'info'; payload: InfoResponse }
   | { type: 'pingData'; payload: PingData }

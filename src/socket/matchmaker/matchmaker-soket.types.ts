@@ -135,7 +135,7 @@ export type MatchCreatedResponse = {
   gameId: string
   players: string[]
   bet: Omit<BetOptions, 'maxRounds'>
-  metadata?: any
+  metadata?: Record<string, unknown>
 }
 
 export type DuelGameCreatedResponse = {
@@ -143,7 +143,7 @@ export type DuelGameCreatedResponse = {
   gameId: string
   players: string[]
   bet: Omit<BetOptions, 'maxRounds'>
-  metadata?: any
+  metadata?: Record<string, unknown>
 }
 
 export type ErrorResponse = {

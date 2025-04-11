@@ -30,7 +30,7 @@ import { notify, SocketEvents } from '@/socket/utils'
 
 export type OnEvents =
   | { type: 'connect'; payload: undefined }
-  | { type: 'connect_error'; payload: any }
+  | { type: 'connect_error'; payload: { message: string } }
   | { type: 'disconnect'; payload: undefined }
   | { type: 'game:joined'; payload: JoinedResponse }
   | { type: 'game:reconnected'; payload: undefined }
@@ -143,7 +143,7 @@ class DuelSocketEvents extends SocketEvents {
       this.onEvent({ type: 'connect', payload: undefined })
     })
 
-    this.on('connect_error', (error) => {
+    this.on('connect_error', (error: { message: string }) => {
       this.onEvent({ type: 'connect_error', payload: error })
     })
 

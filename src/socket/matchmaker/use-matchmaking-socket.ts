@@ -234,12 +234,13 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
 
           // Find opponent's player ID
           const opponentPlayerId = payload.players.find((id) => id !== playerId)
+          const metadata = payload.metadata
 
           const matchDetails: MatchDetails = {
             matchId: payload.matchId,
-            pingDifference: payload.metadata?.pingDifference ?? '',
-            averagePing: payload.metadata?.averagePing ?? '',
-            gameId: payload.metadata?.gameId ?? '',
+            pingDifference: Number(metadata?.pingDifference) || 0,
+            averagePing: Number(metadata?.averagePing) || 0,
+            gameId: String(metadata?.gameId) || '',
             opponent: {
               ping: 0,
               username: '',
@@ -249,9 +250,15 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
           }
 
           // Set opponent details if available
-          if (opponentPlayerId && payload.metadata?.playerMetadata) {
-            const opponentData =
-              payload.metadata.playerMetadata[opponentPlayerId]
+          if (
+            opponentPlayerId &&
+            metadata &&
+            metadata.playerMetadata &&
+            typeof metadata.playerMetadata === 'object' &&
+            opponentPlayerId in metadata.playerMetadata
+          ) {
+            // @ts-ignore
+            const opponentData = metadata.playerMetadata[opponentPlayerId]
             if (opponentData) {
               // TODO: FIX ANY
               matchDetails.opponent.ping = opponentData.ping ?? '--'
