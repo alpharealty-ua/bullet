@@ -209,39 +209,43 @@ const Bet = ({
     >
       <div className='relative z-[3] -my-4'>
         <div
+          className={cn('h-14 bg-contain bg-center bg-no-repeat')}
+          style={{ backgroundImage: `url(${IMAGES.sliderbar})` }}
+        ></div>
+        <div
           className={cn(
-            'h-14 cursor-pointer bg-contain bg-center bg-no-repeat',
+            'absolute inset-0 top-0 right-2 left-2 cursor-pointer',
             disabled && 'cursor-not-allowed',
           )}
-          style={{ backgroundImage: `url(${IMAGES.sliderbar})` }}
           onClick={handleSliderClick}
           onDoubleClick={handleSliderDbClick}
           data-slider
-        ></div>
-        <button
-          className={cn(
-            'absolute top-1/2 left-0 z-[3] h-10 w-10 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
-          )}
-          disabled={disabled}
-          style={{
-            left: `${percent}%`,
-          }}
-          data-button
         >
-          <div
+          <button
             className={cn(
-              'bg-red absolute inset-0 m-auto rounded-[inherit]',
-              size === 'sm' && 'h-2/4 w-2/4',
+              'absolute top-1/2 left-0 z-[3] h-10 w-10 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
             )}
-          ></div>
-          <>
-            {topButtonSlot && (
-              <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
-                {topButtonSlot(value)}
-              </div>
-            )}
-          </>
-        </button>
+            disabled={disabled}
+            style={{
+              left: `${percent}%`,
+            }}
+            data-button
+          >
+            <span
+              className={cn(
+                'bg-red absolute inset-0 m-auto rounded-[inherit]',
+                size === 'sm' && 'h-2/4 w-2/4',
+              )}
+            ></span>
+            <>
+              {topButtonSlot && (
+                <div className='absolute bottom-full left-1/2 w-20 -translate-x-1/2 text-xs uppercase'>
+                  {topButtonSlot(value)}
+                </div>
+              )}
+            </>
+          </button>
+        </div>
         <div
           className={cn(
             'text-red absolute top-1/2 left-full flex -translate-y-1/2 justify-between uppercase',
@@ -263,7 +267,7 @@ const Bet = ({
       {bottomSlot ? (
         bottomSlot(value)
       ) : (
-        <div className='grow text-right text-2xl leading-[1] text-ellipsis'>
+        <div className='grow px-3 text-right text-2xl leading-[1] text-ellipsis'>
           $<span data-value>{value}</span>
         </div>
       )}
