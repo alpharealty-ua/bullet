@@ -94,9 +94,12 @@ const ButtonWithAudio = React.forwardRef<
         prevFocus &&
         prevFocus === buttonRef.current
       ) {
-        setDisabled(true)
-        await promise
-        setDisabled(false)
+        try {
+          setDisabled(true)
+          await promise
+        } finally {
+          setDisabled(false)
+        }
         await wait(0).promise
         buttonRef.current.focus()
       }
