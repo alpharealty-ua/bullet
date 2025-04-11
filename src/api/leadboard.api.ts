@@ -6,7 +6,7 @@ const routes = {
   gameStats: '/leaderboard/leaderboard/game-stats',
 } as const
 
-interface GetStatsResponse {
+export interface GetStatsResponse {
   topPlayers: {
     rank: number
     username: string
