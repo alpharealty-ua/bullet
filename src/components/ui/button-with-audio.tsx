@@ -109,15 +109,14 @@ const ButtonWithAudio = React.forwardRef<
 
     event.preventDefault()
 
-    const buttonEl = buttonRef.current
+    const notPointerClick =
+      'pointerId' in event.nativeEvent && event.nativeEvent.pointerId === -1
 
-    if (buttonEl === null) {
-      return
+    if (notPointerClick) {
+      buttonRef.current?.dispatchEvent(
+        new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
+      )
     }
-
-    buttonEl.dispatchEvent(
-      new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
-    )
   }
 
   return (
