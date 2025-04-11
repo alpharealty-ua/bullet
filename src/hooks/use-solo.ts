@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -31,37 +31,31 @@ import { GameOverHandle } from '@/components/game-over'
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
   const { gameId } = useParams<{ gameId: string }>()
+  const { data: balance } = useBalance()
   const queryClient = useQueryClient()
+  const wait = useWait()
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const revolverHandleRef = useRef<RevolverHandle>(null)
-  const disabledRef = useRef(false)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = useGamePull()
-  const { data: balance } = useBalance()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const declineAllDeals = useSettingsStore(
     ({ declineAllDeals }) => declineAllDeals,
   )
-  const setCountBullet = useGameStore(({ setCountBullet }) => setCountBullet)
-  const setOffer = useGameStore(({ setOffer }) => setOffer)
-  const setBet = useGameStore(({ setBet }) => setBet)
-  const setMultiplier = useGameStore(({ setMultiplier }) => setMultiplier)
-  const setIsStartedGame = useGameStore(
-    ({ setIsStartedGame }) => setIsStartedGame,
-  )
-  const setJackpot = useGameStore(({ setJackpot }) => setJackpot)
-  const setMaxBet = useGameStore(({ setMaxBet }) => setMaxBet)
-  const restartGame = useGameStore(({ newGame }) => newGame)
-  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
-  const offer = useGameStore(({ offer }) => offer)
-  const bet = useGameStore(({ bet }) => bet)
-  const jackpot = useGameStore(({ jackpot }) => jackpot)
-  const wait = useWait()
+  const [countBullet, setCountBullet] = useState(5)
+  const [bet, setBet] = useState(0)
+  const [jackpot, setJackpot] = useState(0)
+  const [offer, setOffer] = useState<Offer | null>(null)
+  const [multiplier, setMultiplier] = useState(-1)
+  const isStartedGame = Boolean(gameId)
+  const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
+  const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
+  const [showHelpers, setShowHelpers] = useState(true)
   const isPlay = variant === 'play'
 
   const newGame = useCallback(async () => {
@@ -76,8 +70,15 @@ const useSolo = (variant: VariantGame) => {
 
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
-    restartGame()
-  }, [restartGame, navigate, queryClient, gameId, variant])
+    const hasPrevBet = bet !== 0
+    const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
+
+    setJackpot(0)
+    setBet(prevBet)
+    setOffer(null)
+    setCountBullet(5)
+    setMultiplier(0)
+  }, [gameId, queryClient, bet, balance, navigate, variant])
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
@@ -265,11 +266,10 @@ const useSolo = (variant: VariantGame) => {
   }, [allGames, navigate, gameId])
 
   useEffect(() => {
-    const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
-    setMaxBet(maxBet)
-  }, [isStartedGame, balance, bet, gameId, setMaxBet])
+    if (!isStartedGame) {
+      return
+    }
 
-  useEffect(() => {
     if (!gameDetails) {
       return
     }
@@ -293,20 +293,29 @@ const useSolo = (variant: VariantGame) => {
     setBet,
     setCountBullet,
     setMultiplier,
-    setIsStartedGame,
     gameId,
     gameOver,
     winGame,
+    isStartedGame,
   ])
-  useEffect(() => {
-    setIsStartedGame(Boolean(gameId))
-  }, [gameId, newGame, setIsStartedGame, variant])
+
   const { watchGame } = useGameSocket(isPlay, pullGame)
 
   return {
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,
+    offer,
+    bet,
+    jackpot,
+    isStartedGame,
+    multiplier,
+    countBullet,
+    noMoney,
+    maxBet,
+    showHelpers,
+    setShowHelpers,
+    setBet,
     next,
     deal,
     watchGame,

@@ -1,9 +1,5 @@
-import { useState } from 'react'
-
-import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
-import { useGameStore } from '@/store/game.store'
 import { useSolo } from '@/hooks/use-solo'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { VariantGame } from '@/lib/constants'
@@ -20,21 +16,24 @@ import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const { data: balance } = useBalance()
   const modal = useCustomModal()
-  const [showHelpers, setShowHelpers] = useState(true)
-  const isStartedGame = useGameStore(({ isStartedGame }) => isStartedGame)
-  const bet = useGameStore(({ bet }) => bet)
-  const offer = useGameStore(({ offer }) => offer)
-  const jackpot = useGameStore(({ jackpot }) => jackpot)
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
-  const multiplier = useGameStore(({ multiplier }) => multiplier)
-  const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
 
   const {
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,
+    offer,
+    bet,
+    jackpot,
+    isStartedGame,
+    multiplier,
+    countBullet,
+    noMoney,
+    maxBet,
+    showHelpers,
+    setShowHelpers,
+    setBet,
     next,
     deal,
     watchGame,
@@ -155,7 +154,13 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver gameOverHandleRef={gameOverHandleRef} />
-      <Footer disabledBet={isStartedGame || noMoney} />
+      <Footer
+        disabledBet={isStartedGame || noMoney}
+        maxBet={maxBet}
+        bet={bet}
+        countBullet={countBullet}
+        setBet={setBet}
+      />
     </>
   )
 }

@@ -7,11 +7,19 @@ import { Settings } from '@/components/settings'
 import { Leaderboard } from '@/components/leaderboard'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-const Footer = ({ disabledBet }: { disabledBet: boolean }) => {
-  const setBet = useGameStore(({ setBet }) => setBet)
-  const bet = useGameStore(({ bet }) => bet)
-  const maxBet = useGameStore(({ maxBet }) => maxBet)
-  const countBullet = useGameStore(({ countBullet }) => countBullet)
+const Footer = ({
+  disabledBet,
+  maxBet,
+  bet,
+  countBullet,
+  setBet,
+}: {
+  disabledBet: boolean
+  maxBet: number
+  bet: number
+  countBullet: number
+  setBet: (bet: number) => void
+}) => {
   const modal = useCustomModal()
 
   const handleSettingsClick = () => {
