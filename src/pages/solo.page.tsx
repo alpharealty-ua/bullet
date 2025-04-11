@@ -81,17 +81,17 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             <Result
               title={'Prizepool'}
               value={`$${jackpot}`}
-              open={Boolean(jackpot)}
+              open={jackpot !== -1}
             />
             <Result
               title={'Multiplier'}
               value={`${multiplier}x`}
-              open={multiplier > 0}
+              open={multiplier !== -1}
             />
             <Result
               title={'the banker offers...'}
               value={`$${offer ? offer.amount : '0'}`}
-              open={isStartedGame && Boolean(offer)}
+              open={Boolean(offer)}
             />
           </div>
         )}
