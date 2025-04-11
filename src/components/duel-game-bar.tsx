@@ -115,7 +115,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
       {/* table for precision border left and border right */}
       <table
         ref={wrapperRef}
-        className='relative h-10 w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
+        className='relative w-full table-fixed border-collapse justify-center bg-[#f7f7c0]'
       >
         <thead>
           <tr>
@@ -129,7 +129,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                 <td
                   key={i}
                   className={cn(
-                    '2xs:border-3 relative border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
+                    '2xs:border-3 relative h-10 border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
                     'transition-colors duration-20 ease-linear',
                     'zoom-in-200 fill-mode-both repeat-1 duration-500',
                     isDefaultNumber && 'text-transparent',
