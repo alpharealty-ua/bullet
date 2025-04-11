@@ -9,7 +9,6 @@ import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
-import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -100,16 +99,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col'>
         <DuelGameBar gameBarRef={topGameBarHandleRef} />
-        <div className='grow'></div>
-        <div className='relative flex w-full grow flex-col justify-end gap-10'>
-          <div
-            className={cn(
-              'relative flex min-h-60 grow flex-col gap-2 pt-4',
-              'animate-in fade-in duration-500',
-            )}
-          >
+        <div className='relative flex w-full grow flex-col justify-end gap-10 py-4'>
+          <div className='relative flex min-h-64 grow items-end'>
             <Character
-              className={cn('mx-auto mr-12 max-h-50 w-full max-w-48')}
+              className='mr-12 ml-auto max-h-50 w-full max-w-48'
               name={matchDetails?.opponent.characterName ?? 'fatty'}
               type='front'
               onClick={handlePlayerClick}
@@ -121,11 +114,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 win: 52,
               }}
             />
-            <ReadySetPull readySetPullHandle={readySetPullHandleRef} />
           </div>
-          <div className='relative flex min-h-60 grow items-end'>
+          <div className='relative flex min-h-64 grow items-end'>
             <Character
-              className={cn('mb-10 ml-6 max-h-50 w-full max-w-45')}
+              className='mr-auto ml-12 max-h-50 w-full max-w-48'
               name={characterName}
               type='back'
               onClick={handlePlayerClick}
@@ -150,6 +142,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               </div>
             </div>
           </div>
+          <ReadySetPull
+            readySetPullHandle={readySetPullHandleRef}
+            className='absolute top-1/2 left-10 -mt-10 -translate-y-1/2'
+          />
         </div>
         <RematchRequest
           onRequest={handleRequestRematch}
