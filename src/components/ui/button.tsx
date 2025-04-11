@@ -67,7 +67,7 @@ const Button = React.forwardRef<
           {text || children}
         </span>
       )}
-      {image && <img src={imagesMap[image]} alt='' />}
+      {image && <img src={imagesMap[image]} alt='' className='w-full' />}
     </Comp>
   )
 })
