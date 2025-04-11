@@ -4,7 +4,6 @@ const flags = {
   ASIA: '🇯🇵',
   SA: '🇧🇷',
   OCE: '🇦🇺',
-  RU: 'RU',
 } as const
 
 export type FlagKeys = keyof typeof flags
@@ -12,6 +11,7 @@ export type FlagKeys = keyof typeof flags
 export const getRegionFlag = (region: FlagKeys) => {
   return flags[region] ?? '🌍'
 }
+
 export const getFlagColor = (lvl: number) => {
   if (lvl >= 91) return '#7E22CE'
   if (lvl >= 81) return '#8B5CF6'
