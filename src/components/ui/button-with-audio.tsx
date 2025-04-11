@@ -3,6 +3,7 @@ import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { Button, ButtonProps } from '@/components/ui/button'
+import { wait } from '@/lib/utils'
 
 type OmitClick<T> = T extends { as: string } ? Omit<T, 'onClick'> : T
 
@@ -85,11 +86,20 @@ const ButtonWithAudio = React.forwardRef<
     }
 
     if (dispatchedAfterAnimation) {
-      setDisabled(true)
+      const prevFocus = document.activeElement
+      const promise = onClick && onClick(event)
 
-      onClick && (await onClick(event))
-
-      setDisabled(false)
+      if (
+        promise instanceof Promise &&
+        prevFocus &&
+        prevFocus === buttonRef.current
+      ) {
+        setDisabled(true)
+        await promise
+        setDisabled(false)
+        await wait(0).promise
+        buttonRef.current.focus()
+      }
 
       return
     }
