@@ -69,19 +69,18 @@ const CharacterSelector = ({
                 )}
                 style={{ backgroundImage: `url(${IMAGES.texture})` }}
               >
-                <button
+                <div
                   key={i}
                   className={cn(
                     'absolute inset-0 flex items-center justify-center rounded-[inherit] border-4 p-10 transition-all disabled:cursor-not-allowed',
                   )}
-                  disabled={disabled}
                 >
                   <Character
                     name={character.id}
                     type={type}
                     className='animate-in fade-in zoom-in-150 h-full'
                   />
-                </button>
+                </div>
                 {disabled && (
                   <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-full bg-black/30 text-white duration-500'>
                     <IoLockClosed className='text-7xl drop-shadow-2xl' />
