@@ -17,16 +17,13 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <div
-        // TODO: REFACTOR PAGE HEIGHT
-        className='relative mx-auto flex h-dvh min-h-[600px] max-w-[var(--width)] translate-0 flex-col bg-cover bg-[right_center] lg:min-h-[780px]'
+        className='custom-scroll relative mx-auto flex h-dvh min-h-[600px] w-full max-w-[var(--width)] translate-0 flex-col overflow-x-hidden bg-cover bg-[right_center] lg:min-h-[780px]'
         style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
       >
-        <div className='custom-scroll flex w-full grow flex-col overflow-x-hidden'>
-          <NiceModal.Provider>
-            <Audios />
-            {children}
-          </NiceModal.Provider>
-        </div>
+        <NiceModal.Provider>
+          <Audios />
+          {children}
+        </NiceModal.Provider>
       </div>
       <ToastContainer theme='colored' />
     </QueryClientProvider>
