@@ -1,100 +1,75 @@
-import { useCallback, useImperativeHandle, useRef } from 'react'
+import { useImperativeHandle, useRef } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
 import { cn, waitEndAudio } from '@/lib/utils'
 
 export interface ReadySetPullHandle {
   startAll: () => Promise<void>
-  start: (value: ReadyTakePull) => Promise<void>
+  start: (value: ReadySetPull) => Promise<void>
 }
 
-export type ReadyTakePull = 'ready' | 'take' | 'pull'
+export type ReadySetPull = 'ready' | 'set' | 'pull'
 
-export interface ReadySetPullProps {
+export interface ReadySetPullProps extends React.ComponentProps<'div'> {
   readySetPullHandle?: React.ForwardedRef<ReadySetPullHandle>
 }
 
-const ReadySetPull = ({ readySetPullHandle }: ReadySetPullProps) => {
+const ReadySetPull = ({
+  readySetPullHandle,
+  className,
+  ...props
+}: ReadySetPullProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
-  const startAll = useCallback(async () => {
+  const startAll = async () => {
+    await start('ready')
+    await start('set')
+    await start('pull')
+  }
+
+  const start = async (value: ReadySetPull) => {
     const wrapperDom = wrapperRef.current
 
     if (wrapperDom === null) {
       return
     }
 
-    const [ready, set, pull] =
+    const [readyEl, setEl, pullEl] =
       wrapperDom.children as HTMLCollectionOf<HTMLDivElement>
 
-    if (!(ready && set && pull)) {
+    if (!(readyEl && setEl && pullEl)) {
       return
     }
 
-    ready.classList.remove('is-show')
-    set.classList.remove('is-show')
-    pull.classList.remove('is-show')
-
-    const readyAudio = await playAudio('ready')
-    ready.classList.add('is-show')
-    await waitEndAudio(readyAudio)
-
-    const setAudio = await playAudio('ready')
-    set.classList.add('is-show')
-    await waitEndAudio(setAudio)
-
-    const pullAudio = await playAudio('pull')
-    pull.classList.add('is-show')
-    await waitEndAudio(pullAudio)
-
-    ready.classList.remove('is-show')
-    set.classList.remove('is-show')
-    pull.classList.remove('is-show')
-  }, [playAudio])
-
-  const start = async (value: ReadyTakePull) => {
-    const wrapperDom = wrapperRef.current
-
-    if (wrapperDom === null) {
-      return
-    }
-
-    const [ready, set, pull] =
-      wrapperDom.children as HTMLCollectionOf<HTMLDivElement>
-
-    if (!(ready && set && pull)) {
-      return
-    }
-
-    ready.classList.remove('is-show')
-    set.classList.remove('is-show')
-    pull.classList.remove('is-show')
+    readyEl.classList.remove('is-show')
+    setEl.classList.remove('is-show')
+    pullEl.classList.remove('is-show')
 
     if (value === 'ready') {
       const readyAudio = await playAudio('ready')
-      ready.classList.add('is-show')
+      readyEl.classList.add('is-show')
       await waitEndAudio(readyAudio)
     }
 
-    if (value === 'take') {
+    if (value === 'set') {
       const setAudio = await playAudio('ready')
-      ready.classList.add('is-show')
-      set.classList.add('is-show')
+      readyEl.classList.add('is-show')
+      setEl.classList.add('is-show')
       await waitEndAudio(setAudio)
     }
 
     if (value === 'pull') {
       const pullAudio = await playAudio('pull')
-      ready.classList.add('is-show')
-      set.classList.add('is-show')
-      pull.classList.add('is-show')
+      readyEl.classList.add('is-show')
+      setEl.classList.add('is-show')
+      pullEl.classList.add('is-show')
       await waitEndAudio(pullAudio)
     }
 
-    ready.classList.remove('is-show')
-    set.classList.remove('is-show')
-    pull.classList.remove('is-show')
+    readyEl.classList.remove('is-show')
+    setEl.classList.remove('is-show')
+    pullEl.classList.remove('is-show')
   }
 
   useImperativeHandle(readySetPullHandle, () => ({
@@ -105,7 +80,8 @@ const ReadySetPull = ({ readySetPullHandle }: ReadySetPullProps) => {
   return (
     <div
       ref={wrapperRef}
-      className='absolute bottom-0 left-10 flex flex-col gap-1 text-[2.5rem]'
+      className={cn('flex flex-col gap-1 text-[2.5rem]', className)}
+      {...props}
     >
       <div
         className={cn(

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client'
 
-import { ReadyTakePull } from '@/components/ready-set-pull'
+import { ReadySetPull } from '@/components/ready-set-pull'
 import {
   RoundCurrent,
   PullResult,
@@ -38,15 +38,15 @@ export type OnEvents =
   | { type: 'game:round_current'; payload: RoundCurrent }
   | {
       type: 'game:ready'
-      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+      payload: ReadyTakePullResponse & { event: ReadySetPull }
     }
   | {
       type: 'game:take'
-      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+      payload: ReadyTakePullResponse & { event: ReadySetPull }
     }
   | {
       type: 'game:pull'
-      payload: ReadyTakePullResponse & { event: ReadyTakePull }
+      payload: ReadyTakePullResponse & { event: ReadySetPull }
     }
   | { type: 'game:pull_result'; payload: PullResult }
   | { type: 'game:player_won'; payload: Won }
@@ -172,7 +172,7 @@ class DuelSocketEvents extends SocketEvents {
     })
 
     this.on('game:take', (data: ReadyTakePullResponse) => {
-      this.onEvent({ type: 'game:take', payload: { ...data, event: 'take' } })
+      this.onEvent({ type: 'game:take', payload: { ...data, event: 'set' } })
     })
 
     this.on('game:pull', (data: ReadyTakePullResponse) => {
