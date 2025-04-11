@@ -1,3 +1,4 @@
+import { useProfile } from '@/api/auth.api'
 import { useGameStats } from '@/api/leadboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
@@ -14,6 +15,7 @@ import {
 } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loading } from '@/components/loading'
+import { cn } from '@/lib/utils'
 
 const flags = {
   NA: '🇺🇸',
@@ -43,6 +45,7 @@ const CURRENT_LEVEL = 53
 
 const Leaderboard = () => {
   const { data: leaderboardData, isLoading, isSuccess } = useGameStats()
+  const { data: user } = useProfile()
 
   if (isLoading || !isSuccess) {
     return <Loading />
@@ -105,90 +108,64 @@ const Leaderboard = () => {
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-200 bg-white'>
-              {leaderboardData.topPlayers.map((player) => (
-                <tr key={player.username} className='hover:bg-gray-50'>
-                  <td className='px-2 py-3 text-sm font-medium whitespace-nowrap text-gray-900'>
-                    #{player.rank}
-                  </td>
-                  <td className='px-2 py-3 whitespace-nowrap'>
-                    <div className='flex items-center'>
-                      <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-100'>
-                        {getRegionFlag(player.region as FlagKeys)}
-                      </div>
-                      <div className='ml-4'>
-                        <div className='text-sm font-medium text-gray-900'>
-                          {player.username}
-                        </div>
-                        <div className='text-sm text-gray-500'>
-                          {player.region}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className='px-2 py-3 whitespace-nowrap'>
-                    <div
-                      className='text-sm font-bold text-gray-900'
-                      style={{ color: getFlagColor(player.lvl) }}
-                    >
-                      {player.lvl}
-                    </div>
-                  </td>
-                  <td className='px-2 py-3 whitespace-nowrap'>
-                    <div className='text-sm text-gray-900'>
-                      {player.precision}
-                    </div>
-                  </td>
-                  <td className='px-2 py-3 whitespace-nowrap'>
-                    <div className='text-sm text-gray-900'>
-                      {player.consistency}
-                    </div>
-                  </td>
-                  <td className='px-2 py-3 whitespace-nowrap'>
-                    <div className='text-sm text-gray-900'>{player.speed}</div>
-                  </td>
-                  <td className='px-2 py-3 text-sm whitespace-nowrap text-gray-500'>
-                    {player.wins}W / {player.losses}L
-                  </td>
-                </tr>
-              ))}
-              <tr className='bg-blue-50 hover:bg-blue-100'>
-                <td className='px-2 py-3 text-sm font-medium whitespace-nowrap text-gray-900'>
-                  #3426
-                </td>
-                <td className='px-2 py-3 whitespace-nowrap'>
-                  <div className='flex items-center'>
-                    <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-100'>
-                      🇺🇸
-                    </div>
-                    <div className='ml-4'>
-                      <div className='text-sm font-medium text-gray-900'>
-                        YOU (SharpShooter)
-                      </div>
-                      <div className='text-sm text-gray-500'>NA</div>
-                    </div>
-                  </div>
-                </td>
-                <td className='px-2 py-3 whitespace-nowrap'>
-                  <div
-                    className='text-sm font-bold text-gray-900'
-                    style={{ color: getFlagColor(CURRENT_LEVEL) }}
+              {leaderboardData.topPlayers.map((player) => {
+                const isPlayer = player.username === user?.username
+                // hover:bg-blue-100
+                return (
+                  <tr
+                    key={player.username}
+                    className={cn(
+                      'hover:bg-gray-50',
+                      isPlayer && 'bg-blue-50 hover:bg-blue-100',
+                    )}
                   >
-                    {CURRENT_LEVEL}
-                  </div>
-                </td>
-                <td className='px-2 py-3 whitespace-nowrap'>
-                  <div className='text-sm text-gray-900'>55</div>
-                </td>
-                <td className='px-2 py-3 whitespace-nowrap'>
-                  <div className='text-sm text-gray-900'>48</div>
-                </td>
-                <td className='px-2 py-3 whitespace-nowrap'>
-                  <div className='text-sm text-gray-900'>56</div>
-                </td>
-                <td className='px-2 py-3 text-sm whitespace-nowrap text-gray-500'>
-                  142W / 128L
-                </td>
-              </tr>
+                    <td className='px-2 py-3 text-sm font-medium whitespace-nowrap text-gray-900'>
+                      #{player.rank}
+                    </td>
+                    <td className='px-2 py-3 whitespace-nowrap'>
+                      <div className='flex items-center'>
+                        <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-100'>
+                          {getRegionFlag(player.region as FlagKeys)}
+                        </div>
+                        <div className='ml-4'>
+                          <div className='text-sm font-medium text-gray-900'>
+                            {player.username}
+                          </div>
+                          <div className='text-sm text-gray-500'>
+                            {player.region}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className='px-2 py-3 whitespace-nowrap'>
+                      <div
+                        className='text-sm font-bold text-gray-900'
+                        style={{ color: getFlagColor(player.lvl) }}
+                      >
+                        {player.lvl}
+                      </div>
+                    </td>
+                    <td className='px-2 py-3 whitespace-nowrap'>
+                      <div className='text-sm text-gray-900'>
+                        {player.precision}
+                      </div>
+                    </td>
+                    <td className='px-2 py-3 whitespace-nowrap'>
+                      <div className='text-sm text-gray-900'>
+                        {player.consistency}
+                      </div>
+                    </td>
+                    <td className='px-2 py-3 whitespace-nowrap'>
+                      <div className='text-sm text-gray-900'>
+                        {player.speed}
+                      </div>
+                    </td>
+                    <td className='px-2 py-3 text-sm whitespace-nowrap text-gray-500'>
+                      {player.wins}W / {player.losses}L
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
