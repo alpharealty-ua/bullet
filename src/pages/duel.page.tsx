@@ -10,7 +10,6 @@ import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from '@/components/duel-game-bar'
@@ -95,7 +94,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Header logoText='Duel' />
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col'>
         <DuelGameBar gameBarRef={topGameBarHandleRef} />

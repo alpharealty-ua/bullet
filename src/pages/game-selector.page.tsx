@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { CharacterEntity, useCharacters } from '@/api/duel.api'
 import { useGameStore } from '@/store/game.store'
@@ -6,7 +6,6 @@ import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { CharacterSelector } from '@/components/character-selector'
 import { Loading } from '@/components/loading'
-import { Header } from '@/components/header'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const { data: characters, isLoading, isSuccess } = useCharacters()
@@ -38,7 +37,6 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
 
   return (
     <>
-      <Header logoText={isDuel ? 'Duel' : 'Solo'} />
       <div className='flex grow flex-col items-center justify-center gap-6 py-8'>
         <div className='flex gap-6'>
           <ButtonWithAudio

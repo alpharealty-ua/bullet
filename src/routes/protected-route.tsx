@@ -8,13 +8,18 @@ import { Loading } from '@/components/loading'
 
 type ProtectedRouteProps = {
   children?: React.ReactNode
+  skip?: boolean
 }
 
-export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children, skip }: ProtectedRouteProps) => {
   const token = useAuthStore(({ accessToken }) => accessToken)
   const { data: user, isPending: profileIsPending } = useProfile()
   const { isPending: balanceIsPending } = useBalance()
   const { pathname } = useLocation()
+
+  if (skip) {
+    return children ?? <Outlet />
+  }
 
   if (token && (profileIsPending || balanceIsPending)) {
     return <Loading className='absolute inset-0' />
@@ -28,3 +33,5 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     <Navigate to={ROUTES.auth.login} state={{ redirect: pathname }} replace />
   )
 }
+
+export { ProtectedRoute }

@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
 import { Result } from '@/components/result'
-import { Header } from '@/components/header'
 import { Footer } from '@/components/footer-solo'
 import { AddMoneyModal } from '@/components/add-money-modal'
 import { Helper } from '@/components/helper'
@@ -56,7 +55,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
   return (
     <>
-      <Header logoText='Solo' showNoMoney={!noMoney} />
       <div className='min-h-60'>
         {variant === 'watch' && watchGame && (
           <div className='flex flex-col gap-6 p-4'>
@@ -77,6 +75,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         )}
         {variant === 'play' && !noMoney && (
+          // TODO: ADD ANIMATION
           <div className='flex flex-col gap-3 pt-2'>
             <Result
               title={'Prizepool'}
@@ -143,7 +142,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             />
             <ButtonWithAudio
               as='button'
-              disabled={bet === 0}
+              disabled={bet === 0 && !isStartedGame}
               className='w-24'
               image='pull'
               onClick={handlePull}

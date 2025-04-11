@@ -4,7 +4,6 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
 import { LeadboardIcon } from '@/components/leadboard-icon'
-import { Header } from '@/components/header'
 
 const HomePage = () => {
   const modal = useCustomModal()
@@ -17,7 +16,6 @@ const HomePage = () => {
 
   return (
     <>
-      <Header hideLogo />
       <main className='flex w-full grow flex-col items-center justify-center gap-10'>
         <Logo as='div' size='xl' />
         <div className='flex flex-col items-center justify-center gap-6'>

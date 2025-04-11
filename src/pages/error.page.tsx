@@ -1,7 +1,6 @@
 import { useRouteError } from 'react-router'
 
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Header } from '@/components/header'
 
 const ErrorPage = () => {
   const data = useRouteError()
@@ -14,7 +13,6 @@ const ErrorPage = () => {
 
   return (
     <>
-      <Header />
       <div className='flex grow flex-col justify-center gap-4 text-center'>
         <h3 className='text-3xl'>Opps, something went wrong!</h3>
         {message && <h4 className='text-xl'>{message}</h4>}

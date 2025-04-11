@@ -5,7 +5,6 @@ import { socketMatchmaker } from '@/socket/socket'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { useAuthStore } from '@/store/auth.store'
-import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Matchmaker } from '@/components/matchmaker'
 import { DuelGameBar } from '@/components/duel-game-bar'
@@ -54,7 +53,6 @@ const MatchmakerPage = () => {
 
   return (
     <>
-      <Header logoText='duel' />
       <div className='flex grow flex-col items-center justify-center'>
         {isNextSearch && <DuelGameBar />}
         <Matchmaker

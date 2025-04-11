@@ -5,14 +5,23 @@ import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
 import { ProtectedRoute } from '@/routes/protected-route'
 import { ErrorPage } from '@/pages/error.page'
 import { NotFoundPage } from '@/pages/not-found.page'
+import { PageWrapper } from '@/components/page-wrapper'
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootRouter />,
-    errorElement: <ErrorPage />,
+    errorElement: (
+      <PageWrapper>
+        <ErrorPage />
+      </PageWrapper>
+    ),
     children: [
-      ...PUBLIC_ROUTES,
+      {
+        path: '/',
+        element: <ProtectedRoute skip />,
+        children: PUBLIC_ROUTES,
+      },
       {
         path: '/',
         element: <ProtectedRoute />,
@@ -20,7 +29,17 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <NotFoundPage />,
+        element: <ProtectedRoute skip />,
+        children: [
+          {
+            path: '*',
+            element: (
+              <PageWrapper>
+                <NotFoundPage />
+              </PageWrapper>
+            ),
+          },
+        ],
       },
     ],
   },

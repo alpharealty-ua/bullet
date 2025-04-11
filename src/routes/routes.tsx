@@ -1,4 +1,5 @@
 import { ROUTES } from '@/routes/path'
+import { PageWrapper } from '@/components/page-wrapper'
 import { HomePage } from '@/pages/home.page'
 import { LoginPage } from '@/pages/login.page'
 import { RegisterPage } from '@/pages/register.page'
@@ -14,11 +15,19 @@ import { ResetPasswordPage } from '@/pages/reset-password.page.tsx'
 export const PUBLIC_ROUTES = [
   {
     path: ROUTES.root,
-    element: <HomePage />,
+    element: (
+      <PageWrapper headerProps={{ hideLogo: true }}>
+        <HomePage />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.leaderboard.root,
-    element: <LeaderboardPage />,
+    element: (
+      <PageWrapper>
+        <LeaderboardPage />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.auth.login,
@@ -45,38 +54,74 @@ export const PRIVATE_ROUTES = [
   },
   {
     path: ROUTES.solo.root,
-    element: <GameSelectorPage format='solo' />,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Solo' }}>
+        <GameSelectorPage format='solo' />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.solo.play,
-    element: <SoloPage variant='play' />,
+    element: (
+      <PageWrapper headerProps={{ showNoMoney: true }}>
+        <SoloPage variant='play' />
+      </PageWrapper>
+    ),
   },
   {
     path: `${ROUTES.solo.root}/:gameId`,
-    element: <SoloPage variant='play' />,
+    element: (
+      <PageWrapper headerProps={{ showNoMoney: false }}>
+        <SoloPage variant='play' />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.solo.watch,
-    element: <SoloPage variant='watch' />,
+    element: (
+      <PageWrapper headerProps={{ showNoMoney: false }}>
+        <SoloPage variant='watch' />
+      </PageWrapper>
+    ),
   },
   {
     path: `${ROUTES.solo.root}/:gameId/watch`,
-    element: <SoloPage variant='watch' />,
+    element: (
+      <PageWrapper headerProps={{ showNoMoney: false }}>
+        <SoloPage variant='watch' />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.duel.root,
-    element: <GameSelectorPage format='duel' />,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+        <GameSelectorPage format='duel' />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.duel.play,
-    element: <MatchmakerPage />,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+        <MatchmakerPage />
+      </PageWrapper>
+    ),
   },
   {
     path: `${ROUTES.duel.root}/:gameId`,
-    element: <DuelPage variant='play' />,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+        <DuelPage variant='play' />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.duel.watch,
-    element: <DuelPage variant='watch' />,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+        <DuelPage variant='watch' />
+      </PageWrapper>
+    ),
   },
 ]
