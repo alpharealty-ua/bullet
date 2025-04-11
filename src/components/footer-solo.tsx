@@ -1,4 +1,3 @@
-import { useGameStore } from '@/store/game.store'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { IMAGES } from '@/lib/constants'
 import { Bet } from '@/components/bet'

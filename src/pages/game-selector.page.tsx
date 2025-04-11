@@ -39,7 +39,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   return (
     <>
       <Header logoText={isDuel ? 'Duel' : 'Solo'} />
-      <div className='flex grow flex-col items-center justify-center gap-6'>
+      <div className='flex grow flex-col items-center justify-center gap-6 py-8'>
         <div className='flex gap-6'>
           <ButtonWithAudio
             as='link'
