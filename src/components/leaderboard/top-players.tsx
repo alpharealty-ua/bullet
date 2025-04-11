@@ -1,6 +1,10 @@
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { cn } from '@/lib/utils'
-import { getRegionFlag, FlagKeys, getFlagColor } from '@/components/utils'
+import {
+  getRegionFlag,
+  FlagKeys,
+  getFlagColor,
+} from '@/components/leaderboard/utils'
 
 const TopPlayers = ({
   topPlayers,

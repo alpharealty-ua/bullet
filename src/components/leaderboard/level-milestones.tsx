@@ -10,7 +10,7 @@ import {
 
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CURRENT_LEVEL, getFlagColor } from '@/components/utils'
+import { CURRENT_LEVEL, getFlagColor } from '@/components/leaderboard/utils'
 
 const LevelMilestones = ({
   milestones,

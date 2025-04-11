@@ -3,7 +3,7 @@ import { IMAGES } from '@/lib/constants'
 import { Bet } from '@/components/bet'
 import { Bullets } from '@/components/bullets'
 import { Settings } from '@/components/settings'
-import { Leaderboard } from '@/components/leaderboard'
+import { Leaderboard } from '@/components/leaderboard/leaderboard'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const Footer = ({

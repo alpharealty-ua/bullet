@@ -2,10 +2,10 @@ import { useProfile } from '@/api/auth.api'
 import { useGameStats } from '@/api/leadboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loading } from '@/components/loading'
-import { DistributionByLevel } from '@/components/distribution-by-level'
-import { RegionalDistribution } from '@/components/regional-distribution'
-import { LevelMilestones } from '@/components/level-milestones'
-import { TopPlayers } from '@/components/top-players'
+import { DistributionByLevel } from '@/components/leaderboard/distribution-by-level'
+import { RegionalDistribution } from '@/components/leaderboard/regional-distribution'
+import { LevelMilestones } from '@/components/leaderboard/level-milestones'
+import { TopPlayers } from '@/components/leaderboard/top-players'
 
 const Leaderboard = () => {
   const { data: leaderboardData, isLoading, isSuccess } = useGameStats()
