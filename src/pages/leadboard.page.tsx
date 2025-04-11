@@ -1,4 +1,4 @@
-import { Leaderboard } from '@/components/leaderboard'
+import { Leaderboard } from '@/components/leaderboard/leaderboard'
 
 const LeaderboardPage = () => {
   return (

@@ -10,7 +10,8 @@ import {
 
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CURRENT_LEVEL, getFlagColor } from '@/components/leaderboard/utils'
+import { CURRENT_LEVEL, getLevelColor } from '@/components/leaderboard/utils'
+import { cn } from '@/lib/utils'
 
 const LevelMilestones = ({
   milestones,
@@ -79,10 +80,10 @@ const LevelMilestones = ({
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className='custom-scroll -mr-6 -ml-6 overflow-auto'>
+        <div className='custom-scroll overflow-auto'>
           <table className='w-full divide-y divide-gray-200 text-sm'>
-            <thead className='bg-gray-50'>
-              <tr>
+            <thead>
+              <tr className='bg-gray-50 text-gray-500 uppercase'>
                 <th className='px-2 py-3 text-left font-medium text-gray-500 uppercase'>
                   LVL
                 </th>
@@ -107,13 +108,11 @@ const LevelMilestones = ({
                 >
                   <td className='px-2 py-2 whitespace-nowrap'>
                     <span
-                      className={`font-bold ${milestone.lvl === CURRENT_LEVEL ? 'text-blue-600' : ''}`}
-                      style={{
-                        color:
-                          milestone.lvl !== CURRENT_LEVEL
-                            ? getFlagColor(milestone.lvl)
-                            : '',
-                      }}
+                      className={cn(
+                        `font-bold`,
+                        milestone.lvl === CURRENT_LEVEL && 'text-blue-600',
+                        getLevelColor(milestone.lvl),
+                      )}
                     >
                       {milestone.lvl}
                     </span>
