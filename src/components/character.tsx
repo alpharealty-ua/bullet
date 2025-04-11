@@ -19,7 +19,7 @@ const initState = {
 } satisfies CharacterState
 
 interface CharacterProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  name: CharacterName
+  name?: CharacterName
   type: CharacterType
   playerInfoProps?: Omit<PlayerInfoProps, 'visible'>
   beforeSlot?: React.ReactNode
@@ -37,7 +37,7 @@ export interface CharacterHandle {
 const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
   (
     {
-      name,
+      name = 'fatty',
       className,
       beforeSlot,
       playerInfoProps,

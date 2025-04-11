@@ -103,7 +103,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           <div className='relative flex min-h-64 grow items-end'>
             <Character
               className='mr-12 ml-auto max-h-50 w-full max-w-48'
-              name={matchDetails?.opponent.characterName ?? 'fatty'}
+              name={matchDetails?.opponent.characterName}
               type='front'
               onClick={handlePlayerClick}
               characterHandleRef={frontCharacterHandleRef}
