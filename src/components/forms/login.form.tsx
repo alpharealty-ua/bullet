@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 import { ChangeForm } from '@/components/ui/change-form'
+import { GoogleLoginButton } from '@/components/ui/google-login-button'
 
 const LoginForm = () => {
   const { mutateAsync: loginMutation, error, isPending, isSuccess } = useLogin()
@@ -94,6 +95,17 @@ const LoginForm = () => {
           type='submit'
           disabled={isPending}
         />
+        <div className="relative my-2">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <GoogleLoginButton />
         <ChangeForm type='forgotPassword' />
         <ChangeForm type='login' />
       </form>
