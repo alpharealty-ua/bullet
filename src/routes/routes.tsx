@@ -85,7 +85,7 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: `${ROUTES.solo.root}/:gameId/watch`,
+    path: `${ROUTES.solo.root}/watch/:gameId`,
     element: (
       <PageWrapper headerProps={{ showNoMoney: false }}>
         <SoloPage variant='watch' />

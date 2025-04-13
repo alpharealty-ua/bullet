@@ -73,6 +73,33 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
                 text='Watch'
               />
             </div>
+            {watchGame.game && (
+              <div className='mt-4 flex flex-col gap-3'>
+                <div className='text-xl'>Game Details</div>
+                <div className='grid grid-cols-2 gap-3'>
+                  <Result
+                    title={'Player'}
+                    value={watchGame.game.user.username}
+                    open={true}
+                  />
+                  <Result
+                    title={'Bet Amount'}
+                    value={`$${watchGame.game.formattedBetAmount}`}
+                    open={true}
+                  />
+                  <Result
+                    title={'Multiplier'}
+                    value={`${watchGame.game.multiplier}x`}
+                    open={true}
+                  />
+                  <Result
+                    title={'Status'}
+                    value={watchGame.game.status}
+                    open={true}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
         {variant === 'play' && !noMoney && (

@@ -313,6 +313,30 @@ const useSolo = (variant: VariantGame) => {
 
   const { watchGame } = useGameSocket(isPlay, pullGame)
 
+  // Update state from watched game if available (for watch mode)
+  useEffect(() => {
+    if (isPlay || !watchGame?.game || !gameId) {
+      return
+    }
+
+    const game = watchGame.game
+    
+    setJackpot(Number(game.potentialWin))
+    setBet(Number(game.betAmount))
+    setCountBullet(5 - game.currentPosition)
+    setMultiplier(game.multiplier)
+    
+    if (game.currentOffer) {
+      setOffer(game.currentOffer)
+    }
+    
+    const isGameOver = game.status === 'COMPLETED_LOSE'
+    const isWin = game.status === 'COMPLETED_WIN'
+    
+    if (isGameOver) gameOver()
+    if (isWin) winGame()
+  }, [watchGame, isPlay, gameId, gameOver, winGame])
+
   return {
     footerHandleRef,
     gameOverHandleRef,
