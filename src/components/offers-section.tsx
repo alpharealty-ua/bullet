@@ -16,7 +16,6 @@ const OffersSection = ({ balance }: OffersSectionProps) => {
           <Balance value={balance} />
         </div>
       </div>
-
       <OffersList />
     </div>
   )

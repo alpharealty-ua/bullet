@@ -17,7 +17,6 @@ const AddMoney = ({
           <Balance value={balance} />
         </div>
       </div>
-
       <div className='mt-6'>
         <OffersList />
       </div>

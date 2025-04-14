@@ -50,35 +50,27 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
   }
 
   return (
-    <div className='mb-4 rounded-lg p-4'>
-      <div className='flex items-start justify-between'>
-        <div>
-          <h3 className='text-lg font-medium'>{offer.name}</h3>
-          <p className='text-sm text-gray-500'>{offer.description}</p>
-          <p className='mt-2 font-semibold text-green-600'>
-            Reward: {offer.formattedRewardAmount} {offer.coin.symbol}
-          </p>
-        </div>
-        <ButtonWithAudio
-          className={cn(
-            offer.canClaim ? 'bg-primary' : 'bg-gray-400',
-            isPending && 'cursor-not-allowed opacity-75',
-          )}
-          disabled={!offer.canClaim || isPending}
-          onClick={handleClaim}
-          as='button'
-          bg='primary'
-          text={
-            isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'
-          }
-        />
+    <div className='flex items-start justify-between gap-4'>
+      <div>
+        <h3 className='text-lg font-medium'>{offer.name}</h3>
+        <p className='text-sm text-gray-500'>{offer.description}</p>
+        <p className='mt-2 font-semibold text-green-600'>
+          Reward: {offer.formattedRewardAmount} {offer.coin.symbol}
+        </p>
+        {timeLeft && (
+          <div className='mt-2 text-sm text-gray-500'>
+            Available again in: {timeLeft}
+          </div>
+        )}
       </div>
-
-      {timeLeft && (
-        <div className='mt-2 text-sm text-gray-500'>
-          Available again in: {timeLeft}
-        </div>
-      )}
+      <ButtonWithAudio
+        className={cn(isPending && 'opacity-75')}
+        disabled={!offer.canClaim || isPending}
+        onClick={handleClaim}
+        as='button'
+        bg={offer.canClaim ? 'primary' : 'gray'}
+        text={isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'}
+      />
     </div>
   )
 }
@@ -101,9 +93,9 @@ const OffersList = () => {
   }
 
   return (
-    <div className='mt-4'>
-      <h2 className='mb-4 text-xl font-bold'>Available Offers</h2>
-      <div>
+    <div className='flex flex-col gap-2'>
+      <h2 className='text-xl font-bold'>Available Offers</h2>
+      <div className='flex flex-col gap-8'>
         {data.data.map((offer) => (
           <OfferItem key={offer.id} offer={offer} />
         ))}
