@@ -181,6 +181,6 @@
 
 @layer components {
   .custom-scroll {
-    @apply overflow-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#ccc];
+    @apply overflow-auto [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-2xl [&::-webkit-scrollbar-thumb]:bg-[#000] [&::-webkit-scrollbar-track]:bg-[#ccc];
   }
 }
