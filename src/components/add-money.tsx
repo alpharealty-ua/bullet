@@ -1,12 +1,7 @@
 import { Balance } from '@/components/balance'
 import { OffersList } from '@/components/offers-list'
 
-const AddMoney = ({
-  balance,
-}: {
-  balance: number
-  onAddMoney: (money: number) => void
-}) => {
+const AddMoney = ({ balance }: { balance: number }) => {
   return (
     <div className='flex flex-col'>
       <div className='flex items-center justify-between'>
