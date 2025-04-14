@@ -110,9 +110,7 @@ export const AUDIOS = {
   set: '/assets/audios/set.mp3',
   pull: '/assets/audios/pull.mp3',
   matchFound: '/assets/audios/match-found.mp3',
-  // TODO: DOWNLOAD TO PROJECT
-  matchConfirmed:
-    'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3',
+  matchConfirmed: '/assets/audios/match-confirmed.mp3',
   matchCanceled: '/assets/audios/match-canceled.mp3',
 } as const
 
