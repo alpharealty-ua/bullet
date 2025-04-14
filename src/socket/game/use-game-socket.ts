@@ -5,7 +5,6 @@ import { socketGame } from '@/socket/socket'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Offer } from '@/api/game.api'
-import { ROUTES } from '@/routes/path'
 
 type PullGameFn = (
   gameId: string,
@@ -38,7 +37,7 @@ type GameData = {
     id: string
     username: string
   }
-  pullAttempts: any[]
+  pullAttempts: unknown[]
   currentOffer: Offer | null
   createdAt: string
   updatedAt: string
@@ -62,7 +61,7 @@ type GameUpdateEvent = {
 const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
   const { gameId } = useParams<{ gameId: string }>()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const token = useAuthStore(({ accessToken }) => accessToken)
   const [watchingLargestGame, setWatchingLargestGame] = useState<{
@@ -117,6 +116,7 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
     let isUnmounted = false
 
     setWatchGame(null)
+    setWatchingLargestGame(null)
 
     socketGame.emit('watch_game', gameId, (response: WatchGameResponse) => {
       console.log('watch_game', response)
@@ -144,18 +144,19 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
         response as { success: boolean; position: number; offer: Offer | null },
       )
     }
-    
+
     const gameUpdate = (response: GameUpdateEvent) => {
       console.log('game_update', response)
-      
+
       if (response.gameId === gameId && response.game) {
-        setWatchGame(prev => {
-          if (!prev) return {
-            gameId: response.game.id,
-            jackpot: Number(response.game.potentialWin),
-            game: response.game,
-          }
-          
+        setWatchGame((prev) => {
+          if (!prev)
+            return {
+              gameId: response.game.id,
+              jackpot: Number(response.game.potentialWin),
+              game: response.game,
+            }
+
           return {
             ...prev,
             jackpot: Number(response.game.potentialWin),
@@ -164,29 +165,29 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
         })
       }
     }
-    
+
     const offerCreated = (response: { gameId: string; offer: Offer }) => {
       console.log('offer_created', response)
       if (response.gameId === gameId) {
-        setWatchGame(prev => {
+        setWatchGame((prev) => {
           if (!prev || !prev.game) return prev
-          
+
           return {
             ...prev,
             game: {
               ...prev.game,
-              currentOffer: response.offer
-            }
+              currentOffer: response.offer,
+            },
           }
         })
       }
     }
-    
+
     const offerAccepted = (response: { gameId: string; offerId: string }) => {
       console.log('offer_accepted', response)
       // Handle offer accepted event
     }
-    
+
     const offerRejected = (response: { gameId: string; offerId: string }) => {
       console.log('offer_rejected', response)
       // Handle offer rejected event
@@ -217,7 +218,6 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
       return
     }
 
-    let isUnmounted = false
     const emitWatchLargestGame = () => {
       socketGame.emit(
         'watch_largest_prize',
@@ -232,10 +232,6 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
               }
             | { success: false; message: string },
         ) => {
-          if (isUnmounted) {
-            return
-          }
-
           if (!response.success) {
             clearTimeout(interalID)
             toast.error(response.message)
@@ -249,7 +245,7 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
           })
 
           // redirect to game page
-          navigate(`${ROUTES.solo.watch}/${response.gameId}`)
+          // navigate(`${ROUTES.solo.watch}/${response.gameId}`)
         },
       )
     }
@@ -257,7 +253,6 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
 
     const interalID = setInterval(emitWatchLargestGame, 1000)
     return () => {
-      isUnmounted = true
       clearTimeout(interalID)
     }
   }, [gameId, isPlay, navigate])
