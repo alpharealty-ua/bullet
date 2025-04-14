@@ -23,8 +23,8 @@ const LevelMilestones = ({
       <CardHeader>
         <CardTitle>LVL Milestones & Rankings</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className='mb-6 h-64'>
+      <CardContent className='p-0'>
+        <div className='h-64 p-6'>
           <ResponsiveContainer width='100%' height='100%'>
             <LineChart data={milestones}>
               <CartesianGrid strokeDasharray='3 3' />

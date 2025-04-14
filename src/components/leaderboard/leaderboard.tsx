@@ -45,19 +45,26 @@ const Leaderboard = () => {
           user={user ?? null}
         />
       </TabsContent>
-      <TabsContent
-        value='stats'
-        className='custom-scroll flex grow flex-col gap-6'
-      >
-        <RegionalChampions user={user ?? null} />
-        <DistributionByLevel
-          levelDistribution={leaderboardData.levelDistribution}
-        />
-        <RegionalDistribution regions={leaderboardData.regions} />
+      <TabsContent value='stats' className='flex grow flex-col gap-6'>
+        <div className='custom-scroll'>
+          <RegionalChampions user={user ?? null} />
+        </div>
+        <div className='custom-scroll'>
+          <DistributionByLevel
+            levelDistribution={leaderboardData.levelDistribution}
+          />
+        </div>
+        <div className='custom-scroll'>
+          <RegionalDistribution regions={leaderboardData.regions} />
+        </div>
       </TabsContent>
       <TabsContent value='milestones' className='custom-scroll grow'>
-        <RisingStars user={user ?? null} />
-        <LevelMilestones milestones={leaderboardData.milestones} />
+        <div className='custom-scroll'>
+          <RisingStars user={user ?? null} />
+        </div>
+        <div className='custom-scroll'>
+          <LevelMilestones milestones={leaderboardData.milestones} />
+        </div>
       </TabsContent>
     </Tabs>
   )
