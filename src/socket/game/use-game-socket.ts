@@ -242,9 +242,10 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
             return
           }
 
-          setWatchGame({
-            gameId: String(response.gameId),
-            jackpot: Number(response.potentialWin!),
+          setWatchingLargestGame({
+            gameId: response.gameId,
+            jackpot: response.potentialWin,
+            game: response.game,
           })
 
           // redirect to game page
@@ -259,7 +260,7 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
       isUnmounted = true
       clearTimeout(interalID)
     }
-  }, [gameId, isPlay])
+  }, [gameId, isPlay, navigate])
 
   return { watchGame, watchingLargestGame }
 }

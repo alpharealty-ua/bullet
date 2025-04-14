@@ -311,7 +311,7 @@ const useSolo = (variant: VariantGame) => {
     setIsStartedGame(Boolean(gameId))
   }, [gameId])
 
-  const { watchGame } = useGameSocket(isPlay, pullGame)
+  const { watchGame, watchingLargestGame } = useGameSocket(isPlay, pullGame)
 
   // Update state from watched game if available (for watch mode)
   useEffect(() => {
@@ -356,6 +356,7 @@ const useSolo = (variant: VariantGame) => {
     next,
     deal,
     watchGame,
+    watchingLargestGame,
   }
 }
 
