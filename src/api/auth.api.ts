@@ -35,6 +35,16 @@ interface ResetPasswordResponse {
   message: string
 }
 
+interface GoogleAuthPayload {
+  code: string
+}
+
+interface GoogleAuthResponse {
+  accessToken: string
+  refreshToken: string
+  user: User
+}
+
 const routes = {
   login: '/auth/login',
   register: '/auth/register',
@@ -42,6 +52,7 @@ const routes = {
   profile: '/auth/profile',
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
+  googleCallback: '/auth/google',
 } as const
 
 export const login = async (values: LoginSchema): Promise<LoginResponse> => {
@@ -86,6 +97,16 @@ export const resetPassword = async (
 ): Promise<ResetPasswordResponse> => {
   const { data } = await api.post<ResetPasswordResponse>(
     routes.resetPassword,
+    values,
+  )
+  return data
+}
+
+export const googleAuth = async (
+  values: GoogleAuthPayload,
+): Promise<GoogleAuthResponse> => {
+  const { data } = await api.post<GoogleAuthResponse>(
+    routes.googleCallback,
     values,
   )
   return data
@@ -138,5 +159,16 @@ export const useForgotPassword = () => {
 export const useResetPassword = () => {
   return useMutation({
     mutationFn: resetPassword,
+  })
+}
+
+export const useGoogleAuth = () => {
+  const setTokens = useAuthStore(({ setTokens }) => setTokens)
+
+  return useMutation({
+    mutationFn: googleAuth,
+    onSuccess: ({ accessToken, refreshToken }) => {
+      setTokens({ accessToken, refreshToken })
+    },
   })
 }

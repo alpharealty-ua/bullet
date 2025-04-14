@@ -32,7 +32,7 @@ export type ButtonProps = {
   | { image: keyof typeof imagesMap; bg?: undefined }
   | {
       image?: undefined
-      bg: 'green' | 'red' | 'primary' | ''
+      bg: 'green' | 'red' | 'primary' | 'white' | ''
     }
 ) &
   (asLink | asButton)
@@ -49,10 +49,12 @@ const Button = React.forwardRef<
       ref={ref}
       className={cn(
         'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-all disabled:scale-100 disabled:cursor-not-allowed data-[disabled=true]:cursor-not-allowed',
+        // TODO: ADD HOVERS
         bg && 'rounded-md border-1 border-black px-4 py-1 text-2xl',
         bg === 'green' && 'bg-green text-white',
         bg === 'red' && 'bg-red text-white',
         bg === 'primary' && 'bg-primary',
+        bg === 'white' && 'border-gray-300 bg-white hover:bg-gray-50',
         className,
       )}
       {...props}
@@ -61,7 +63,7 @@ const Button = React.forwardRef<
         <span
           className={cn(
             !bg && 'absolute inset-0 inline-flex items-center justify-center',
-            bg && 'relative',
+            bg && 'relative flex items-center gap-2',
           )}
         >
           {text || children}
