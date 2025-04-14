@@ -1,21 +1,20 @@
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'
-import { useCustomModal } from '@/hooks/use-custom-modal'
+import { useShowAddMoneyModal } from '@/hooks/use-add-money-modal'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
 import { Result } from '@/components/result'
 import { Footer } from '@/components/footer-solo'
-import { AddMoneyModal } from '@/components/add-money-modal'
 import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const modal = useCustomModal()
+  const showAddMoneyModal = useShowAddMoneyModal()
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
 
   const {
@@ -48,11 +47,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     await deal()
   }
 
-  const handleAddMoney = async () => {
-    modal.show({
-      contentSlot: <AddMoneyModal />,
-    })
-  }
+  const handleAddMoney = showAddMoneyModal
 
   return (
     <>

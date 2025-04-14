@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from 'clsx'
+import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 import { AUDIOS } from '@/lib/constants'
@@ -74,3 +74,11 @@ const UTC = Date.now()
 
 export const addId = <T>(list: T[]): Prettify<T & { id: string }>[] =>
   list.map((m, i) => ({ id: String(UTC + i), ...m }))
+
+export const formatTimeRemaining = (milliseconds: number) => {
+  const seconds = Math.floor((milliseconds / 1000) % 60)
+  const minutes = Math.floor((milliseconds / (1000 * 60)) % 60)
+  const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24)
+
+  return `${hours > 0 ? `${hours}h ` : ''}${addZerro(minutes)}m ${addZerro(seconds)}s`
+}

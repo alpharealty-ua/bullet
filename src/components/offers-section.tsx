@@ -1,9 +1,13 @@
 import { Balance } from '@/components/balance'
 import { OffersList } from '@/components/offers-list'
 
-const AddMoney = ({ balance }: { balance: number }) => {
+interface OffersSectionProps {
+  balance: number
+}
+
+const OffersSection = ({ balance }: OffersSectionProps) => {
   return (
-    <div className='flex flex-col'>
+    <div className='space-y-6'>
       <div className='flex items-center justify-between'>
         <div className='relative flex flex-col items-end'>
           <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
@@ -12,11 +16,9 @@ const AddMoney = ({ balance }: { balance: number }) => {
           <Balance value={balance} />
         </div>
       </div>
-      <div className='mt-6'>
-        <OffersList />
-      </div>
+      <OffersList />
     </div>
   )
 }
 
-export { AddMoney }
+export { OffersSection }

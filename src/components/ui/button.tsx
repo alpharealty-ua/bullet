@@ -32,7 +32,7 @@ export type ButtonProps = {
   | { image: keyof typeof imagesMap; bg?: undefined }
   | {
       image?: undefined
-      bg: 'green' | 'red' | 'primary' | 'white' | ''
+      bg: 'green' | 'red' | 'primary' | 'white' | 'gray' | ''
     }
 ) &
   (asLink | asButton)
@@ -54,6 +54,7 @@ const Button = React.forwardRef<
         bg === 'green' && 'bg-green text-white',
         bg === 'red' && 'bg-red text-white',
         bg === 'primary' && 'bg-primary',
+        bg === 'gray' && 'bg-gray-400',
         bg === 'white' && 'border-gray-300 bg-white hover:bg-gray-50',
         className,
       )}
