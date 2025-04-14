@@ -23,11 +23,13 @@ const CharacterSelector = ({
     characters.findIndex((n) => n.id === defaultName) ?? 0,
   )
   const [type, setType] = useState<CharacterType>('front')
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const changeIndex = (index: number) => {
     const newIndex =
       index < 0 ? characters.length - 1 : index % characters.length
     setActiveIndex(newIndex)
+    setShowConfirm(false)
     onSelect(characters[newIndex])
   }
 
@@ -42,6 +44,12 @@ const CharacterSelector = ({
   const handleFlipClick = () => {
     setType(type === 'front' ? 'back' : 'front')
   }
+
+  const handleConfirmClick = () => {}
+
+  const handleUnlockClick = () => setShowConfirm(true)
+
+  const handleBackClick = () => setShowConfirm(false)
 
   return (
     <>
@@ -82,10 +90,46 @@ const CharacterSelector = ({
                   />
                 </div>
                 {disabled && (
-                  <div className='animate-in fade-in fill-mode-both absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-full bg-black/30 text-white duration-500'>
+                  <div
+                    className={cn(
+                      'absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-full bg-black/30 text-center text-white',
+                      'animate-in fade-in fill-mode-both duration-500',
+                    )}
+                  >
                     <IoLockClosed className='text-7xl drop-shadow-2xl' />
-                    <div className='text-3xl'>$ {character.price}</div>
-                    <ButtonWithAudio as='button' bg='primary' text='Unlock' />
+                    <div className='flex min-h-25 flex-col gap-2.5'>
+                      {!showConfirm ? (
+                        <>
+                          <div className='text-3xl'>$ {character.price}</div>
+                          <ButtonWithAudio
+                            as='button'
+                            bg='primary'
+                            text='Unlock'
+                            onClick={handleUnlockClick}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <h3 className='text-2xl'>Are you sure?</h3>
+                          <div className='flex gap-2'>
+                            <ButtonWithAudio
+                              as='button'
+                              bg='green'
+                              text='Confirm'
+                              className='text-base'
+                              onClick={handleConfirmClick}
+                            />
+                            <ButtonWithAudio
+                              as='button'
+                              bg='red'
+                              text='back'
+                              className='text-base'
+                              onClick={handleBackClick}
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
