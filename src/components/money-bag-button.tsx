@@ -1,7 +1,6 @@
-import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { ButtonProps } from '@/components/ui/button'
-import { AddMoneyModal } from '@/components/add-money-modal'
+import { useShowAddMoneyModal } from '@/hooks/use-add-money-modal'
 import { cn } from '@/lib/utils'
 
 const MoneyBagButton = ({
@@ -16,13 +15,9 @@ const MoneyBagButton = ({
   balance: number
   noMoney: boolean
 }) => {
-  const modal = useCustomModal()
+  const showAddMoneyModal = useShowAddMoneyModal()
 
-  const handleAddMoney = async () => {
-    modal.show({
-      contentSlot: <AddMoneyModal />,
-    })
-  }
+  const handleAddMoney = showAddMoneyModal
 
   return (
     <ButtonWithAudio

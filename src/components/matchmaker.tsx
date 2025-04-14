@@ -4,14 +4,13 @@ import { useNavigate } from 'react-router'
 import { useBalance } from '@/api/wallet.api'
 import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
-import { useCustomModal } from '@/hooks/use-custom-modal'
+import { useShowAddMoneyModal } from '@/hooks/use-add-money-modal'
 import { useWait } from '@/hooks/use-wait'
 import { ROUTES } from '@/routes/path'
 import { cn } from '@/lib/utils'
 import { IMAGES, MIN_DUEL_BET, START_GAME_COUNTDOWN } from '@/lib/constants'
 import { EnterArena } from '@/components/enter-arena'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { AddMoneyModal } from '@/components/add-money-modal'
 import { MatchmakerStatistics } from '@/components/matchmaker-statistics'
 import { Countdown } from '@/components/countdown'
 
@@ -26,7 +25,7 @@ const Matchmaker = ({
 }) => {
   const navigate = useNavigate()
   const { data: balance } = useBalance()
-  const modal = useCustomModal()
+  const showAddMoneyModal = useShowAddMoneyModal()
   const canJoin = !(balance < MIN_DUEL_BET)
 
   const {
@@ -57,11 +56,7 @@ const Matchmaker = ({
     })
   }, [navigate, gameId])
 
-  const handleAddMoney = async () => {
-    modal.show({
-      contentSlot: <AddMoneyModal />,
-    })
-  }
+  const handleAddMoney = showAddMoneyModal
 
   const handleLeave = () => {
     leaveMatchmaking()
