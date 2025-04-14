@@ -1,7 +1,9 @@
+import { toast } from 'react-toastify'
+
 import { useAuthStore } from '@/store/auth.store'
 import { socketGame } from '@/socket/socket'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { Offer } from '@/api/game.api'
 
 type PullGameFn = (
@@ -13,14 +15,64 @@ type PullGameFn = (
   },
 ) => Promise<void>
 
+type GameData = {
+  id: string
+  status: string
+  betAmount: string
+  multiplier: number
+  potentialWin: string
+  actualWin: string | null
+  bulletPosition: number
+  currentPosition: number
+  network: {
+    id: string
+    symbol: string
+  }
+  coin: {
+    id: string
+    symbol: string
+    decimals: number
+  }
+  user: {
+    id: string
+    username: string
+  }
+  pullAttempts: unknown[]
+  currentOffer: Offer | null
+  createdAt: string
+  updatedAt: string
+  formattedBetAmount: number
+  formattedPotentialWin: number
+  formattedActualWin: number
+}
+
+type WatchGameResponse = {
+  success: boolean
+  message: string
+  game: GameData
+}
+
+type GameUpdateEvent = {
+  gameId: string
+  game: GameData
+}
+
 // TODO: REFACTOR HOOK
 const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
   const { gameId } = useParams<{ gameId: string }>()
 
+  const navigate = useNavigate()
+
   const token = useAuthStore(({ accessToken }) => accessToken)
+  const [watchingLargestGame, setWatchingLargestGame] = useState<{
+    gameId: string
+    jackpot: number
+    game?: GameData
+  } | null>(null)
   const [watchGame, setWatchGame] = useState<{
     gameId: string
     jackpot: number
+    game?: GameData
   } | null>(null)
 
   useEffect(() => {
@@ -64,13 +116,23 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
     let isUnmounted = false
 
     setWatchGame(null)
+    setWatchingLargestGame(null)
 
-    socketGame.emit('watch_game', gameId, (response: unknown) => {
-      console.log('watch_game', response) // ok
+    socketGame.emit('watch_game', gameId, (response: WatchGameResponse) => {
+      console.log('watch_game', response)
 
       if (isUnmounted) {
         socketGame.emit('unwatch_game', gameId, (response: unknown) => {
-          console.log('unwatch_game', response) // ok
+          console.log('unwatch_game', response)
+        })
+        return
+      }
+
+      if (response.success && response.game) {
+        setWatchGame({
+          gameId: response.game.id,
+          jackpot: Number(response.game.formattedPotentialWin),
+          game: response.game,
         })
       }
     })
@@ -82,28 +144,60 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
         response as { success: boolean; position: number; offer: Offer | null },
       )
     }
-    // const gameUpdate = (response: unknown) => {
-    //   // console.log('game_update', response)
-    // }
-    // const offer_created = (response: unknown) => {
-    //   // console.log('offer_created', response)
-    // }
-    // const offer_accepted = (response: unknown) => {
-    //   // console.log('offer_accepted', response)
-    // }
-    // const offer_rejected = (response: unknown) => {
-    //   // console.log('offer_rejected', response)
-    // }
-    // const next_largest_game = (response: unknown) => {
-    //   console.log('next_largest_game', response)
-    // }
+
+    const gameUpdate = (response: GameUpdateEvent) => {
+      console.log('game_update', response)
+
+      if (response.gameId === gameId && response.game) {
+        setWatchGame((prev) => {
+          if (!prev)
+            return {
+              gameId: response.game.id,
+              jackpot: Number(response.game.potentialWin),
+              game: response.game,
+            }
+
+          return {
+            ...prev,
+            jackpot: Number(response.game.potentialWin),
+            game: response.game,
+          }
+        })
+      }
+    }
+
+    const offerCreated = (response: { gameId: string; offer: Offer }) => {
+      console.log('offer_created', response)
+      if (response.gameId === gameId) {
+        setWatchGame((prev) => {
+          if (!prev || !prev.game) return prev
+
+          return {
+            ...prev,
+            game: {
+              ...prev.game,
+              currentOffer: response.offer,
+            },
+          }
+        })
+      }
+    }
+
+    const offerAccepted = (response: { gameId: string; offerId: string }) => {
+      console.log('offer_accepted', response)
+      // Handle offer accepted event
+    }
+
+    const offerRejected = (response: { gameId: string; offerId: string }) => {
+      console.log('offer_rejected', response)
+      // Handle offer rejected event
+    }
 
     socketGame.on('pull_result', pullResult)
-    // socket.on('game_update', gameUpdate)
-    // socket.on('offer_created', offer_created)
-    // socket.on('offer_accepted', offer_accepted)
-    // socket.on('offer_rejected', offer_rejected)
-    // socket.on('next_largest_game', next_largest_game)
+    socketGame.on('game_update', gameUpdate)
+    socketGame.on('offer_created', offerCreated)
+    socketGame.on('offer_accepted', offerAccepted)
+    socketGame.on('offer_rejected', offerRejected)
 
     return () => {
       isUnmounted = true
@@ -112,11 +206,10 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
       })
 
       socketGame.off('pull_result', pullResult)
-      // socket.off('game_update', gameUpdate)
-      // socket.off('offer_created', offer_created)
-      // socket.off('offer_accepted', offer_accepted)
-      // socket.off('offer_rejected', offer_rejected)
-      // socket.off('next_largest_game', next_largest_game)
+      socketGame.off('game_update', gameUpdate)
+      socketGame.off('offer_created', offerCreated)
+      socketGame.off('offer_accepted', offerAccepted)
+      socketGame.off('offer_rejected', offerRejected)
     }
   }, [isPlay, gameId, pullGame])
 
@@ -124,34 +217,47 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
     if (gameId || isPlay) {
       return
     }
-    let id: number | null = null
-    let isUnmounted = false
-    const call = () => {
+
+    const emitWatchLargestGame = () => {
       socketGame.emit(
         'watch_largest_prize',
-        (response: { gameId: string; potentialWin: string }) => {
-          if (isUnmounted) {
+        (
+          response:
+            | {
+                success: true
+                message: string
+                gameId: string
+                game: GameData
+                potentialWin: number
+              }
+            | { success: false; message: string },
+        ) => {
+          if (!response.success) {
+            clearTimeout(interalID)
+            toast.error(response.message)
             return
           }
 
-          setWatchGame({
-            gameId: String(response.gameId),
-            jackpot: Number(response.potentialWin!),
+          setWatchingLargestGame({
+            gameId: response.gameId,
+            jackpot: response.potentialWin,
+            game: response.game,
           })
+
+          // redirect to game page
+          // navigate(`${ROUTES.solo.watch}/${response.gameId}`)
         },
       )
-      id = window.setTimeout(call, 1000)
     }
-    call()
-    return () => {
-      isUnmounted = true
-      if (id) {
-        clearTimeout(id)
-      }
-    }
-  }, [gameId, isPlay])
+    emitWatchLargestGame()
 
-  return { watchGame }
+    const interalID = setInterval(emitWatchLargestGame, 1000)
+    return () => {
+      clearTimeout(interalID)
+    }
+  }, [gameId, isPlay, navigate])
+
+  return { watchGame, watchingLargestGame }
 }
 
 export { useGameSocket }
