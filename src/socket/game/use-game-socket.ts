@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify'
+
 import { useAuthStore } from '@/store/auth.store'
 import { socketGame } from '@/socket/socket'
 import { useEffect, useState } from 'react'
@@ -214,8 +216,17 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
     const call = () => {
       socketGame.emit(
         'watch_largest_prize',
-        (response: { gameId: string; potentialWin: string }) => {
+        (
+          response:
+            | { success: true; gameId: string; potentialWin: string }
+            | { success: false; message: string },
+        ) => {
           if (isUnmounted) {
+            return
+          }
+
+          if (!response.success) {
+            toast.error(response.message)
             return
           }
 
