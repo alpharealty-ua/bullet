@@ -144,7 +144,11 @@ class MatchmakerSocketEvents extends SocketEvents {
         betAmount: '0.01',
         maxRounds: 10,
       },
-      metadata: this.metadata,
+      metadata: {
+        username: this.metadata.username,
+        characterName: this.metadata.characterName,
+        region: this.metadata.region,
+      },
       matchConfirmationRequired: false,
     }
 
