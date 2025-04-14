@@ -65,6 +65,11 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
   const navigate = useNavigate();
 
   const token = useAuthStore(({ accessToken }) => accessToken)
+  const [watchingLargestGame, setWatchingLargestGame] = useState<{
+    gameId: string
+    jackpot: number
+    game?: GameData
+  } | null>(null)
   const [watchGame, setWatchGame] = useState<{
     gameId: string
     jackpot: number
@@ -211,14 +216,20 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
     if (gameId || isPlay) {
       return
     }
-    let id: number | null = null
+
     let isUnmounted = false
-    const call = () => {
+    const emitWatchLargestGame = () => {
       socketGame.emit(
         'watch_largest_prize',
         (
           response:
-            | { success: true; gameId: string; potentialWin: string }
+            | {
+                success: true
+                message: string
+                gameId: string
+                game: GameData
+                potentialWin: number
+              }
             | { success: false; message: string },
         ) => {
           if (isUnmounted) {
@@ -226,6 +237,7 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
           }
 
           if (!response.success) {
+            clearTimeout(interalID)
             toast.error(response.message)
             return
           }
@@ -239,18 +251,17 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
           navigate(`${ROUTES.solo.watch}/${response.gameId}`)
         },
       )
-      id = window.setTimeout(call, 1000)
     }
-    call()
+    emitWatchLargestGame()
+
+    const interalID = setInterval(emitWatchLargestGame, 1000)
     return () => {
       isUnmounted = true
-      if (id) {
-        clearTimeout(id)
-      }
+      clearTimeout(interalID)
     }
   }, [gameId, isPlay])
 
-  return { watchGame }
+  return { watchGame, watchingLargestGame }
 }
 
 export { useGameSocket }
