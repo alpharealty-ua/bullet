@@ -31,17 +31,15 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     noMoney,
     maxBet,
     showHelpers,
-    setShowHelpers,
     setBet,
-    next,
+    pull,
     deal,
     watchGame,
     watchingLargestGame,
   } = useSolo(variant)
 
   const handlePull = async () => {
-    setShowHelpers(false)
-    await next()
+    await pull()
   }
 
   const handleDeal = async () => {

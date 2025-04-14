@@ -252,13 +252,14 @@ const useSolo = (variant: VariantGame) => {
     ],
   )
 
-  const next = useCallback(async () => {
+  const pull = useCallback(async () => {
     if (!gameId && bet === 0) {
       footerHandleRef.current?.wiggleWager()
       return
     }
 
     if (!gameId) {
+      setShowHelpers(false)
       await startGame()
       return
     }
@@ -353,7 +354,7 @@ const useSolo = (variant: VariantGame) => {
     showHelpers,
     setShowHelpers,
     setBet,
-    next,
+    pull,
     deal,
     watchGame,
     watchingLargestGame,
