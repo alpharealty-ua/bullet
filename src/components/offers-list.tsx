@@ -12,8 +12,9 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
   useEffect(() => {
     if (!offer.nextClaimAt) return
 
+    const nextClaimTime = new Date(offer.nextClaimAt!).getTime()
+
     const updateTime = () => {
-      const nextClaimTime = new Date(offer.nextClaimAt!).getTime()
       const now = Date.now()
       const diff = nextClaimTime - now
 
