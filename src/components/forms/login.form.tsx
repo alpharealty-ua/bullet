@@ -95,16 +95,7 @@ const LoginForm = () => {
           type='submit'
           disabled={isPending}
         />
-        <div className="relative my-2">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
+        <div className='text-center text-xs uppercase'>Or continue with</div>
         <GoogleLoginButton />
         <ChangeForm type='forgotPassword' />
         <ChangeForm type='login' />
