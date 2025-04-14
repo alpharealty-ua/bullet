@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
+import { useSettingsStore } from '@/store/settings.store'
 import { cn } from '@/lib/utils'
 import { CharacterType, IMAGES } from '@/lib/constants'
 import { Character } from '@/components/character'
@@ -19,6 +20,7 @@ const CharacterSelector = ({
   defaultName: string
   onSelect: (character: CharacterEntity) => void
 }) => {
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [activeIndex, setActiveIndex] = useState(
     characters.findIndex((n) => n.id === defaultName) ?? 0,
   )
@@ -45,7 +47,11 @@ const CharacterSelector = ({
     setType(type === 'front' ? 'back' : 'front')
   }
 
-  const handleConfirmClick = () => {}
+  const handleConfirmClick = () => {
+    // TODO: ADD MUTATION
+    playAudio('chaching')
+    setShowConfirm(false)
+  }
 
   const handleUnlockClick = () => setShowConfirm(true)
 
