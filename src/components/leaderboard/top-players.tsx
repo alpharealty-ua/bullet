@@ -1,6 +1,9 @@
+import { Link } from 'react-router'
+
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { cn } from '@/lib/utils'
 import { getRegionFlag, getLevelColor } from '@/components/leaderboard/utils'
+import { ROUTES } from '@/routes/path'
 
 interface TopPlayersProps {
   topPlayers: GetStatsResponse['topPlayers']
@@ -41,7 +44,7 @@ const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
             <tr
               key={player.username}
               className={cn(
-                'bg-white duration-150 even:bg-gray-50 hover:bg-gray-50',
+                'bg-white duration-150 even:bg-gray-50 hover:bg-blue-50',
                 isPlayer && 'bg-blue-50 hover:bg-blue-100',
               )}
             >
@@ -51,7 +54,11 @@ const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
                 </div>
               </td>
               <td className='px-2 py-3 text-left font-bold'>#{i + 1}</td>
-              <td className='px-2 py-3 text-left'>{player.username}</td>
+              <td className='px-2 py-3 text-left'>
+                <Link to={`${ROUTES.player.root}/${user?.id}`}>
+                  {player.username}
+                </Link>
+              </td>
               <td className='px-2 py-3'>
                 <span className='text-xl'>🇫🇷</span>
               </td>

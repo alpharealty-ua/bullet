@@ -1,5 +1,8 @@
+import { Link } from 'react-router'
+
 import { cn } from '@/lib/utils'
 import { getLevelColor, getRegionFlag } from './utils'
+import { ROUTES } from '@/routes/path'
 
 const regionData = [
   {
@@ -111,7 +114,7 @@ const RegionalChampions = ({ user }: RegionalChampionsProps) => {
             <tr
               key={player.username}
               className={cn(
-                'bg-white duration-150 even:bg-gray-50 hover:bg-gray-50',
+                'bg-white duration-150 even:bg-gray-50 hover:bg-blue-50',
                 isPlayer && 'bg-blue-50 hover:bg-blue-100',
               )}
             >
@@ -120,7 +123,11 @@ const RegionalChampions = ({ user }: RegionalChampionsProps) => {
                   {getRegionFlag(player.region)}
                 </div>
               </td>
-              <td className='px-2 py-3 text-left'>{player.username}</td>
+              <td className='px-2 py-3 text-left'>
+                <Link to={`${ROUTES.player.root}/${user?.id}`}>
+                  {player.username}
+                </Link>
+              </td>
               <td className='px-2 py-3'>
                 <span className='text-xl'>{player.flag}</span>
               </td>

@@ -11,6 +11,7 @@ import { ProfilePage } from '@/pages/profile.page'
 import { MatchmakerPage } from '@/pages/matchmaker.page'
 import { ForgotPasswordPage } from '@/pages/forgot-password.page.tsx'
 import { ResetPasswordPage } from '@/pages/reset-password.page.tsx'
+import { PlayerPage } from '@/pages/player.page'
 
 export const PUBLIC_ROUTES = [
   {
@@ -26,6 +27,14 @@ export const PUBLIC_ROUTES = [
     element: (
       <PageWrapper>
         <LeaderboardPage />
+      </PageWrapper>
+    ),
+  },
+  {
+    path: `${ROUTES.player.root}/:playerId`,
+    element: (
+      <PageWrapper>
+        <PlayerPage />
       </PageWrapper>
     ),
   },
@@ -85,7 +94,7 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: `${ROUTES.solo.root}/watch/:gameId`,
+    path: `${ROUTES.solo.watch}/:gameId`,
     element: (
       <PageWrapper headerProps={{ showNoMoney: false }}>
         <SoloPage variant='watch' />

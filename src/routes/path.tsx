@@ -13,6 +13,9 @@ export const ROUTES = {
   leaderboard: {
     root: '/leaderboard',
   },
+  player: {
+    root: '/player',
+  },
   solo: {
     root: '/solo',
     play: '/solo/play',

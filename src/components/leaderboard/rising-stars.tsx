@@ -174,7 +174,7 @@ const RisingStars = ({ user }: RisingStarsProps) => {
             <tr
               key={player.username}
               className={cn(
-                'bg-white duration-150 even:bg-gray-50 hover:bg-gray-50',
+                'bg-white duration-150 even:bg-gray-50 hover:bg-blue-50',
                 isPlayer && 'bg-blue-50 hover:bg-blue-100',
               )}
             >

@@ -7,12 +7,18 @@ import { ENV } from '@/lib/env'
 
 const { API_URL } = ENV
 
+// TODO: ADD PREFIX TO ALL ROUTES
+export const SVC = {
+  leaderboard: 'leaderboard',
+} as const
+
 export const QUERY_KEYS = {
   profile: 'profile',
   balance: 'balance',
   allGames: 'allGames',
   gameDetails: 'gameDetails',
   gameStats: 'gameStats',
+  playerStatistics: 'playerStatistics',
   characters: 'characters',
   userOffers: 'userOffers',
 } as const
