@@ -14,6 +14,7 @@ export const QUERY_KEYS = {
   gameDetails: 'gameDetails',
   gameStats: 'gameStats',
   characters: 'characters',
+  userOffers: 'userOffers',
 } as const
 
 export const api = axios.create({
