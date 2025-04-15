@@ -1,7 +1,6 @@
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'
-import { useShowAddMoneyModal } from '@/hooks/use-add-money-modal'
 import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
@@ -12,9 +11,9 @@ import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
 import { Victory } from '@/components/victory'
+import { AddMoneyButton } from '@/components/add-money-button'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
-  const showAddMoneyModal = useShowAddMoneyModal()
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
 
   const {
@@ -45,8 +44,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const handleDeal = async () => {
     await deal()
   }
-
-  const handleAddMoney = showAddMoneyModal
 
   return (
     <>
@@ -120,16 +117,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             />
           </div>
         )}
-        {noMoney && (
-          <div className='relative flex flex-col items-center justify-center pt-8'>
-            <ButtonWithAudio
-              as='button'
-              image='button'
-              text='Add money'
-              onClick={handleAddMoney}
-            />
-          </div>
-        )}
+        {noMoney && <AddMoneyButton />}
       </div>
       <div className='relative mt-auto flex min-h-80 flex-1 items-end px-8 pt-2'>
         <Revolver
