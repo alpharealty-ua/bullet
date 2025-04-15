@@ -3,19 +3,17 @@ import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
 
-// TODO: ADD ComponentProps<'div'>
-const AnimationInOut = ({
-  children,
-  className,
-  ...props
-}: ComponentProps<typeof CSSTransition> & {
+type Props = Partial<ComponentProps<typeof CSSTransition>> & {
   children: React.ReactNode
-  className: string
-}) => {
+  className?: string
+}
+
+// TODO: ADD ComponentProps<'div'>
+const AnimationInOut = ({ children, className, ...props }: Props) => {
   const nodeRef = useRef(null)
 
   return (
-    <CSSTransition nodeRef={nodeRef} unmountOnExit {...props}>
+    <CSSTransition nodeRef={nodeRef} timeout={400} unmountOnExit {...props}>
       {(state) => {
         const open = state === 'entering' || state === 'entered'
         const close = state === 'exiting' || state === 'exited'
@@ -23,7 +21,7 @@ const AnimationInOut = ({
           <div
             ref={nodeRef}
             className={cn(
-              'fill-mode-both fade-in fade-out',
+              'fill-mode-both fade-in fade-out duration-400',
               open && 'animate-in',
               close && 'animate-out',
               className,
