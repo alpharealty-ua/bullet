@@ -1,3 +1,4 @@
+// TODO: REMOVE
 export const createTestEvents = (playerId?: string) => ({
   connect: { type: 'connect', payload: undefined },
   readyTakePull: {
@@ -8,11 +9,11 @@ export const createTestEvents = (playerId?: string) => ({
   pullResult: {
     player: (fired: boolean) => ({
       type: 'game:pull_result',
-      payload: { playerId, fired } as any,
+      payload: { playerId, fired },
     }),
     opponent: (fired: boolean) => ({
       type: 'game:pull_result',
-      payload: { playerId: undefined, fired } as any,
+      payload: { playerId: undefined, fired },
     }),
   },
   gameEnded: {

@@ -14,7 +14,7 @@ export const notify = (
 }
 
 export class SocketEvents {
-  protected eventListener: (() => any)[] = []
+  protected eventListener: (() => void)[] = []
 
   constructor(protected socket: Socket) {}
 
