@@ -15,13 +15,13 @@ import { SocketEvents } from '@/socket/utils'
 
 class MatchmakerPingClient extends SocketEvents {
   socket: Socket
+  // eslint-disable-next-line
   options: Record<string, any>
   pingHistory: { ping: number; jitter: number; timestamp: number }[]
   lastSequence: number
   currentPing: number
   currentJitter: number
   measurementsCount: number
-  eventListener: (() => any)[] = []
 
   constructor(socket: Socket, options = {}) {
     super(socket)
