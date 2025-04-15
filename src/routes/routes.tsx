@@ -72,7 +72,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.play,
     element: (
-      <PageWrapper headerProps={{ showNoMoney: true }}>
+      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: true }}>
         <SoloPage variant='play' />
       </PageWrapper>
     ),
