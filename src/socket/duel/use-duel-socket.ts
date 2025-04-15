@@ -240,11 +240,11 @@ export const useDuelSocket = ({
             : topGameBarHandleRef
 
           if (payload.fired) {
-            await gameBarHandleRef.current?.setActive(payload.index)
+            await topGameBarHandleRef.current?.setActive(payload.index)
+            await bottomGameBarHandleRef.current?.setActive(payload.index)
           }
 
-          await topGameBarHandleRef.current?.highlight(payload.index)
-          await bottomGameBarHandleRef.current?.highlight(payload.index)
+          await gameBarHandleRef.current?.highlight(payload.index)
 
           await pull(payload.fired)
 
