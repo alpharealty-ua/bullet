@@ -41,7 +41,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
         <div className='flex gap-6'>
           <ButtonWithAudio
             as='link'
-            to={isSolo ? ROUTES.solo.play : ROUTES.duel.play}
+            to={isSolo ? ROUTES.solo.play : ROUTES.duel.enterArena}
             onClick={handleButtonClick}
             className='w-30'
             image='play'

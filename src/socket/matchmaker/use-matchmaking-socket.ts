@@ -14,8 +14,12 @@ import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
 import { Indicator } from '@/components/indicators'
+import { wait } from '@/lib/utils'
 
-const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
+const useMatchmakingSocket = (
+  matchmakerEvents: MatchmakerSocketEvents,
+  autoJoin = false,
+) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -117,7 +121,6 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
         case 'joinedMatchmaking': {
           notify('You have Joined the matchmaking queue', 'success')
 
-          // TODO: NOT UPDATE STATE
           // Update matchmaking status
           if (matchmakingStatus === 'not-in-queue') {
             setMatchmakingStatus('searching')
@@ -139,7 +142,10 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
         case 'leftMatchmaking': {
           notify('You have left the matchmaking queue', 'info')
 
-          setMatchmakingStatus('not-in-queue')
+          if (matchmakingStatus === 'searching') {
+            setMatchmakingStatus('not-in-queue')
+          }
+
           refState.current.matchmakingStatus = 'not-in-queue'
 
           setPlayerId(null)
@@ -301,7 +307,7 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
               return
             }
           }
-          console.error(payload)
+          console.error(event, payload)
           notify('Unhandled error ' + event, 'info')
           return
         }
@@ -359,6 +365,31 @@ const useMatchmakingSocket = (matchmakerEvents: MatchmakerSocketEvents) => {
   }
 
   useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
+
+  useEffect(() => {
+    if (!autoJoin) {
+      return
+    }
+
+    let isUnmounted = false
+    let called = false
+    ;(async () => {
+      await wait(3000).promise
+      if (isUnmounted) {
+        return
+      }
+
+      called = true
+      joinMatchmaking()
+    })()
+
+    return () => {
+      isUnmounted = true
+      if (called) {
+        leaveMatchmaking()
+      }
+    }
+  }, [autoJoin, joinMatchmaking, leaveMatchmaking])
 
   return {
     toggleConnection,

@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
+import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
 import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
 import { wait } from '@/lib/utils'
@@ -21,7 +22,7 @@ export const useDuelSocket = ({
   playerId,
   duelSocketEvents,
 }: {
-  gameId: string
+  gameId: string | null
   playerId: string
   duelSocketEvents: DuelSocketEvents
 }) => {
@@ -46,6 +47,13 @@ export const useDuelSocket = ({
     rematchStatus: 'idle',
   })
 
+  const reset = useCallback(async () => {
+    await topGameBarHandleRef.current?.reset()
+    await bottomGameBarHandleRef.current?.reset()
+    await frontCharacterHandleRef.current?.reset()
+    await backCharacterHandleRef.current?.reset()
+  }, [])
+
   const opponentPull = useCallback(async (shot: boolean) => {
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.trigger()
     await frontCharacterHandleRef.current?.frontGunHandleRef?.current?.spin()
@@ -63,19 +71,26 @@ export const useDuelSocket = ({
   }, [])
 
   const requestRematch = () => {
-    duelSocketEvents.requestRematch()
+    if (gameId === null || playerId === null) {
+      return
+    }
+
+    const payload: BaseDuelPayload = {
+      gameId,
+      playerId,
+    }
+
+    duelSocketEvents.requestRematch(payload)
   }
 
   const cancelRematch = () => {
-    navigate(`${ROUTES.duel.play}?next`)
+    nextOpponnet()
   }
 
-  const reset = useCallback(async () => {
-    await topGameBarHandleRef.current?.reset()
-    await bottomGameBarHandleRef.current?.reset()
-    await frontCharacterHandleRef.current?.reset()
-    await backCharacterHandleRef.current?.reset()
-  }, [])
+  const nextOpponnet = useCallback(() => {
+    reset()
+    navigate(ROUTES.duel.next, { preventScrollReset: true })
+  }, [navigate, reset])
 
   const showRequestRematch = useCallback(async () => {
     const hideVictoryPromise = victoryHandleRef.current?.hide()
@@ -96,8 +111,8 @@ export const useDuelSocket = ({
     }
 
     await rematchRequestHandleRef.current?.hide()
-    navigate(`${ROUTES.duel.play}?next`)
-  }, [navigate])
+    nextOpponnet()
+  }, [nextOpponnet])
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
@@ -164,13 +179,22 @@ export const useDuelSocket = ({
     await wait(2000).promise
 
     await victoryHandleRef.current?.hide()
-    navigate(`${ROUTES.duel.play}?next`)
-  }, [navigate])
+    nextOpponnet()
+  }, [nextOpponnet])
 
   const pull = async () => {
+    if (gameId === null || playerId === null) {
+      return
+    }
+
+    const payload: BaseDuelPayload = {
+      gameId,
+      playerId,
+    }
+
     setPulls((p) => [...p, round])
 
-    duelSocketEvents.pullTrigger()
+    duelSocketEvents.pullTrigger(payload)
   }
 
   useEffect(() => {
@@ -328,7 +352,7 @@ export const useDuelSocket = ({
         }
         case 'game:player_left':
         case 'game:player_disconnected': {
-          navigate(`${ROUTES.duel.play}?next`)
+          nextOpponnet()
           return
         }
         case 'error': {
@@ -360,15 +384,16 @@ export const useDuelSocket = ({
     opponentPull,
     drawGame,
     navigate,
+    nextOpponnet,
   ])
 
   useEffect(() => {
-    if (!gameId) {
+    if (!(gameId && playerId)) {
       return
     }
 
-    duelSocketEvents.joinDuelGame()
-  }, [duelSocketEvents, gameId])
+    duelSocketEvents.joinDuelGame({ gameId, playerId })
+  }, [duelSocketEvents, gameId, playerId])
 
   return {
     gameOverHandleRef,

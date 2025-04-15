@@ -23,7 +23,8 @@ export const ROUTES = {
   },
   duel: {
     root: '/duel',
-    play: '/duel/play',
+    enterArena: '/duel/enter-arena',
+    next: '/duel/next',
     watch: '/duel/watch',
   },
 } as const

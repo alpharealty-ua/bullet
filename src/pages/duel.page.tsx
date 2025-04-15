@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from 'react'
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
-import { socketDuel as socketDuel } from '@/socket/socket'
+import { socketDuel, socketMatchmaker } from '@/socket/socket'
+import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
@@ -18,18 +19,25 @@ import { ReadySetPull } from '@/components/ready-set-pull'
 import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 import { RematchRequest } from '@/components/rematch-request'
+import { Matchmaker } from '@/components/matchmaker'
+import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
+import { AnimationInOut } from '@/components/animation-in-out'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
-  const { gameId } = useParams() as { gameId: string }
+  const { gameId = null } = useParams() as { gameId?: string }
   const token = useAuthStore(({ accessToken }) => accessToken)
   const user = useUser()
   const characterName = useGameStore(({ characterName }) => characterName)
   const playerId = user.id
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
+  const { pathname } = useLocation()
+  const typePage: 'enter-arena' | 'next' | 'duel' =
+    (['enter-arena', 'next'] as const).find((s) => pathname.includes(s)) ??
+    'duel'
 
   const duelSocketEvents = useMemo(
-    () => new DuelSocketEvents(socketDuel, token!, gameId, playerId),
-    [token, gameId, playerId],
+    () => new DuelSocketEvents(socketDuel, token!),
+    [token],
   )
 
   const {
@@ -52,6 +60,16 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     duelSocketEvents,
   })
 
+  const matchmakerEvents = useMemo(
+    () =>
+      new MatchmakerSocketEvents(socketMatchmaker, token!, {
+        username: user.username,
+        characterName,
+        region: 'us-west',
+      }),
+    [characterName, token, user.username],
+  )
+
   const handlePull = async () => {
     await pull()
   }
@@ -72,6 +90,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const isUnmounted = useUnmountedState()
   useEffect(() => {
     duelSocketEvents.connect()
+    matchmakerEvents.connect()
 
     return () => {
       queueMicrotask(() => {
@@ -80,25 +99,51 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         }
 
         duelSocketEvents.disconnect()
+        matchmakerEvents.disconnect()
       })
     }
-  }, [duelSocketEvents, isUnmounted])
+  }, [duelSocketEvents, matchmakerEvents, isUnmounted, gameId])
 
   useEffect(() => {
+    matchmakerEvents.attachEventListeners()
     duelSocketEvents.attachEventListeners()
 
     return () => {
+      matchmakerEvents.dettachEventListeners()
       duelSocketEvents.dettachEventListeners()
     }
-  }, [duelSocketEvents])
+  }, [duelSocketEvents, matchmakerEvents, gameId])
 
   return (
     <>
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col'>
         <DuelGameBar gameBarRef={topGameBarHandleRef} />
-        <div className='relative flex w-full grow flex-col justify-end gap-10 py-4'>
-          <div className='relative flex min-h-64 grow items-end'>
+        <div className='relative flex min-h-148 w-full grow flex-col justify-end gap-10 py-5'>
+          <AnimationInOut
+            in={typePage !== 'duel'}
+            className={cn(
+              'absolute inset-0 z-3 flex w-full items-center',
+              'transition-none',
+              typePage === 'next' &&
+                'slide-in-from-top-10 slide-out-to-top-10 top-20 bottom-auto',
+            )}
+          >
+            {typePage !== 'duel' && (
+              <Matchmaker
+                matchmakerEvents={matchmakerEvents}
+                isNextSearch={typePage === 'next'}
+                autoJoin={typePage === 'next'}
+              />
+            )}
+          </AnimationInOut>
+          <AnimationInOut
+            in={typePage === 'duel'}
+            className={cn(
+              'relative flex min-h-64 w-full grow items-end',
+              'slide-in-from-top-10 slide-out-to-top-10',
+            )}
+          >
             <Character
               className='mr-12 ml-auto max-h-50 w-full max-w-48'
               name={matchDetails?.opponent.characterName}
@@ -112,8 +157,14 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 win: 52,
               }}
             />
-          </div>
-          <div className='relative flex min-h-64 grow items-end'>
+          </AnimationInOut>
+          <AnimationInOut
+            in={typePage !== 'enter-arena'}
+            className={cn(
+              'relative flex min-h-64 w-full grow items-end',
+              'slide-in-from-bottom-10 slide-out-to-bottom-10',
+            )}
+          >
             <Character
               className='mr-auto ml-12 max-h-50 w-full max-w-48'
               name={characterName}
@@ -127,7 +178,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                 win: 52,
               }}
             />
-            <div className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'>
+            <AnimationInOut
+              in={typePage === 'duel'}
+              className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'
+            >
               <div className='relative ml-auto'>
                 <ButtonWithAudio
                   as='button'
@@ -138,8 +192,8 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   skipWaitAnimation
                 />
               </div>
-            </div>
-          </div>
+            </AnimationInOut>
+          </AnimationInOut>
           <ReadySetPull
             readySetPullHandle={readySetPullHandleRef}
             className='absolute top-1/2 left-10 -mt-10 -translate-y-1/2'

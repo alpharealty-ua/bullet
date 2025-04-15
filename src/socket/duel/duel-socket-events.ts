@@ -70,8 +70,6 @@ class DuelSocketEvents extends SocketEvents {
   constructor(
     protected socket: Socket,
     private token: string,
-    private gameId: string,
-    private playerId: string,
   ) {
     super(socket)
   }
@@ -90,48 +88,27 @@ class DuelSocketEvents extends SocketEvents {
   }
 
   disconnect() {
-    this.leaveDuelGame()
     notify(`Disconnected from duel game service`, 'info')
     this.socket.disconnect()
   }
 
-  joinDuelGame() {
-    const payload: BaseDuelPayload = {
-      gameId: this.gameId,
-      playerId: this.playerId,
-    }
-
+  joinDuelGame(payload: BaseDuelPayload) {
     this.socket.emit('game:join', payload)
   }
 
-  leaveDuelGame() {
-    notify(`Leaving duel game ${this.gameId}...`, 'info')
-
-    const payload: BaseDuelPayload = {
-      gameId: this.gameId,
-      playerId: this.playerId,
-    }
+  leaveDuelGame(payload: BaseDuelPayload) {
+    notify(`Leaving duel game ${payload.gameId}...`, 'info')
 
     this.socket.emit('game:leave', payload)
   }
 
-  requestRematch = () => {
+  requestRematch = (payload: BaseDuelPayload) => {
     notify(`Request rematch`, 'info')
-
-    const payload: BaseDuelPayload = {
-      gameId: this.gameId,
-      playerId: this.playerId,
-    }
 
     this.socket.emit('game:request_rematch', payload)
   }
 
-  pullTrigger() {
-    const payload: BaseDuelPayload = {
-      gameId: this.gameId,
-      playerId: this.playerId,
-    }
-
+  pullTrigger(payload: BaseDuelPayload) {
     this.socket.emit('game:pull_trigger', payload)
   }
 

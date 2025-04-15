@@ -8,7 +8,6 @@ import { SoloPage } from '@/pages/solo.page'
 import { DuelPage } from '@/pages/duel.page'
 import { GameSelectorPage } from '@/pages/game-selector.page'
 import { ProfilePage } from '@/pages/profile.page'
-import { MatchmakerPage } from '@/pages/matchmaker.page'
 import { ForgotPasswordPage } from '@/pages/forgot-password.page.tsx'
 import { ResetPasswordPage } from '@/pages/reset-password.page.tsx'
 import { PlayerPage } from '@/pages/player.page'
@@ -110,10 +109,18 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: ROUTES.duel.play,
+    path: ROUTES.duel.enterArena,
     element: (
       <PageWrapper headerProps={{ logoText: 'Duel' }}>
-        <MatchmakerPage />
+        <DuelPage variant='play' />
+      </PageWrapper>
+    ),
+  },
+  {
+    path: `${ROUTES.duel.next}`,
+    element: (
+      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+        <DuelPage variant='play' />
       </PageWrapper>
     ),
   },
