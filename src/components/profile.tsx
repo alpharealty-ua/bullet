@@ -10,6 +10,7 @@ import {
   ChangePasswordSchema,
   changePasswordSchema,
 } from '@/lib/schemas/change-password.schema'
+import { UserSchema } from '@/lib/schemas/auth.schema'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
@@ -22,7 +23,11 @@ import {
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
 
-const Profile = ({ user }: { user: User }) => {
+interface ProfileProps {
+  user: UserSchema
+}
+
+const Profile = ({ user }: ProfileProps) => {
   const queryClient = useQueryClient()
   const { error, isPending } = useLogin()
   const [isSuccess, setIsSuccess] = useState(false)

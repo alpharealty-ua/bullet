@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
 
-import { cn } from '@/lib/utils'
-import { getLevelColor, getRegionFlag } from './utils'
 import { ROUTES } from '@/routes/path'
+import { cn } from '@/lib/utils'
+import { UserSchema } from '@/lib/schemas/auth.schema'
+import { getLevelColor, getRegionFlag } from '@/lib/utils'
 
 const regionData = [
   {
@@ -80,7 +81,7 @@ const regionData = [
 ]
 
 interface RegionalChampionsProps {
-  user: User | null
+  user: UserSchema | null
 }
 
 const RegionalChampions = ({ user }: RegionalChampionsProps) => {

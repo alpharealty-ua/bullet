@@ -1,4 +1,6 @@
 import { addId } from '@/lib/utils'
+import { Message } from '@/components/bar/side-chat'
+import { Wager } from '@/components/bar/live-wagers'
 
 export const mockMessageUSAList = addId([
   {

@@ -1,5 +1,12 @@
 import { cn } from '@/lib/utils'
 
+export interface Wager {
+  id: string
+  user: string
+  money: number
+  result: 'win' | 'lose'
+}
+
 const LiveWagers = ({ list }: { list: Wager[] }) => {
   return (
     <div className='flex flex-col justify-between'>

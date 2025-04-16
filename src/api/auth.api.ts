@@ -6,26 +6,29 @@ import { LoginSchema } from '@/lib/schemas/login.schema'
 import { RegisterSchema } from '@/lib/schemas/register.schema'
 import { ForgotPasswordSchema } from '@/lib/schemas/forgot-password.schema.ts'
 import { ResetPasswordSchema } from '@/lib/schemas/reset-password.schema.ts'
-
-interface RefreshTokenPayload {
-  refreshToken: string
-}
+import { userSchema, UserSchema } from '@/lib/schemas/auth.schema'
 
 interface LoginResponse {
   accessToken: string
   refreshToken: string
-  user: User
+  user: UserSchema
 }
 
 interface RegisterResponse {
   accessToken: string
-  user: User
+  user: UserSchema
+}
+
+interface RefreshTokenPayload {
+  refreshToken: string
 }
 
 interface RefreshTokenResponse {
   accessToken: string
   refreshToken: string
 }
+
+interface ProfileResponse extends UserSchema {}
 
 interface ForgotPasswordResponse {
   message: string
@@ -42,7 +45,7 @@ interface GoogleAuthPayload {
 interface GoogleAuthResponse {
   accessToken: string
   refreshToken: string
-  user: User
+  user: UserSchema
 }
 
 const prefix = ROUTE_PREFIX.auth
@@ -79,9 +82,9 @@ export const refreshToken = async (
   return data
 }
 
-export const fetchProfile = async (): Promise<User> => {
-  const { data } = await api.get<User>(routes.profile)
-  return data
+export const fetchProfile = async (): Promise<UserSchema> => {
+  const { data } = await api.get<ProfileResponse>(routes.profile)
+  return userSchema.parse(data)
 }
 
 export const forgotPassword = async (

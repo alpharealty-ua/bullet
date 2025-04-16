@@ -2,12 +2,13 @@ import { Link } from 'react-router'
 
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { cn } from '@/lib/utils'
-import { getRegionFlag, getLevelColor } from '@/components/leaderboard/utils'
+import { UserSchema } from '@/lib/schemas/auth.schema'
+import { getRegionFlag, getLevelColor } from '@/lib/utils'
 import { ROUTES } from '@/routes/path'
 
 interface TopPlayersProps {
   topPlayers: GetStatsResponse['topPlayers']
-  user: User | null
+  user: UserSchema | null
 }
 
 const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {

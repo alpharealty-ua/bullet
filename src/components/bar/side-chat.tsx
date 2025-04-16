@@ -9,6 +9,12 @@ const DEFAULT_ROOM = 'usa'
 
 const rooms = mockRooms
 
+export interface Message {
+  id: string
+  user: string
+  message: string
+}
+
 const SideChat = ({
   languageProps: { className, ...languageProps } = {},
 }: {

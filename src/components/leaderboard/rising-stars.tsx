@@ -1,3 +1,4 @@
+import { UserSchema } from '@/lib/schemas/auth.schema'
 import { cn } from '@/lib/utils'
 
 const risingStarsData = [
@@ -144,7 +145,7 @@ const risingStarsData = [
 ]
 
 interface RisingStarsProps {
-  user: User | null
+  user: UserSchema | null
 }
 
 const RisingStars = ({ user }: RisingStarsProps) => {
