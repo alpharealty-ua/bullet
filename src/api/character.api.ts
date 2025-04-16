@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS, SVC } from '@/api/api'
+import { api, QUERY_KEYS, ROUTE_PREFIX } from '@/api/api'
 import { CharacterName } from '@/lib/constants'
 import {
   CharacterListSchema,
@@ -9,12 +9,12 @@ import {
   userCharacterSchemaArray,
 } from '@/lib/schemas/character.schema'
 
-const svc = SVC.character
+const prefix = ROUTE_PREFIX.character
 
 const routes = {
-  characters: `/${svc}/characters`,
-  purchase: `/${svc}/characters/purchase`,
-  userCharacters: `/${svc}/characters/user`,
+  characters: `/${prefix}/characters`,
+  purchase: `/${prefix}/characters/purchase`,
+  userCharacters: `/${prefix}/characters/user`,
 } as const
 
 type CharactersResponse = Character[]

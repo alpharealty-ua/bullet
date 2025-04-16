@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS } from '@/api/api'
+import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 
 interface Coin {
   id: string
@@ -76,9 +76,11 @@ interface ClaimOfferResponse {
   }
 }
 
+const prefix = ROUTE_PREFIX.offer
+
 const routes = {
-  userOffers: '/offer/user-offers',
-  claimOffer: (offerId: string) => `/offer/offers/${offerId}/claim`,
+  userOffers: `/${prefix}/user-offers`,
+  claimOffer: (offerId: string) => `/${prefix}/offers/${offerId}/claim`,
 } as const
 
 export const fetchUserOffers = async (): Promise<UserOffersResponse> => {

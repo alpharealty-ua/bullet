@@ -7,9 +7,12 @@ import { ENV } from '@/lib/env'
 
 const { API_URL } = ENV
 
-// TODO: ADD PREFIX TO ALL ROUTES
-export const SVC = {
+export const ROUTE_PREFIX = {
+  auth: 'auth',
+  game: 'game',
   leaderboard: 'leaderboard',
+  offer: 'offer',
+  wallet: 'wallet',
   character: 'character',
 } as const
 

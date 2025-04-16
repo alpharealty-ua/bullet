@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS } from '@/api/api'
+import { api, QUERY_KEYS, ROUTE_PREFIX } from '@/api/api'
 import { useAuthStore } from '@/store/auth.store'
 import { LoginSchema } from '@/lib/schemas/login.schema'
 import { RegisterSchema } from '@/lib/schemas/register.schema'
@@ -45,14 +45,16 @@ interface GoogleAuthResponse {
   user: User
 }
 
+const prefix = ROUTE_PREFIX.auth
+
 const routes = {
-  login: '/auth/login',
-  register: '/auth/register',
-  refreshToken: '/auth/refresh-token',
-  profile: '/auth/profile',
-  forgotPassword: '/auth/forgot-password',
-  resetPassword: '/auth/reset-password',
-  googleCallback: '/auth/google',
+  login: `/${prefix}/login`,
+  register: `/${prefix}/register`,
+  refreshToken: `/${prefix}/refresh-token`,
+  profile: `/${prefix}/profile`,
+  forgotPassword: `/${prefix}/forgot-password`,
+  resetPassword: `/${prefix}/reset-password`,
+  googleCallback: `/${prefix}/google`,
 } as const
 
 export const login = async (values: LoginSchema): Promise<LoginResponse> => {

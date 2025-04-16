@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useNavigate, useParams } from 'react-router'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS } from '@/api/api'
+import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 
 type GameStatus = 'ACTIVE' | 'PENDING' | 'COMPLETED_LOSE' | 'COMPLETED_WIN'
@@ -49,12 +49,14 @@ type Game = {
 type GameDetailsResponse = Game
 type AllGamesResponse = Game[]
 
+const prefix = ROUTE_PREFIX.game
+
 const routes = {
-  start: '/game/start',
-  pull: (gameId: string) => `/game/${gameId}/pull`,
-  acceptOffer: (offerId: string) => `/game/offer/${offerId}/accept`,
-  details: (gameId: string) => `/game/${gameId}`,
-  all: '/game/all',
+  start: `/${prefix}/start`,
+  pull: (gameId: string) => `/${prefix}/${gameId}/pull`,
+  acceptOffer: (offerId: string) => `/${prefix}/offer/${offerId}/accept`,
+  details: (gameId: string) => `/${prefix}/${gameId}`,
+  all: `/${prefix}/all`,
 } as const
 
 export const startGame = async (

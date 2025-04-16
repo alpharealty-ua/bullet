@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS } from '@/api/api'
-import { useProfile } from '@/api/auth.api'
+import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 
 interface FetchBalanceResponse {
   balance: {
@@ -23,9 +22,11 @@ interface AddBalancePayload {
   description: string
 }
 
+const prefix = ROUTE_PREFIX.wallet
+
 const routes = {
-  balance: '/wallet/balance',
-  addBalance: '/wallet/add-balance',
+  balance: `/${prefix}/balance`,
+  addBalance: `/${prefix}/add-balance`,
 } as const
 
 export const fetchBalance = async (): Promise<FetchBalanceResponse> => {

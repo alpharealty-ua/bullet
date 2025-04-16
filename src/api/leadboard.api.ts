@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { api, QUERY_KEYS, SVC } from '@/api/api'
+import { api, QUERY_KEYS, ROUTE_PREFIX } from '@/api/api'
 import {
   playerStatisticsSchema,
   PlayerStatisticsSchema,
 } from '@/lib/schemas/leadboard.schema'
 
-const svc = SVC.leaderboard
+const prefix = ROUTE_PREFIX.leaderboard
 
 const routes = {
-  gameStats: `${svc}/leaderboard/game-stats`,
-  playerStatistics: `${svc}/statistics/player`,
+  gameStats: `${prefix}/leaderboard/game-stats`,
+  playerStatistics: `${prefix}/statistics/player`,
 } as const
 
 export interface GetStatsResponse {
