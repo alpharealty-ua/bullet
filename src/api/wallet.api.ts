@@ -55,23 +55,9 @@ export const useBalance = (enabled = false) => {
 
 export const useAddBalance = () => {
   const queryClient = useQueryClient()
-  const { data: profile } = useProfile()
 
   return useMutation({
-    mutationFn: async (amount: number) => {
-      if (!profile) {
-        return
-      }
-
-      // TODO: CHANGE
-      return addBalance({
-        userId: profile.id,
-        networkId: 'local',
-        coinId: 'usd',
-        amount: String(amount),
-        description: 'TEST BALANCE',
-      })
-    },
+    mutationFn: addBalance,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     },
