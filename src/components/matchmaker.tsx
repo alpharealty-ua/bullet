@@ -48,7 +48,7 @@ const Matchmaker = ({
       return
     }
 
-    navigate(`${ROUTES.duel.root}/${gameId}`, {
+    navigate(ROUTES.duel.game(gameId), {
       preventScrollReset: true,
     })
   }, [navigate, gameId])

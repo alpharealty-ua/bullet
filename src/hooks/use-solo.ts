@@ -165,7 +165,7 @@ const useSolo = (variant: VariantGame) => {
       }
 
       await getMultiplier(multiplierIndex)
-      navigate(`${ROUTES.solo.root}/${gameId}`, { preventScrollReset: true })
+      navigate(ROUTES.solo.game(gameId), { preventScrollReset: true })
     },
     [bet, getMultiplier, navigate, queryClient, startGameMutation],
   )
@@ -270,7 +270,7 @@ const useSolo = (variant: VariantGame) => {
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !gameId) {
-      // navigate(`${ROUTES.solo.root}/${activeGame.id}`, { preventScrollReset: true })
+      // navigate(ROUTES.solo.game(activeGame.id), { preventScrollReset: true })
     }
   }, [allGames, navigate, gameId])
 

@@ -77,7 +77,7 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: `${ROUTES.solo.root}/:gameId`,
+    path: ROUTES.solo.game(':gameId'),
     element: (
       <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
         <SoloPage variant='play' />
@@ -93,7 +93,7 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: `${ROUTES.solo.watch}/:gameId`,
+    path: ROUTES.solo.watchGame(':gameId'),
     element: (
       <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
         <SoloPage variant='watch' />
@@ -125,7 +125,7 @@ export const PRIVATE_ROUTES = [
     ),
   },
   {
-    path: `${ROUTES.duel.root}/:gameId`,
+    path: ROUTES.duel.game(':gameId'),
     element: (
       <PageWrapper headerProps={{ logoText: 'Duel' }}>
         <DuelPage variant='play' />

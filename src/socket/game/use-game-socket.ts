@@ -245,7 +245,7 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
           })
 
           // redirect to game page
-          // navigate(`${ROUTES.solo.watch}/${response.gameId}`)
+          // navigate(ROUTES.solo.watchGame(response.gameId))
         },
       )
     }

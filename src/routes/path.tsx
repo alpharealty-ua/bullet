@@ -18,11 +18,14 @@ export const ROUTES = {
   },
   solo: {
     root: '/solo',
+    game: (gameId: string) => `/solo/${gameId}`,
     play: '/solo/play',
     watch: '/solo/watch',
+    watchGame: (gameId: string) => `/solo/${gameId}`,
   },
   duel: {
     root: '/duel',
+    game: (gameId: string) => `/duel/${gameId}`,
     enterArena: '/duel/enter-arena',
     next: '/duel/next',
     watch: '/duel/watch',
