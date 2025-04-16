@@ -2,6 +2,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api, QUERY_KEYS, SVC } from '@/api/api'
 import { CharacterName } from '@/lib/constants'
+import {
+  CharacterListSchema,
+  characterSchemaArray,
+  UserCharacterListSchema,
+  userCharacterSchemaArray,
+} from '@/lib/schemas/character.schema'
 
 const svc = SVC.character
 
@@ -14,18 +20,74 @@ const routes = {
 type CharactersResponse = Character[]
 type UserCharactersResponse = UserCharacter[]
 
-export const fetchCharacters = async (): Promise<CharactersResponse> => {
-  // TODO: VALIDATE ID CHARACTERS
+interface Character {
+  id: string
+  name: string
+  description: string
+  imageUrl: string
+  isFree: boolean
+  price: string
+  coinId: string
+  networkId: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  formattedPrice: string | number
+  network: Network
+  coin: Coin
+}
+
+interface Network {
+  id: string
+  name: string
+  symbol: string
+  isDefault: boolean
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface Coin {
+  id: string
+  name: string
+  symbol: string
+  type: string
+  decimals: number
+  isDefault: boolean
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+type UserCharacter = Character & { purchased: boolean }
+
+export const fetchCharacters = async (): Promise<CharacterListSchema> => {
   const { data } = await api.get<CharactersResponse>(routes.characters)
-  return data
+
+  const validated = characterSchemaArray.safeParse(data)
+
+  if (validated.error) {
+    console.error(validated.error)
+    return []
+  }
+
+  return validated.data
 }
 
 export const fetchUserCharacters =
-  async (): Promise<UserCharactersResponse> => {
+  async (): Promise<UserCharacterListSchema> => {
     const { data } = await api.get<UserCharactersResponse>(
       routes.userCharacters,
     )
-    return data
+
+    const validatedData = userCharacterSchemaArray.safeParse(data)
+
+    if (validatedData.error) {
+      console.error(validatedData.error)
+      return []
+    }
+
+    return validatedData.data
   }
 
 export const purchaseCharacter = async (

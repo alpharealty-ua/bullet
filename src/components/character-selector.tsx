@@ -5,6 +5,7 @@ import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 import { usePurchaseCharacter } from '@/api/character.api'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
+import { UserCharacterListSchema } from '@/lib/schemas/character.schema'
 import { cn } from '@/lib/utils'
 import { CharacterType, IMAGES } from '@/lib/constants'
 import { Character } from '@/components/character'
@@ -15,7 +16,7 @@ const CharacterSelector = ({
   characters,
   onSelect,
 }: {
-  characters: UserCharacter[]
+  characters: UserCharacterListSchema
   onSelect: (selected: boolean) => void
 }) => {
   const {

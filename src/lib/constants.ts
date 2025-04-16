@@ -87,12 +87,15 @@ export const CHARACTER_LIST = {
   },
 } satisfies Record<CharacterName, Record<CharacterType, string>>
 
-export type CharacterName =
-  | 'nubcat'
-  | 'mickey'
-  | 'fatty'
-  | 'anime-1'
-  | 'anime-2'
+export const characterNameList = [
+  'nubcat',
+  'mickey',
+  'fatty',
+  'anime-1',
+  'anime-2',
+] as const
+
+export type CharacterName = (typeof characterNameList)[number]
 
 export type CharacterType = 'back' | 'front'
 
