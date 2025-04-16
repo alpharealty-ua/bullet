@@ -79,7 +79,7 @@ export const PRIVATE_ROUTES = [
   {
     path: `${ROUTES.solo.root}/:gameId`,
     element: (
-      <PageWrapper headerProps={{ showNoMoney: false }}>
+      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
         <SoloPage variant='play' />
       </PageWrapper>
     ),
@@ -87,7 +87,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.watch,
     element: (
-      <PageWrapper headerProps={{ showNoMoney: false }}>
+      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
         <SoloPage variant='watch' />
       </PageWrapper>
     ),
@@ -95,7 +95,7 @@ export const PRIVATE_ROUTES = [
   {
     path: `${ROUTES.solo.watch}/:gameId`,
     element: (
-      <PageWrapper headerProps={{ showNoMoney: false }}>
+      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
         <SoloPage variant='watch' />
       </PageWrapper>
     ),
