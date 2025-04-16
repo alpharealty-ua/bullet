@@ -1,10 +1,10 @@
-import { toast } from 'react-toastify'
-
-import { useAuthStore } from '@/store/auth.store'
-import { socketGame } from '@/socket/socket'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import { toast } from 'react-toastify'
+
 import { Offer } from '@/api/game.api'
+import { socketGame } from '@/socket/socket'
+import { useAuthStore } from '@/store/auth.store'
 
 type PullGameFn = (
   gameId: string,

@@ -24,7 +24,7 @@ interface StartGameResponse {
 interface GamePullResponse {
   success: boolean
   position: number
-  offer: null | Offer
+  offer: Offer | null
   gameStatus: GameStatus
   remainingPulls: number
 }
@@ -32,12 +32,12 @@ interface GamePullResponse {
 interface AcceptOfferResponse {
   success: boolean
   position: number
-  offer: null | Offer
+  offer: Offer | null
   gameStatus: GameStatus
   remainingPulls: number
 }
 
-type Game = {
+interface Game {
   id: string
   betAmount: string
   multiplier: string
@@ -46,7 +46,7 @@ type Game = {
   status: GameStatus
 }
 
-type GameDetailsResponse = Game
+interface GameDetailsResponse extends Game {}
 type AllGamesResponse = Game[]
 
 const prefix = ROUTE_PREFIX.game
