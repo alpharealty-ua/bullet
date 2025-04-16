@@ -10,7 +10,7 @@ import {
 
 import { GetStatsResponse } from '@/api/leadboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CURRENT_LEVEL, getLevelColor } from '@/components/leaderboard/utils'
+import { getLevelColor } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
 const LevelMilestones = ({
@@ -100,19 +100,10 @@ const LevelMilestones = ({
             </thead>
             <tbody className='divide-y divide-gray-200 bg-white'>
               {milestones.map((milestone, i) => (
-                <tr
-                  key={i}
-                  className={
-                    milestone.lvl === CURRENT_LEVEL ? 'bg-blue-50' : ''
-                  }
-                >
+                <tr key={i} className='bg-blue-50'>
                   <td className='px-2 py-2 whitespace-nowrap'>
                     <span
-                      className={cn(
-                        `font-bold`,
-                        milestone.lvl === CURRENT_LEVEL && 'text-blue-600',
-                        getLevelColor(milestone.lvl),
-                      )}
+                      className={cn(`font-bold`, getLevelColor(milestone.lvl))}
                     >
                       {milestone.lvl}
                     </span>
@@ -132,8 +123,7 @@ const LevelMilestones = ({
           </table>
         </div>
         <div className='mt-4 text-center text-sm text-gray-500'>
-          Your current LVL ({CURRENT_LEVEL}) places you in the top 35% of all
-          players.
+          Your current LVL (53) places you in the top 35% of all players.
         </div>
       </CardContent>
     </Card>
