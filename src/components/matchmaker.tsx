@@ -10,6 +10,7 @@ import { EnterArena } from '@/components/enter-arena'
 import { MatchmakerStatistics } from '@/components/matchmaker-statistics'
 import { NextSearch } from '@/components/next-search'
 import { AddMoneyButton } from '@/components/add-money-button'
+import { MatchmakerPersonalStatistics } from '@/components/matchmaker-personal-statistics'
 
 const Matchmaker = ({
   matchmakerEvents,
@@ -81,6 +82,7 @@ const Matchmaker = ({
               defaultValue={`${MIN_DUEL_BET}`}
             />
           )}
+          {!isNextSearch && <MatchmakerPersonalStatistics />}
           {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
         </div>
       )}
