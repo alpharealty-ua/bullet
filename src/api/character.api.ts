@@ -63,15 +63,7 @@ type UserCharacter = Character & { purchased: boolean }
 
 export const fetchCharacters = async (): Promise<CharacterListSchema> => {
   const { data } = await api.get<CharactersResponse>(routes.characters)
-
-  const validated = characterSchemaArray.safeParse(data)
-
-  if (validated.error) {
-    console.error(validated.error)
-    return []
-  }
-
-  return validated.data
+  return characterSchemaArray.parse(data)
 }
 
 export const fetchUserCharacters =
@@ -79,15 +71,7 @@ export const fetchUserCharacters =
     const { data } = await api.get<UserCharactersResponse>(
       routes.userCharacters,
     )
-
-    const validatedData = userCharacterSchemaArray.safeParse(data)
-
-    if (validatedData.error) {
-      console.error(validatedData.error)
-      return []
-    }
-
-    return validatedData.data
+    return userCharacterSchemaArray.parse(data)
   }
 
 export const purchaseCharacter = async (
