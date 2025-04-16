@@ -1,36 +1,25 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
-import { CharacterEntity, useCharacters } from '@/api/duel.api'
-import { useGameStore } from '@/store/game.store'
+import { useUserCharacters } from '@/api/character.api'
 import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { CharacterSelector } from '@/components/character-selector'
 import { Loading } from '@/components/loading'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
-  const { data: characters, isLoading, isSuccess } = useCharacters()
-  const setCharacterName = useGameStore(
-    ({ setCharacterName }) => setCharacterName,
-  )
-  const characterName = useGameStore(({ characterName }) => characterName)
-  const [disabled, setDisabled] = useState(false)
+  const { data: characters, isLoading, isSuccess } = useUserCharacters()
+  const [selected, setSelected] = useState(false)
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
 
-  const handleSelectCharacter = (character: CharacterEntity) => {
-    const characterName = character.id
-    const disabled = character.price !== 0
-    setDisabled(disabled)
-
-    if (!disabled) {
-      setCharacterName(characterName)
-    }
-  }
+  const handleSelectCharacter = useCallback((selected: boolean) => {
+    setSelected(selected)
+  }, [])
 
   const handleButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
-    if (disabled) {
+    if (!selected) {
       event.preventDefault()
     }
   }
@@ -45,7 +34,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             onClick={handleButtonClick}
             className='w-30'
             image='play'
-            data-disabled={disabled}
+            data-disabled={!selected}
           />
           <ButtonWithAudio
             as='link'
@@ -53,7 +42,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             onClick={handleButtonClick}
             className='w-30'
             image='watch'
-            data-disabled={disabled}
+            data-disabled={!selected}
           />
         </div>
         {isDuel &&
@@ -61,10 +50,8 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             <Loading />
           ) : (
             <CharacterSelector
-              label='Choose your character'
               characters={characters}
               onSelect={handleSelectCharacter}
-              defaultName={characterName}
             />
           ))}
       </div>

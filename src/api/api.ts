@@ -10,6 +10,7 @@ const { API_URL } = ENV
 // TODO: ADD PREFIX TO ALL ROUTES
 export const SVC = {
   leaderboard: 'leaderboard',
+  character: 'character',
 } as const
 
 export const QUERY_KEYS = {
@@ -19,6 +20,7 @@ export const QUERY_KEYS = {
   gameDetails: 'gameDetails',
   gameStats: 'gameStats',
   playerStatistics: 'playerStatistics',
+  userCharacters: 'userCharacters',
   characters: 'characters',
   userOffers: 'userOffers',
 } as const
