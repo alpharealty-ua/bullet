@@ -11,6 +11,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const [selected, setSelected] = useState(false)
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
+  const isDisabled = isDuel && !selected
 
   const handleSelectCharacter = useCallback((selected: boolean) => {
     setSelected(selected)
@@ -19,7 +20,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const handleButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
-    if (!selected) {
+    if (isDisabled) {
       event.preventDefault()
     }
   }
@@ -34,7 +35,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             onClick={handleButtonClick}
             className='w-30'
             image='play'
-            data-disabled={!selected}
+            data-disabled={isDisabled}
           />
           <ButtonWithAudio
             as='link'
@@ -42,7 +43,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             onClick={handleButtonClick}
             className='w-30'
             image='watch'
-            data-disabled={!selected}
+            data-disabled={isDisabled}
           />
         </div>
         {isDuel &&
