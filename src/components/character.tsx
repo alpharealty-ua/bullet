@@ -51,6 +51,10 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
     const backGunHandleRef = useRef<GunHandle>(null)
     const [{ characterState, showInfo }, setState] =
       useState<CharacterState>(initState)
+    const characterImages = CHARACTER_LIST[name] ?? CHARACTER_LIST.fatty
+    const imagesNotFound = !CHARACTER_LIST[name]
+    const frontImage = characterImages.front
+    const backImage = characterImages.back
 
     useImperativeHandle(characterHandleRef, () => {
       return {
@@ -88,11 +92,19 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
           )}
         >
           <div
-            className='absolute inset-0 bg-contain bg-bottom bg-no-repeat'
+            className={cn(
+              'absolute inset-0 bg-contain bg-bottom bg-no-repeat',
+              imagesNotFound && 'opacity-50',
+            )}
             style={{
-              backgroundImage: `url(${CHARACTER_LIST[name]['front']})`,
+              backgroundImage: `url(${frontImage})`,
             }}
           ></div>
+          {imagesNotFound && (
+            <div className='relative z-3 flex h-full items-center justify-center text-center'>
+              Front image not&nbsp;found
+            </div>
+          )}
           <GunCharacter
             characterName={name}
             characterType={'front'}
@@ -107,11 +119,19 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
           )}
         >
           <div
-            className='absolute inset-0 z-2 bg-contain bg-bottom bg-no-repeat'
+            className={cn(
+              'absolute inset-0 z-2 bg-contain bg-bottom bg-no-repeat',
+              imagesNotFound && 'opacity-50',
+            )}
             style={{
-              backgroundImage: `url(${CHARACTER_LIST[name]['back']})`,
+              backgroundImage: `url(${backImage})`,
             }}
           ></div>
+          {imagesNotFound && (
+            <div className='relative z-3 flex h-full items-center justify-center text-center'>
+              Back image not&nbsp;found
+            </div>
+          )}
           <GunCharacter
             characterName={name}
             characterType={'back'}
