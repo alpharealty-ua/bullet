@@ -1,6 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { api, QUERY_KEYS, SVC } from '@/api/api'
+import {
+  playerStatisticsSchema,
+  PlayerStatisticsSchema,
+} from '@/lib/schemas/leadboard.schema'
 
 const svc = SVC.leaderboard
 
@@ -41,7 +45,7 @@ export interface GetStatsResponse {
   totalPlayers: number
 }
 
-export interface PlayerStatisticsResponse {
+interface PlayerStatisticsResponse {
   userId: string
   username: string
   country: string
@@ -85,11 +89,12 @@ export const fetchGameStats = async (): Promise<GetStatsResponse> => {
 
 export const fetchPlayerStatistics = async (
   playerId: string,
-): Promise<PlayerStatisticsResponse> => {
+): Promise<PlayerStatisticsSchema> => {
   const { data } = await api.get<PlayerStatisticsResponse>(
     `${routes.playerStatistics}/${playerId}`,
   )
-  return data
+
+  return playerStatisticsSchema.parse(data)
 }
 
 export const useGameStats = () =>
@@ -100,6 +105,6 @@ export const useGameStats = () =>
 
 export const usePlayerStatistics = (playerId: string) =>
   useQuery({
-    queryKey: [QUERY_KEYS.playerStatistics],
+    queryKey: [QUERY_KEYS.playerStatistics, playerId],
     queryFn: () => fetchPlayerStatistics(playerId),
   })
