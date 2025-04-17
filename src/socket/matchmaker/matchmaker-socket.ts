@@ -136,13 +136,13 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.matchmakerPingClient?.dettachEventListeners()
   }
 
-  joinMatchmaking() {
+  joinMatchmaking(maxRounds = 10) {
     const payload: JoinMatchmaking = {
       betOptions: {
         networkId: 'local',
         coinId: 'usd',
         betAmount: '0.01',
-        maxRounds: 10,
+        maxRounds,
       },
       metadata: {
         username: this.metadata.username,
