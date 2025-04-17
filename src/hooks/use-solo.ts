@@ -64,13 +64,14 @@ const useSolo = (variant: VariantGame) => {
     await victoryHandleRef.current?.updateState({ show: false })
     await gameOverHandleRef.current?.updateState({ show: false })
 
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.allGames] })
+    await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
+
     if (gameId) {
       navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
       })
     }
-
-    await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
@@ -270,7 +271,7 @@ const useSolo = (variant: VariantGame) => {
   useEffect(() => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
     if (activeGame && !gameId) {
-      // navigate(ROUTES.solo.game(activeGame.id), { preventScrollReset: true })
+      navigate(ROUTES.solo.game(activeGame.id), { preventScrollReset: true })
     }
   }, [allGames, navigate, gameId])
 
