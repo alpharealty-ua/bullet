@@ -135,7 +135,6 @@ export const SETTINGS = {
   soundEffects: 'Toggle sound effects',
   invertButtons: 'Invert PULL AND DEAL button positions',
   blood: 'Toggles off blood',
-  declineAllDeals: 'Decline all deals',
 } as const
 
 export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
@@ -143,7 +142,6 @@ export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
   soundEffects: true,
   invertButtons: false,
   blood: false,
-  declineAllDeals: false,
 }
 
 export const settingsEntries = Object.entries(SETTINGS) as [

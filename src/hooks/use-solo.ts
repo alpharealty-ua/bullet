@@ -46,9 +46,6 @@ const useSolo = (variant: VariantGame) => {
   const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = useGamePull()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
-  const declineAllDeals = useSettingsStore(
-    ({ declineAllDeals }) => declineAllDeals,
-  )
   const [countBullet, setCountBullet] = useState(5)
   const [bet, setBet] = useState(0)
   const [jackpot, setJackpot] = useState(-1)
@@ -241,18 +238,11 @@ const useSolo = (variant: VariantGame) => {
         await winGame()
         return
       }
-      if (offer && !declineAllDeals) {
+      if (offer) {
         setOffer(offer)
       }
     },
-    [
-      declineAllDeals,
-      gamePullMutation,
-      setCountBullet,
-      setOffer,
-      gameOver,
-      winGame,
-    ],
+    [gamePullMutation, setCountBullet, setOffer, gameOver, winGame],
   )
 
   const pull = useCallback(async () => {
