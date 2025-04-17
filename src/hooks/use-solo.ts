@@ -53,8 +53,10 @@ const useSolo = (variant: VariantGame) => {
   const [bet, setBet] = useState(0)
   const [jackpot, setJackpot] = useState(-1)
   const [offer, setOffer] = useState<Offer | null>(null)
+  // TODO: ADD REF HANDLE FOR NOT RE RENDER COMPONENT
   const [multiplier, setMultiplier] = useState(-1)
-  const [isStartedGame, setIsStartedGame] = useState(Boolean(gameId))
+  const [startedMultiplierSpin, setStartedMultiplierSpin] = useState(false)
+  const isStartedGame = Boolean(gameId)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
   const [showHelpers, setShowHelpers] = useState(true)
@@ -149,24 +151,24 @@ const useSolo = (variant: VariantGame) => {
 
   const startGame = useCallback(
     async (result?: { gameId: string; multiplier: string }) => {
-      setIsStartedGame(true)
       const { gameId, multiplier } =
         result ??
         (await startGameMutation({
           betAmount: String(bet),
         }))
+
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+      navigate(ROUTES.solo.game(gameId), { preventScrollReset: true })
 
       const multiplierIndex = MULTIPLIERS.findIndex(
         (value) => value === Number(multiplier),
       )
 
-      if (multiplierIndex === -1) {
-        return
+      if (multiplierIndex !== -1) {
+        setStartedMultiplierSpin(true)
+        await getMultiplier(multiplierIndex)
+        setStartedMultiplierSpin(false)
       }
-
-      await getMultiplier(multiplierIndex)
-      navigate(ROUTES.solo.game(gameId), { preventScrollReset: true })
     },
     [bet, getMultiplier, navigate, queryClient, startGameMutation],
   )
@@ -269,13 +271,22 @@ const useSolo = (variant: VariantGame) => {
   }, [bet, gameId, pullGame, startGame])
 
   useEffect(() => {
+    if (isStartedGame) {
+      return
+    }
+
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
-    if (activeGame && !gameId) {
+
+    if (activeGame) {
       navigate(ROUTES.solo.game(activeGame.id), { preventScrollReset: true })
     }
-  }, [allGames, navigate, gameId])
+  }, [allGames, navigate, isStartedGame])
 
   useEffect(() => {
+    if (startedMultiplierSpin) {
+      return
+    }
+
     if (!isStartedGame) {
       return
     }
@@ -303,21 +314,21 @@ const useSolo = (variant: VariantGame) => {
     setBet,
     setCountBullet,
     setMultiplier,
-    gameId,
     gameOver,
     winGame,
     isStartedGame,
+    startedMultiplierSpin,
   ])
-
-  useEffect(() => {
-    setIsStartedGame(Boolean(gameId))
-  }, [gameId])
 
   const { watchGame, watchingLargestGame } = useGameSocket(isPlay, pullGame)
 
   // Update state from watched game if available (for watch mode)
   useEffect(() => {
-    if (isPlay || !watchGame?.game || !gameId) {
+    if (startedMultiplierSpin) {
+      return
+    }
+
+    if (isPlay || !watchGame?.game || !isStartedGame) {
       return
     }
 
@@ -337,7 +348,14 @@ const useSolo = (variant: VariantGame) => {
 
     if (isGameOver) gameOver()
     if (isWin) winGame()
-  }, [watchGame, isPlay, gameId, gameOver, winGame])
+  }, [
+    watchGame,
+    isPlay,
+    isStartedGame,
+    gameOver,
+    winGame,
+    startedMultiplierSpin,
+  ])
 
   return {
     footerHandleRef,
