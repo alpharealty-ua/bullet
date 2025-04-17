@@ -60,9 +60,6 @@ const useSolo = (variant: VariantGame) => {
   const isPlay = variant === 'play'
 
   const newGame = useCallback(async () => {
-    await victoryHandleRef.current?.updateState({ show: false })
-    await gameOverHandleRef.current?.updateState({ show: false })
-
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.allGames] })
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
@@ -71,6 +68,9 @@ const useSolo = (variant: VariantGame) => {
         preventScrollReset: true,
       })
     }
+
+    victoryHandleRef.current?.hide()
+    gameOverHandleRef.current?.hide()
 
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
