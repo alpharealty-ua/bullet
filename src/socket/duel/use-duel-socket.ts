@@ -97,9 +97,12 @@ export const useDuelSocket = ({
   }
 
   const nextOpponnet = useCallback(() => {
+    if (gameId && playerId) {
+      duelSocketEvents.leaveDuelGame({ gameId, playerId })
+    }
     reset()
     navigate(ROUTES.duel.next, { preventScrollReset: true })
-  }, [navigate, reset])
+  }, [duelSocketEvents, gameId, navigate, playerId, reset])
 
   const showRequestRematch = useCallback(async () => {
     const hideVictoryPromise = victoryHandleRef.current?.hide()
