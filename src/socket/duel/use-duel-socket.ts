@@ -30,6 +30,7 @@ export const useDuelSocket = ({
   const queryClient = useQueryClient()
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
+  const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
@@ -52,6 +53,12 @@ export const useDuelSocket = ({
     await bottomGameBarHandleRef.current?.reset()
     await frontCharacterHandleRef.current?.reset()
     await backCharacterHandleRef.current?.reset()
+
+    await rematchRequestHandleRef.current?.hide()
+
+    setPulls([])
+    setCanPull(true)
+    setRound(1)
   }, [])
 
   const opponentPull = useCallback(async (shot: boolean) => {
@@ -107,12 +114,12 @@ export const useDuelSocket = ({
     const { rematchStatus } = refState.current
 
     if (rematchStatus == 'created') {
+      reset()
       return
     }
 
-    await rematchRequestHandleRef.current?.hide()
     nextOpponnet()
-  }, [nextOpponnet])
+  }, [nextOpponnet, reset])
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
@@ -243,8 +250,13 @@ export const useDuelSocket = ({
         case 'game:take':
         case 'game:pull': {
           if (payload.roundNumber === 1) {
-            await readySetPullHandleRef.current?.start(payload.event)
+            readySetPullHandleRef.current?.start(payload.event)
+
+            if (type === 'game:ready' || type === 'game:take') {
+              setCanPull(false)
+            }
             if (type === 'game:pull') {
+              setCanPull(true)
               frontCharacterHandleRef.current?.updateState({ showInfo: false })
               backCharacterHandleRef.current?.updateState({ showInfo: false })
             }
@@ -273,6 +285,7 @@ export const useDuelSocket = ({
           await pull(payload.fired)
 
           if (payload.fired) {
+            setCanPull(false)
             isPlayer ? winGame() : gameOver()
           }
           return
@@ -361,6 +374,13 @@ export const useDuelSocket = ({
             case 'game:join':
             case 'game:pull_trigger':
             case 'game:request_rematch':
+              if (event === 'game:join') {
+                if (
+                  payload.message.includes('You are not a participant in game')
+                ) {
+                  nextOpponnet()
+                }
+              }
               if (event === 'game:pull_trigger') {
                 setPulls((p) => p.filter((_, i, arr) => i !== arr.length - 1))
               }
@@ -409,6 +429,7 @@ export const useDuelSocket = ({
     cancelRematch,
     reset,
     hasPull,
+    canPull,
     round,
   }
 }

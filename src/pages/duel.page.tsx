@@ -54,6 +54,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     requestRematch,
     cancelRematch,
     hasPull,
+    canPull,
   } = useDuelSocket({
     gameId,
     playerId,
@@ -188,7 +189,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
                   className='w-26'
                   image='pull'
                   onClick={handlePull}
-                  disabled={!hasPull}
+                  disabled={!hasPull || !canPull}
                   skipWaitAnimation
                 />
               </div>
