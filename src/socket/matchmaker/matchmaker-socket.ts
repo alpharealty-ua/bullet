@@ -141,7 +141,7 @@ class MatchmakerSocketEvents extends SocketEvents {
       betOptions: {
         networkId: 'local',
         coinId: 'usd',
-        betAmount: '0.01',
+        betAmount: '1000',
         maxRounds,
       },
       metadata: {
