@@ -4,9 +4,15 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
+import {
+  gameListSchema,
+  GameListSchema,
+  gameSchema,
+  GameSchema,
+  GameStatusSchema,
+} from '@/lib/schemas/game.schema'
 
-type GameStatus = 'ACTIVE' | 'PENDING' | 'COMPLETED_LOSE' | 'COMPLETED_WIN'
-
+// TODO: ADD SCHEMA TO ALL RESPONSE
 export type Offer = {
   id: string
   amount: string
@@ -25,7 +31,7 @@ interface GamePullResponse {
   success: boolean
   position: number
   offer: Offer | null
-  gameStatus: GameStatus
+  gameStatus: GameStatusSchema
   remainingPulls: number
 }
 
@@ -33,21 +39,13 @@ interface AcceptOfferResponse {
   success: boolean
   position: number
   offer: Offer | null
-  gameStatus: GameStatus
+  gameStatus: GameStatusSchema
   remainingPulls: number
 }
 
-interface Game {
-  id: string
-  betAmount: string
-  multiplier: string
-  potentialWin: string
-  currentPosition: string
-  status: GameStatus
-}
+interface GameDetailsResponse extends GameSchema {}
 
-interface GameDetailsResponse extends Game {}
-type AllGamesResponse = Game[]
+type AllGamesResponse = GameListSchema
 
 const prefix = ROUTE_PREFIX.game
 
@@ -80,16 +78,14 @@ export const acceptOffer = async (
   return data
 }
 
-export const fetchGameDetails = async (
-  gameId: string,
-): Promise<GameDetailsResponse> => {
+export const fetchGameDetails = async (gameId: string): Promise<GameSchema> => {
   const { data } = await api.get<GameDetailsResponse>(routes.details(gameId))
-  return data
+  return gameSchema.parse(data)
 }
 
-export const fetchAllGames = async (): Promise<AllGamesResponse> => {
+export const fetchAllGames = async (): Promise<GameListSchema> => {
   const { data } = await api.get<AllGamesResponse>(routes.all)
-  return data
+  return gameListSchema.parse(data)
 }
 
 export const useAllGames = () =>
@@ -130,7 +126,6 @@ export const useStartGame = () => {
 export const useGamePull = () =>
   useMutation({
     mutationFn: gamePull,
-    onSuccess: () => {},
   })
 
 export const useAcceptOffer = () =>
