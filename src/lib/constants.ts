@@ -100,6 +100,7 @@ export type CharacterName = (typeof characterNameList)[number]
 export type CharacterType = 'back' | 'front'
 
 export const AUDIOS = {
+  bulletTrack: '/assets/audios/bullet-track.mp3',
   revolverspin: '/assets/audios/revolverspin.mp3',
   trigger: '/assets/audios/trigger.wav',
   triggerpull: '/assets/audios/trigger-pull.wav',
@@ -119,7 +120,7 @@ export const AUDIOS = {
   bounce: '/assets/audios/bounce.mp3',
 } as const
 
-export const audiosEntries = Object.entries(AUDIOS)
+export const SRC_AUDIOS = Object.values(AUDIOS)
 
 export const MAX_BET = 10_000
 

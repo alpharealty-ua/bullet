@@ -44,6 +44,10 @@ export const wait = (timeout: number) => {
   return { promise, timeoutId }
 }
 
+export const getAudio = (key: keyof typeof AUDIOS): HTMLAudioElement => {
+  return new Audio(AUDIOS[key])
+}
+
 export const waitEndAudio = (audio: HTMLAudioElement) =>
   new Promise<Event>((resolve) =>
     audio.addEventListener('ended', resolve, { once: true }),
