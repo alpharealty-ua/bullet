@@ -88,6 +88,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     backCharacterHandleRef.current?.toggleInfo()
   }
 
+  // TODO: REFACTOR
   const isUnmounted = useUnmountedState()
   useEffect(() => {
     duelSocketEvents.connect()

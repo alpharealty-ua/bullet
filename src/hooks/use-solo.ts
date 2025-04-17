@@ -17,6 +17,7 @@ import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useGameStore } from '@/store/game.store'
 import { useWait } from '@/hooks/use-wait'
+import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { randomIntFromInterval } from '@/lib/utils'
 import {
   MAX_BET,
@@ -35,6 +36,7 @@ const useSolo = (variant: VariantGame) => {
   const { data: balance } = useBalance()
   const queryClient = useQueryClient()
   const wait = useWait()
+  const isUnmounted = useUnmountedState()
   const footerHandleRef = useRef<FooterHandle>(null)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
@@ -63,7 +65,7 @@ const useSolo = (variant: VariantGame) => {
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.allGames] })
     await queryClient.setQueryData([QUERY_KEYS.gameDetails], null)
 
-    if (gameId) {
+    if (gameId && !isUnmounted()) {
       navigate(ROUTES.solo[variant], {
         preventScrollReset: true,
       })
@@ -80,7 +82,7 @@ const useSolo = (variant: VariantGame) => {
     setOffer(null)
     setCountBullet(5)
     setMultiplier(-1)
-  }, [gameId, queryClient, bet, balance, navigate, variant])
+  }, [queryClient, gameId, isUnmounted, bet, balance, navigate, variant])
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
