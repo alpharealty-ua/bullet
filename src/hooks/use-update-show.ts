@@ -10,6 +10,7 @@ export interface UpdateShowMethods<T> {
   updateState: DispatchUpdateShow<T>
   show: () => Promise<void>
   hide: () => Promise<void>
+  reset: () => Promise<void>
 }
 
 export interface DispatchUpdateShow<ComponentState> {
@@ -41,7 +42,9 @@ const useUpdateShow = <ComponentState extends { show: boolean }>(
 
   const hide = () => updateState({ show: false } as Partial<ComponentState>)
 
-  return { state, updateState, show, hide, timeout }
+  const reset = () => updateState(intiState)
+
+  return { state, updateState, show, hide, reset, timeout }
 }
 
 export { useUpdateShow }

@@ -51,12 +51,13 @@ export const useDuelSocket = ({
   })
 
   const reset = useCallback(async () => {
-    await topGameBarHandleRef.current?.reset()
-    await bottomGameBarHandleRef.current?.reset()
+    await gameOverHandleRef.current?.reset()
+    await victoryHandleRef.current?.reset()
     await frontCharacterHandleRef.current?.reset()
     await backCharacterHandleRef.current?.reset()
-
-    await rematchRequestHandleRef.current?.hide()
+    await topGameBarHandleRef.current?.reset()
+    await bottomGameBarHandleRef.current?.reset()
+    await rematchRequestHandleRef.current?.reset()
 
     setPulls([])
     setCanPull(true)
@@ -104,28 +105,6 @@ export const useDuelSocket = ({
     navigate(ROUTES.duel.next, { preventScrollReset: true })
   }, [duelSocketEvents, gameId, navigate, playerId, reset])
 
-  const showRequestRematch = useCallback(async () => {
-    const hideVictoryPromise = victoryHandleRef.current?.hide()
-    const hideGameOverPromise = gameOverHandleRef.current?.hide()
-    const showRematchPromsie = rematchRequestHandleRef.current?.show()
-
-    await Promise.all([
-      hideVictoryPromise,
-      hideGameOverPromise,
-      showRematchPromsie,
-    ])
-
-    await wait(5000).promise
-    const { rematchStatus } = refState.current
-
-    if (rematchStatus == 'created') {
-      reset()
-      return
-    }
-
-    nextOpponnet()
-  }, [nextOpponnet, reset])
-
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
@@ -137,23 +116,23 @@ export const useDuelSocket = ({
 
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
-    const hideRematchRequestPromise = rematchRequestHandleRef.current?.hide()
+    const showRematchRequestPromise = rematchRequestHandleRef.current?.show()
     gameOverHandleRef.current?.updateState({
       disabled: true,
       on: async (event) => {
         if (event === 'click') {
-          showRequestRematch()
+          await gameOverHandleRef.current?.hide()
         }
       },
     })
     const showGameOverPromise = gameOverHandleRef.current?.show()
-    await Promise.all([hideRematchRequestPromise, showGameOverPromise])
+    await Promise.all([showRematchRequestPromise, showGameOverPromise])
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
 
-    await showRequestRematch()
-  }, [showRequestRematch])
+    await gameOverHandleRef.current?.hide()
+  }, [])
 
   const winGame = useCallback(async () => {
     setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
@@ -166,22 +145,22 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.updateState({
       characterState: 'winner',
     })
-    const hideRematchRequestPromise = rematchRequestHandleRef.current?.hide()
     victoryHandleRef.current?.updateState({
       type: 'win',
       oldLevel: 722,
       newLevel: 754,
     })
     const showVictoryPromise = victoryHandleRef.current?.show()
-    await Promise.all([hideRematchRequestPromise, showVictoryPromise])
+    const showRematchPromise = rematchRequestHandleRef.current?.show()
+
+    await Promise.all([showRematchPromise, showVictoryPromise])
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
 
     setIncreaseTime(undefined)
-
-    await showRequestRematch()
-  }, [queryClient, setIncreaseTime, showRequestRematch])
+    await victoryHandleRef.current?.hide()
+  }, [queryClient, setIncreaseTime])
 
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()
