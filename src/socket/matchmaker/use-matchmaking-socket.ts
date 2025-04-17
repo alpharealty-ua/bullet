@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
+import { QUERY_KEYS } from '@/api/api'
 import { socketMatchmaker as socket } from '@/socket/socket'
 import {
   PingData,
@@ -20,6 +22,7 @@ const useMatchmakingSocket = (
   matchmakerEvents: MatchmakerSocketEvents,
   autoJoin = false,
 ) => {
+  const queryClient = useQueryClient()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
@@ -119,6 +122,9 @@ const useMatchmakingSocket = (
           return
         }
         case 'joinedMatchmaking': {
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.balance],
+          })
           notify('You have Joined the matchmaking queue', 'success')
 
           // Update matchmaking status
@@ -281,6 +287,9 @@ const useMatchmakingSocket = (
           return
         }
         case 'duelGameCreated': {
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.balance],
+          })
           setGameId(payload.gameId)
           return
         }
@@ -315,7 +324,7 @@ const useMatchmakingSocket = (
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
     })
-  }, [matchmakerEvents, playAudio, playerId, setMatchDetails])
+  }, [matchmakerEvents, playAudio, playerId, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
     socket.connected
