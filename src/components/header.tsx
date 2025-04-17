@@ -28,7 +28,7 @@ export const Header = ({
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   return (
-    <header className='flex h-20 w-full shrink-0 items-center justify-between px-3 py-1'>
+    <header className='relative z-50 flex h-20 w-full shrink-0 items-center justify-between px-3 py-1'>
       {!hideLogo && <Logo as='link' to='/' text={logoText} />}
       <div className='ml-auto flex flex-col gap-1'>
         {token && isPending ? (
