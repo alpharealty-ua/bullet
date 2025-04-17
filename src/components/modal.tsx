@@ -68,7 +68,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       <div
         ref={mergeRefs(ref, modalRef)}
         className={cn(
-          'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col justify-start gap-12 overflow-auto bg-cover bg-[right_center] px-3 py-12 duration-200',
+          'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col justify-start gap-12 overflow-auto bg-cover bg-[right_center] py-12 duration-200',
           className,
           isOpen
             ? 'animate-in fade-in-0 zoom-in-95'
@@ -77,7 +77,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
         {...props}
       >
-        <header className='flex items-center justify-between gap-2'>
+        <header className='flex items-center justify-between gap-2 px-3'>
           <div className='flex items-center gap-4'>
             <button onClick={handleClose}>
               <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
