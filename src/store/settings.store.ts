@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { AUDIOS, DEFAULT_SETTINGS, SettingsKeys } from '@/lib/constants'
-import { getAudio } from '@/lib/utils'
 
 export type PlaySound = (
   key: keyof typeof AUDIOS,
@@ -25,7 +24,7 @@ const useSettingsStore = create<SettingsState>()(
         key: keyof typeof AUDIOS,
         play = true,
       ): Promise<HTMLAudioElement> => {
-        const audio = getAudio(key)
+        const audio = new Audio(AUDIOS[key])
 
         // TODO: MOVE TO ADUIO
         audio.addEventListener(
@@ -36,7 +35,6 @@ const useSettingsStore = create<SettingsState>()(
           { once: true },
         )
 
-        // TODO: MOVE TO ADUIO
         audio.muted = !get().soundEffects
         audio.currentTime = 0
 

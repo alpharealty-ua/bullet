@@ -4,7 +4,7 @@ import { ZodError } from 'zod'
 
 import { useProfile } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
-import { usePreloadImages } from '@/hooks/use-preload-images'
+import { usePreloadMedia } from '@/hooks/use-preload-media'
 import { useAuthStore } from '@/store/auth.store'
 import { Notification } from '@/components/ui/notification'
 import { Debug } from '@/components/debug'
@@ -21,7 +21,7 @@ const App = () => {
   const { error } = useProfile(Boolean(token))
   useBalance(Boolean(token))
 
-  usePreloadImages()
+  usePreloadMedia()
 
   if (error && error instanceof ZodError) {
     return <Notification type='error' message={error.message} />

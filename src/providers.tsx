@@ -5,9 +5,8 @@ import NiceModal from '@ebay/nice-modal-react'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import 'react-toastify/ReactToastify.css'
 
-import { IMAGES } from '@/lib/constants'
 import { queryClient } from '@/api/query-client'
-import { Audios } from '@/components/audios'
+import { IMAGES } from '@/lib/constants'
 
 export function Providers({
   children,
@@ -22,10 +21,7 @@ export function Providers({
           className='custom-scroll relative mx-auto flex h-dvh min-h-[600px] w-full max-w-[var(--width)] translate-0 flex-col overflow-x-hidden overflow-y-scroll bg-cover bg-[right_center] lg:min-h-[780px]'
           style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
         >
-          <NiceModal.Provider>
-            <Audios />
-            {children}
-          </NiceModal.Provider>
+          <NiceModal.Provider>{children}</NiceModal.Provider>
         </div>
       </GoogleOAuthProvider>
       <ToastContainer theme='colored' />

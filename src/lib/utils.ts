@@ -44,17 +44,6 @@ export const wait = (timeout: number) => {
   return { promise, timeoutId }
 }
 
-export const getAudio = (key: keyof typeof AUDIOS): HTMLAudioElement => {
-  const audiosDom = document.getElementById('audios')
-
-  const selector = `[data-audio=${key}]`
-
-  const audio = ((audiosDom ?? document).querySelector(selector) ??
-    new Audio(AUDIOS[key])) as HTMLAudioElement
-
-  return audio
-}
-
 export const waitEndAudio = (audio: HTMLAudioElement) =>
   new Promise<Event>((resolve) =>
     audio.addEventListener('ended', resolve, { once: true }),
