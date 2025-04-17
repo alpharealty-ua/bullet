@@ -8,6 +8,7 @@ import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
 import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
+import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
 import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { CharacterHandle } from '@/components/character'
@@ -28,6 +29,7 @@ export const useDuelSocket = ({
 }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
   const [canPull, setCanPull] = useState(true)
@@ -204,9 +206,21 @@ export const useDuelSocket = ({
     duelSocketEvents.pullTrigger(payload)
   }
 
+  const duelEventsStateRef = useRef({
+    round,
+    setRound,
+  })
+
   useEffect(() => {
+    const setRound = (round: number) => {
+      duelEventsStateRef.current.setRound(round)
+      duelEventsStateRef.current.round = round
+    }
+
     duelSocketEvents.updateEvents(async (event) => {
       const { type, payload } = event
+      const { round } = duelEventsStateRef.current
+
       switch (type) {
         case 'connect': {
           notify('Connected to duel game service', 'info')
@@ -311,6 +325,10 @@ export const useDuelSocket = ({
         case 'probability': {
           await topGameBarHandleRef.current?.setActive(payload.index)
           await bottomGameBarHandleRef.current?.setActive(payload.index)
+
+          if ((payload.index === 0 && round !== 1) || payload.index === 20) {
+            playAudio('bounce')
+          }
           return
         }
         case 'game:rematch_requested': {
@@ -405,6 +423,7 @@ export const useDuelSocket = ({
     drawGame,
     navigate,
     nextOpponnet,
+    playAudio,
   ])
 
   useEffect(() => {

@@ -48,20 +48,37 @@ const useMatchmakingSocket = (
   >([])
   const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
-  const [currentMatchId, setMatchId] = useState<string | null>(null)
+  const [matchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
   const [playerId, setPlayerId] = useState<string | null>(null)
 
-  // TODO: REFACTOR
-  const refState = useRef({
-    currentMatchId,
+  const matchmakerEventsStateRef = useRef({
+    matchId,
+    playerId,
     matchmakingStatus,
+    setMatchId,
+    setPlayerId,
+    setMatchmakingStatus,
   })
 
   useEffect(() => {
+    const setMatchId = (matchId: string | null) => {
+      matchmakerEventsStateRef.current.setMatchId(matchId)
+      matchmakerEventsStateRef.current.matchId = matchId
+    }
+    const setPlayerId = (playerId: string | null) => {
+      matchmakerEventsStateRef.current.setPlayerId(playerId)
+      matchmakerEventsStateRef.current.playerId = playerId
+    }
+    const setMatchmakingStatus = (status: MatchmakingStatus) => {
+      matchmakerEventsStateRef.current.setMatchmakingStatus(status)
+      matchmakerEventsStateRef.current.matchmakingStatus = status
+    }
+
     matchmakerEvents.updateEvents(async (event) => {
       const { type, payload } = event
-      const { currentMatchId, matchmakingStatus } = refState.current
+      const { matchId, playerId, matchmakingStatus } =
+        matchmakerEventsStateRef.current
 
       switch (type) {
         case 'connect': {
@@ -78,7 +95,6 @@ const useMatchmakingSocket = (
         case 'disconnect': {
           setConnectionStatus('disconnected')
           setMatchmakingStatus('not-in-queue')
-          refState.current.matchmakingStatus = 'not-in-queue'
 
           setPingData({
             ping: 0,
@@ -130,7 +146,6 @@ const useMatchmakingSocket = (
           // Update matchmaking status
           if (matchmakingStatus === 'not-in-queue') {
             setMatchmakingStatus('searching')
-            refState.current.matchmakingStatus = 'searching'
             setMatchDetails(null)
           }
 
@@ -152,8 +167,6 @@ const useMatchmakingSocket = (
             setMatchmakingStatus('not-in-queue')
           }
 
-          refState.current.matchmakingStatus = 'not-in-queue'
-
           setPlayerId(null)
 
           return
@@ -164,7 +177,6 @@ const useMatchmakingSocket = (
 
           // Update matchmaking status
           setMatchmakingStatus('match-found')
-          refState.current.matchmakingStatus = 'match-found'
 
           setMatchId(payload.matchId)
 
@@ -190,7 +202,7 @@ const useMatchmakingSocket = (
           return
         }
         case 'matchConfirmationUpdate': {
-          if (payload.matchId !== currentMatchId) {
+          if (payload.matchId !== matchId) {
             return
           }
 
@@ -213,7 +225,6 @@ const useMatchmakingSocket = (
               ? 'searching'
               : 'not-in-queue'
           setMatchmakingStatus(status)
-          refState.current.matchmakingStatus = status
 
           // Play match canceled sound
           playAudio('matchCanceled')
@@ -234,7 +245,6 @@ const useMatchmakingSocket = (
           // Update matchmaking status
 
           setMatchmakingStatus('match-created')
-          refState.current.matchmakingStatus = 'match-created'
 
           playAudio('matchConfirmed')
 
@@ -324,7 +334,7 @@ const useMatchmakingSocket = (
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
     })
-  }, [matchmakerEvents, playAudio, playerId, queryClient, setMatchDetails])
+  }, [matchmakerEvents, playAudio, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
     socket.connected
@@ -337,7 +347,7 @@ const useMatchmakingSocket = (
   }, [matchmakerEvents])
 
   const leaveMatchmaking = useCallback(() => {
-    const { matchmakingStatus } = refState.current
+    const { matchmakingStatus } = matchmakerEventsStateRef.current
     if (matchmakingStatus === 'match-found') {
       addLogEntry(
         'Cannot leave matchmaking while a match confirmation is active',
@@ -354,19 +364,19 @@ const useMatchmakingSocket = (
   }, [matchmakerEvents])
 
   const confirmMatch = () => {
-    if (currentMatchId === null) {
+    if (matchId === null) {
       return
     }
 
-    matchmakerEvents.confirmMatch(currentMatchId)
+    matchmakerEvents.confirmMatch(matchId)
   }
 
   const declineMatch = () => {
-    if (currentMatchId === null) {
+    if (matchId === null) {
       return
     }
 
-    matchmakerEvents.declineMatch(currentMatchId)
+    matchmakerEvents.declineMatch(matchId)
   }
 
   const getStats = () => {

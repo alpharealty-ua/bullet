@@ -116,6 +116,7 @@ export const AUDIOS = {
   matchConfirmed: '/assets/audios/match-confirmed.mp3',
   matchCanceled: '/assets/audios/match-canceled.mp3',
   holy: '/assets/audios/holy.mp3',
+  bounce: '/assets/audios/bounce.mp3',
 } as const
 
 export const audiosEntries = Object.entries(AUDIOS)
