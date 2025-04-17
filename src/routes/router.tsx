@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 
-import { RootRouter } from '@/routes/root-router'
+import { RootRouter } from '@/App'
 import { PRIVATE_ROUTES, PUBLIC_ROUTES } from '@/routes/routes'
 import { ProtectedRoute } from '@/routes/protected-route'
 import { ErrorPage } from '@/pages/error.page'

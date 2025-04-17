@@ -1,12 +1,20 @@
-import { RouterProvider } from 'react-router'
+import { Outlet, ScrollRestoration } from 'react-router'
+
 import { ZodError } from 'zod'
 
 import { useProfile } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
 import { usePreloadImages } from '@/hooks/use-preload-images'
-import { router } from '@/routes/router'
 import { useAuthStore } from '@/store/auth.store'
 import { Notification } from '@/components/ui/notification'
+import { Debug } from '@/components/debug'
+import { Providers } from '@/providers'
+
+const RootRouter = () => (
+  <Providers>
+    <App />
+  </Providers>
+)
 
 const App = () => {
   const token = useAuthStore(({ accessToken }) => accessToken)
@@ -19,7 +27,13 @@ const App = () => {
     return <Notification type='error' message={error.message} />
   }
 
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <Debug />
+      <Outlet />
+      <ScrollRestoration />
+    </>
+  )
 }
 
-export default App
+export { RootRouter }
