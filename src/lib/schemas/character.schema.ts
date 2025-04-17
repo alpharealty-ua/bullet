@@ -25,9 +25,13 @@ export const userCharacterSchema = characterSchema.merge(
 )
 
 export const characterSchemaArray = z.array(characterSchema)
+
 export const userCharacterSchemaArray = z.array(userCharacterSchema)
 
 export type CharacterSchema = z.infer<typeof characterSchema>
+
 export type UserCharacterSchema = z.infer<typeof userCharacterSchema>
+
 export type CharacterListSchema = z.infer<typeof characterSchemaArray>
+
 export type UserCharacterListSchema = z.infer<typeof userCharacterSchemaArray>

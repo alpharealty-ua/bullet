@@ -23,4 +23,5 @@ export const coinSchema = z.object({
 })
 
 export type NetworkSchema = z.infer<typeof networkSchema>
+
 export type CoinSchema = z.infer<typeof coinSchema>
