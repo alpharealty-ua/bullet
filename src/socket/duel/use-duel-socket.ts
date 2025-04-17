@@ -167,11 +167,13 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.reset()
     await victoryHandleRef.current?.updateState({ type: 'draw' })
     await victoryHandleRef.current?.show()
+    await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
+
     await wait(2000).promise
 
     await victoryHandleRef.current?.hide()
     nextOpponnet()
-  }, [nextOpponnet])
+  }, [nextOpponnet, queryClient])
 
   const pull = async () => {
     if (gameId === null || playerId === null) {
