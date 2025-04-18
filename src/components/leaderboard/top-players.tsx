@@ -1,10 +1,10 @@
-import { GetStatsResponse } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
 import { UserSchema } from '@/lib/schemas/auth.schema'
 import { getRegionFlag, getLevelColor } from '@/lib/utils'
+import { TopPlayerListSchema } from '@/lib/schemas/leaderboard.schema'
 
 interface TopPlayersProps {
-  list: GetStatsResponse['topPlayers']
+  list: TopPlayerListSchema
   user: UserSchema | null
 }
 

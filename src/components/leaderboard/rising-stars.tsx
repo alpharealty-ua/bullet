@@ -1,9 +1,9 @@
-import { GetStatsResponse } from '@/api/leaderboard.api'
 import { UserSchema } from '@/lib/schemas/auth.schema'
+import { RisingStarListchema } from '@/lib/schemas/leaderboard.schema'
 import { cn } from '@/lib/utils'
 
 interface RisingStarsProps {
-  list: GetStatsResponse['risingStars']
+  list: RisingStarListchema
   user: UserSchema | null
 }
 

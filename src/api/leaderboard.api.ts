@@ -3,9 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { api, QUERY_KEYS, ROUTE_PREFIX } from '@/api/api'
 import { useUser } from '@/api/auth.api'
 import {
+  getStatsResponseSchema,
+  GetStatsResponseSchema,
   playerStatisticsSchema,
   PlayerStatisticsSchema,
-} from '@/lib/schemas/leadboard.schema'
+} from '@/lib/schemas/leaderboard.schema'
 
 const prefix = ROUTE_PREFIX.leaderboard
 
@@ -123,9 +125,9 @@ interface PerformanceTrend {
   lvl: number
 }
 
-export const fetchGameStats = async (): Promise<GetStatsResponse> => {
+export const fetchGameStats = async (): Promise<GetStatsResponseSchema> => {
   const { data } = await api.get<GetStatsResponse>(routes.gameStats)
-  return data
+  return getStatsResponseSchema.parse(data)
 }
 
 export const fetchPlayerStatistics = async (
@@ -134,7 +136,6 @@ export const fetchPlayerStatistics = async (
   const { data } = await api.get<PlayerStatisticsResponse>(
     `${routes.playerStatistics}/${playerId}`,
   )
-
   return playerStatisticsSchema.parse(data)
 }
 

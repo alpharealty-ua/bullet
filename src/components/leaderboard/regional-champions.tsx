@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils'
 import { UserSchema } from '@/lib/schemas/auth.schema'
 import { getLevelColor, getRegionFlag } from '@/lib/utils'
-import { GetStatsResponse } from '@/api/leaderboard.api'
+import { RegionalChampionListchema } from '@/lib/schemas/leaderboard.schema'
 
 interface RegionalChampionsProps {
-  list: GetStatsResponse['regionalChampions']
+  list: RegionalChampionListchema
   user: UserSchema | null
 }
 

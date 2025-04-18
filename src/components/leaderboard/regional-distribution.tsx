@@ -1,11 +1,11 @@
-import { GetStatsResponse } from '@/api/leaderboard.api'
+import { RegionSchemaListSchema } from '@/lib/schemas/leaderboard.schema'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const RegionalDistribution = ({
-  list: regions,
-}: {
-  list: GetStatsResponse['regions']
-}) => {
+interface RegionalDistributionProps {
+  list: RegionSchemaListSchema
+}
+
+const RegionalDistribution = ({ list }: RegionalDistributionProps) => {
   return (
     <Card>
       <CardHeader>
@@ -13,7 +13,7 @@ const RegionalDistribution = ({
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>
-          {regions.map((region) => (
+          {list.map((region) => (
             <div key={region.name} className='space-y-1'>
               <div className='flex justify-between'>
                 <span>{region.name}</span>

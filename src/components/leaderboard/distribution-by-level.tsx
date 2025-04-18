@@ -9,11 +9,11 @@ import {
   Cell,
 } from 'recharts'
 
-import { GetStatsResponse } from '@/api/leaderboard.api'
+import { LevelDistributionListSchema } from '@/lib/schemas/leaderboard.schema'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface DistributionByLevelProps {
-  list: GetStatsResponse['levelDistribution']
+  list: LevelDistributionListSchema
 }
 
 const DistributionByLevel = ({ list }: DistributionByLevelProps) => {

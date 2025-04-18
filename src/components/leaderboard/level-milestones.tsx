@@ -8,13 +8,13 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-import { GetStatsResponse } from '@/api/leaderboard.api'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getLevelColor } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import { MilistoneSchemaListSchema } from '@/lib/schemas/leaderboard.schema'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface LevelMilestonesProps {
-  list: GetStatsResponse['milestones']
+  list: MilistoneSchemaListSchema
 }
 
 const LevelMilestones = ({ list }: LevelMilestonesProps) => {
