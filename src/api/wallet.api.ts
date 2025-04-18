@@ -5,7 +5,9 @@ import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 interface FetchBalanceResponse {
   balance: {
     amount: string
-    formattedAmount: string
+    lockedAmount: string
+    formattedAmount: number
+    formattedLockedAmount: number
   }
   activeSelection?: Record<string, unknown>
 }
@@ -49,7 +51,7 @@ export const useBalance = (enabled = false) => {
     enabled,
     queryKey: [QUERY_KEYS.balance],
     queryFn: fetchBalance,
-    select: (data) => Number(data.balance.amount),
+    select: (data) => Number(data.balance.formattedAmount),
   })
   return { ...data, data: data.data ?? 0 }
 }
