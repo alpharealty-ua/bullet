@@ -43,10 +43,10 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
           style={{ backgroundImage: `url(${IMAGES.texture})` }}
         >
           <div className='flex justify-between gap-2'>
-            <div>
-              <strong>{login}</strong>
+            <div className='overflow-hidden text-ellipsis' title={login}>
+              <strong className=''>{login}</strong>
             </div>
-            <div>
+            <div className='shrink-0'>
               <strong>Lvl</strong> {level}
             </div>
           </div>
