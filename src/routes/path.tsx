@@ -21,7 +21,7 @@ export const ROUTES = {
     game: (gameId: string) => `/solo/${gameId}`,
     play: '/solo/play',
     watch: '/solo/watch',
-    watchGame: (gameId: string) => `/solo/${gameId}`,
+    watchGame: (gameId: string) => `/solo/watch/${gameId}`,
   },
   duel: {
     root: '/duel',
