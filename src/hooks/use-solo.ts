@@ -219,10 +219,7 @@ const useSolo = (variant: VariantGame) => {
       await revolverHandleRef.current?.click()
 
       setCountBullet(5 - position)
-
-      await revolverHandle.trigger()
-      await revolverHandle.spin()
-      await revolverHandle.click()
+      setOffer(offer ?? null)
 
       if (isGameOver) {
         await revolverHandleRef.current?.shot()
@@ -232,9 +229,6 @@ const useSolo = (variant: VariantGame) => {
       if (isWin) {
         await winGame()
         return
-      }
-      if (offer) {
-        setOffer(offer)
       }
     },
     [gamePullMutation, setCountBullet, setOffer, gameOver, winGame],
