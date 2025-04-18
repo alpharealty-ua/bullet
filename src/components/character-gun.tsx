@@ -48,6 +48,25 @@ const imagesMap = {
   },
 } satisfies Record<CharacterName, { hand: string; finger: string } | null>
 
+// A function cva need for work prettier-plugin-tailwindcss
+const cva = (className: string) => className
+const positionStylesMap = {
+  front: {
+    nubcat: cva('top-0 left-[30%] aspect-[1/2.3] w-[40%]'),
+    mickey: cva('top-[13%] left-[14%] aspect-[1/1.8] w-[29.5%]'),
+    fatty: cva('top-[6%] left-[15%] aspect-[1/2.4] w-[22.5%] rotate-12'),
+    'anime-1': cva('top-[24%] left-[10%] aspect-[1/1.82] w-[14.5%]'),
+    'anime-2': cva('top-[15%] left-[33%] aspect-[1/2.1] w-[14%]'),
+  },
+  back: {
+    nubcat: cva('right-[6%] w-[20%]'),
+    mickey: cva('top-[17%] right-[22%] w-[10%]'),
+    fatty: cva('right-[14%] w-[14%] -rotate-8'),
+    'anime-1': cva('top-[20%] left-[30%] w-[6.5%]'),
+    'anime-2': cva('top-[17%] right-[33.5%] w-[6%]'),
+  },
+} satisfies Record<CharacterType, Record<CharacterName, string>>
+
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
   (
     {
@@ -65,7 +84,6 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     const rotateRef = useRef(0)
     const [showShot, setShowShot] = useState(false)
     const isFront = characterType === 'front'
-    const isBack = characterType === 'back'
     const isNubcat = characterName === 'nubcat'
     const isMickey = characterName === 'mickey'
     const isFatty = characterName === 'fatty'
@@ -115,25 +133,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           ref={mergeRefs(ref, gunRef)}
           className={cn(
             'absolute z-1 aspect-[1/1.5]',
-            // TODO: CREATE MAP STYLES
-            isFront && isNubcat && 'top-0 left-[30%] aspect-[1/2.3] w-[40%]',
-            isFront &&
-              isMickey &&
-              'top-[13%] left-[14%] aspect-[1/1.8] w-[29.5%]',
-            isFront &&
-              isFatty &&
-              'top-[6%] left-[15%] aspect-[1/2.4] w-[22.5%] rotate-12',
-            isFront &&
-              isAnime1 &&
-              'top-[24%] left-[10%] aspect-[1/1.82] w-[14.5%]',
-            isFront &&
-              isAnime2 &&
-              'top-[15%] left-[33%] aspect-[1/2.1] w-[14%]',
-            isBack && isNubcat && 'right-[6%] w-[20%]',
-            isBack && isMickey && 'top-[17%] right-[22%] w-[10%]',
-            isBack && isFatty && 'right-[14%] w-[14%] -rotate-8',
-            isBack && isAnime1 && 'top-[20%] left-[30%] w-[6.5%]',
-            isBack && isAnime2 && 'top-[17%] right-[33.5%] w-[6%]',
+            positionStylesMap[characterType][characterName],
             className,
           )}
           {...props}
@@ -146,18 +146,15 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             className={cn(
               'absolute bottom-[-10%] left-[40%] aspect-[1632/1830] h-[90%] -translate-x-1/2 bg-contain bg-center bg-no-repeat',
               hideGun && 'opacity-0',
+              isFront && isNubcat && '',
               isFront && isMickey && 'bottom-[0%] left-1/2 h-[80%]',
               isFront && isFatty && 'bottom-0 h-[64%]',
               isFront && isAnime1 && 'bottom-0 left-1/2 h-[65%]',
               isFront && isAnime2 && 'bottom-0 left-1/2 h-[65%]',
             )}
-            style={
-              images
-                ? {
-                    backgroundImage: `url(${images.hand})`,
-                  }
-                : {}
-            }
+            style={{
+              backgroundImage: `url(${images.hand})`,
+            }}
             data-hand
           >
             <div
@@ -165,13 +162,9 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
                 'absolute top-[12%] left-[15%] aspect-square w-[60%] bg-contain bg-center bg-no-repeat transition-all',
                 'duration-100 [&.is-trigger]:-rotate-10',
               )}
-              style={
-                images
-                  ? {
-                      backgroundImage: `url(${images.finger})`,
-                    }
-                  : {}
-              }
+              style={{
+                backgroundImage: `url(${images.finger})`,
+              }}
               data-finger
             ></div>
           </div>
