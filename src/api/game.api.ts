@@ -48,11 +48,10 @@ interface PullGameResponse {
 }
 
 interface AcceptOfferResponse {
-  success: boolean
-  position: number
-  offer: Offer | null
   gameStatus: string
-  remainingPulls: number
+  message: string
+  offerAmount: string
+  success: boolean
 }
 
 interface GameDetailsResponse extends GameSchema {}
@@ -135,10 +134,20 @@ export const useStartGame = () => {
   })
 }
 
-export const usePullGame = () =>
-  useMutation({
+export const usePullGame = () => {
+  const navigate = useNavigate()
+
+  return useMutation({
     mutationFn: pullGame,
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
+        if (error.response.data.message.includes('Game is not active')) {
+          navigate(ROUTES.solo.play)
+        }
+      }
+    },
   })
+}
 
 export const useAcceptOffer = () =>
   useMutation({

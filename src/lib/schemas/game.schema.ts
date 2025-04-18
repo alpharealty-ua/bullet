@@ -60,6 +60,11 @@ export const pullGameSchema = z.object({
 
 export type PullGameSchema = z.infer<typeof pullGameSchema>
 
-export const acceptOfferSchema = pullGameSchema
+export const acceptOfferSchema = z.object({
+  gameStatus: z.string(),
+  message: z.string(),
+  offerAmount: z.string(),
+  success: z.boolean(),
+})
 
 export type AcceptOfferSchema = z.infer<typeof acceptOfferSchema>
