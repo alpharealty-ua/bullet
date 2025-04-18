@@ -1,8 +1,8 @@
 import React from 'react'
+import { Link, LinkProps } from 'react-router'
 
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Link, LinkProps } from 'react-router'
 
 const imagesMap = {
   button: IMAGES.button,

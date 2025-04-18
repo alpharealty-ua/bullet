@@ -48,7 +48,7 @@ const Balance = () => {
         ref={addedElRef}
         className={cn(
           'invisible absolute top-full right-0 left-0 flex justify-end text-center text-2xl leading-[1] tracking-tight',
-          'fill-mode-both [&.is-animate]:visible [&.is-animate]:duration-500',
+          '[&.is-animate]:fill-mode-both [&.is-animate]:visible [&.is-animate]:duration-500',
           '[&.is-in]:animate-in [&.is-in]:fade-in [&.is-in]:slide-in-from-bottom-10 [&.is-in]:visible [&.is-in]:delay-200',
           '[&.is-out]:animate-out [&.is-out]:fade-out',
           '[&.is-increase]:text-green',
