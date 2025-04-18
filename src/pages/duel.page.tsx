@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
+import { useUserStatistics } from '@/api/leadboard.api'
 import { socketDuel, socketMatchmaker } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
@@ -27,6 +28,12 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId = null } = useParams() as { gameId?: string }
   const token = useAuthStore(({ accessToken }) => accessToken)
   const user = useUser()
+  const {
+    data: userStatistics,
+    isLoading,
+    isSuccess,
+    error,
+  } = useUserStatistics()
   const characterName = useGameStore(({ characterName }) => characterName)
   const playerId = user.id
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
@@ -173,12 +180,16 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               type='back'
               onClick={handlePlayerClick}
               characterHandleRef={backCharacterHandleRef}
-              playerInfoProps={{
-                side: 'right',
-                level: 53,
-                login: user.username,
-                win: 52,
-              }}
+              playerInfoProps={
+                userStatistics
+                  ? {
+                      side: 'right',
+                      level: userStatistics.lvl,
+                      login: userStatistics.username,
+                      win: Number(userStatistics.winRate.toFixed(2)),
+                    }
+                  : undefined
+              }
             />
             <AnimationInOut
               in={typePage === 'duel'}
