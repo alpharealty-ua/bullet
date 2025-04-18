@@ -96,5 +96,5 @@ export const getLevelColor = (lvl: number) => {
   if (lvl >= 61) return 'text-[#3B82F6]'
   if (lvl >= 41) return 'text-[#10B981]'
   if (lvl >= 21) return 'text-[#F59E0B]'
-  return '#9CA3AF'
+  return 'text-[#9CA3AF]'
 }
