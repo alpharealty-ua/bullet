@@ -82,16 +82,13 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
       return
     }
 
-    // TODO: JOIN CLASS. SEE BALANCE
     cellEl.classList.add('is-selected')
-    cellEl.classList.add('animate-[bar-select]')
 
     await new Promise((resolve) =>
       cellEl.addEventListener('animationend', resolve, { once: true }),
     )
 
     cellEl.classList.remove('is-selected')
-    cellEl.classList.remove('animate-[bar-select]')
   }
 
   const reset = async () => {
@@ -130,14 +127,14 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                   key={i}
                   className={cn(
                     '2xs:border-3 relative h-10 border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
-                    'transition-colors duration-20 ease-linear',
-                    'zoom-in-200 fill-mode-both repeat-1 duration-500',
+                    'zoom-in-200',
+                    '[&.is-selected]:fill-mode-both [&.is-selected]:repeat-1 [&.is-selected]:animate-[bar-select] [&.is-selected]:duration-500',
                     isDefaultNumber && 'text-transparent',
                     isSkullNumber && 'zoom-in-400',
                     className,
                   )}
                 >
-                  <div className='absolute inset-0 bg-[#30ff00] opacity-0 [.is-active_&]:opacity-100 [.is-selected_&]:opacity-0'></div>
+                  <div className='absolute inset-0 duration-0 ease-linear [.is-active:not(.is-selected)_&]:bg-[#30ff00]'></div>
                   <div className='relative'>
                     {number === 50 ? (
                       <IoSkull className='2xs:text-base relative -top-[1px] inline-block text-sm' />
