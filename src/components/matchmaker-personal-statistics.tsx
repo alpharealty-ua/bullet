@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils'
-import { usePlayerStatistics } from '@/api/leadboard.api'
-import { useUser } from '@/api/auth.api'
+import { useUserStatistics } from '@/api/leadboard.api'
 import { Loading } from '@/components/loading'
 import { Notification } from '@/components/ui/notification'
 
@@ -11,13 +10,12 @@ const MatchmakerPersonalStatistics = ({
   className,
   ...props
 }: MatchmakerPersonalStatisticsProps) => {
-  const user = useUser()
   const {
-    data: playerStatistics,
+    data: userStatistics,
     isLoading,
     isSuccess,
     error,
-  } = usePlayerStatistics(user.id)
+  } = useUserStatistics()
 
   return (
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
@@ -37,11 +35,11 @@ const MatchmakerPersonalStatistics = ({
           <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
             <div className='text-xl'>
               <span className='font-medium text-green-600'>
-                {playerStatistics.gamesWon}W
+                {userStatistics.gamesWon}W
               </span>
               <span>/</span>
               <span className='font-medium text-red-600'>
-                {playerStatistics.gamesLost}L
+                {userStatistics.gamesLost}L
               </span>
             </div>
             <div className='text-xs text-[#7f8c8d]'>Record</div>
@@ -49,35 +47,35 @@ const MatchmakerPersonalStatistics = ({
           {[
             {
               label: 'Total games',
-              value: playerStatistics.totalGames,
+              value: userStatistics.totalGames,
             },
             {
               label: 'Win rate',
-              value: playerStatistics.winRate,
+              value: userStatistics.winRate,
             },
             {
               label: 'Level',
-              value: playerStatistics.lvl,
+              value: userStatistics.lvl,
             },
             {
               label: 'Precision',
-              value: playerStatistics.precision,
+              value: userStatistics.precision,
             },
             {
               label: 'Consistency',
-              value: playerStatistics.consistency,
+              value: userStatistics.consistency,
             },
             {
               label: 'Percentile',
-              value: playerStatistics.percentile,
+              value: userStatistics.percentile,
             },
             {
               label: 'Perfect Hit %	',
-              value: playerStatistics.perfectHitRate,
+              value: userStatistics.perfectHitRate,
             },
             {
               label: 'Speed',
-              value: playerStatistics.speedAdapt,
+              value: userStatistics.speedAdapt,
             },
           ].map((el, i) => (
             <div

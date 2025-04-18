@@ -108,3 +108,9 @@ export const usePlayerStatistics = (playerId: string) =>
     queryKey: [QUERY_KEYS.playerStatistics, playerId],
     queryFn: () => fetchPlayerStatistics(playerId),
   })
+
+export const useUserStatistics = () => {
+  const { id } = useUser()
+
+  return usePlayerStatistics(id)
+}
