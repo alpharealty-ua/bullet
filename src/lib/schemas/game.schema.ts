@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { coinSchema, networkSchema } from '@/lib/schemas/wallet.schema'
+
 const offerSchema = z.object({
   id: z.string(),
   amount: z.string(),
@@ -24,8 +26,8 @@ export const gameSchema = z.object({
   formattedBetAmount: z.number(),
   formattedPotentialWin: z.number(),
   formattedActualWin: z.number().nullable(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string().nullish(),
+  updatedAt: z.string().nullish(),
 })
 
 export type GameSchema = z.infer<typeof gameSchema>
@@ -35,18 +37,25 @@ export const gameListSchema = z.array(gameSchema)
 export type GameListSchema = z.infer<typeof gameListSchema>
 
 export const startGameSchema = z.object({
+  betAmount: z.string(),
+  coin: coinSchema,
   gameId: z.string(),
-  multiplier: z.string(),
+  multiplier: z.number(),
+  network: networkSchema,
+  potentialWin: z.string(),
+  status: gameStatusSchema,
+  success: z.boolean(),
 })
 
 export type StartGameSchema = z.infer<typeof startGameSchema>
 
 export const pullGameSchema = z.object({
-  success: z.boolean(),
-  position: z.number(),
-  offer: offerSchema.nullable(),
   gameStatus: z.string(),
-  remainingPulls: z.number(),
+  message: z.string(),
+  offer: offerSchema.nullish(),
+  position: z.number(),
+  remainingPulls: z.number().nullish(),
+  success: z.boolean(),
 })
 
 export type PullGameSchema = z.infer<typeof pullGameSchema>

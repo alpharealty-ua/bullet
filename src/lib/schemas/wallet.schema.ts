@@ -6,8 +6,8 @@ export const networkSchema = z.object({
   symbol: z.string(),
   isDefault: z.boolean(),
   status: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string().nullish(),
+  updatedAt: z.string().nullish(),
 })
 
 export const coinSchema = z.object({
@@ -18,8 +18,8 @@ export const coinSchema = z.object({
   decimals: z.number(),
   isDefault: z.boolean(),
   isActive: z.boolean(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string().nullish(),
+  updatedAt: z.string().nullish(),
 })
 
 export type NetworkSchema = z.infer<typeof networkSchema>

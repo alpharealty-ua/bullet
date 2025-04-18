@@ -27,16 +27,24 @@ interface StartGamePayload {
 }
 
 interface StartGameResponse {
+  betAmount: string
+  coin: unknown
   gameId: string
-  multiplier: string
+  multiplier: number
+  network: unknown
+  potentialWin: string
+  status: string
+  success: boolean
 }
 
 interface PullGameResponse {
-  success: boolean
-  position: number
-  offer: Offer | null
   gameStatus: string
+  message: string
+  offer: Offer | null
+  pullAttempt: unknown[]
+  position: number
   remainingPulls: number
+  success: boolean
 }
 
 interface AcceptOfferResponse {
