@@ -178,11 +178,6 @@ const useSolo = (variant: VariantGame) => {
     await gameOverHandleRef.current?.updateState({
       show: true,
       disabled: true,
-      on: async (event) => {
-        if (event === 'click') {
-          newGame()
-        }
-      },
     })
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
@@ -369,6 +364,7 @@ const useSolo = (variant: VariantGame) => {
     deal,
     watchGame,
     watchingLargestGame,
+    newGame,
   }
 }
 

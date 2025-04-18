@@ -13,24 +13,23 @@ export interface GameOverHandle extends UpdateShowMethods<GameOverState> {
 interface GameOverState {
   show: boolean
   disabled: boolean
-  on: ((event: 'click' | 'timeout') => Promise<void>) | null
 }
 
 interface GameOverProps {
   gameOverHandleRef?: React.ForwardedRef<GameOverHandle>
+  onClick: () => void
 }
 
-const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
+const GameOver = ({ gameOverHandleRef, onClick }: GameOverProps) => {
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const blood = useSettingsStore(({ blood }) => blood)
   const {
-    state: { show, disabled, on },
+    state: { show, disabled },
     timeout,
     ...methods
   } = useUpdateShow<GameOverState>({
     show: false,
     disabled: false,
-    on: null,
   })
 
   const runSound = async function* () {
@@ -44,9 +43,8 @@ const GameOver = ({ gameOverHandleRef }: GameOverProps) => {
     ...methods,
   }))
 
-  // TODO: MAYBE CHANGED TO PROPS ON_CLICK LIKE REMATCH REQUEST
   const handleClick = () => {
-    on && on('click')
+    onClick()
   }
 
   return (

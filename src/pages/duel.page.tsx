@@ -90,6 +90,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     backCharacterHandleRef.current?.toggleInfo()
   }
 
+  const handleGameOverClick = async () => {
+    await gameOverHandleRef.current?.hide()
+  }
+
   // TODO: REFACTOR
   const isUnmounted = useUnmountedState()
   useEffect(() => {
@@ -215,7 +219,10 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         <DuelGameBar gameBarRef={bottomGameBarHandleRef} />
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
-      <GameOver gameOverHandleRef={gameOverHandleRef} />
+      <GameOver
+        gameOverHandleRef={gameOverHandleRef}
+        onClick={handleGameOverClick}
+      />
       <Footer round={round} hasPull={hasPull} prizepool={2000} />
     </>
   )

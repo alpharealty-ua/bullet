@@ -35,6 +35,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     deal,
     watchGame,
     watchingLargestGame,
+    newGame,
   } = useSolo(variant)
 
   const handlePull = async () => {
@@ -43,6 +44,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
   const handleDeal = async () => {
     await deal()
+  }
+
+  const hanldeGameOverClick = async () => {
+    await newGame()
   }
 
   return (
@@ -164,7 +169,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         </div>
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
-      <GameOver gameOverHandleRef={gameOverHandleRef} />
+      <GameOver
+        gameOverHandleRef={gameOverHandleRef}
+        onClick={hanldeGameOverClick}
+      />
       <Footer
         footerHandleRef={footerHandleRef}
         disabledBet={isStartedGame || noMoney}

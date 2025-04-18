@@ -119,11 +119,6 @@ export const useDuelSocket = ({
     const showRematchRequestPromise = rematchRequestHandleRef.current?.show()
     gameOverHandleRef.current?.updateState({
       disabled: true,
-      on: async (event) => {
-        if (event === 'click') {
-          await gameOverHandleRef.current?.hide()
-        }
-      },
     })
     const showGameOverPromise = gameOverHandleRef.current?.show()
     await Promise.all([showRematchRequestPromise, showGameOverPromise])
