@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
-import { useUserStatistics } from '@/api/leadboard.api'
+import { useUserStatistics } from '@/api/leaderboard.api'
 import { socketDuel, socketMatchmaker } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
