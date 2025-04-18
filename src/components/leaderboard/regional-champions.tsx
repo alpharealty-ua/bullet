@@ -1,90 +1,14 @@
-import { Link } from 'react-router'
-
-import { ROUTES } from '@/routes/path'
 import { cn } from '@/lib/utils'
 import { UserSchema } from '@/lib/schemas/auth.schema'
 import { getLevelColor, getRegionFlag } from '@/lib/utils'
-
-const regionData = [
-  {
-    region: 'North America',
-    flag: '🇺🇸',
-    username: 'ShadowStriker',
-    rank: 1,
-    lvl: 982,
-    precision: 990,
-    speed: 964,
-    perfectHitPercent: 18.7,
-    wins: 312,
-    losses: 40,
-  },
-  {
-    region: 'Asia',
-    flag: '🇰🇷',
-    username: 'Quantum',
-    rank: 2,
-    lvl: 967,
-    precision: 978,
-    speed: 941,
-    perfectHitPercent: 17.2,
-    wins: 296,
-    losses: 46,
-  },
-  {
-    region: 'Europe',
-    flag: '🇬🇧',
-    username: 'NightHawk',
-    rank: 3,
-    lvl: 954,
-    precision: 961,
-    speed: 938,
-    perfectHitPercent: 16.9,
-    wins: 321,
-    losses: 57,
-  },
-  {
-    region: 'South America',
-    flag: '🇧🇷',
-    username: 'VortexQueen',
-    rank: 5,
-    lvl: 926,
-    precision: 940,
-    speed: 894,
-    perfectHitPercent: 15.8,
-    wins: 279,
-    losses: 52,
-  },
-  {
-    region: 'Oceania',
-    flag: '🇦🇺',
-    username: 'EliteTrigger',
-    rank: 10,
-    lvl: 879,
-    precision: 903,
-    speed: 826,
-    perfectHitPercent: 13.5,
-    wins: 236,
-    losses: 72,
-  },
-  {
-    region: 'Africa',
-    flag: '🇿🇦',
-    username: 'ThunderBolt',
-    rank: 15,
-    lvl: 843,
-    precision: 825,
-    speed: 885,
-    perfectHitPercent: 12.6,
-    wins: 234,
-    losses: 86,
-  },
-]
+import { GetStatsResponse } from '@/api/leaderboard.api'
 
 interface RegionalChampionsProps {
+  list: GetStatsResponse['regionalChampions']
   user: UserSchema | null
 }
 
-const RegionalChampions = ({ user }: RegionalChampionsProps) => {
+const RegionalChampions = ({ list, user }: RegionalChampionsProps) => {
   return (
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
@@ -108,12 +32,12 @@ const RegionalChampions = ({ user }: RegionalChampionsProps) => {
         </tr>
       </thead>
       <tbody>
-        {regionData.map((player) => {
-          const isUser = player.username === user?.username
+        {list.map((player) => {
+          const isUser = player.name === user?.username
 
           return (
             <tr
-              key={player.username}
+              key={player.name}
               className={cn(
                 'bg-white duration-150 even:bg-gray-50 hover:bg-blue-50',
                 isUser && 'bg-blue-50 hover:bg-blue-100',
@@ -125,9 +49,9 @@ const RegionalChampions = ({ user }: RegionalChampionsProps) => {
                 </div>
               </td>
               <td className='px-2 py-3 text-left'>
-                <Link to={`${ROUTES.player.root}/${user?.id}`}>
-                  {player.username}
-                </Link>
+                <div className='max-w-30 overflow-hidden text-ellipsis'>
+                  {player.name}
+                </div>
               </td>
               <td className='px-2 py-3'>
                 <span className='text-xl'>{player.flag}</span>

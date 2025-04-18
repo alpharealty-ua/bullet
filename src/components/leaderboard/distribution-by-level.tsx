@@ -9,14 +9,14 @@ import {
   Cell,
 } from 'recharts'
 
-import { GetStatsResponse } from '@/api/leadboard.api'
+import { GetStatsResponse } from '@/api/leaderboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const DistributionByLevel = ({
-  levelDistribution,
-}: {
-  levelDistribution: GetStatsResponse['levelDistribution']
-}) => {
+interface DistributionByLevelProps {
+  list: GetStatsResponse['levelDistribution']
+}
+
+const DistributionByLevel = ({ list }: DistributionByLevelProps) => {
   return (
     <Card>
       <CardHeader>
@@ -25,13 +25,13 @@ const DistributionByLevel = ({
       <CardContent>
         <div className='h-64'>
           <ResponsiveContainer width='100%' height='100%'>
-            <BarChart data={levelDistribution}>
+            <BarChart data={list}>
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis dataKey='range' />
               <YAxis />
               <Tooltip formatter={(value) => [`${value} Players`, 'Count']} />
               <Bar dataKey='count' name='Players'>
-                {levelDistribution.map((entry, index) => (
+                {list.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Bar>
@@ -39,7 +39,7 @@ const DistributionByLevel = ({
           </ResponsiveContainer>
         </div>
         <div className='mt-4 grid grid-cols-3 gap-2'>
-          {levelDistribution.map((tier) => (
+          {list.map((tier) => (
             <div
               key={tier.range}
               className='flex items-center rounded p-2'

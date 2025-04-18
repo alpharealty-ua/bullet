@@ -1,17 +1,14 @@
 import { useProfile } from '@/api/auth.api'
-import { useGameStats } from '@/api/leadboard.api'
+import { useGameStats } from '@/api/leaderboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loading } from '@/components/loading'
-import { DistributionByLevel } from '@/components/leaderboard/distribution-by-level'
-import { RegionalDistribution } from '@/components/leaderboard/regional-distribution'
-import { LevelMilestones } from '@/components/leaderboard/level-milestones'
 import { TopPlayers } from '@/components/leaderboard/top-players'
 import { RegionalChampions } from '@/components/leaderboard/regional-champions'
 import { RisingStars } from '@/components/leaderboard/rising-stars'
 
 const Leaderboard = () => {
   const { data: leaderboardData, isLoading, isSuccess } = useGameStats()
-  const { data: user } = useProfile()
+  const { data: user = null } = useProfile()
 
   if (isLoading || !isSuccess) {
     return <Loading />
@@ -38,31 +35,20 @@ const Leaderboard = () => {
       </TabsList>
       <TabsContent value='top' className='flex grow flex-col gap-6'>
         <div className='custom-scroll'>
-          <TopPlayers
-            topPlayers={leaderboardData.topPlayers}
-            user={user ?? null}
-          />
+          <TopPlayers list={leaderboardData.topPlayers} user={user} />
         </div>
       </TabsContent>
       <TabsContent value='stats' className='flex grow flex-col gap-6'>
         <div className='custom-scroll'>
-          <RegionalChampions user={user ?? null} />
-        </div>
-        <div className='custom-scroll'>
-          <DistributionByLevel
-            levelDistribution={leaderboardData.levelDistribution}
+          <RegionalChampions
+            list={leaderboardData.regionalChampions}
+            user={user}
           />
-        </div>
-        <div className='custom-scroll'>
-          <RegionalDistribution regions={leaderboardData.regions} />
         </div>
       </TabsContent>
       <TabsContent value='milestones' className='flex grow flex-col gap-6'>
         <div className='custom-scroll'>
-          <RisingStars user={user ?? null} />
-        </div>
-        <div className='custom-scroll'>
-          <LevelMilestones milestones={leaderboardData.milestones} />
+          <RisingStars list={leaderboardData.risingStars} user={user} />
         </div>
       </TabsContent>
     </Tabs>

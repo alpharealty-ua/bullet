@@ -1,17 +1,14 @@
-import { Link } from 'react-router'
-
-import { GetStatsResponse } from '@/api/leadboard.api'
+import { GetStatsResponse } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
 import { UserSchema } from '@/lib/schemas/auth.schema'
 import { getRegionFlag, getLevelColor } from '@/lib/utils'
-import { ROUTES } from '@/routes/path'
 
 interface TopPlayersProps {
-  topPlayers: GetStatsResponse['topPlayers']
+  list: GetStatsResponse['topPlayers']
   user: UserSchema | null
 }
 
-const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
+const TopPlayers = ({ list, user }: TopPlayersProps) => {
   return (
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
@@ -38,7 +35,7 @@ const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
         </tr>
       </thead>
       <tbody>
-        {topPlayers.map((player, i) => {
+        {list.map((player, i) => {
           const isUser = player.username === user?.username
 
           return (
@@ -56,19 +53,19 @@ const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
               </td>
               <td className='px-2 py-3 text-left font-bold'>#{i + 1}</td>
               <td className='px-2 py-3 text-left'>
-                <Link to={`${ROUTES.player.root}/${user?.id}`}>
+                <div className='max-w-30 overflow-hidden text-ellipsis'>
                   {player.username}
-                </Link>
+                </div>
               </td>
               <td className='px-2 py-3'>
-                <span className='text-xl'>🇫🇷</span>
+                <span className='text-xl'>{player.flag}</span>
               </td>
               <td className='px-2 py-3'>
                 <div className={getLevelColor(player.lvl)}>{player.lvl}</div>
               </td>
               <td className='px-2 py-3'>{player.precision}</td>
               <td className='px-2 py-3'>{player.speed}</td>
-              <td className='px-2 py-3'>0%</td>
+              <td className='px-2 py-3'>{player.perfectHitPercent}%</td>
               <td className='px-2 py-3'>
                 <span className='font-medium text-green-600'>
                   {player.wins}W

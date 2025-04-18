@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { QUERY_KEYS } from '@/api/api'
+import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { useLogin } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
 import {
@@ -22,8 +23,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
-import { Loading } from './loading'
-import { usePlayerStatistics } from '@/api/leadboard.api'
+import { Loading } from '@/components/loading'
 
 // TODO: MOVE FETCH USE TO COMPONENT
 interface ProfileProps {

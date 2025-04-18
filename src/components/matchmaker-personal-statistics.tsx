@@ -1,5 +1,5 @@
+import { useUserStatistics } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
-import { useUserStatistics } from '@/api/leadboard.api'
 import { Loading } from '@/components/loading'
 import { Notification } from '@/components/ui/notification'
 

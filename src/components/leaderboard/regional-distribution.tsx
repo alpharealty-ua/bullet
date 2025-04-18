@@ -1,10 +1,10 @@
-import { GetStatsResponse } from '@/api/leadboard.api'
+import { GetStatsResponse } from '@/api/leaderboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const RegionalDistribution = ({
-  regions,
+  list: regions,
 }: {
-  regions: GetStatsResponse['regions']
+  list: GetStatsResponse['regions']
 }) => {
   return (
     <Card>

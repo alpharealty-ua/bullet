@@ -8,7 +8,7 @@ import {
   Line,
 } from 'recharts'
 
-import { usePlayerStatistics } from '@/api/leadboard.api'
+import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loading } from '@/components/loading'
 import { Notification } from '@/components/ui/notification'

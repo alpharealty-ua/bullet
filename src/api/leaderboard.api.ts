@@ -15,35 +15,75 @@ const routes = {
 } as const
 
 export interface GetStatsResponse {
-  topPlayers: {
-    rank: number
-    username: string
-    lvl: number
-    precision: number
-    consistency: number
-    speed: number
-    region: string
-    wins: number
-    losses: number
-    winRate: number
-  }[]
-  levelDistribution: {
-    range: string
-    count: number
-    color: string
-    percentage: number
-  }[]
-  regions: {
-    name: string
-    count: number
-    percentage: number
-  }[]
-  milestones: {
-    lvl: number
-    rank: number
-    percentile: number
-  }[]
+  topPlayers: TopPlayer[]
+  risingStars: RisingStar[]
+  regionalChampions: RegionalChampion[]
+  levelDistribution: LevelDistribution[]
+  regions: Region[]
+  milestones: Milistone[]
   totalPlayers: number
+}
+
+interface TopPlayer {
+  rank: number
+  flag: string
+  username: string
+  lvl: number
+  precision: number
+  consistency: number
+  speed: number
+  perfectHitPercent: number
+  region: string
+  wins: number
+  losses: number
+  winRate: number
+}
+
+interface RisingStar {
+  rank: number
+  displayRank: string
+  flag: string
+  name: string
+  region: string
+  lvl: number
+  precision: number
+  speed: number
+  perfectHitPercent: number
+  wins: number
+  losses: number
+  totalGames: number
+}
+
+interface RegionalChampion {
+  region: string
+  flag: string
+  name: string
+  rank: number
+  lvl: number
+  precision: number
+  speed: number
+  perfectHitPercent: number
+  wins: number
+  losses: number
+}
+
+interface LevelDistribution {
+  range: string
+  count: number
+  color: string
+  percentage: number
+}
+
+interface Region {
+  name: string
+  count: number
+  percentage: number
+}
+
+interface Milistone {
+  lvl: number
+  rank: number
+  percentile: number
 }
 
 interface PlayerStatisticsResponse {

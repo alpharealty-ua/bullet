@@ -8,16 +8,16 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-import { GetStatsResponse } from '@/api/leadboard.api'
+import { GetStatsResponse } from '@/api/leaderboard.api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getLevelColor } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
-const LevelMilestones = ({
-  milestones,
-}: {
-  milestones: GetStatsResponse['milestones']
-}) => {
+interface LevelMilestonesProps {
+  list: GetStatsResponse['milestones']
+}
+
+const LevelMilestones = ({ list }: LevelMilestonesProps) => {
   return (
     <Card>
       <CardHeader>
@@ -26,7 +26,7 @@ const LevelMilestones = ({
       <CardContent className='p-0'>
         <div className='h-64 p-6'>
           <ResponsiveContainer width='100%' height='100%'>
-            <LineChart data={milestones}>
+            <LineChart data={list}>
               <CartesianGrid strokeDasharray='3 3' />
               <XAxis
                 dataKey='lvl'
@@ -99,7 +99,7 @@ const LevelMilestones = ({
               </tr>
             </thead>
             <tbody className='divide-y divide-gray-200 bg-white'>
-              {milestones.map((milestone, i) => (
+              {list.map((milestone, i) => (
                 <tr key={i} className='bg-blue-50'>
                   <td className='px-2 py-2 whitespace-nowrap'>
                     <span
