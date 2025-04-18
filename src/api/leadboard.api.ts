@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { api, QUERY_KEYS, ROUTE_PREFIX } from '@/api/api'
+import { useUser } from '@/api/auth.api'
 import {
   playerStatisticsSchema,
   PlayerStatisticsSchema,
