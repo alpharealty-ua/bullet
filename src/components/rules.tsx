@@ -188,7 +188,7 @@ const Rules = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <h4 className='font-bold'>Survival Odds</h4>
-            <h5>Your odds of survival change with each pull:</h5>
+            <p>Your odds of survival change with each pull:</p>
             <ul className='flex list-disc flex-col gap-1 pl-8'>
               <li className='text-sm marker:text-2xl'>
                 1st pull: 5/6 chance of survival (83.3%)
@@ -209,18 +209,49 @@ const Rules = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <h4 className='font-bold'>Multipliers and Probabilities</h4>
-            <h5>
+            <p>
               Your potential winnings depend on the multiplier assigned at the
               start of your game:
-            </h5>
-            <code className='custom-scroll rouned-sm font-verdana bg-gray-200 p-3 whitespace-nowrap normal-case'>
-              MultiplierProbabilityExample $100
-              Win2x42.2%$2003x25.1%$3005x17.25%$50010x10.4%$1,00025x4.0%$2,500100x1.0%$10,0001000x0.05%$100,000
-            </code>
+            </p>
+            <table className='w-full divide-y divide-gray-200 text-center text-sm'>
+              <thead>
+                <tr className='bg-white text-left'>
+                  <th className='px-4 py-1 text-left font-normal whitespace-nowrap'>
+                    Multiplier
+                  </th>
+                  <th className='px-4 py-1 text-left font-normal whitespace-nowrap'>
+                    Probability
+                  </th>
+                  <th className='px-4 py-1 text-left font-normal whitespace-nowrap'>
+                    Win
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['2x', '42.2', '$200'],
+                  ['3x', '25.1', '$300'],
+                  ['5x', '17.25', '$500'],
+                  ['10x', '10.4', '$1,000'],
+                  ['25x', '4.0', '$2,500'],
+                  ['100x', '1.0', '$10,000'],
+                  ['1000x', '0.05', '$100,000'],
+                ].map(([multiplier, probability, win], i) => (
+                  <tr
+                    key={i}
+                    className='bg-white duration-150 even:bg-gray-50 hover:bg-blue-50'
+                  >
+                    <td className='px-4 py-1 text-left'>{multiplier}</td>
+                    <td className='px-4 py-1 text-left'>{probability}</td>
+                    <td className='px-4 py-1 text-left'>{win}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           <div className='flex flex-col gap-2'>
             <h4 className='font-bold'>Fairness Verification</h4>
-            <h5>Every game is provably fair:</h5>
+            <p>Every game is provably fair:</p>
             <ul className='flex list-disc flex-col gap-1 pl-8'>
               <li className='text-sm marker:text-2xl'>
                 Each game generates a unique cryptographic seed
