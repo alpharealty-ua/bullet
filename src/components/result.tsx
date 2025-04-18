@@ -1,36 +1,25 @@
 import { cn } from '@/lib/utils'
 
-const Result = ({
-  title,
-  value,
-  open,
-}: {
+// TODO: RED ADD HANDLE
+interface ResultProps {
   title: string
   value: string
   open: boolean
-}) => {
+}
+
+const Result = ({ title, value, open }: ResultProps) => {
   return (
-    <div className='flex flex-col items-center gap-1'>
-      <div
-        className={cn(
-          'fill-mode-both origin-top text-xl leading-[1] opacity-0 lg:text-2xl',
-          open &&
-            'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
-          !open && 'animate-out fade-out zoom-out-50 duration-200',
-        )}
-      >
-        {title}
-      </div>
-      <div
-        className={cn(
-          'fill-mode-both text-red max-w-75 origin-top text-2xl opacity-0 lg:text-4xl',
-          open &&
-            'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
-          !open && 'animate-out fade-out zoom-out-50 duration-200',
-        )}
-      >
-        {value}
-      </div>
+    <div
+      className={cn(
+        'flex origin-top flex-col items-center gap-1 opacity-0',
+        'fill-mode-both',
+        open &&
+          'animate-in fade-in slide-in-from-top-6 opacity-100 duration-500',
+        !open && 'animate-out fade-out zoom-out-50 duration-200',
+      )}
+    >
+      <div className='text-xl leading-[1] lg:text-2xl'>{title}</div>
+      <div className='text-red max-w-75 text-2xl lg:text-4xl'>{value}</div>
     </div>
   )
 }

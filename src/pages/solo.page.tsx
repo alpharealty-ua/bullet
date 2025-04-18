@@ -98,7 +98,6 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           </div>
         )}
         {variant === 'play' && !noMoney && (
-          // TODO: ADD ANIMATION
           <div className='flex flex-col gap-3 pt-2'>
             <Result
               title={'Prizepool'}
