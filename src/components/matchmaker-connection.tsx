@@ -11,7 +11,6 @@ const connectionStatusMap: Record<ConnectionStatus, string> = {
   'authentication-failed': 'Authentication failed',
 }
 
-// TODO: NOT USE. REMOVE LATER
 const MatchmakerConnection = ({
   connectionStatus,
   authenticated,
