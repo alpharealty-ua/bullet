@@ -28,12 +28,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId = null } = useParams() as { gameId?: string }
   const token = useAuthStore(({ accessToken }) => accessToken)
   const user = useUser()
-  const {
-    data: userStatistics,
-    isLoading,
-    isSuccess,
-    error,
-  } = useUserStatistics()
+  const { data: userStatistics } = useUserStatistics()
   const characterName = useGameStore(({ characterName }) => characterName)
   const playerId = user.id
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
