@@ -138,9 +138,6 @@ const useMatchmakingSocket = (
           return
         }
         case 'joinedMatchmaking': {
-          await queryClient.invalidateQueries({
-            queryKey: [QUERY_KEYS.balance],
-          })
           notify('You have Joined the matchmaking queue', 'success')
 
           // Update matchmaking status
