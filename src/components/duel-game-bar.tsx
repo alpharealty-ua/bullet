@@ -82,7 +82,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
       return
     }
 
-    // TODO: JOIN CLASS
+    // TODO: JOIN CLASS. SEE BALANCE
     cellEl.classList.add('is-selected')
     cellEl.classList.add('animate-[bar-select]')
 

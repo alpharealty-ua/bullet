@@ -5,7 +5,7 @@ import { MatchDetails } from '@/socket/matchmaker/matchmaker-soket.types'
 import { CharacterName } from '@/lib/constants'
 
 interface GameState {
-  increaseTime: number | undefined
+  increaseTime: number
   characterName: CharacterName
   matchDetails: MatchDetails | null
   setIncreaseTime: (increaseTime: number | undefined) => void
@@ -17,10 +17,10 @@ const useGameStore = create<GameState>()(
   persist(
     (set) => ({
       characterName: 'nubcat',
-      increaseTime: undefined,
+      increaseTime: 500,
       matchDetails: null,
       setIncreaseTime: (increaseTime: number | undefined) =>
-        set({ increaseTime }),
+        set({ increaseTime: increaseTime ?? 500 }),
       setCharacterName: (characterName: CharacterName) =>
         set({ characterName }),
       setMatchDetails: (matchDetails: MatchDetails | null) =>

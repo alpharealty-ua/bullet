@@ -1,10 +1,9 @@
 import { useBalance } from '@/api/wallet.api'
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
-import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { Logo } from '@/components/logo'
-import { Balance } from '@/components/balance'
+import { Balance } from '@/components/balance/balance'
 import { MoneyBagButton } from '@/components/money-bag-button'
 import { ProfileLink } from '@/components/profile-link'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
@@ -28,8 +27,6 @@ export const Header = ({
   const { data: user, isPending } = useProfile()
   const { data: balance, isLoading } = useBalance()
   const noMoney = !hideNoMoney && !(balance > 0)
-
-  const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
   return (
     <header className='relative z-50 flex h-20 w-full shrink-0 items-center justify-between px-3 py-1'>
@@ -55,7 +52,7 @@ export const Header = ({
                   <div className='text-green text-center text-xl leading-[1] tracking-tight uppercase'>
                     Balance
                   </div>
-                  <Balance value={balance} increaseTime={increaseTime} />
+                  <Balance />
                 </div>
               </div>
             )}

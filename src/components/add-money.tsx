@@ -1,12 +1,10 @@
-import { useBalance } from '@/api/wallet.api'
-import { Balance } from '@/components/balance'
-import { OffersList } from '@/components/offers-list'
-import { cn } from '@/lib/utils'
 import { ComponentProps } from 'react'
 
-const AddMoney = ({ className, ...props }: ComponentProps<'div'>) => {
-  const { data: balance } = useBalance()
+import { Balance } from '@/components/balance/balance'
+import { OffersList } from '@/components/offers-list'
+import { cn } from '@/lib/utils'
 
+const AddMoney = ({ className, ...props }: ComponentProps<'div'>) => {
   return (
     <div className={cn('flex flex-col', className)} {...props}>
       <div className='flex items-center justify-between'>
@@ -14,7 +12,7 @@ const AddMoney = ({ className, ...props }: ComponentProps<'div'>) => {
           <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
             Balance
           </div>
-          <Balance value={balance} />
+          <Balance />
         </div>
       </div>
       <div className='mt-6'>

@@ -1,11 +1,9 @@
-import { Balance } from '@/components/balance'
+import { Balance } from '@/components/balance/balance'
 import { OffersList } from '@/components/offers-list'
 
-interface OffersSectionProps {
-  balance: number
-}
+interface OffersSectionProps {}
 
-const OffersSection = ({ balance }: OffersSectionProps) => {
+const OffersSection = (_: OffersSectionProps) => {
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
@@ -13,7 +11,7 @@ const OffersSection = ({ balance }: OffersSectionProps) => {
           <div className='text-green text-center text-2xl leading-[1] tracking-tight uppercase'>
             Balance
           </div>
-          <Balance value={balance} />
+          <Balance />
         </div>
       </div>
       <OffersList />
