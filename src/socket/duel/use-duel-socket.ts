@@ -265,11 +265,11 @@ export const useDuelSocket = ({
         case 'game:pull_result': {
           notify(payload.message, 'info')
 
-          const isPlayer = playerId === payload.playerId
+          const isUser = playerId === payload.playerId
 
-          const pull = isPlayer ? playerPull : opponentPull
+          const pull = isUser ? playerPull : opponentPull
 
-          const gameBarHandleRef = isPlayer
+          const gameBarHandleRef = isUser
             ? bottomGameBarHandleRef
             : topGameBarHandleRef
 
@@ -284,7 +284,7 @@ export const useDuelSocket = ({
 
           if (payload.fired) {
             setCanPull(false)
-            isPlayer ? winGame() : gameOver()
+            isUser ? winGame() : gameOver()
           }
           return
         }
@@ -318,11 +318,11 @@ export const useDuelSocket = ({
         case 'game:rematch_requested': {
           refState.current.rematchStatus = 'requested'
 
-          const isPlayer = payload.playerId === playerId
-          const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
+          const isUser = payload.playerId === playerId
+          const userOrOpponent = isUser ? 'user' : 'opponnent'
 
           await rematchRequestHandleRef.current?.action(
-            playerOrOpponent,
+            userOrOpponent,
             'confirm',
           )
 
@@ -333,12 +333,12 @@ export const useDuelSocket = ({
           refState.current.rematchStatus = 'created'
           notify(payload.message, 'info')
 
-          await rematchRequestHandleRef.current?.action('player', 'confirm')
+          await rematchRequestHandleRef.current?.action('user', 'confirm')
           await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
 
           await wait(1500).promise
           await rematchRequestHandleRef.current?.hide()
-          rematchRequestHandleRef.current?.action('player', 'init')
+          rematchRequestHandleRef.current?.action('user', 'init')
           rematchRequestHandleRef.current?.action('opponnent', 'init')
 
           const rematchGameId = payload.rematchGame.id
@@ -351,11 +351,11 @@ export const useDuelSocket = ({
           refState.current.rematchStatus = 'cancelled'
           notify(payload.message, 'info')
 
-          const isPlayer = payload.playerId === playerId
-          const playerOrOpponent = isPlayer ? 'player' : 'opponnent'
+          const isUser = payload.playerId === playerId
+          const userOrOpponent = isUser ? 'user' : 'opponnent'
 
           await rematchRequestHandleRef.current?.action(
-            playerOrOpponent,
+            userOrOpponent,
             'cancel',
           )
 

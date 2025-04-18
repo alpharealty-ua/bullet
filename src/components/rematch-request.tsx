@@ -8,10 +8,10 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 export interface RematchRequestHandle
   extends UpdateShowMethods<RematchRequestState> {
-  action: (playerOrOpponnent: IndicatorSide, action: Indicator) => Promise<void>
+  action: (userOrOpponnent: IndicatorSide, action: Indicator) => Promise<void>
 }
 
-type IndicatorSide = 'player' | 'opponnent'
+type IndicatorSide = 'user' | 'opponnent'
 
 interface RematchRequestState {
   show: boolean
@@ -36,20 +36,17 @@ const RematchRequest = ({
   } = useUpdateShow<RematchRequestState>({
     show: false,
     indicators: {
-      player: 'init',
+      user: 'init',
       opponnent: 'init',
     },
   })
 
-  const action = async (
-    playerOrOpponnent: IndicatorSide,
-    action: Indicator,
-  ) => {
+  const action = async (userOrOpponnent: IndicatorSide, action: Indicator) => {
     methods.updateState((p) => ({
       ...p,
       indicators: {
         ...p.indicators,
-        [playerOrOpponnent]: action,
+        [userOrOpponnent]: action,
       },
     }))
   }
@@ -88,7 +85,7 @@ const RematchRequest = ({
       </div>
       <Indicators
         className='w-11 border-b-0'
-        indicators={[indicators.player, indicators.opponnent]}
+        indicators={[indicators.user, indicators.opponnent]}
       />
     </AnimationInOut>
   )

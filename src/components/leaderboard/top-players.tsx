@@ -39,14 +39,14 @@ const TopPlayers = ({ topPlayers, user }: TopPlayersProps) => {
       </thead>
       <tbody>
         {topPlayers.map((player, i) => {
-          const isPlayer = player.username === user?.username
+          const isUser = player.username === user?.username
 
           return (
             <tr
               key={player.username}
               className={cn(
                 'bg-white duration-150 even:bg-gray-50 hover:bg-blue-50',
-                isPlayer && 'bg-blue-50 hover:bg-blue-100',
+                isUser && 'bg-blue-50 hover:bg-blue-100',
               )}
             >
               <td className='px-2 py-3 text-left'>
