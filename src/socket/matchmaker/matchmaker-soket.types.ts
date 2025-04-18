@@ -152,11 +152,6 @@ export type ErrorResponse = {
   timestamp: string
 }
 
-export type Player = {
-  id: string // Player ID
-  username: string // Player username
-}
-
 export type MatchDetails = {
   matchId: string
   pingDifference: number
