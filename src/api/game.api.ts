@@ -5,14 +5,18 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 import {
+  acceptOfferSchema,
+  AcceptOfferSchema,
   gameListSchema,
   GameListSchema,
   gameSchema,
   GameSchema,
-  GameStatusSchema,
+  pullGameSchema,
+  PullGameSchema,
+  StartGameSchema,
+  startGameSchema,
 } from '@/lib/schemas/game.schema'
 
-// TODO: ADD SCHEMA TO ALL RESPONSE
 export type Offer = {
   id: string
   amount: string
@@ -27,11 +31,11 @@ interface StartGameResponse {
   multiplier: string
 }
 
-interface GamePullResponse {
+interface PullGameResponse {
   success: boolean
   position: number
   offer: Offer | null
-  gameStatus: GameStatusSchema
+  gameStatus: string
   remainingPulls: number
 }
 
@@ -39,13 +43,13 @@ interface AcceptOfferResponse {
   success: boolean
   position: number
   offer: Offer | null
-  gameStatus: GameStatusSchema
+  gameStatus: string
   remainingPulls: number
 }
 
 interface GameDetailsResponse extends GameSchema {}
 
-type AllGamesResponse = GameListSchema
+interface AllGamesResponse extends GameListSchema {}
 
 const prefix = ROUTE_PREFIX.game
 
@@ -59,23 +63,23 @@ const routes = {
 
 export const startGame = async (
   payload: StartGamePayload,
-): Promise<StartGameResponse> => {
+): Promise<StartGameSchema> => {
   const { data } = await api.post<StartGameResponse>(routes.start, payload)
-  return data
+  return startGameSchema.parse(data)
 }
 
-export const gamePull = async (gameId: string): Promise<GamePullResponse> => {
-  const { data } = await api.post<GamePullResponse>(routes.pull(gameId))
-  return data
+export const pullGame = async (gameId: string): Promise<PullGameSchema> => {
+  const { data } = await api.post<PullGameResponse>(routes.pull(gameId))
+  return pullGameSchema.parse(data)
 }
 
 export const acceptOffer = async (
   offerId: string,
-): Promise<AcceptOfferResponse> => {
+): Promise<AcceptOfferSchema> => {
   const { data } = await api.post<AcceptOfferResponse>(
     routes.acceptOffer(offerId),
   )
-  return data
+  return acceptOfferSchema.parse(data)
 }
 
 export const fetchGameDetails = async (gameId: string): Promise<GameSchema> => {
@@ -123,9 +127,9 @@ export const useStartGame = () => {
   })
 }
 
-export const useGamePull = () =>
+export const usePullGame = () =>
   useMutation({
-    mutationFn: gamePull,
+    mutationFn: pullGame,
   })
 
 export const useAcceptOffer = () =>

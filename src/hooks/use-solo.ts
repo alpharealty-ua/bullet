@@ -8,7 +8,7 @@ import {
   useAcceptOffer,
   useAllGames,
   useGameDetails,
-  useGamePull,
+  usePullGame,
   useStartGame,
 } from '@/api/game.api'
 import { useBalance } from '@/api/wallet.api'
@@ -46,7 +46,7 @@ const useSolo = (variant: VariantGame) => {
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
-  const { mutateAsync: gamePullMutation } = useGamePull()
+  const { mutateAsync: gamePullMutation } = usePullGame()
   const playAudio = useSettingsStore(({ playAudio }) => playAudio)
   const [countBullet, setCountBullet] = useState(5)
   const [bet, setBet] = useState(0)
