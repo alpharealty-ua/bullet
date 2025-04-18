@@ -58,7 +58,11 @@ export const PUBLIC_ROUTES = [
 export const PRIVATE_ROUTES = [
   {
     path: ROUTES.cabinet.profile,
-    element: <ProfilePage />,
+    element: (
+      <PageWrapper>
+        <ProfilePage />
+      </PageWrapper>
+    ),
   },
   {
     path: ROUTES.solo.root,
@@ -71,7 +75,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.play,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: true }}>
+      <PageWrapper headerProps={{ logoText: 'Solo' }}>
         <SoloPage variant='play' />
       </PageWrapper>
     ),
@@ -79,7 +83,13 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.game(':gameId'),
     element: (
-      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
+      <PageWrapper
+        headerProps={{
+          logoText: 'Solo',
+          hideNoMoney: true,
+          isModalProfileLink: true,
+        }}
+      >
         <SoloPage variant='play' />
       </PageWrapper>
     ),
@@ -87,7 +97,13 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.watch,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
+      <PageWrapper
+        headerProps={{
+          logoText: 'Solo',
+          hideNoMoney: true,
+          isModalProfileLink: true,
+        }}
+      >
         <SoloPage variant='watch' />
       </PageWrapper>
     ),
@@ -95,7 +111,13 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.watchGame(':gameId'),
     element: (
-      <PageWrapper headerProps={{ logoText: 'Solo', showNoMoney: false }}>
+      <PageWrapper
+        headerProps={{
+          logoText: 'Solo',
+          hideNoMoney: true,
+          isModalProfileLink: true,
+        }}
+      >
         <SoloPage variant='watch' />
       </PageWrapper>
     ),
@@ -119,7 +141,12 @@ export const PRIVATE_ROUTES = [
   {
     path: `${ROUTES.duel.next}`,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+      <PageWrapper
+        headerProps={{
+          logoText: 'Duel',
+          isModalProfileLink: true,
+        }}
+      >
         <DuelPage variant='play' />
       </PageWrapper>
     ),
@@ -127,7 +154,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.duel.game(':gameId'),
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+      <PageWrapper headerProps={{ logoText: 'Duel', isModalProfileLink: true }}>
         <DuelPage variant='play' />
       </PageWrapper>
     ),

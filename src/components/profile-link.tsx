@@ -1,22 +1,29 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
 
 import { useProfile } from '@/api/auth.api'
+import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { Profile } from '@/components/profile'
 
-type Props = React.ComponentProps<'button'>
+interface ProfileLinkProps extends React.ComponentProps<'button'> {
+  isModal?: boolean
+}
 
-const ProfileLink = ({ className, ...props }: Props) => {
+const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
   const modal = useCustomModal()
   const { data: user } = useProfile()
+  const navigate = useNavigate()
 
   const handleProfileClick = () => {
     if (!user) {
       return
     }
 
-    modal.show({ contentSlot: <Profile user={user} /> })
+    isModal
+      ? modal.show({ contentSlot: <Profile user={user} /> })
+      : navigate(ROUTES.cabinet.profile)
   }
 
   useEffect(() => {

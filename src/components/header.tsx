@@ -9,21 +9,25 @@ import { MoneyBagButton } from '@/components/money-bag-button'
 import { ProfileLink } from '@/components/profile-link'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
-export const Header = ({
-  logoText,
-  hideLogo = false,
-  hideProfile = false,
-  showNoMoney = true,
-}: {
+interface HeaderProps {
   logoText?: string
   hideLogo?: boolean
   hideProfile?: boolean
-  showNoMoney?: boolean
-}) => {
+  hideNoMoney?: boolean
+  isModalProfileLink?: boolean
+}
+
+export const Header = ({
+  logoText,
+  hideLogo,
+  hideProfile,
+  hideNoMoney,
+  isModalProfileLink,
+}: HeaderProps) => {
   const token = useAuthStore(({ accessToken }) => accessToken)
   const { data: user, isPending } = useProfile()
   const { data: balance, isLoading } = useBalance()
-  const noMoney = showNoMoney && !(balance > 0)
+  const noMoney = !hideNoMoney && !(balance > 0)
 
   const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
 
@@ -35,7 +39,9 @@ export const Header = ({
           'loading'
         ) : user ? (
           <>
-            {!hideProfile && <ProfileLink className='self-end' />}
+            {!hideProfile && (
+              <ProfileLink isModal={isModalProfileLink} className='self-end' />
+            )}
             {!isLoading && (
               <div className='flex gap-1'>
                 <MoneyBagButton
