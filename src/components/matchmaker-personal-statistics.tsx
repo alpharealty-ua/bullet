@@ -54,36 +54,28 @@ const MatchmakerPersonalStatistics = ({
               value: userStatistics.winRate,
             },
             {
-              label: 'Level',
+              label: 'Lvl',
               value: userStatistics.lvl,
-            },
-            {
-              label: 'Precision',
-              value: userStatistics.precision,
-            },
-            {
-              label: 'Consistency',
-              value: userStatistics.consistency,
             },
             {
               label: 'Percentile',
               value: userStatistics.percentile,
             },
             {
-              label: 'Perfect Hit %	',
+              label: 'Perfect Hit %',
               value: userStatistics.perfectHitRate,
             },
             {
-              label: 'Speed',
-              value: userStatistics.speedAdapt,
+              label: 'Rank',
+              value: userStatistics.rank,
             },
-          ].map((el, i) => (
+          ].map(({ value, label }, i) => (
             <div
               key={i}
               className='flex flex-col items-center gap-1 bg-white p-1 shadow'
             >
-              <div className='text-xl'>{Number(el.value.toFixed(2))}</div>
-              <div className='text-xs text-[#7f8c8d]'>{el.label}</div>
+              <div className='text-xl'>{Number(value.toFixed(2))}</div>
+              <div className='text-xs text-[#7f8c8d]'>{label}</div>
             </div>
           ))}
         </div>

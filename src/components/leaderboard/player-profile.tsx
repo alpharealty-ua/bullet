@@ -60,50 +60,6 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
             <tbody>
               <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
                 <td className='px-2 py-3 font-semibold text-gray-500'>
-                  Country
-                </td>
-                <td className='px-2 py-3'>{playerStatistics.country}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>Rank</td>
-                <td className='px-2 py-3'>{playerStatistics.rank}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>Level</td>
-                <td className='px-2 py-3'>{playerStatistics.lvl}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>
-                  Precision
-                </td>
-                <td className='px-2 py-3'>{playerStatistics.precision}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>
-                  Perfect Hit %
-                </td>
-                <td className='px-2 py-3'>
-                  {playerStatistics.perfectHitRate}%
-                </td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>Speed</td>
-                <td className='px-2 py-3'>{playerStatistics.speedAdapt}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>
-                  Total games
-                </td>
-                <td className='px-2 py-3'>{playerStatistics.totalGames}</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>
-                  Win rate
-                </td>
-                <td className='px-2 py-3'>{playerStatistics.winRate}%</td>
-              </tr>
-              <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                <td className='px-2 py-3 font-semibold text-gray-500'>
                   Record
                 </td>
                 <td className='px-2 py-3 font-medium'>
@@ -116,6 +72,42 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
                   </span>
                 </td>
               </tr>
+              {[
+                {
+                  label: 'Total games',
+                  value: playerStatistics.totalGames,
+                },
+                {
+                  label: 'Win rate',
+                  value: playerStatistics.winRate,
+                },
+                {
+                  label: 'Lvl',
+                  value: playerStatistics.lvl,
+                },
+                {
+                  label: 'Percentile',
+                  value: playerStatistics.percentile,
+                },
+                {
+                  label: 'Perfect Hit %',
+                  value: playerStatistics.perfectHitRate,
+                },
+                {
+                  label: 'Rank',
+                  value: playerStatistics.rank,
+                },
+              ].map(({ label, value }, i) => (
+                <tr
+                  key={i}
+                  className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'
+                >
+                  <td className='px-2 py-3 font-semibold text-gray-500'>
+                    {label}
+                  </td>
+                  <td className='px-2 py-3'>{Number(value.toFixed(2))}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
