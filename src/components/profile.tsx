@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { QUERY_KEYS } from '@/api/api'
 import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { useLogin } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
@@ -34,7 +32,6 @@ interface ProfileProps {
 }
 
 const Profile = ({ user }: ProfileProps) => {
-  const queryClient = useQueryClient()
   const {
     data: playerStatistics,
     isLoading,
@@ -63,7 +60,6 @@ const Profile = ({ user }: ProfileProps) => {
 
   const handleLogout = async () => {
     resetTokens()
-    await queryClient.setQueryData([QUERY_KEYS.profile], null)
   }
 
   const handleChangePasswordSubmit = async (values: ChangePasswordSchema) => {

@@ -1,3 +1,5 @@
+import { QUERY_KEYS } from '@/api/api'
+import { queryClient } from '@/api/query-client'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -22,8 +24,9 @@ const useAuthStore = create<AuthState>()(
       }) => {
         set({ accessToken, refreshToken })
       },
-      resetTokens: () => {
+      resetTokens: async () => {
         set({ accessToken: null, refreshToken: null })
+        await queryClient.setQueryData([QUERY_KEYS.profile], null)
       },
     }),
     { name: 'auth-store' },
