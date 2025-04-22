@@ -1,12 +1,11 @@
 import { useImperativeHandle, useRef } from 'react'
-import { useCustomModal } from '@/hooks/use-custom-modal'
+
 import { IMAGES } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import { Bet } from '@/components/bet'
 import { Bullets } from '@/components/bullets'
-import { Settings } from '@/components/settings'
-import { Leaderboard } from '@/components/leaderboard/leaderboard'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { cn } from '@/lib/utils'
+import { SettingsButton } from '@/components/ui/settings-button'
+import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 
 export interface FooterHandle {
   wiggleWager: () => Promise<void>
@@ -27,7 +26,6 @@ const Footer = ({
   setBet: (bet: number) => void
   footerHandleRef?: React.ForwardedRef<FooterHandle>
 }) => {
-  const modal = useCustomModal()
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useImperativeHandle(footerHandleRef, () => ({
@@ -51,14 +49,6 @@ const Footer = ({
       )
     },
   }))
-
-  const handleSettingsClick = () => {
-    modal.show({ contentSlot: <Settings /> })
-  }
-
-  const handleLeaderboardClick = () => {
-    modal.show({ contentSlot: <Leaderboard /> })
-  }
 
   return (
     <footer
@@ -92,18 +82,8 @@ const Footer = ({
           <div>Pulls remaining</div>
         </div>
         <div className='flex items-center gap-1'>
-          <ButtonWithAudio
-            as='button'
-            image='leaderboardstar'
-            onClick={handleLeaderboardClick}
-            className='w-10 cursor-pointer'
-          />
-          <ButtonWithAudio
-            as='button'
-            image='settings'
-            className='w-10 cursor-pointer bg-center bg-no-repeat p-1.5'
-            onClick={handleSettingsClick}
-          />
+          <LeaderboardButton as='button' />
+          <SettingsButton />
         </div>
       </div>
     </footer>

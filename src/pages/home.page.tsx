@@ -3,7 +3,8 @@ import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Logo } from '@/components/logo'
 import { Rules } from '@/components/rules'
-import { LeadboardIcon } from '@/components/leadboard-icon'
+import { SettingsButton } from '@/components/ui/settings-button'
+import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 
 const HomePage = () => {
   const modal = useCustomModal()
@@ -39,9 +40,11 @@ const HomePage = () => {
           />
         </div>
       </main>
-      <footer className='flex w-full shrink-0 justify-end overflow-hidden p-4'>
-        {/* TODO: MAYBE ADD PORTAL  */}
-        <LeadboardIcon />
+      <footer className='flex w-full shrink-0 justify-end p-4'>
+        <div className='flex items-center gap-1'>
+          <LeaderboardButton as='link' className='w-20' />
+          <SettingsButton />
+        </div>
       </footer>
     </>
   )
