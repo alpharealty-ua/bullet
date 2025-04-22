@@ -74,6 +74,7 @@ export const fetchUserCharacters =
     return userCharacterSchemaArray.parse(data)
   }
 
+// TODO: ADD SCHEMA
 export const purchaseCharacter = async (
   characterName: CharacterName,
 ): Promise<void> => {

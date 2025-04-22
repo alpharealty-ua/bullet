@@ -94,7 +94,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     await gameOverHandleRef.current?.hide()
   }
 
-  // TODO: REFACTOR
+  // TODO: REFACTOR. FIND ANOTHER WAY PREVENT DISCONNECT WHEN HMR
   const isUnmounted = useUnmountedState()
   useEffect(() => {
     duelSocketEvents.connect()

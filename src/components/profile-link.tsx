@@ -37,6 +37,7 @@ const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
   }
 
   return (
+    // TODO: ADD MOUSE CLICK
     <button
       className={cn(
         'hover:text-green cursor-pointer leading-[1] transition-all active:scale-90',

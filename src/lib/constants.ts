@@ -178,4 +178,5 @@ export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
 
 export const MIN_DUEL_BET = 1000
 
+// TODO: VALUES FOR DEBUG
 export const START_GAME_COUNTDOWN = 5

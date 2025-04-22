@@ -62,6 +62,7 @@ api.interceptors.response.use(
       )
 
       if (refreshToken === null || isRetryRequest) {
+        // TODO: MAYBE NEED INVALIDATE USER
         useAuthStore.getState().resetTokens()
         throw error
       }
