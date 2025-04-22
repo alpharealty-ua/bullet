@@ -81,15 +81,10 @@ const Profile = ({ user }: ProfileProps) => {
         defaultValue='personalStatistics'
       >
         <TabsList>
-          <TabsTrigger
-            value='personalStatistics'
-            className='flex w-full flex-col'
-          >
+          <TabsTrigger value='personalStatistics'>
             Personal statistics
           </TabsTrigger>
-          <TabsTrigger value='changePassword' className='flex w-full flex-col'>
-            Change password
-          </TabsTrigger>
+          <TabsTrigger value='changePassword'>Change password</TabsTrigger>
         </TabsList>
         <TabsContent
           value='personalStatistics'

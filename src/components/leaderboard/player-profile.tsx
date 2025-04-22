@@ -38,16 +38,11 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
       defaultValue='personalStatistics'
     >
       <TabsList>
-        <TabsTrigger
-          value='personalStatistics'
-          className='flex w-full flex-col'
-        >
+        <TabsTrigger value='personalStatistics'>
           Personal statistics
         </TabsTrigger>
-        <TabsTrigger value='stats' className='flex w-full flex-col'>
-          Recent match
-        </TabsTrigger>
-        <TabsTrigger value='levelProgress' className='flex w-full flex-col'>
+        <TabsTrigger value='stats'>Recent match</TabsTrigger>
+        <TabsTrigger value='levelProgress'>
           LVL Progress Over&nbsp;Time
         </TabsTrigger>
       </TabsList>

@@ -12,7 +12,7 @@ const RegionalChampions = ({ list, user }: RegionalChampionsProps) => {
   return (
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
-        <tr className='bg-gray-50 text-gray-500 uppercase'>
+        <tr className='bg-gray-50 text-gray-500'>
           <th className='px-2 py-3 text-left font-normal whitespace-nowrap'>
             Region
           </th>

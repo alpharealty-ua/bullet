@@ -25,14 +25,9 @@ const Leaderboard = () => {
       defaultValue='top'
     >
       <TabsList>
-        {/* TODO: MOVE CLASS TO COMPONENTS  */}
-        <TabsTrigger value='top' className='flex w-full flex-col'>
-          Top 20 Players
-        </TabsTrigger>
-        <TabsTrigger value='stats' className='flex w-full flex-col'>
-          Regional Champions
-        </TabsTrigger>
-        <TabsTrigger value='milestones' className='flex w-full flex-col'>
+        <TabsTrigger value='top'>Top 20 Players</TabsTrigger>
+        <TabsTrigger value='stats'>Regional Champions</TabsTrigger>
+        <TabsTrigger value='milestones'>
           Rising Stars{' '}
           <span className='text-[0.6rem] text-gray-500 [[data-state=active]_&]:text-gray-700'>
             (Players with over 100 Games)

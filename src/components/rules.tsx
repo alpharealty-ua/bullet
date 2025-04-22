@@ -9,10 +9,10 @@ const Rules = () => {
         defaultValue='duel'
       >
         <TabsList>
-          <TabsTrigger value='duel' className='flex w-full flex-col text-base'>
+          <TabsTrigger value='duel' className='text-base'>
             DUEL
           </TabsTrigger>
-          <TabsTrigger value='solo' className='flex w-full flex-col text-base'>
+          <TabsTrigger value='solo' className='text-base'>
             Solo
           </TabsTrigger>
         </TabsList>
