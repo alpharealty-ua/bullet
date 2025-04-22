@@ -257,7 +257,10 @@ const useSolo = (variant: VariantGame) => {
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
 
     if (activeGame) {
-      navigate(ROUTES.solo.game(activeGame.id), { preventScrollReset: true })
+      navigate(ROUTES.solo.game(activeGame.id), {
+        preventScrollReset: true,
+        replace: true,
+      })
     }
   }, [allGames, navigate, isStartedGame])
 
