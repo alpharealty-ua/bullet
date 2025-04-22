@@ -40,12 +40,6 @@ const HomePage = () => {
           />
         </div>
       </main>
-      <footer className='flex w-full shrink-0 justify-end p-4'>
-        <div className='flex items-center gap-1'>
-          <LeaderboardButton as='link' className='w-20' />
-          <SettingsButton />
-        </div>
-      </footer>
     </>
   )
 }

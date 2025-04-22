@@ -27,7 +27,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
 
   return (
     <>
-      <div className='flex grow flex-col items-center justify-center gap-6 py-8'>
+      <main className='flex grow flex-col items-center justify-center gap-6 py-8'>
         <div className='flex gap-6'>
           <ButtonWithAudio
             as='link'
@@ -55,7 +55,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
               onSelect={handleSelectCharacter}
             />
           ))}
-      </div>
+      </main>
     </>
   )
 }

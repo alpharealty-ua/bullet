@@ -194,7 +194,7 @@ const CharacterSelector = ({
         text='flip'
         onClick={handleFlipClick}
       />
-      <div className='min-h-12'>
+      <>
         <Notification type='error' message={showResult ? error?.message : ''} />
         <Notification
           type='success'
@@ -202,7 +202,7 @@ const CharacterSelector = ({
             showResult && isSuccess ? 'You have purchased a character' : ''
           }
         />
-      </div>
+      </>
     </>
   )
 }

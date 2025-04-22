@@ -75,7 +75,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.solo.play,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Solo' }}>
+      <PageWrapper headerProps={{ logoText: 'Solo' }} hideFooter>
         <SoloPage variant='play' />
       </PageWrapper>
     ),
@@ -89,6 +89,7 @@ export const PRIVATE_ROUTES = [
           hideNoMoney: true,
           isModalProfileLink: true,
         }}
+        hideFooter
       >
         <SoloPage variant='play' />
       </PageWrapper>
@@ -103,6 +104,7 @@ export const PRIVATE_ROUTES = [
           hideNoMoney: true,
           isModalProfileLink: true,
         }}
+        hideFooter
       >
         <SoloPage variant='watch' />
       </PageWrapper>
@@ -117,6 +119,7 @@ export const PRIVATE_ROUTES = [
           hideNoMoney: true,
           isModalProfileLink: true,
         }}
+        hideFooter
       >
         <SoloPage variant='watch' />
       </PageWrapper>
@@ -133,7 +136,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.duel.enterArena,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+      <PageWrapper headerProps={{ logoText: 'Duel' }} hideFooter>
         <DuelPage variant='play' />
       </PageWrapper>
     ),
@@ -146,6 +149,7 @@ export const PRIVATE_ROUTES = [
           logoText: 'Duel',
           isModalProfileLink: true,
         }}
+        hideFooter
       >
         <DuelPage variant='play' />
       </PageWrapper>
@@ -154,7 +158,10 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.duel.game(':gameId'),
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel', isModalProfileLink: true }}>
+      <PageWrapper
+        headerProps={{ logoText: 'Duel', isModalProfileLink: true }}
+        hideFooter
+      >
         <DuelPage variant='play' />
       </PageWrapper>
     ),
@@ -162,7 +169,7 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.duel.watch,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel' }}>
+      <PageWrapper headerProps={{ logoText: 'Duel' }} hideFooter>
         <DuelPage variant='watch' />
       </PageWrapper>
     ),
