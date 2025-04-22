@@ -13,7 +13,8 @@ const prefix = ROUTE_PREFIX.leaderboard
 
 const routes = {
   gameStats: `${prefix}/leaderboard/game-stats`,
-  playerStatistics: `${prefix}/statistics/player`,
+  playerStatistics: (playerId: string) =>
+    `${prefix}/statistics/player/${playerId}`,
 } as const
 
 export interface GetStatsResponse {
@@ -134,7 +135,7 @@ export const fetchPlayerStatistics = async (
   playerId: string,
 ): Promise<PlayerStatisticsSchema> => {
   const { data } = await api.get<PlayerStatisticsResponse>(
-    `${routes.playerStatistics}/${playerId}`,
+    `${routes.playerStatistics(playerId)}`,
   )
   return playerStatisticsSchema.parse(data)
 }
