@@ -5,13 +5,18 @@ import { Loading } from '@/components/loading'
 import { TopPlayers } from '@/components/leaderboard/top-players'
 import { RegionalChampions } from '@/components/leaderboard/regional-champions'
 import { RisingStars } from '@/components/leaderboard/rising-stars'
+import { RequestError } from '@/components/request-error'
 
 const Leaderboard = () => {
-  const { data: leaderboardData, isLoading, isSuccess } = useGameStats()
+  const { data: leaderboardData, isLoading, isSuccess, error } = useGameStats()
   const { data: user = null } = useProfile()
 
-  if (isLoading || !isSuccess) {
+  if (isLoading) {
     return <Loading />
+  }
+
+  if (!isSuccess) {
+    return <RequestError error={error} />
   }
 
   return (
@@ -20,6 +25,7 @@ const Leaderboard = () => {
       defaultValue='top'
     >
       <TabsList>
+        {/* TODO: MOVE CLASS TO COMPONENTS  */}
         <TabsTrigger value='top' className='flex w-full flex-col'>
           Top 20 Players
         </TabsTrigger>
