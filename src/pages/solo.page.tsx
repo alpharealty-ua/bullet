@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
 import { Result } from '@/components/result'
-import { Footer } from '@/components/footer-solo'
+import { SoloFooter } from '@/components/footer-solo'
 import { Helper } from '@/components/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/animation-in-out'
@@ -173,7 +173,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
         gameOverHandleRef={gameOverHandleRef}
         onClick={hanldeGameOverClick}
       />
-      <Footer
+      <SoloFooter
         footerHandleRef={footerHandleRef}
         disabledBet={isStartedGame || noMoney}
         maxBet={maxBet}

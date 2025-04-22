@@ -5,7 +5,7 @@ import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard/leaderboard'
 
-const Footer = ({
+const DuelFooter = ({
   round,
   hasPull = true,
   prizepool,
@@ -83,4 +83,4 @@ const Footer = ({
   )
 }
 
-export { Footer }
+export { DuelFooter }

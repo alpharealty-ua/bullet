@@ -12,7 +12,7 @@ import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Footer } from '@/components/footer'
+import { DuelFooter } from '@/components/footer-duel'
 import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from '@/components/duel-game-bar'
 import { Character } from '@/components/character'
@@ -223,7 +223,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         gameOverHandleRef={gameOverHandleRef}
         onClick={handleGameOverClick}
       />
-      <Footer round={round} hasPull={hasPull} prizepool={2000} />
+      <DuelFooter round={round} hasPull={hasPull} prizepool={2000} />
     </>
   )
 }

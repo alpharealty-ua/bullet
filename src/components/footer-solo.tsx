@@ -11,7 +11,7 @@ export interface FooterHandle {
   wiggleWager: () => Promise<void>
 }
 
-const Footer = ({
+const SoloFooter = ({
   disabledBet,
   maxBet,
   bet,
@@ -90,4 +90,4 @@ const Footer = ({
   )
 }
 
-export { Footer }
+export { SoloFooter }
