@@ -26,6 +26,7 @@ import {
 import { Notification } from '@/components/ui/notification'
 import { Loading } from '@/components/loading'
 import { RequestError } from '@/components/request-error'
+import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
 
 // TODO: MOVE FETCH USE TO COMPONENT
 interface ProfileProps {
@@ -92,70 +93,7 @@ const Profile = ({ user }: ProfileProps) => {
         >
           <div className='cuctom-scroll'>
             <table className='w-full divide-y divide-gray-200 text-center text-sm'>
-              <tbody>
-                <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
-                  <td className='px-2 py-3 font-semibold text-gray-500'>
-                    Record
-                  </td>
-                  <td className='px-2 py-3 font-medium'>
-                    <span className='text-green-600'>
-                      {playerStatistics.gamesWon}W
-                    </span>
-                    /
-                    <span className='text-red-600'>
-                      {playerStatistics.gamesLost}L
-                    </span>
-                  </td>
-                </tr>
-                {[
-                  {
-                    label: 'Username',
-                    value: user.username,
-                  },
-                  {
-                    label: 'Email',
-                    value: user.email,
-                  },
-                  {
-                    label: 'Total games',
-                    value: playerStatistics.totalGames,
-                  },
-                  {
-                    label: 'Win rate',
-                    value: playerStatistics.winRate,
-                  },
-                  {
-                    label: 'Lvl',
-                    value: playerStatistics.lvl,
-                  },
-                  {
-                    label: 'Percentile',
-                    value: playerStatistics.percentile,
-                  },
-                  {
-                    label: 'Perfect Hit %',
-                    value: playerStatistics.perfectHitRate,
-                  },
-                  {
-                    label: 'Rank',
-                    value: playerStatistics.rank,
-                  },
-                ].map(({ label, value }, i) => (
-                  <tr
-                    key={i}
-                    className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'
-                  >
-                    <td className='px-2 py-3 font-semibold text-gray-500'>
-                      {label}
-                    </td>
-                    <td className='px-2 py-3'>
-                      {typeof value === 'number'
-                        ? Number(value.toFixed(2))
-                        : value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              <PlayerStatistics list={playerStatistics} user={user} />
             </table>
           </div>
           <ButtonWithAudio
