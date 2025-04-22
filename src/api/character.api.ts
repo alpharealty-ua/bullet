@@ -13,7 +13,8 @@ const prefix = ROUTE_PREFIX.character
 
 const routes = {
   characters: `/${prefix}/characters`,
-  purchase: `/${prefix}/characters/purchase`,
+  purchase: (characterName: string) =>
+    `/${prefix}/characters/purchase/${characterName}`,
   userCharacters: `/${prefix}/characters/user`,
 } as const
 
@@ -78,7 +79,7 @@ export const fetchUserCharacters =
 export const purchaseCharacter = async (
   characterName: CharacterName,
 ): Promise<void> => {
-  const { data } = await api.post<void>(`${routes.purchase}/${characterName}`)
+  const { data } = await api.post<void>(routes.purchase(characterName))
   return data
 }
 
