@@ -2,12 +2,10 @@ import React, { useRef, useState } from 'react'
 import mergeRefs from 'merge-refs'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { Button, ButtonProps } from '@/components/ui/button'
 import { wait } from '@/lib/utils'
+import { Button, ButtonProps, OmitUnion } from '@/components/ui/button'
 
-type OmitClick<T> = T extends { as: string } ? Omit<T, 'onClick'> : T
-
-type ButtonWithAudioProps = OmitClick<ButtonProps> & {
+type ButtonWithAudioProps = OmitUnion<ButtonProps, 'onClick'> & {
   skipWaitAnimation?: boolean
   onClick?: (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
@@ -23,10 +21,6 @@ const ButtonWithAudio = React.forwardRef<
   const isMouseDownFiredRef = useRef(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const allProps = {
-    ...props,
-    disabled: props.as === 'button' ? props.disabled || disabled : undefined,
-  }
 
   const mouseClick = async (buttonEl: HTMLButtonElement): Promise<void> => {
     await playAudio('mouseclick')
@@ -117,6 +111,13 @@ const ButtonWithAudio = React.forwardRef<
         new PointerEvent('pointerdown', { bubbles: true, cancelable: true }),
       )
     }
+  }
+
+  const allProps: ButtonWithAudioProps = {
+    ...props,
+    ...(props.as === 'button'
+      ? { disabled: props.disabled || disabled }
+      : undefined),
   }
 
   return (

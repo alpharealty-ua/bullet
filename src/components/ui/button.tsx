@@ -37,6 +37,10 @@ export type ButtonProps = {
 ) &
   (asLink | asButton)
 
+// Distributive Conditional Types.
+// See more https://www.typescriptlang.org/docs/handbook/2/conditional-types.html
+export type OmitUnion<T, Keys extends keyof T> = T extends T ? Omit<T, Keys> : T
+
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
