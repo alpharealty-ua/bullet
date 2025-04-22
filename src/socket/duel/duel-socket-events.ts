@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client'
 
-import { ReadySetPull } from '@/components/ready-set-pull'
+import { ReadySetPull } from '@/components/duel/ready-set-pull'
 import {
   RoundCurrent,
   PullResult,

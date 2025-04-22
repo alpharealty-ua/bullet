@@ -1,10 +1,8 @@
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Logo } from '@/components/logo'
+import { Logo } from '@/components/ui/logo'
 import { Rules } from '@/components/rules'
-import { SettingsButton } from '@/components/ui/settings-button'
-import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 
 const HomePage = () => {
   const modal = useCustomModal()

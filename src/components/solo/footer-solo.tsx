@@ -2,8 +2,8 @@ import { useImperativeHandle, useRef } from 'react'
 
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Bet } from '@/components/bet'
-import { Bullets } from '@/components/bullets'
+import { Bet } from '@/components/solo/bet'
+import { Bullets } from '@/components/solo/bullets'
 import { SettingsButton } from '@/components/ui/settings-button'
 import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 

@@ -1,6 +1,6 @@
 import { ConnectionStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 import { cn } from '@/lib/utils'
-import { ButtonWithAudio } from './ui/button-with-audio'
+import { ButtonWithAudio } from '../ui/button-with-audio'
 
 const connectionStatusMap: Record<ConnectionStatus, string> = {
   connected: 'Connected',

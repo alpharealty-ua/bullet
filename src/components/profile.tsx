@@ -22,8 +22,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
-import { Loading } from '@/components/loading'
-import { RequestError } from '@/components/request-error'
+import { Loading } from '@/components/ui/loading'
+import { RequestError } from '@/components/ui/request-error'
 import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
 
 // TODO: MOVE FETCH USE TO COMPONENT

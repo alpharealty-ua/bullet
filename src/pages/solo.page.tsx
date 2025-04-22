@@ -5,13 +5,13 @@ import { VariantGame } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { GameOver } from '@/components/game-over'
 import { Revolver } from '@/components/guns/revolver'
-import { Result } from '@/components/result'
-import { SoloFooter } from '@/components/footer-solo'
-import { Helper } from '@/components/helper'
+import { Result } from '@/components/solo/result'
+import { SoloFooter } from '@/components/solo/footer-solo'
+import { Helper } from '@/components/solo/helper'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { AnimationInOut } from '@/components/animation-in-out'
+import { AnimationInOut } from '@/components/ui/animation-in-out'
 import { Victory } from '@/components/victory'
-import { AddMoneyButton } from '@/components/add-money-button'
+import { AddMoneyButton } from '@/components/ui/add-money-button'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)

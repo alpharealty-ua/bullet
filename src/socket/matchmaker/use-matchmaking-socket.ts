@@ -15,7 +15,7 @@ import { addLogEntry, notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
-import { Indicator } from '@/components/indicators'
+import { Indicator } from '@/components/ui/indicators'
 import { wait } from '@/lib/utils'
 
 const useMatchmakingSocket = (

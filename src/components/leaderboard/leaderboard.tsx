@@ -1,11 +1,11 @@
 import { useProfile } from '@/api/auth.api'
 import { useGameStats } from '@/api/leaderboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loading } from '@/components/loading'
+import { Loading } from '@/components/ui/loading'
 import { TopPlayers } from '@/components/leaderboard/top-players'
 import { RegionalChampions } from '@/components/leaderboard/regional-champions'
 import { RisingStars } from '@/components/leaderboard/rising-stars'
-import { RequestError } from '@/components/request-error'
+import { RequestError } from '@/components/ui/request-error'
 
 const Leaderboard = () => {
   const { data: leaderboardData, isLoading, isSuccess, error } = useGameStats()

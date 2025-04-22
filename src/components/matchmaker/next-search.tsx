@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { IMAGES, START_GAME_COUNTDOWN } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Countdown } from '@/components/countdown'
+import { Countdown } from '@/components/ui/countdown'
 import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 
 const NextSearch = ({

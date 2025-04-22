@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useCustomModal } from '@/hooks/use-custom-modal'
-import { AddMoney } from '@/components/add-money'
+import { AddMoney } from '@/components/ui/add-money'
 
 const useShowAddMoneyModal = () => {
   const modal = useCustomModal()

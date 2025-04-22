@@ -28,7 +28,7 @@ import {
 import { RevolverHandle } from '@/components/guns/revolver'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
-import { FooterHandle } from '@/components/footer-solo'
+import { FooterHandle } from '@/components/solo/footer-solo'
 
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()

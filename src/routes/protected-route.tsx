@@ -4,7 +4,7 @@ import { useProfile } from '@/api/auth.api'
 import { useBalance } from '@/api/wallet.api'
 import { useAuthStore } from '@/store/auth.store'
 import { ROUTES } from '@/routes/path'
-import { Loading } from '@/components/loading'
+import { Loading } from '@/components/ui/loading'
 
 type ProtectedRouteProps = {
   children?: React.ReactNode

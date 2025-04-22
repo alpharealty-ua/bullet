@@ -1,5 +1,5 @@
 import { ZodError } from 'zod'
-import { Notification } from './ui/notification'
+import { Notification } from './notification'
 
 const RequestError = ({ error }: { error: Error | null }) => {
   if (error instanceof ZodError) {

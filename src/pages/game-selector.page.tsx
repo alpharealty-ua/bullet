@@ -3,8 +3,8 @@ import React, { useCallback, useState } from 'react'
 import { useUserCharacters } from '@/api/character.api'
 import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { CharacterSelector } from '@/components/character-selector'
-import { Loading } from '@/components/loading'
+import { CharacterSelector } from '@/components/duel/character-selector'
+import { Loading } from '@/components/ui/loading'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
   const { data: characters, isLoading, isSuccess } = useUserCharacters()

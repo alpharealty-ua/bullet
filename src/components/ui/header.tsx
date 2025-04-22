@@ -2,10 +2,10 @@ import { useBalance } from '@/api/wallet.api'
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useAuthStore } from '@/store/auth.store'
-import { Logo } from '@/components/logo'
+import { Logo } from '@/components/ui/logo'
 import { Balance } from '@/components/balance/balance'
-import { MoneyBagButton } from '@/components/money-bag-button'
-import { ProfileLink } from '@/components/profile-link'
+import { MoneyBagButton } from '@/components/ui/money-bag-button'
+import { ProfileLink } from '@/components/ui/profile-link'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 interface HeaderProps {

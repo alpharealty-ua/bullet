@@ -1,4 +1,4 @@
-import { Bet } from '@/components/bet'
+import { Bet } from '@/components/solo/bet'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const PlaceWager = () => {

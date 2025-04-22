@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import { IMAGES } from '@/lib/constants'
-import { AnimationInOut } from '@/components/animation-in-out'
+import { AnimationInOut } from '@/components/ui/animation-in-out'
 
 const imagesMap = {
   wagehere: IMAGES.wagerhere,

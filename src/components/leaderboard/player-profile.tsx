@@ -10,7 +10,7 @@ import {
 
 import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loading } from '@/components/loading'
+import { Loading } from '@/components/ui/loading'
 import { Notification } from '@/components/ui/notification'
 import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
 

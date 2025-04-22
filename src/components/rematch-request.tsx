@@ -2,8 +2,8 @@ import { useImperativeHandle } from 'react'
 
 import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { cn } from '@/lib/utils'
-import { AnimationInOut } from '@/components/animation-in-out'
-import { Indicator, Indicators } from '@/components/indicators'
+import { AnimationInOut } from '@/components/ui/animation-in-out'
+import { Indicator, Indicators } from '@/components/ui/indicators'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 export interface RematchRequestHandle

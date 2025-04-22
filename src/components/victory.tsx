@@ -4,7 +4,7 @@ import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
-import { AnimationInOut } from '@/components/animation-in-out'
+import { AnimationInOut } from '@/components/ui/animation-in-out'
 
 export interface VictoryHandle extends UpdateShowMethods<VictoryState> {
   runSound: () => AsyncGenerator<void>

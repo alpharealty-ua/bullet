@@ -1,6 +1,6 @@
 import { useUserStatistics } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
-import { Loading } from '@/components/loading'
+import { Loading } from '@/components/ui/loading'
 import { Notification } from '@/components/ui/notification'
 
 interface MatchmakerPersonalStatisticsProps

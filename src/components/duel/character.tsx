@@ -5,8 +5,8 @@ import { FaCrown } from 'react-icons/fa'
 
 import { cn } from '@/lib/utils'
 import { CHARACTER_LIST, CharacterName, CharacterType } from '@/lib/constants'
-import { GunCharacter, GunHandle } from '@/components/character-gun'
-import { PlayerInfo, PlayerInfoProps } from '@/components/player-info'
+import { GunCharacter, GunHandle } from '@/components/duel/character-gun'
+import { PlayerInfo, PlayerInfoProps } from '@/components/duel/player-info'
 
 export type CharacterState = {
   characterState: 'eliminated' | 'alive' | 'left' | 'winner'

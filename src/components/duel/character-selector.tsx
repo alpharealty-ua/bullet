@@ -8,7 +8,7 @@ import { useSettingsStore } from '@/store/settings.store'
 import { UserCharacterListSchema } from '@/lib/schemas/character.schema'
 import { cn } from '@/lib/utils'
 import { CharacterType, IMAGES } from '@/lib/constants'
-import { Character } from '@/components/character'
+import { Character } from '@/components/duel/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Notification } from '@/components/ui/notification'
 

@@ -6,11 +6,11 @@ import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { ROUTES } from '@/routes/path'
 import { MIN_DUEL_BET } from '@/lib/constants'
-import { EnterArena } from '@/components/enter-arena'
-import { MatchmakerStatistics } from '@/components/matchmaker-statistics'
-import { NextSearch } from '@/components/next-search'
-import { AddMoneyButton } from '@/components/add-money-button'
-import { MatchmakerPersonalStatistics } from '@/components/matchmaker-personal-statistics'
+import { EnterArena } from '@/components/matchmaker/enter-arena'
+import { MatchmakerStatistics } from '@/components/matchmaker/matchmaker-statistics'
+import { NextSearch } from '@/components/matchmaker/next-search'
+import { AddMoneyButton } from '@/components/ui/add-money-button'
+import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
 
 const Matchmaker = ({
   matchmakerEvents,
