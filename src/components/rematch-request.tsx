@@ -1,4 +1,5 @@
 import { useImperativeHandle } from 'react'
+import { RxCheck, RxCross1 } from 'react-icons/rx'
 
 import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { cn } from '@/lib/utils'
@@ -71,16 +72,20 @@ const RematchRequest = ({
         <div className='flex justify-between gap-1'>
           <ButtonWithAudio
             as='button'
-            bg='green'
-            className='h-4 w-4 rounded-full p-0 text-xs'
+            bg='white'
+            className='text-green h-4 w-4 rounded-full p-0 pb-0.5 text-xl'
             onClick={onRequest}
-          ></ButtonWithAudio>
+          >
+            <RxCheck />
+          </ButtonWithAudio>
           <ButtonWithAudio
             as='button'
-            bg='red'
-            className='h-4 w-4 rounded-full p-0 text-xs'
+            bg='white'
+            className='text-red h-4 w-4 rounded-full p-0 text-sm'
             onClick={onCancel}
-          ></ButtonWithAudio>
+          >
+            <RxCross1 />
+          </ButtonWithAudio>
         </div>
       </div>
       <Indicators
