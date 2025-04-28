@@ -68,7 +68,7 @@ export interface ProbabilityResponse {
 }
 export interface RematchRequestResponse {
   gameId: string
-  playerId: string
+  userId: string
   message: string
 }
 export interface RematchCreatedResonse {

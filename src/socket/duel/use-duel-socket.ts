@@ -341,7 +341,7 @@ export const useDuelSocket = ({
         case 'game:rematch_requested': {
           refState.current.rematchStatus = 'requested'
 
-          const isUser = payload.playerId === playerId
+          const isUser = payload.userId === playerId
           const userOrOpponent = isUser ? 'user' : 'opponnent'
 
           await rematchRequestHandleRef.current?.action(
