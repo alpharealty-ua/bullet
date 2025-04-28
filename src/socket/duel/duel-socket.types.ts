@@ -49,8 +49,17 @@ export interface StartedResponse {
 export interface EndedResponse {
   gameId: string
   message: string
+  rematchInfo: {
+    rematchCount: number
+    rematchScores: Record<string, string>
+    canRematch: boolean
+    originalGameId: string
+    rematchSeriesComplete: boolean
+  }
+  reason?: string
   winner?: { id: string }
 }
+
 export interface ProbabilityResponse {
   gameId: string
   probability: number

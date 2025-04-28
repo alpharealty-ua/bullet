@@ -45,19 +45,24 @@ export const useDuelSocket = ({
   const hasPull = !pulls.includes(round)
 
   const refState = useRef<{
+    // TODO: REMOVE
     rematchStatus: 'idle' | 'requested' | 'cancelled' | 'created'
+    pullTriggerPromise: Promise<void>
   }>({
     rematchStatus: 'idle',
+    pullTriggerPromise: Promise.resolve(),
   })
 
   const reset = useCallback(async () => {
-    await gameOverHandleRef.current?.reset()
-    await victoryHandleRef.current?.reset()
-    await frontCharacterHandleRef.current?.reset()
-    await backCharacterHandleRef.current?.reset()
-    await topGameBarHandleRef.current?.reset()
-    await bottomGameBarHandleRef.current?.reset()
-    await rematchRequestHandleRef.current?.reset()
+    await Promise.all([
+      gameOverHandleRef.current?.reset(),
+      victoryHandleRef.current?.reset(),
+      frontCharacterHandleRef.current?.reset(),
+      backCharacterHandleRef.current?.reset(),
+      topGameBarHandleRef.current?.reset(),
+      bottomGameBarHandleRef.current?.reset(),
+      rematchRequestHandleRef.current?.reset(),
+    ])
 
     setPulls([])
     setCanPull(true)
@@ -116,12 +121,11 @@ export const useDuelSocket = ({
 
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
-    const showRematchRequestPromise = rematchRequestHandleRef.current?.show()
     gameOverHandleRef.current?.updateState({
       disabled: true,
     })
     const showGameOverPromise = gameOverHandleRef.current?.show()
-    await Promise.all([showRematchRequestPromise, showGameOverPromise])
+    await Promise.all([showGameOverPromise])
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({ disabled: false })
     await wait(1000).promise
@@ -146,9 +150,8 @@ export const useDuelSocket = ({
       newLevel: 754,
     })
     const showVictoryPromise = victoryHandleRef.current?.show()
-    const showRematchPromise = rematchRequestHandleRef.current?.show()
 
-    await Promise.all([showRematchPromise, showVictoryPromise])
+    await Promise.all([showVictoryPromise])
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
@@ -167,8 +170,7 @@ export const useDuelSocket = ({
     await wait(2000).promise
 
     await victoryHandleRef.current?.hide()
-    nextOpponnet()
-  }, [nextOpponnet, queryClient])
+  }, [queryClient])
 
   const pull = async () => {
     if (gameId === null || playerId === null) {
@@ -223,7 +225,12 @@ export const useDuelSocket = ({
 
             const isWin = winPlayer && winPlayer.id === playerId
 
-            isWin ? await winGame() : await gameOver()
+            await frontCharacterHandleRef.current?.updateState({
+              characterState: isWin ? 'eliminated' : 'winner',
+            })
+            await backCharacterHandleRef.current?.updateState({
+              characterState: !isWin ? 'eliminated' : 'winner',
+            })
 
             return
           }
@@ -258,29 +265,30 @@ export const useDuelSocket = ({
           return
         }
         case 'game:pull_result': {
-          notify(payload.message, 'info')
+          const pullTrigger = async () => {
+            const isUser = playerId === payload.playerId
 
-          const isUser = playerId === payload.playerId
+            const pull = isUser ? playerPull : opponentPull
 
-          const pull = isUser ? playerPull : opponentPull
+            const gameBarHandleRef = isUser
+              ? bottomGameBarHandleRef
+              : topGameBarHandleRef
 
-          const gameBarHandleRef = isUser
-            ? bottomGameBarHandleRef
-            : topGameBarHandleRef
+            if (payload.fired) {
+              await topGameBarHandleRef.current?.setActive(payload.index)
+              await bottomGameBarHandleRef.current?.setActive(payload.index)
+            }
 
-          if (payload.fired) {
-            await topGameBarHandleRef.current?.setActive(payload.index)
-            await bottomGameBarHandleRef.current?.setActive(payload.index)
+            await gameBarHandleRef.current?.highlight(payload.index)
+
+            await pull(payload.fired)
+
+            if (payload.fired) {
+              setCanPull(false)
+            }
           }
 
-          await gameBarHandleRef.current?.highlight(payload.index)
-
-          await pull(payload.fired)
-
-          if (payload.fired) {
-            setCanPull(false)
-            isUser ? winGame() : gameOver()
-          }
+          refState.current.pullTriggerPromise = pullTrigger()
           return
         }
         case 'game:player_won': {
@@ -292,13 +300,33 @@ export const useDuelSocket = ({
           return
         }
         case 'game:ended': {
-          if (payload.winner) {
-            const isWin = payload.winner.id === playerId
-            notify(payload.message, isWin ? 'success' : 'error')
-          } else {
-            notify(payload.message, 'info')
-            drawGame()
+          // TODO: BUG ON SERVER. GAME WITH `REASON` PROPERTY COMES BEFORE PULL TRIGGER
+          if (
+            payload.reason &&
+            !payload.reason?.includes('Maximum rounds reached')
+          ) {
+            return
           }
+
+          const { canRematch } = payload.rematchInfo
+
+          await refState.current.pullTriggerPromise
+
+          setCanPull(false)
+          const isDraw = !payload.winner
+          const isWin = payload.winner?.id === playerId
+
+          const result = isDraw ? drawGame : isWin ? winGame : gameOver
+          const resultPromise = result()
+
+          if (canRematch) {
+            rematchRequestHandleRef.current?.show()
+          } else {
+            await resultPromise
+            nextOpponnet()
+            return
+          }
+
           return
         }
         case 'probability': {
@@ -332,11 +360,9 @@ export const useDuelSocket = ({
           await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
 
           await wait(1500).promise
-          await rematchRequestHandleRef.current?.hide()
-          rematchRequestHandleRef.current?.action('user', 'init')
-          rematchRequestHandleRef.current?.action('opponnent', 'init')
 
           const rematchGameId = payload.rematchGame.id
+          await reset()
           navigate(ROUTES.duel.game(rematchGameId), {
             preventScrollReset: true,
           })
@@ -403,6 +429,7 @@ export const useDuelSocket = ({
     navigate,
     nextOpponnet,
     playAudio,
+    reset,
   ])
 
   useEffect(() => {
