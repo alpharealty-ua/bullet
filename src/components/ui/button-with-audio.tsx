@@ -25,15 +25,24 @@ const ButtonWithAudio = React.forwardRef<
   const mouseClick = async (buttonEl: HTMLButtonElement): Promise<void> => {
     await playAudio('mouseclick')
 
-    buttonEl.classList.add('animate-button-click')
-    buttonEl.style.animationIterationCount = '1'
+    const ANIMATION_NAME = 'animate-button-click'
 
-    await new Promise<Event>((resolve) => {
+    buttonEl.classList.add(ANIMATION_NAME)
+
+    const iterationCount = getComputedStyle(buttonEl).animationIterationCount
+    const isInfititeCount = iterationCount === 'infinite'
+
+    const promise = new Promise<Event>((resolve) => {
       buttonEl.addEventListener('animationend', resolve, { once: true })
     })
 
-    buttonEl.classList.remove('animate-button-click')
-    buttonEl.style.animationIterationCount = ''
+    !isInfititeCount && (await promise)
+
+    buttonEl.classList.remove(ANIMATION_NAME)
+
+    if (isInfititeCount) {
+      buttonEl.style.animationIterationCount = ''
+    }
   }
 
   const handlePointerDown = async () => {

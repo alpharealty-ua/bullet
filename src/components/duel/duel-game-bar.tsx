@@ -128,7 +128,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                   className={cn(
                     '2xs:border-3 relative h-10 border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
                     'zoom-in-200',
-                    '[&.is-selected]:fill-mode-both [&.is-selected]:repeat-1 [&.is-selected]:animate-[bar-select] [&.is-selected]:duration-500',
+                    '[&.is-selected]:fill-mode-both [&.is-selected]:repeat-[2] [&.is-selected]:direction-alternate [&.is-selected]:animate-[bar-select] [&.is-selected]:duration-250 [&.is-selected]:ease-linear',
                     isDefaultNumber && 'text-transparent',
                     isSkullNumber && 'zoom-in-400',
                     className,

@@ -279,7 +279,7 @@ const Revolver = React.forwardRef<
         <div className='relative -left-0.5 h-[48%]'>
           <div
             className={cn(
-              'absolute inset-0 mx-auto bg-[length:35%] bg-center bg-no-repeat',
+              'absolute inset-[25%] mx-auto bg-contain bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-0 duration-100',
             )}
             style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
