@@ -195,7 +195,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'
             >
               <div className='relative ml-auto'>
-                {/* TODO: ADD DISABLE WHEN GAME IS COMPLETED */}
                 <ButtonWithAudio
                   as='button'
                   className='w-26'

@@ -217,9 +217,8 @@ export const useDuelSocket = ({
         case 'game:joined': {
           const { game } = payload
           if (payload.game.status === 'completed') {
-            notify('The game is already completed.', 'info')
-
             setRound(game.currentRound)
+            setCanPull(false)
 
             const winPlayer = game.players.find((p) => p.status === 'alive')
 
