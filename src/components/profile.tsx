@@ -88,9 +88,7 @@ const Profile = ({ user }: ProfileProps) => {
           className='flex grow flex-col gap-6'
         >
           <div className='cuctom-scroll'>
-            <table className='w-full divide-y divide-gray-200 text-center text-sm'>
-              <PlayerStatistics list={playerStatistics} user={user} />
-            </table>
+            <PlayerStatistics list={playerStatistics} user={user} />
           </div>
           <ButtonWithAudio
             as='button'
