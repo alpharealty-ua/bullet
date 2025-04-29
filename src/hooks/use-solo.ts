@@ -153,7 +153,7 @@ const useSolo = (variant: VariantGame) => {
       const { gameId, multiplier } =
         result ??
         (await startGameMutation({
-          betAmount: String(bet),
+          betAmount: String(bet) + '00',
         }))
 
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
@@ -277,8 +277,8 @@ const useSolo = (variant: VariantGame) => {
       return
     }
 
-    const jackpot = Number(gameDetails.potentialWin ?? 0)
-    const bet = Number(gameDetails.betAmount ?? 0)
+    const jackpot = gameDetails.formattedPotentialWin ?? 0
+    const bet = gameDetails.formattedBetAmount ?? 0
     const multiplier = Number(gameDetails.multiplier ?? 0)
     const countBullet = 5 - Number(gameDetails.currentPosition ?? 0)
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
