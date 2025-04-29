@@ -1,8 +1,9 @@
 import { createPortal } from 'react-dom'
 
-import { getItem } from '@/lib/localstorage'
 import { useForm } from 'react-hook-form'
 
+import { DUEL_COUNTDOWN, MAX_BET, MIN_DUEL_BET } from '@/lib/constants'
+import { getItem, setItem } from '@/lib/localstorage'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
   Form,
@@ -14,11 +15,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
+type FormValues = { duelCoundDown: string; minDuelBet: string; maxBet: string }
+
 const Debug = () => {
-  // TODO: ADD STORE
-  const form = useForm({
+  const form = useForm<FormValues>({
     defaultValues: {
-      startCountDown: '5',
+      duelCoundDown: String(DUEL_COUNTDOWN),
+      minDuelBet: String(MIN_DUEL_BET),
+      maxBet: String(MAX_BET),
     },
   })
 
@@ -26,7 +30,11 @@ const Debug = () => {
     return null
   }
 
-  const onSubmit = () => {}
+  const onSubmit = (values: FormValues) => {
+    setItem('duelCoundDown', values.duelCoundDown)
+    setItem('minDuelBet', values.minDuelBet)
+    setItem('maxBet', values.maxBet)
+  }
 
   return createPortal(
     <div className='absolute top-0 right-[calc(50%+var(--width)/2)] flex w-50 flex-col gap-2 bg-amber-100 p-4'>
@@ -37,17 +45,38 @@ const Debug = () => {
         >
           <FormField
             control={form.control}
-            name='startCountDown'
+            name='duelCoundDown'
             render={({ field: { disabled, ...field } }) => (
               <FormItem>
                 <FormLabel>Duel start countdown</FormLabel>
                 <FormControl>
-                  <FormInput
-                    placeholder='5'
-                    disabled={disabled}
-                    type='email'
-                    {...field}
-                  />
+                  <FormInput disabled={disabled} type='number' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='minDuelBet'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Min duel bet</FormLabel>
+                <FormControl>
+                  <FormInput disabled={disabled} type='number' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='maxBet'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Max bet</FormLabel>
+                <FormControl>
+                  <FormInput disabled={disabled} type='number' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

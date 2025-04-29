@@ -1,7 +1,7 @@
 import { IoPlay } from 'react-icons/io5'
 
 import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
-import { START_GAME_COUNTDOWN, IMAGES } from '@/lib/constants'
+import { DUEL_COUNTDOWN, IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
@@ -146,7 +146,7 @@ const EnterArena = ({
         )}
         {isMatchCreated && (
           <Countdown
-            time={START_GAME_COUNTDOWN}
+            time={DUEL_COUNTDOWN}
             onEnd={onMatchCreatedCountdownEnd}
             className='my-4 flex items-center justify-center text-5xl'
           />

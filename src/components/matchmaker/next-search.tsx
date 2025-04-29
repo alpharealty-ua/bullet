@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { IMAGES, START_GAME_COUNTDOWN } from '@/lib/constants'
+import { IMAGES, DUEL_COUNTDOWN } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
 import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
@@ -37,7 +37,7 @@ const NextSearch = ({
         </div>
         {matchmakingStatus === 'match-created' && (
           <Countdown
-            time={START_GAME_COUNTDOWN}
+            time={DUEL_COUNTDOWN}
             onEnd={onMatchCreatedCountdownEnd}
             className='my-4 flex items-center justify-center text-5xl'
           />

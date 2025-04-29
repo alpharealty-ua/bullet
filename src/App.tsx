@@ -12,6 +12,7 @@ import { Providers } from '@/providers'
 
 const RootRouter = () => (
   <Providers>
+    <Debug />
     <App />
   </Providers>
 )
@@ -30,7 +31,6 @@ const App = () => {
 
   return (
     <>
-      <Debug />
       <Outlet />
       <ScrollRestoration />
     </>

@@ -5,8 +5,8 @@ export const setItem = (key: LocalStorageKeys, value: string): void => {
 }
 
 export const getItem = (key: LocalStorageKeys): string | undefined => {
-  const token = localStorage.getItem(LOCAL_STORAGE_KEYS[key])
-  return token ? JSON.parse(token) : undefined
+  const item = localStorage.getItem(LOCAL_STORAGE_KEYS[key])
+  return item ? JSON.parse(item) : undefined
 }
 
 export const removeItem = (key: LocalStorageKeys): void => {

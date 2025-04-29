@@ -1,3 +1,5 @@
+import { getItem } from '@/lib/localstorage'
+
 export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 
 export type FormatGame = 'solo' | 'duel'
@@ -122,8 +124,7 @@ export const AUDIOS = {
 
 export const SRC_AUDIOS = Object.values(AUDIOS)
 
-export const MAX_BET = 10_000
-
+// TODO: GET TIME FROM AUDIO
 const TIME_WIN_AUDIO = 3500
 const TIME_ANIMATION_DELAY = 200
 const TIME_ANIMATION_DURATION = 500
@@ -172,11 +173,15 @@ export const LOCAL_STORAGE_KEYS = {
   token: 'TOKEN',
   endTime: 'END_TIME',
   showDebug: 'SHOW_DEBUG',
+  maxBet: 'MAX_BET',
+  minDuelBet: 'MIN_DUEL_BET',
+  duelCoundDown: 'DUEL_COUNTDOWN',
 } as const
 
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
 
-export const MIN_DUEL_BET = 1000
+export const MAX_BET = Number(getItem('maxBet') ?? 10_000)
 
-// TODO: VALUES FOR DEBUG
-export const START_GAME_COUNTDOWN = 5
+export const MIN_DUEL_BET = Number(getItem('minDuelBet') ?? 1_000)
+
+export const DUEL_COUNTDOWN = Number(getItem('duelCoundDown') ?? 10_000)
