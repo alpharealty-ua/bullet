@@ -88,7 +88,6 @@
   }
 }
 
-/*  TODO: ADD ALTERNATE  */
 @keyframes pulse-time {
   0% {
     color: #e74c3c;
@@ -101,7 +100,8 @@
 }
 
 @keyframes bar-select {
-  0% {
+  0%,
+  100% {
     z-index: 3;
   }
   100% {
