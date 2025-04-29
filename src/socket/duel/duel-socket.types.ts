@@ -52,7 +52,7 @@ export interface EndedResponse {
   message: string
   rematchInfo: {
     rematchCount: number
-    rematchScores: Record<string, string>
+    rematchScores: Record<string, number>
     canRematch: boolean
     originalGameId: string
     rematchSeriesComplete: boolean

@@ -307,8 +307,6 @@ export const useDuelSocket = ({
             return
           }
 
-          const { canRematch } = payload.rematchInfo
-
           await refState.current.pullTriggerPromise
 
           setCanPull(false)
@@ -317,6 +315,13 @@ export const useDuelSocket = ({
 
           const result = isDraw ? drawGame : isWin ? winGame : gameOver
           const resultPromise = result()
+
+          const { rematchScores } = payload.rematchInfo
+          const [scorePlayer1 = 0, scorePlayer2 = 0] =
+            Object.values(rematchScores)
+
+          const diffScore = Math.abs(scorePlayer1 - scorePlayer2)
+          const canRematch = diffScore < 2
 
           if (canRematch) {
             rematchRequestHandleRef.current?.show()
