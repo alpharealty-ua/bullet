@@ -10,6 +10,7 @@ interface Game {
 interface Player {
   id: string
   username: string
+  userId: string
   status?: 'eliminated' | 'alive'
 }
 interface Round {

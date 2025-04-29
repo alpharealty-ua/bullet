@@ -222,7 +222,7 @@ export const useDuelSocket = ({
 
             const winPlayer = game.players.find((p) => p.status === 'alive')
 
-            const isWin = winPlayer && winPlayer.id === playerId
+            const isWin = winPlayer && winPlayer.userId === playerId
 
             await frontCharacterHandleRef.current?.updateState({
               characterState: isWin ? 'eliminated' : 'winner',
