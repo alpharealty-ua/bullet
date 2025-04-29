@@ -278,9 +278,12 @@ export const useDuelSocket = ({
               await bottomGameBarHandleRef.current?.setActive(payload.index)
             }
 
-            await gameBarHandleRef.current?.highlight(payload.index)
+            const highlightPromise = gameBarHandleRef.current?.highlight(
+              payload.index,
+            )
+            const pullPromise = pull(payload.fired)
 
-            await pull(payload.fired)
+            await Promise.all([highlightPromise, pullPromise])
 
             if (payload.fired) {
               setCanPull(false)
