@@ -5,17 +5,11 @@ const useSpin = (
   rotateRef: React.MutableRefObject<number>,
 ) => {
   return async (duration = 200): Promise<void> => {
-    const gunDom = gunRef.current
-
-    if (gunDom === null) {
-      return
-    }
-
-    const chamberDom = gunDom.querySelector(
+    const chamberEl = gunRef.current?.querySelector(
       '[data-chamber-rotate]',
     ) as HTMLDivElement
 
-    if (chamberDom === null) {
+    if (chamberEl == null) {
       return
     }
 
@@ -25,14 +19,14 @@ const useSpin = (
           return
         }
 
-        chamberDom.style.transitionDuration = ``
-        chamberDom.removeEventListener('transitionend', transitionend)
+        chamberEl.style.transitionDuration = ``
+        chamberEl.removeEventListener('transitionend', transitionend)
         resolve()
       }
 
-      chamberDom.style.rotate = (rotateRef.current += 60) + 'deg'
-      chamberDom.style.transitionDuration = `${duration}ms`
-      chamberDom.addEventListener('transitionend', transitionend)
+      chamberEl.style.rotate = (rotateRef.current += 60) + 'deg'
+      chamberEl.style.transitionDuration = `${duration}ms`
+      chamberEl.addEventListener('transitionend', transitionend)
     })
   }
 }

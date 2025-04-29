@@ -27,19 +27,13 @@ const SideChat = ({
   const [message, setMessage] = useState('')
 
   const scorllToBottom = () => {
-    const wrapperDom = wrapperRef.current
+    const messagesEl = wrapperRef.current?.querySelector('[data-messages]')
 
-    if (wrapperDom === null) {
+    if (messagesEl == null) {
       return
     }
 
-    const messagesDom = wrapperDom.querySelector('[data-messages]')
-
-    if (messagesDom === null) {
-      return
-    }
-
-    messagesDom.scrollTop = messagesDom.scrollHeight
+    messagesEl.scrollTop = messagesEl.scrollHeight
   }
 
   const addMessage = () => {

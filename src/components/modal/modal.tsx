@@ -36,13 +36,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     const [isOpen, setIsOpen] = useState(true)
 
     const closeWithDelay = useCallback(() => {
-      const modalDom = modalRef.current
-
-      if (modalDom === null) {
-        return
-      }
-
-      modalDom.addEventListener('animationend', remove, { once: true })
+      modalRef.current?.addEventListener('animationend', remove, { once: true })
 
       setIsOpen(false)
     }, [remove])

@@ -97,23 +97,17 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     const spin = useSpin(gunRef, rotateRef)
 
     const trigger = async () => {
-      const gunDom = gunRef.current
+      const fingerEl = gunRef.current?.querySelector('[data-finger]')
 
-      if (gunDom === null) {
+      if (fingerEl == null) {
         return
       }
 
-      const fingerDom = gunDom.querySelector('[data-finger]')
-
-      if (fingerDom === null) {
-        return
-      }
-
-      fingerDom.classList.add('is-trigger')
+      fingerEl.classList.add('is-trigger')
       await new Promise((resolve) =>
-        fingerDom.addEventListener('transitionend', resolve, { once: true }),
+        fingerEl.addEventListener('transitionend', resolve, { once: true }),
       )
-      fingerDom.classList.remove('is-trigger')
+      fingerEl.classList.remove('is-trigger')
 
       await playAudio('triggerpull')
     }

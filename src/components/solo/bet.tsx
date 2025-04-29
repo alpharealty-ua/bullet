@@ -48,40 +48,40 @@ const Bet = ({
       return
     }
 
-    const sliderWrapperDom = sliderWrapperRef.current
+    const sliderWrapperEl = sliderWrapperRef.current
 
-    if (sliderWrapperDom === null) {
+    if (sliderWrapperEl === null) {
       return
     }
 
-    sliderWrapperDom.ondragstart = () => false
+    sliderWrapperEl.ondragstart = () => false
 
-    const sliderDom = sliderWrapperDom.querySelector(
+    const sliderEl = sliderWrapperEl.querySelector(
       '[data-slider]',
     ) as HTMLDivElement
-    const buttonDom = sliderWrapperDom.querySelector(
+    const buttonEl = sliderWrapperEl.querySelector(
       '[data-button]',
     ) as HTMLButtonElement
-    const valueDoms = sliderWrapperDom.querySelectorAll('[data-value]')
+    const valueEls = sliderWrapperEl.querySelectorAll('[data-value]')
 
-    if (sliderDom === null || buttonDom === null) {
+    if (sliderEl === null || buttonEl === null) {
       return
     }
 
     const pointerDown = (event: PointerEvent) => {
-      buttonDom.setPointerCapture(event.pointerId)
+      buttonEl.setPointerCapture(event.pointerId)
 
       const startX = event.clientX
       // @ts-ignore
       const startY = event.clientY
 
       // getBoundingClientRect more accurate than offsetleft
-      const sliderDomRect = sliderDom.getBoundingClientRect()
-      const buttonDomRect = buttonDom.getBoundingClientRect()
+      const sliderDomRect = sliderEl.getBoundingClientRect()
+      const buttonDomRect = buttonEl.getBoundingClientRect()
       const shiftTranslateX = buttonDomRect.width / 2
       const startLeft =
         buttonDomRect.left - sliderDomRect.left + shiftTranslateX
-      const width = sliderWrapperDom.offsetWidth
+      const width = sliderWrapperEl.offsetWidth
 
       let percentX = Math.round((startLeft / width) * 100)
 
@@ -105,8 +105,8 @@ const Bet = ({
           maxBet,
         )
 
-        buttonDom.style.left = roundPercentX + '%'
-        valueDoms.forEach(
+        buttonEl.style.left = roundPercentX + '%'
+        valueEls.forEach(
           (valueDom) => (valueDom.textContent = String(currentBet)),
         )
       }
@@ -114,18 +114,18 @@ const Bet = ({
       const pointerUp = (_: PointerEvent) => {
         changeValue((maxBet * percentX) / 100)
 
-        buttonDom.removeEventListener('pointermove', pointerMove)
-        buttonDom.removeEventListener('pointerup', pointerUp)
+        buttonEl.removeEventListener('pointermove', pointerMove)
+        buttonEl.removeEventListener('pointerup', pointerUp)
       }
 
-      buttonDom.addEventListener('pointermove', pointerMove)
-      buttonDom.addEventListener('pointerup', pointerUp)
+      buttonEl.addEventListener('pointermove', pointerMove)
+      buttonEl.addEventListener('pointerup', pointerUp)
     }
 
-    buttonDom.addEventListener('pointerdown', pointerDown)
+    buttonEl.addEventListener('pointerdown', pointerDown)
 
     return () => {
-      buttonDom.removeEventListener('pointerdown', pointerDown)
+      buttonEl.removeEventListener('pointerdown', pointerDown)
     }
   }, [maxBet, onBet, disabled, changeValue])
 
@@ -136,19 +136,17 @@ const Bet = ({
       return
     }
 
-    const sliderWrapperDom = sliderWrapperRef.current
-
-    if (sliderWrapperDom === null) {
-      return
-    }
-
-    const buttonDom = sliderWrapperDom.querySelector(
+    const buttonEl = sliderWrapperRef.current?.querySelector(
       '[data-button]',
     ) as HTMLButtonElement
 
-    const buttomDomRect = buttonDom.getBoundingClientRect()
+    if (buttonEl === null) {
+      return
+    }
 
-    if (buttonDom === null) {
+    const buttomDomRect = buttonEl.getBoundingClientRect()
+
+    if (buttonEl === null) {
       return
     }
 
@@ -173,17 +171,15 @@ const Bet = ({
       return
     }
 
-    const sliderWrapperDom = sliderWrapperRef.current
-
-    if (sliderWrapperDom === null) {
-      return
-    }
-
-    const sliderDom = sliderWrapperDom.querySelector(
+    const sliderEl = sliderWrapperRef.current?.querySelector(
       '[data-slider]',
     ) as HTMLDivElement
 
-    const { x, width } = sliderDom.getBoundingClientRect()
+    if (sliderEl == null) {
+      return
+    }
+
+    const { x, width } = sliderEl.getBoundingClientRect()
 
     const clickX = event.clientX
     const sliderX = x

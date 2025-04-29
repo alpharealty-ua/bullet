@@ -40,25 +40,18 @@ const Revolver = React.forwardRef<
       return
     }
 
-    const gunDom = gunRef.current
-
-    if (gunDom === null) {
-      return
-    }
-
-    const chamberRotateDom = gunDom.querySelector(
+    const chamberRotateEl = gunRef.current?.querySelector(
       '[data-chamber-rotate]',
     ) as HTMLDivElement
-
-    const chamberSpeedDom = gunDom.querySelector(
+    const chamberSpeedEl = gunRef.current?.querySelector(
       '[data-chamber-speed]',
     ) as HTMLDivElement
 
-    if (!(chamberRotateDom && chamberSpeedDom)) {
+    if (!(chamberRotateEl && chamberSpeedEl)) {
       return
     }
 
-    chamberRotateDom.ondragstart = () => false
+    chamberRotateEl.ondragstart = () => false
 
     let clickStartTime = 0
 
@@ -69,15 +62,15 @@ const Revolver = React.forwardRef<
       const startY = event.clientY
 
       const { left, width, top, height } =
-        chamberRotateDom.getBoundingClientRect()
+        chamberRotateEl.getBoundingClientRect()
 
-      chamberRotateDom.setPointerCapture(event.pointerId)
+      chamberRotateEl.setPointerCapture(event.pointerId)
 
       const startRotate = rotateRef.current
       let prevX = startX
       let prevY = startY
 
-      chamberRotateDom.style.transitionDuration = `0s`
+      chamberRotateEl.style.transitionDuration = `0s`
 
       const pointerMove = (event: PointerEvent) => {
         const currentX = event.clientX
@@ -104,7 +97,7 @@ const Revolver = React.forwardRef<
         const deltaRotate = deltaY * directionY + deltaX * directionX
 
         rotateRef.current += deltaRotate
-        chamberRotateDom.style.rotate = `${rotateRef.current}deg`
+        chamberRotateEl.style.rotate = `${rotateRef.current}deg`
       }
 
       const poinerUp = (event: PointerEvent) => {
@@ -132,25 +125,25 @@ const Revolver = React.forwardRef<
         speedRef.current = speedBoundary
 
         if (prevSpeed !== speedRef.current) {
-          chamberSpeedDom.dispatchEvent(new CustomEvent('speedchanged'))
+          chamberSpeedEl.dispatchEvent(new CustomEvent('speedchanged'))
         }
 
         rotateRef.current = 60 * Math.round(rotateRef.current / 60)
-        chamberRotateDom.style.transitionDuration = ``
-        chamberRotateDom.style.rotate = `${rotateRef.current}deg`
+        chamberRotateEl.style.transitionDuration = ``
+        chamberRotateEl.style.rotate = `${rotateRef.current}deg`
 
-        chamberRotateDom.removeEventListener('pointermove', pointerMove)
-        chamberRotateDom.removeEventListener('pointerup', poinerUp)
+        chamberRotateEl.removeEventListener('pointermove', pointerMove)
+        chamberRotateEl.removeEventListener('pointerup', poinerUp)
       }
 
-      chamberRotateDom.addEventListener('pointermove', pointerMove)
-      chamberRotateDom.addEventListener('pointerup', poinerUp)
+      chamberRotateEl.addEventListener('pointermove', pointerMove)
+      chamberRotateEl.addEventListener('pointerup', poinerUp)
     }
 
-    chamberRotateDom.addEventListener('pointerdown', pointerDown)
+    chamberRotateEl.addEventListener('pointerdown', pointerDown)
 
     return () => {
-      chamberRotateDom.removeEventListener('pointerdown', pointerDown)
+      chamberRotateEl.removeEventListener('pointerdown', pointerDown)
     }
   }, [disabled])
 
@@ -159,27 +152,20 @@ const Revolver = React.forwardRef<
       return
     }
 
-    const gunDom = gunRef.current
-
-    if (gunDom === null) {
-      return
-    }
-
-    const chamberRotateDom = gunDom.querySelector(
+    const chamberRotateEl = gunRef.current?.querySelector(
       '[data-chamber-rotate]',
     ) as HTMLDivElement
-
-    const chamberSpeedDom = chamberRotateDom.querySelector(
+    const chamberSpeeEl = gunRef.current?.querySelector(
       '[data-chamber-speed]',
     ) as HTMLDivElement
 
-    if (!(chamberRotateDom && chamberSpeedDom)) {
+    if (!(chamberRotateEl && chamberSpeeEl)) {
       return
     }
 
     const stopSpin = () => {
       const roundedRotate = 60 * Math.round(speedRotateRef.current / 60)
-      chamberSpeedDom.style.rotate = `${roundedRotate}deg`
+      chamberSpeeEl.style.rotate = `${roundedRotate}deg`
     }
 
     let started = false
@@ -204,16 +190,16 @@ const Revolver = React.forwardRef<
       }
 
       speedRef.current -= 5 * sign
-      chamberSpeedDom.style.rotate = `${(speedRotateRef.current += speed)}deg`
+      chamberSpeeEl.style.rotate = `${(speedRotateRef.current += speed)}deg`
     }
 
-    chamberSpeedDom.addEventListener('transitionend', startSpin)
-    chamberSpeedDom.addEventListener('speedchanged', speedChanged)
+    chamberSpeeEl.addEventListener('transitionend', startSpin)
+    chamberSpeeEl.addEventListener('speedchanged', speedChanged)
 
     return () => {
       stopSpin()
-      chamberSpeedDom.removeEventListener('transitionend', startSpin)
-      chamberSpeedDom.removeEventListener('speedchanged', speedChanged)
+      chamberSpeeEl.removeEventListener('transitionend', startSpin)
+      chamberSpeeEl.removeEventListener('speedchanged', speedChanged)
     }
   }, [disabled])
 

@@ -1,13 +1,7 @@
 const useClick = (gunRef: React.RefObject<HTMLDivElement>) => {
   return async () => {
-    const gunDom = gunRef.current
-
-    if (gunDom === null) {
-      return
-    }
-
     const ANIMATION_NAME = 'animate-click'
-    const clickEls = gunDom.querySelectorAll('[data-click]')
+    const clickEls = gunRef.current?.querySelectorAll('[data-click]') ?? []
 
     await Promise.all(
       Array.from(clickEls).map(async (clickEl) => {

@@ -29,14 +29,9 @@ const ReadySetPull = ({
   }
 
   const start = async (value: ReadySetPull) => {
-    const wrapperDom = wrapperRef.current
-
-    if (wrapperDom === null) {
-      return
-    }
-
+    const wrapperEl = wrapperRef.current
     const [readyEl, setEl, pullEl] =
-      wrapperDom.children as HTMLCollectionOf<HTMLDivElement>
+      (wrapperEl?.children as HTMLCollectionOf<HTMLDivElement>) ?? []
 
     if (!(readyEl && setEl && pullEl)) {
       return
