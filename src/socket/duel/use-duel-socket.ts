@@ -233,7 +233,9 @@ export const useDuelSocket = ({
 
             return
           }
-          notify(payload.message, 'info')
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.balance],
+          })
           return
         }
         case 'game:reconnected': {
@@ -303,10 +305,7 @@ export const useDuelSocket = ({
         }
         case 'game:ended': {
           // TODO: BUG ON SERVER. GAME WITH `REASON` PROPERTY COMES BEFORE PULL TRIGGER
-          if (
-            payload.reason &&
-            !payload.reason?.includes('Maximum rounds reached')
-          ) {
+          if (payload.reason?.includes('Player eliminated in duel')) {
             return
           }
 
@@ -437,6 +436,7 @@ export const useDuelSocket = ({
     nextOpponnet,
     playAudio,
     reset,
+    queryClient,
   ])
 
   useEffect(() => {

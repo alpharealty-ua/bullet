@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { QUERY_KEYS } from '@/api/api'
 import { socketMatchmaker as socket } from '@/socket/socket'
 import {
   PingData,
@@ -294,9 +293,6 @@ const useMatchmakingSocket = (
           return
         }
         case 'duelGameCreated': {
-          await queryClient.invalidateQueries({
-            queryKey: [QUERY_KEYS.balance],
-          })
           setGameId(payload.gameId)
           return
         }
