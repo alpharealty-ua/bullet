@@ -19,7 +19,13 @@ import {
 
 export type Offer = {
   id: string
+  gameId: string
+  networkId: string
+  coinId: string
+  decimals: number
   amount: string
+  multiplier: number
+  status: string
 }
 
 interface StartGamePayload {

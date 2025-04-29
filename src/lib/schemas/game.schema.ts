@@ -4,7 +4,15 @@ import { coinSchema, networkSchema } from '@/lib/schemas/wallet.schema'
 
 const offerSchema = z.object({
   id: z.string(),
+  gameId: z.string(),
+  networkId: z.string(),
+  coinId: z.string(),
+  decimals: z.number(),
   amount: z.string(),
+  multiplier: z.number(),
+  status: z.string(),
+  createdAt: z.string().nullish(),
+  updatedAt: z.string().nullish(),
 })
 
 const gameStatusSchema = z.enum([
