@@ -184,4 +184,4 @@ export const MAX_BET = Number(getItem('maxBet') ?? 10_000)
 
 export const MIN_DUEL_BET = Number(getItem('minDuelBet') ?? 1_000)
 
-export const DUEL_COUNTDOWN = Number(getItem('duelCoundDown') ?? 10_000)
+export const DUEL_COUNTDOWN = Number(getItem('duelCoundDown') ?? 5)
