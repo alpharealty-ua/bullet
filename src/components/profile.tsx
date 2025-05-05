@@ -54,10 +54,6 @@ const Profile = ({ user }: ProfileProps) => {
     return <Loading />
   }
 
-  if (!isSuccess) {
-    return <RequestError error={error} />
-  }
-
   const handleLogout = async () => {
     resetTokens()
   }
@@ -87,9 +83,13 @@ const Profile = ({ user }: ProfileProps) => {
           value='personalStatistics'
           className='flex grow flex-col gap-6'
         >
-          <div className='cuctom-scroll'>
-            <PlayerStatistics list={playerStatistics} user={user} />
-          </div>
+          {isSuccess ? (
+            <div className='cuctom-scroll'>
+              <PlayerStatistics list={playerStatistics} user={user} />
+            </div>
+          ) : (
+            <RequestError error={error} />
+          )}
           <ButtonWithAudio
             as='button'
             className='self-center'
