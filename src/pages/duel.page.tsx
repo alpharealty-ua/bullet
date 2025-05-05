@@ -126,7 +126,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     <>
       {variant === 'watch' && <Bar />}
       <div className='relative flex grow flex-col'>
-        <DuelGameBar gameBarRef={topGameBarHandleRef} />
+        {typePage !== 'enter-arena' && (
+          <DuelGameBar gameBarRef={topGameBarHandleRef} />
+        )}
         <div className='relative flex min-h-148 w-full grow flex-col justify-end gap-10 py-5'>
           <AnimationInOut
             in={typePage !== 'duel'}
@@ -216,14 +218,22 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           onCancel={handleCancelRematch}
           rematchRequestHandleRef={rematchRequestHandleRef}
         />
-        <DuelGameBar gameBarRef={bottomGameBarHandleRef} />
+        {typePage !== 'enter-arena' && (
+          <DuelGameBar gameBarRef={bottomGameBarHandleRef} />
+        )}
       </div>
       <Victory victoryHandleRef={victoryHandleRef} />
       <GameOver
         gameOverHandleRef={gameOverHandleRef}
         onClick={handleGameOverClick}
       />
-      <DuelFooter round={round} hasPull={hasPull} prizepool={2000} />
+      <DuelFooter
+        round={round}
+        hasPull={hasPull}
+        prizepool={2000}
+        hideRound={typePage !== 'duel'}
+        hidePrizepool={typePage === 'enter-arena'}
+      />
     </>
   )
 }
