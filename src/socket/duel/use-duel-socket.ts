@@ -309,6 +309,10 @@ export const useDuelSocket = ({
             return
           }
 
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.playerStatistics, playerId],
+          })
+
           await refState.current.pullTriggerPromise
 
           setCanPull(false)
