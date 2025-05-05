@@ -2,7 +2,12 @@ import { createPortal } from 'react-dom'
 
 import { useForm } from 'react-hook-form'
 
-import { DUEL_COUNTDOWN, MAX_BET, MIN_DUEL_BET } from '@/lib/constants'
+import {
+  AFK_TIME,
+  DUEL_COUNTDOWN,
+  MAX_BET,
+  MIN_DUEL_BET,
+} from '@/lib/constants'
 import { getItem, setItem } from '@/lib/localstorage'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
@@ -15,7 +20,12 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-type FormValues = { duelCoundDown: string; minDuelBet: string; maxBet: string }
+type FormValues = {
+  duelCoundDown: string
+  minDuelBet: string
+  maxBet: string
+  afkTime: string
+}
 
 const Debug = () => {
   const form = useForm<FormValues>({
@@ -23,6 +33,7 @@ const Debug = () => {
       duelCoundDown: String(DUEL_COUNTDOWN),
       minDuelBet: String(MIN_DUEL_BET),
       maxBet: String(MAX_BET),
+      afkTime: String(AFK_TIME),
     },
   })
 
@@ -34,6 +45,9 @@ const Debug = () => {
     setItem('duelCoundDown', values.duelCoundDown)
     setItem('minDuelBet', values.minDuelBet)
     setItem('maxBet', values.maxBet)
+    setItem('afkTime', values.afkTime)
+
+    location.reload()
   }
 
   return createPortal(
@@ -75,6 +89,19 @@ const Debug = () => {
             render={({ field: { disabled, ...field } }) => (
               <FormItem>
                 <FormLabel>Max bet</FormLabel>
+                <FormControl>
+                  <FormInput disabled={disabled} type='number' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='afkTime'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Afk time</FormLabel>
                 <FormControl>
                   <FormInput disabled={disabled} type='number' {...field} />
                 </FormControl>

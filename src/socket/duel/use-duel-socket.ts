@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
+import { useAfk } from '@/hooks/use-afk'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
 import { notify } from '@/socket/utils'
@@ -28,6 +29,7 @@ export const useDuelSocket = ({
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
+  const isAfk = useAfk()
   const [pulls, setPulls] = useState<number[]>([])
   const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
@@ -101,8 +103,10 @@ export const useDuelSocket = ({
       duelSocketEvents.leaveDuelGame({ gameId, playerId })
     }
     reset()
-    navigate(ROUTES.duel.next, { preventScrollReset: true })
-  }, [duelSocketEvents, gameId, navigate, playerId, reset])
+    navigate(isAfk() ? ROUTES.duel.enterArena : ROUTES.duel.next, {
+      preventScrollReset: true,
+    })
+  }, [duelSocketEvents, gameId, isAfk, navigate, playerId, reset])
 
   // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {

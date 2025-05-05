@@ -171,6 +171,7 @@ export const LOCAL_STORAGE_KEYS = {
   maxBet: 'MAX_BET',
   minDuelBet: 'MIN_DUEL_BET',
   duelCoundDown: 'DUEL_COUNTDOWN',
+  afkTime: 'AFK_TIME',
 } as const
 
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
@@ -180,3 +181,5 @@ export const MAX_BET = Number(getItem('maxBet') ?? 10_000)
 export const MIN_DUEL_BET = Number(getItem('minDuelBet') ?? 1_000)
 
 export const DUEL_COUNTDOWN = Number(getItem('duelCoundDown') ?? 5)
+
+export const AFK_TIME = Number(getItem('afkTime') ?? 30_000)
