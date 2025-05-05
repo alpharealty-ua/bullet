@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify'
 import { Socket } from 'socket.io-client'
 
-// TODO: FIX
-// TODO: ADDED LOG TO COMPONENT
-// @ts-ignore
-export const addLogEntry = (message: string, type: string) => {}
-
 export const notify = (
   message: string,
   type: 'info' | 'success' | 'error' | 'warning',

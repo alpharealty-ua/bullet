@@ -10,7 +10,7 @@ import {
   MatchDetails,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
-import { addLogEntry, notify } from '@/socket/utils'
+import { notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
@@ -342,10 +342,6 @@ const useMatchmakingSocket = (
   const leaveMatchmaking = useCallback(() => {
     const { matchmakingStatus } = matchmakerEventsStateRef.current
     if (matchmakingStatus === 'match-found') {
-      addLogEntry(
-        'Cannot leave matchmaking while a match confirmation is active',
-        'warning',
-      )
       notify(
         'Cannot leave matchmaking while a match confirmation is active. Please accept or decline the match first.',
         'warning',

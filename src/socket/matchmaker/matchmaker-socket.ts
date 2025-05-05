@@ -15,7 +15,7 @@ import {
   ErrorResponse,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
-import { addLogEntry, notify, SocketEvents } from '@/socket/utils'
+import { notify, SocketEvents } from '@/socket/utils'
 
 type OnEvents =
   | { type: 'connect'; payload: undefined }
@@ -93,39 +93,30 @@ class MatchmakerSocketEvents extends SocketEvents {
       this.onEvent({ type: 'info', payload: data })
     })
     this.on('error', (data: ErrorResponse) => {
-      addLogEntry(`Error: ${data.message}`, 'error')
       this.onEvent({ type: 'error', payload: data })
     })
     this.on('joinedMatchmaking', (data: JoinedMatchmakingResponse) => {
-      addLogEntry(`Joined matchmaking: ${JSON.stringify(data)}`, 'success')
       this.onEvent({ type: 'joinedMatchmaking', payload: data })
     })
     this.on('leftMatchmaking', (data: LeftMatchmakingResponse) => {
-      addLogEntry(`Left matchmaking: ${JSON.stringify(data)}`, 'info')
       this.onEvent({ type: 'leftMatchmaking', payload: data })
     })
     this.on('matchFound', (data: MatchFoundResponse) => {
-      addLogEntry(`Match found: ${JSON.stringify(data)}`, 'success')
       this.onEvent({ type: 'matchFound', payload: data })
     })
     this.on('matchConfirmationUpdate', (data: MatchConfirmationUpdate) => {
-      addLogEntry(`Match confirmation update: ${JSON.stringify(data)}`, 'info')
       this.onEvent({ type: 'matchConfirmationUpdate', payload: data })
     })
     this.on('matchCanceled', (data: MatchCancelResponse) => {
-      addLogEntry(`Match canceled: ${JSON.stringify(data)}`, 'warning')
       this.onEvent({ type: 'matchCanceled', payload: data })
     })
     this.on('matchCreated', (data: MatchCreatedResponse) => {
-      addLogEntry(`Match created: ${JSON.stringify(data)}`, 'success')
       this.onEvent({ type: 'matchCreated', payload: data })
     })
     this.on('duelGameCreated', (data: DuelGameCreatedResponse) => {
-      addLogEntry(`Duel game created: ${JSON.stringify(data)}`, 'success')
       this.onEvent({ type: 'duelGameCreated', payload: data })
     })
     this.on('stats', (data: StatisticsResponse) => {
-      addLogEntry(`Received stats: ${JSON.stringify(data)}`, 'info')
       this.onEvent({ type: 'stats', payload: data })
     })
   }

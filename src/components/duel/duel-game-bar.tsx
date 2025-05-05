@@ -1,7 +1,7 @@
 import { useImperativeHandle, useRef } from 'react'
+import { IoSkull } from 'react-icons/io5'
 
 import { cn } from '@/lib/utils'
-import { IoSkull } from 'react-icons/io5'
 
 export interface GameBarHandle {
   highlight: (index: number) => Promise<void>
