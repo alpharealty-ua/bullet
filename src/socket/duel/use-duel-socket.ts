@@ -45,11 +45,8 @@ export const useDuelSocket = ({
   const hasPull = !pulls.includes(round)
 
   const refState = useRef<{
-    // TODO: REMOVE
-    rematchStatus: 'idle' | 'requested' | 'cancelled' | 'created'
     pullTriggerPromise: Promise<void>
   }>({
-    rematchStatus: 'idle',
     pullTriggerPromise: Promise.resolve(),
   })
 
@@ -349,8 +346,6 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_requested': {
-          refState.current.rematchStatus = 'requested'
-
           const isUser = payload.userId === playerId
           const userOrOpponent = isUser ? 'user' : 'opponnent'
 
@@ -363,7 +358,6 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_created': {
-          refState.current.rematchStatus = 'created'
           notify(payload.message, 'info')
 
           await rematchRequestHandleRef.current?.action('user', 'confirm')
@@ -379,7 +373,6 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_cancelled': {
-          refState.current.rematchStatus = 'cancelled'
           notify(payload.message, 'info')
 
           const isUser = payload.playerId === playerId
