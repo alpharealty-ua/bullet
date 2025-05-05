@@ -5,12 +5,12 @@ const ProfilePage = () => {
   const user = useUser()
 
   return (
-    <>
+    <main className='grow'>
       <div className='flex flex-col gap-2 p-6'>
         <h1 className='text-2xl font-bold'>Profile page</h1>
       </div>
       <Profile user={user} />
-    </>
+    </main>
   )
 }
 
