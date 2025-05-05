@@ -6,11 +6,9 @@ import { QUERY_KEYS } from '@/api/api'
 import { ROUTES } from '@/routes/path'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
-import { useGameStore } from '@/store/game.store'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
-import { TIME_WIN_INCREASE_NUMBER } from '@/lib/constants'
 import { CharacterHandle } from '@/components/duel/character'
 import { GameBarHandle } from '@/components/duel/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/duel/ready-set-pull'
@@ -30,7 +28,6 @@ export const useDuelSocket = ({
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
-  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
   const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
@@ -131,8 +128,6 @@ export const useDuelSocket = ({
   }, [])
 
   const winGame = useCallback(async () => {
-    setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
-
     const genRunSound = victoryHandleRef.current?.runSound()
 
     await frontCharacterHandleRef.current?.updateState({
@@ -153,9 +148,8 @@ export const useDuelSocket = ({
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
 
-    setIncreaseTime(undefined)
     await victoryHandleRef.current?.hide()
-  }, [queryClient, setIncreaseTime])
+  }, [queryClient])
 
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()

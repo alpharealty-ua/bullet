@@ -15,16 +15,10 @@ import { useBalance } from '@/api/wallet.api'
 import { useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
-import { useGameStore } from '@/store/game.store'
 import { useWait } from '@/hooks/use-wait'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { randomIntFromInterval } from '@/lib/utils'
-import {
-  MAX_BET,
-  MULTIPLIERS,
-  TIME_WIN_INCREASE_NUMBER,
-  VariantGame,
-} from '@/lib/constants'
+import { MAX_BET, MULTIPLIERS, VariantGame } from '@/lib/constants'
 import { RevolverHandle } from '@/components/guns/revolver'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
@@ -41,7 +35,6 @@ const useSolo = (variant: VariantGame) => {
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const revolverHandleRef = useRef<RevolverHandle>(null)
-  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
@@ -186,8 +179,6 @@ const useSolo = (variant: VariantGame) => {
   }, [wait, newGame])
 
   const winGame = useCallback(async () => {
-    setIncreaseTime(TIME_WIN_INCREASE_NUMBER)
-
     const genRunSound = victoryHandleRef.current?.runSound()
 
     await victoryHandleRef.current?.updateState({
@@ -199,9 +190,8 @@ const useSolo = (variant: VariantGame) => {
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
 
-    setIncreaseTime(undefined)
     newGame()
-  }, [setIncreaseTime, queryClient, jackpot, newGame])
+  }, [queryClient, jackpot, newGame])
 
   const pullGame = useCallback(
     async (

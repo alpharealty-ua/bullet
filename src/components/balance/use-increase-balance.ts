@@ -1,5 +1,12 @@
 import { useRef, useEffect } from 'react'
 
+import { wait } from '@/lib/utils'
+
+const DOWNTIME_BETWEEN_ANIMATION = 200
+const DURATION_FADE_IN_BALANCE = 500
+export const TIME_BEFORE_INCREASE_BALANCE =
+  DURATION_FADE_IN_BALANCE + DOWNTIME_BETWEEN_ANIMATION
+
 export const useIncreaseBalance = ({
   value,
   increaseTime,
@@ -71,6 +78,7 @@ export const useIncreaseBalance = ({
       }
 
       if (event.animationName === 'enter') {
+        await wait(DOWNTIME_BETWEEN_ANIMATION).promise
         requestID = requestAnimationFrame(function add() {
           currentValue += intervalFrameValue
           if (currentValue * sign >= value * sign) {

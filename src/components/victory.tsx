@@ -2,9 +2,11 @@ import { useImperativeHandle } from 'react'
 
 import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
+import { useGameStore } from '@/store/game.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
+import { TIME_BEFORE_INCREASE_BALANCE } from './balance/use-increase-balance'
 
 export interface VictoryHandle extends UpdateShowMethods<VictoryState> {
   runSound: () => AsyncGenerator<void>
@@ -24,6 +26,7 @@ interface VictoryState {
 
 const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const playSound = useSettingsStore(({ playSound }) => playSound)
+  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const {
     state: { show, type, win, oldLevel, newLevel },
     timeout,
@@ -43,9 +46,15 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
     const winSoundAudio = await playSound('winsound', false)
     const chachingAudio = await playSound('chaching')
 
+    const durationWinAudio = winSoundAudio.duration * 1000
+    const durationWinIncreaseWithDelay =
+      durationWinAudio - TIME_BEFORE_INCREASE_BALANCE
+
     yield void (await waitEndAudio(chachingAudio))
+    setIncreaseTime(durationWinIncreaseWithDelay)
     await winSoundAudio.play()
     await waitEndAudio(winSoundAudio)
+    setIncreaseTime(undefined)
   }
 
   useImperativeHandle(victoryHandleRef, () => ({

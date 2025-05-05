@@ -8,7 +8,6 @@ type Props = Partial<ComponentProps<typeof CSSTransition>> & {
   className?: string
 }
 
-// TODO: ADD ComponentProps<'div'>
 const AnimationInOut = ({ children, className, ...props }: Props) => {
   const nodeRef = useRef(null)
 

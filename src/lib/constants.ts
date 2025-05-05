@@ -126,13 +126,6 @@ export const SRC_AUDIOS = Object.values(AUDIOS)
 
 export type AudioKeys = keyof typeof AUDIOS
 
-// TODO: GET TIME FROM AUDIO
-const TIME_WIN_AUDIO = 3500
-const TIME_ANIMATION_DELAY = 200
-const TIME_ANIMATION_DURATION = 500
-export const TIME_WIN_INCREASE_NUMBER =
-  TIME_WIN_AUDIO - TIME_ANIMATION_DURATION - TIME_ANIMATION_DELAY
-
 export const SETTINGS = {
   music: 'Toggle music',
   soundEffects: 'Toggle sound effects',
