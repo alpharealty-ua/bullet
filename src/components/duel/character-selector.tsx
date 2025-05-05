@@ -143,7 +143,9 @@ const CharacterSelector = ({
                     <div className='flex min-h-25 flex-col gap-2.5'>
                       {!showConfirm ? (
                         <>
-                          <div className='text-3xl'>$ {character.price}</div>
+                          <div className='text-3xl'>
+                            $ {character.formattedPrice}
+                          </div>
                           <ButtonWithAudio
                             as='button'
                             bg='primary'
