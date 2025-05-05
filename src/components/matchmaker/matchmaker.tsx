@@ -23,7 +23,7 @@ const Matchmaker = ({
 }) => {
   const navigate = useNavigate()
   const { data: balance } = useBalance()
-  const noMoney = !(balance < MIN_DUEL_BET)
+  const noMoney = balance < MIN_DUEL_BET
 
   const {
     joinMatchmaking,
@@ -60,8 +60,8 @@ const Matchmaker = ({
 
   return (
     <div className='my-auto w-full'>
-      {!noMoney && <AddMoneyButton />}
-      {noMoney && (
+      {noMoney && <AddMoneyButton />}
+      {!noMoney && (
         <div className='flex w-full flex-col items-center justify-center gap-3'>
           {isNextSearch && (
             <NextSearch

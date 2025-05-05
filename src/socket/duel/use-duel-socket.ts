@@ -53,7 +53,7 @@ export const useDuelSocket = ({
     pullTriggerPromise: Promise.resolve(),
     noMoney: false,
   })
-  stateRef.current.noMoney = !(balance < MIN_DUEL_BET)
+  stateRef.current.noMoney = balance < MIN_DUEL_BET
 
   const reset = useCallback(async () => {
     await Promise.all([
@@ -110,6 +110,7 @@ export const useDuelSocket = ({
     }
     reset()
     const canNext = !stateRef.current.noMoney && !isAfk()
+    console.log(canNext, stateRef.current.noMoney, isAfk())
     navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
       preventScrollReset: true,
     })
