@@ -24,36 +24,31 @@ const useSettingsStore = create<SettingsState>()(
         key: keyof typeof AUDIOS,
         play = true,
       ): Promise<HTMLAudioElement> => {
-        const audio = new Audio(AUDIOS[key])
+        const audioEl = new Audio(AUDIOS[key])
+        const muted = !get().soundEffects
 
-        // TODO: MOVE TO ADUIO
-        audio.addEventListener(
-          'ended',
-          () => {
-            console.log('Play audio - ' + audio.src)
-          },
-          { once: true },
-        )
+        audioEl.muted = muted
+        audioEl.currentTime = 0
 
-        audio.muted = !get().soundEffects
-        audio.currentTime = 0
+        const nativePlay = audioEl.play
 
-        const nativePlay = audio.play
-
-        audio.play = async () => {
+        audioEl.play = async () => {
           try {
-            await nativePlay.call(audio)
+            await nativePlay.call(audioEl)
           } catch (error) {
-            const duration = (audio.duration || 1) * 1000
-            setTimeout(() => audio.dispatchEvent(new Event('ended')), duration)
+            const duration = (audioEl.duration || 1) * 1000
+            setTimeout(
+              () => audioEl.dispatchEvent(new Event('ended')),
+              duration,
+            )
           }
         }
 
         if (play) {
-          await audio.play()
+          await audioEl.play()
         }
 
-        return audio
+        return audioEl
       },
     }),
     { name: 'settings-store' },
