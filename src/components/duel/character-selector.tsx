@@ -29,7 +29,7 @@ const CharacterSelector = ({
     ({ setCharacterName }) => setCharacterName,
   )
   const characterName = useGameStore(({ characterName }) => characterName)
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const [activeIndex, setActiveIndex] = useState(
     characters.findIndex((n) => n.id === characterName) ?? 0,
   )
@@ -69,7 +69,7 @@ const CharacterSelector = ({
     const characterName = characters[activeIndex].id
     purchaseCharacterMutation(characterName, {
       onSuccess: () => {
-        playAudio('holy')
+        playSound('holy')
         onSelect(true)
       },
       onError: () => {},

@@ -125,6 +125,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
               return (
                 <td
                   key={i}
+                  // TODO: ADD WILL CHANGE
                   className={cn(
                     '2xs:border-3 relative h-10 border-2 border-black bg-[#f7f7c0] text-center align-middle text-[0.5rem] text-white select-none first:border-l-0 last:border-r-0 sm:text-[0.563rem]',
                     'zoom-in-200',

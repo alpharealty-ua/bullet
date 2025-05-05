@@ -17,13 +17,13 @@ const ButtonWithAudio = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonWithAudioProps
 >(({ onClick, skipWaitAnimation = false, ...props }, ref) => {
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const isMouseDownFiredRef = useRef(false)
   const [disabled, setDisabled] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   const mouseClick = async (buttonEl: HTMLButtonElement): Promise<void> => {
-    await playAudio('mouseclick')
+    await playSound('mouseclick')
 
     const ANIMATION_NAME = 'animate-button-click'
 

@@ -28,7 +28,7 @@ const Revolver = React.forwardRef<
     gunHandleRef: React.ForwardedRef<RevolverHandle>
   }
 >(({ disabled, className, gunHandleRef, ...props }, ref) => {
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const gunRef = useRef<HTMLDivElement>(null)
   const rotateRef = useRef(0)
   const speedRotateRef = useRef(0)
@@ -203,11 +203,11 @@ const Revolver = React.forwardRef<
     }
   }, [disabled])
 
-  const shot = useShot(playAudio, setShowShot)
+  const shot = useShot(playSound, setShowShot)
 
   const spin = useSpin(gunRef, rotateRef)
 
-  const trigger = async () => void (await playAudio('triggerpull'))
+  const trigger = async () => void (await playSound('triggerpull'))
 
   const click = useClick(gunRef)
 

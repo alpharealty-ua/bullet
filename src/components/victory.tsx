@@ -23,7 +23,7 @@ interface VictoryState {
 }
 
 const Victory = ({ victoryHandleRef }: VictoryProps) => {
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const {
     state: { show, type, win, oldLevel, newLevel },
     timeout,
@@ -40,8 +40,8 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const isDraw = type === 'draw'
 
   const runSound = async function* () {
-    const winSoundAudio = await playAudio('winsound', false)
-    const chachingAudio = await playAudio('chaching')
+    const winSoundAudio = await playSound('winsound', false)
+    const chachingAudio = await playSound('chaching')
 
     yield void (await waitEndAudio(chachingAudio))
     await winSoundAudio.play()

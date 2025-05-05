@@ -19,7 +19,7 @@ const ReadySetPull = ({
   className,
   ...props
 }: ReadySetPullProps) => {
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   const startAll = async () => {
@@ -42,20 +42,20 @@ const ReadySetPull = ({
     pullEl.classList.remove('is-show')
 
     if (value === 'ready') {
-      const readyAudio = await playAudio('ready')
+      const readyAudio = await playSound('ready')
       readyEl.classList.add('is-show')
       await waitEndAudio(readyAudio)
     }
 
     if (value === 'set') {
-      const setAudio = await playAudio('ready')
+      const setAudio = await playSound('ready')
       readyEl.classList.add('is-show')
       setEl.classList.add('is-show')
       await waitEndAudio(setAudio)
     }
 
     if (value === 'pull') {
-      const pullAudio = await playAudio('pull')
+      const pullAudio = await playSound('pull')
       readyEl.classList.add('is-show')
       setEl.classList.add('is-show')
       pullEl.classList.add('is-show')

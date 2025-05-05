@@ -1,17 +1,20 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { AUDIOS, DEFAULT_SETTINGS, SettingsKeys } from '@/lib/constants'
+import {
+  AudioKeys,
+  AUDIOS,
+  DEFAULT_SETTINGS,
+  SettingsKeys,
+} from '@/lib/constants'
 
 export type PlaySound = (
-  key: keyof typeof AUDIOS,
+  key: AudioKeys,
   play?: boolean,
 ) => Promise<HTMLAudioElement>
 interface SettingsState extends Record<SettingsKeys, boolean> {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
-  // TODO: MOVE
-  // TODO: RENAME TO PLAY SOUND
-  playAudio: PlaySound
+  playSound: PlaySound
 }
 
 const useSettingsStore = create<SettingsState>()(
@@ -20,8 +23,8 @@ const useSettingsStore = create<SettingsState>()(
       ...DEFAULT_SETTINGS,
       change: (payload: Partial<Record<SettingsKeys, boolean>>) =>
         set({ ...payload }),
-      playAudio: async (
-        key: keyof typeof AUDIOS,
+      playSound: async (
+        key: AudioKeys,
         play = true,
       ): Promise<HTMLAudioElement> => {
         const audioEl = new Audio(AUDIOS[key])

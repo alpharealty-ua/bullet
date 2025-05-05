@@ -79,7 +79,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     },
     ref,
   ) => {
-    const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+    const playSound = useSettingsStore(({ playSound }) => playSound)
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
     const [showShot, setShowShot] = useState(false)
@@ -92,7 +92,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
 
     const images = imagesMap[characterName]
 
-    const shot = useShot(playAudio, setShowShot)
+    const shot = useShot(playSound, setShowShot)
 
     const spin = useSpin(gunRef, rotateRef)
 
@@ -109,7 +109,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
       )
       fingerEl.classList.remove('is-trigger')
 
-      await playAudio('triggerpull')
+      await playSound('triggerpull')
     }
 
     const click = useClick(gunRef)

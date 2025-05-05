@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import { AUDIOS } from '@/lib/constants'
+import { AudioKeys, AUDIOS } from '@/lib/constants'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -44,7 +44,7 @@ export const wait = (timeout: number) => {
   return { promise, timeoutId }
 }
 
-export const getAudio = (key: keyof typeof AUDIOS): HTMLAudioElement => {
+export const getAudio = (key: AudioKeys): HTMLAudioElement => {
   return new Audio(AUDIOS[key])
 }
 

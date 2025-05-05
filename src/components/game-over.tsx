@@ -21,7 +21,7 @@ interface GameOverProps {
 }
 
 const GameOver = ({ gameOverHandleRef, onClick }: GameOverProps) => {
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playAudio = useSettingsStore(({ playSound }) => playSound)
   const blood = useSettingsStore(({ blood }) => blood)
   const {
     state: { show, disabled },

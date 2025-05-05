@@ -14,15 +14,15 @@ import { addLogEntry, notify } from '@/socket/utils'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
-import { Indicator } from '@/components/ui/indicators'
 import { wait } from '@/lib/utils'
+import { Indicator } from '@/components/ui/indicators'
 
 const useMatchmakingSocket = (
   matchmakerEvents: MatchmakerSocketEvents,
   autoJoin = false,
 ) => {
   const queryClient = useQueryClient()
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const [pingData, setPingData] = useState<PingData>({
     ping: 0,
     jitter: 0,
@@ -185,7 +185,7 @@ const useMatchmakingSocket = (
           )
 
           // Play match found sound
-          playAudio('matchFound')
+          playSound('matchFound')
 
           // TODO: SET ALL RESPONSE DATA
           if (payload.confirmationRequired) {
@@ -223,7 +223,7 @@ const useMatchmakingSocket = (
           setMatchmakingStatus(status)
 
           // Play match canceled sound
-          playAudio('matchCanceled')
+          playSound('matchCanceled')
 
           // Show reason in a more user-friendly way
           let reason = 'Unknown reason'
@@ -242,7 +242,7 @@ const useMatchmakingSocket = (
 
           setMatchmakingStatus('match-created')
 
-          playAudio('matchConfirmed')
+          playSound('matchConfirmed')
 
           // Show a notification
           notify(
@@ -327,7 +327,7 @@ const useMatchmakingSocket = (
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
     })
-  }, [matchmakerEvents, playAudio, queryClient, setMatchDetails])
+  }, [matchmakerEvents, playSound, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
     socket.connected

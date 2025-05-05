@@ -47,7 +47,7 @@ const useSolo = (variant: VariantGame) => {
   const { mutateAsync: startGameMutation } = useStartGame()
   const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = usePullGame()
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const [countBullet, setCountBullet] = useState(5)
   const [bet, setBet] = useState(0)
   const [jackpot, setJackpot] = useState(-1)
@@ -97,7 +97,7 @@ const useSolo = (variant: VariantGame) => {
         length * Math.round(randomIntFromInterval(20, 30) / length) +
         multiplierIndex
 
-      const spinAudio = await playAudio('spin')
+      const spinAudio = await playSound('spin')
 
       const END_DELAY = 100
       const DURATION_AUDIO = spinAudio.duration * 1000 - END_DELAY
@@ -136,14 +136,14 @@ const useSolo = (variant: VariantGame) => {
         spin(0).then(resolve)
       })
     },
-    [bet, playAudio, setJackpot, setMultiplier],
+    [bet, playSound, setJackpot, setMultiplier],
   )
 
   const deal = async () => {
     if (offer) {
       await acceptOfferMutation(offer.id)
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
-      await playAudio('chaching')
+      await playSound('chaching')
       await newGame()
     }
   }

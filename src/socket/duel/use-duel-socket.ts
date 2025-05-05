@@ -29,7 +29,7 @@ export const useDuelSocket = ({
 }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const playAudio = useSettingsStore(({ playAudio }) => playAudio)
+  const playSound = useSettingsStore(({ playSound }) => playSound)
   const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
   const [pulls, setPulls] = useState<number[]>([])
   const [canPull, setCanPull] = useState(true)
@@ -340,7 +340,7 @@ export const useDuelSocket = ({
           await bottomGameBarHandleRef.current?.setActive(payload.index)
 
           if ((payload.index === 0 && round !== 1) || payload.index === 20) {
-            playAudio('bounce')
+            playSound('bounce')
           }
           return
         }
@@ -434,7 +434,7 @@ export const useDuelSocket = ({
     drawGame,
     navigate,
     nextOpponnet,
-    playAudio,
+    playSound,
     reset,
     queryClient,
   ])

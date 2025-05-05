@@ -124,6 +124,8 @@ export const AUDIOS = {
 
 export const SRC_AUDIOS = Object.values(AUDIOS)
 
+export type AudioKeys = keyof typeof AUDIOS
+
 // TODO: GET TIME FROM AUDIO
 const TIME_WIN_AUDIO = 3500
 const TIME_ANIMATION_DELAY = 200
@@ -138,7 +140,7 @@ export const SETTINGS = {
   blood: 'Toggles off blood',
 } as const
 
-export const DEFAULT_SETTINGS: Record<keyof typeof SETTINGS, boolean> = {
+export const DEFAULT_SETTINGS: Record<SettingsKeys, boolean> = {
   music: true,
   soundEffects: true,
   invertButtons: false,
