@@ -98,3 +98,17 @@ export const getLevelColor = (lvl: number) => {
   if (lvl >= 21) return 'text-[#F59E0B]'
   return 'text-[#9CA3AF]'
 }
+
+export const debounce = <T extends unknown[], U>(
+  callback: (...args: T) => PromiseLike<U> | U,
+  wait: number,
+) => {
+  let timeoutID: number
+
+  return (...args: T): Promise<U> => {
+    clearTimeout(timeoutID)
+    return new Promise((resolve) => {
+      timeoutID = window.setTimeout(() => resolve(callback(...args)), wait)
+    })
+  }
+}
