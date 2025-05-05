@@ -35,7 +35,7 @@ const Matchmaker = ({
     indicators,
     confirmationTimeoutSeconds,
     gameId,
-  } = useMatchmakingSocket(matchmakerEvents, autoJoin)
+  } = useMatchmakingSocket(matchmakerEvents, autoJoin && !noMoney)
 
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'
