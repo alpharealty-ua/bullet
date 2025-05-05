@@ -159,7 +159,11 @@ export const PRIVATE_ROUTES = [
     path: ROUTES.duel.game(':gameId'),
     element: (
       <PageWrapper
-        headerProps={{ logoText: 'Duel', isModalProfileLink: true }}
+        headerProps={{
+          logoText: 'Duel',
+          isModalProfileLink: true,
+          hideNoMoney: true,
+        }}
         hideFooter
       >
         <DuelPage variant='play' />
