@@ -108,7 +108,6 @@ export const useDuelSocket = ({
     })
   }, [duelSocketEvents, gameId, isAfk, navigate, playerId, reset])
 
-  // TODO: EXTRACTED TO CUSTOM HOOK AND USE IN SOLO TOO
   const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
       characterState: 'eliminated',
