@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/api/api'
+import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
@@ -10,6 +11,7 @@ import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
+import { MIN_DUEL_BET } from '@/lib/constants'
 import { CharacterHandle } from '@/components/duel/character'
 import { GameBarHandle } from '@/components/duel/duel-game-bar'
 import { ReadySetPullHandle } from '@/components/duel/ready-set-pull'
@@ -27,6 +29,7 @@ export const useDuelSocket = ({
   duelSocketEvents: DuelSocketEvents
 }) => {
   const navigate = useNavigate()
+  const { data: balance } = useBalance()
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
   const isAfk = useAfk()
@@ -43,11 +46,14 @@ export const useDuelSocket = ({
   const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
   const hasPull = !pulls.includes(round)
 
-  const refState = useRef<{
+  const stateRef = useRef<{
     pullTriggerPromise: Promise<void>
+    noMoney: boolean
   }>({
     pullTriggerPromise: Promise.resolve(),
+    noMoney: false,
   })
+  stateRef.current.noMoney = !(balance < MIN_DUEL_BET)
 
   const reset = useCallback(async () => {
     await Promise.all([
@@ -103,7 +109,8 @@ export const useDuelSocket = ({
       duelSocketEvents.leaveDuelGame({ gameId, playerId })
     }
     reset()
-    navigate(isAfk() ? ROUTES.duel.enterArena : ROUTES.duel.next, {
+    const canNext = !stateRef.current.noMoney && !isAfk()
+    navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
       preventScrollReset: true,
     })
   }, [duelSocketEvents, gameId, isAfk, navigate, playerId, reset])
@@ -286,7 +293,7 @@ export const useDuelSocket = ({
             }
           }
 
-          refState.current.pullTriggerPromise = pullTrigger()
+          stateRef.current.pullTriggerPromise = pullTrigger()
           return
         }
         case 'game:player_won': {
@@ -307,7 +314,7 @@ export const useDuelSocket = ({
             queryKey: [QUERY_KEYS.playerStatistics, playerId],
           })
 
-          await refState.current.pullTriggerPromise
+          await stateRef.current.pullTriggerPromise
 
           setCanPull(false)
           const isDraw = !payload.winner
