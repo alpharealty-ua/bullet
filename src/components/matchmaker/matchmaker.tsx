@@ -11,6 +11,7 @@ import { MatchmakerStatistics } from '@/components/matchmaker/matchmaker-statist
 import { NextSearch } from '@/components/matchmaker/next-search'
 import { AddMoneyButton } from '@/components/ui/add-money-button'
 import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
+import { MatchmakerTrophies } from '@/components/matchmaker//matchmaker-trophies'
 
 const Matchmaker = ({
   matchmakerEvents,
@@ -84,6 +85,7 @@ const Matchmaker = ({
           )}
           {!isNextSearch && <MatchmakerPersonalStatistics />}
           {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
+          {!isNextSearch && <MatchmakerTrophies />}
         </div>
       )}
     </div>
