@@ -176,7 +176,7 @@ export const useDuelSocket = ({
     await genRunSound?.next()
 
     await victoryHandleRef.current?.hide()
-  }, [queryClient])
+  }, [playerId, queryClient])
 
   const drawGame = useCallback(async () => {
     await frontCharacterHandleRef.current?.reset()
