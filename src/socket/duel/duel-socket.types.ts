@@ -47,6 +47,13 @@ export interface StartedResponse {
   gameId: string
   message: string
 }
+
+export interface Winner {
+  id: string
+  userId: string
+  username: string
+}
+
 export interface EndedResponse {
   gameId: string
   message: string
@@ -58,7 +65,7 @@ export interface EndedResponse {
     rematchSeriesComplete: boolean
   }
   reason?: string
-  winner?: { id: string }
+  winner?: Winner
 }
 
 export interface ProbabilityResponse {

@@ -7,7 +7,7 @@ import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
-import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
+import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
@@ -36,6 +36,7 @@ export const useDuelSocket = ({
   const [pulls, setPulls] = useState<number[]>([])
   const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
+  const [winner, setWinner] = useState<Winner | null>(null)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -65,6 +66,7 @@ export const useDuelSocket = ({
       rematchRequestHandleRef.current?.reset(),
     ])
 
+    setWinner(null)
     setPulls([])
     setCanPull(true)
     setRound(1)
@@ -190,6 +192,8 @@ export const useDuelSocket = ({
   const duelEventsStateRef = useRef({
     round,
     setRound,
+    winner,
+    setWinner,
   })
 
   useEffect(() => {
@@ -198,9 +202,14 @@ export const useDuelSocket = ({
       duelEventsStateRef.current.round = round
     }
 
+    const setWinner = (winner: Winner | null) => {
+      duelEventsStateRef.current.setWinner(winner)
+      duelEventsStateRef.current.winner = winner
+    }
+
     duelSocketEvents.updateEvents(async (event) => {
       const { type, payload } = event
-      const { round } = duelEventsStateRef.current
+      const { round, winner } = duelEventsStateRef.current
 
       switch (type) {
         case 'connect': {
@@ -308,6 +317,15 @@ export const useDuelSocket = ({
           if (payload.reason?.includes('Player eliminated in duel')) {
             return
           }
+          if (winner) {
+            return
+          }
+
+          const { winner: gameWinner = null } = payload
+          const { rematchScores } = payload.rematchInfo
+
+          setWinner(gameWinner)
+          setCanPull(false)
 
           await queryClient.invalidateQueries({
             queryKey: [QUERY_KEYS.playerStatistics, playerId],
@@ -315,14 +333,12 @@ export const useDuelSocket = ({
 
           await stateRef.current.pullTriggerPromise
 
-          setCanPull(false)
-          const isDraw = !payload.winner
-          const isWin = payload.winner?.id === playerId
+          const isDraw = !gameWinner
+          const isWin = gameWinner?.id === playerId
 
           const result = isDraw ? drawGame : isWin ? winGame : gameOver
           const resultPromise = result()
 
-          const { rematchScores } = payload.rematchInfo
           const [scorePlayer1 = 0, scorePlayer2 = 0] =
             Object.values(rematchScores)
 
