@@ -228,9 +228,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         gameOverHandleRef={gameOverHandleRef}
         onClick={handleGameOverClick}
       />
-      {typePage === 'enter-arena' ? (
-        <Footer />
-      ) : (
+      {typePage !== 'enter-arena' && (
         <DuelFooter round={round} hasPull={hasPull} prizepool={2000} />
       )}
     </>

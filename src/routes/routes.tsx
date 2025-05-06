@@ -136,7 +136,10 @@ export const PRIVATE_ROUTES = [
   {
     path: ROUTES.duel.enterArena,
     element: (
-      <PageWrapper headerProps={{ logoText: 'Duel' }} hideFooter>
+      <PageWrapper
+        headerProps={{ logoText: 'Duel' }}
+        footerProps={{ leaderboardButton: 'button' }}
+      >
         <DuelPage variant='play' />
       </PageWrapper>
     ),
@@ -149,6 +152,7 @@ export const PRIVATE_ROUTES = [
           logoText: 'Duel',
           isModalProfileLink: true,
         }}
+        footerProps={{ leaderboardButton: 'button' }}
         hideFooter
       >
         <DuelPage variant='play' />
@@ -164,6 +168,7 @@ export const PRIVATE_ROUTES = [
           isModalProfileLink: true,
           hideNoMoney: true,
         }}
+        footerProps={{ leaderboardButton: 'button' }}
         hideFooter
       >
         <DuelPage variant='play' />
