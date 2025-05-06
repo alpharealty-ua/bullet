@@ -33,6 +33,8 @@ export const IMAGES = {
   gunfingercharacterfatty: '/assets/images/gun-finger-character-fatty.png',
   gunhandcharacteranime: '/assets/images/gun-hand-character-anime.png',
   gunfingercharacteranime: '/assets/images/gun-finger-character-anime.png',
+  gunhandcharacterdaisy: '/assets/images/gun-hand-character-daisy.png',
+  gunfingercharacterdaisy: '/assets/images/gun-finger-character-daisy.png',
   solo: '/assets/images/solo.svg',
   play: '/assets/images/play.svg',
   pull: '/assets/images/pull.svg',
@@ -45,11 +47,13 @@ export const IMAGES = {
   characterfattyfront: '/assets/images/character-fatty-front.png',
   characteranime1front: '/assets/images/character-anime-1-front.png',
   characteranime2front: '/assets/images/character-anime-2-front.png',
+  characterdaisyfront: '/assets/images/character-daisy-front.png',
   characternubcatback: '/assets/images/character-nubcat-back.png',
   charactermickeyback: '/assets/images/character-mickey-back.png',
   characterfattyback: '/assets/images/character-fatty-back.png',
   characteranime1back: '/assets/images/character-anime-1-back.png',
   characteranime2back: '/assets/images/character-anime-2-back.png',
+  characterdaisyback: '/assets/images/character-daisy-back.png',
   flagusa: '/assets/images/flag-usa.png',
   flagchina: '/assets/images/flag-china.png',
   flagmexico: '/assets/images/flag-mexico.png',
@@ -87,9 +91,14 @@ export const CHARACTER_LIST = {
     back: IMAGES.characteranime2back,
     front: IMAGES.characteranime2front,
   },
+  daisy: {
+    back: IMAGES.characterdaisyback,
+    front: IMAGES.characterdaisyfront,
+  },
 } satisfies Record<CharacterName, Record<CharacterType, string>>
 
 export const characterNameList = [
+  'daisy',
   'nubcat',
   'mickey',
   'fatty',

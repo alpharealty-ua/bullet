@@ -136,7 +136,6 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
             characterName={name}
             characterType={'back'}
             gunHandleRef={backGunHandleRef}
-            hideGun
           />
         </div>
         {characterState !== 'alive' && (

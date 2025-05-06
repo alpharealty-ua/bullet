@@ -51,7 +51,9 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             <Loading />
           ) : (
             <CharacterSelector
-              characters={characters}
+              // TODO: REMOVE LATER, ONLY FOR TEST
+              // @ts-ignore
+              characters={[{ id: 'daisy', purchased: true }, ...characters]}
               onSelect={handleSelectCharacter}
             />
           ))}
