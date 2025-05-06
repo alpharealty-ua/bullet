@@ -66,10 +66,10 @@ export const useDuelSocket = ({
       rematchRequestHandleRef.current?.reset(),
     ])
 
-    setWinner(null)
+    setWinner((duelEventsStateRef.current.winner = null))
     setPulls([])
     setCanPull(true)
-    setRound(1)
+    setRound((duelEventsStateRef.current.round = 1))
   }, [])
 
   const opponentPull = useCallback(async (shot: boolean) => {
@@ -317,6 +317,9 @@ export const useDuelSocket = ({
           if (payload.reason?.includes('Player eliminated in duel')) {
             return
           }
+
+          console.log(winner)
+
           if (winner) {
             return
           }
