@@ -65,10 +65,6 @@ const MatchmakerPersonalStatistics = ({
               label: 'Perfect Hit %',
               value: userStatistics.perfectHitRate,
             },
-            {
-              label: 'Rank',
-              value: userStatistics.rank,
-            },
           ].map(({ value, label }, i) => (
             <div
               key={i}
