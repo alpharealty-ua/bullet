@@ -130,7 +130,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         {typePage !== 'enter-arena' && (
           <DuelGameBar gameBarRef={topGameBarHandleRef} />
         )}
-        <div className='relative flex min-h-145 w-full grow flex-col justify-end gap-10 py-5'>
+        <div className='relative flex min-h-148 w-full grow flex-col justify-end gap-10 py-5'>
           <AnimationInOut
             in={typePage !== 'duel'}
             className={cn(
