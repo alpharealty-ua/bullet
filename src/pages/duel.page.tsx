@@ -23,7 +23,6 @@ import { RematchRequest } from '@/components/rematch-request'
 import { Matchmaker } from '@/components/matchmaker/matchmaker'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
-import { Footer } from '@/components/ui/footer'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId = null } = useParams() as { gameId?: string }

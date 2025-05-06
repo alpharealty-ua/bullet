@@ -21,7 +21,7 @@ const MatchmakerPersonalStatistics = ({
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
       <div className='px-2'>Personal statistics</div>
       {isLoading ? (
-        <Loading />
+        <Loading size='sm' diration='row' />
       ) : !isSuccess ? (
         error?.message.includes('not found') ? (
           <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>

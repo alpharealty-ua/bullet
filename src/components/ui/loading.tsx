@@ -1,16 +1,38 @@
 import { ComponentProps } from 'react'
+
 import { cn } from '@/lib/utils'
 
-const Loading = ({ className, ...props }: ComponentProps<'div'>) => {
+type Size = 'lg' | 'md' | 'sm'
+
+interface LoadingProps extends ComponentProps<'div'> {
+  size?: Size
+  diration?: 'row' | 'col'
+}
+
+const Loading = ({
+  className,
+  size = 'lg',
+  diration = 'col',
+  ...props
+}: LoadingProps) => {
   return (
     <div
       className={cn(
         'flex flex-col items-center justify-center gap-4',
+        diration === 'row' && 'flex-row',
+        diration === 'col' && 'flex-col',
         className,
       )}
       {...props}
     >
-      <div className='h-30 w-30'>
+      <div
+        className={cn(
+          'shrink-0',
+          size === 'lg' && 'w-24',
+          size === 'md' && 'w-18',
+          size === 'sm' && 'w-12',
+        )}
+      >
         <svg
           className='fill-primary h-full w-full animate-spin text-white drop-shadow-lg'
           viewBox='0 0 100 101'
@@ -27,7 +49,16 @@ const Loading = ({ className, ...props }: ComponentProps<'div'>) => {
           />
         </svg>
       </div>
-      <div className='text-4xl'>Loading...</div>
+      <div
+        className={cn(
+          'text-2xl',
+          size === 'lg' && 'text-2xl',
+          size === 'md' && 'text-xl',
+          size === 'sm' && 'text-lg',
+        )}
+      >
+        Loading...
+      </div>
     </div>
   )
 }
