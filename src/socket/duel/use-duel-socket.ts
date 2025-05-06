@@ -217,7 +217,9 @@ export const useDuelSocket = ({
     }
 
     const setIsDisconnectedOpponent = (isDisconnectedOpponent: boolean) => {
-      duelEventsStateRef.current.setIsDisconnectedOpponent(isLeftOpponent)
+      duelEventsStateRef.current.setIsDisconnectedOpponent(
+        isDisconnectedOpponent,
+      )
       duelEventsStateRef.current.isDisconnectedOpponent = isDisconnectedOpponent
     }
 
