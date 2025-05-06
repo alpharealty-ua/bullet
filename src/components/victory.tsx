@@ -93,7 +93,7 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
             You won - <span className='text-green'>${win}</span>
           </div>
         )}
-        {(typeof oldLevel === 'number' || typeof newLevel === 'number') && (
+        {typeof oldLevel === 'number' && typeof newLevel === 'number' && (
           <div className='flex gap-10'>
             <div className='text-4xl'>Lvl</div>
             <ul className='pt-4 text-right'>

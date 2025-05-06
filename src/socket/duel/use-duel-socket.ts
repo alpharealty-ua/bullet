@@ -11,6 +11,7 @@ import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
+import { PlayerStatisticsSchema } from '@/lib/schemas/leaderboard.schema'
 import { MIN_DUEL_BET } from '@/lib/constants'
 import { CharacterHandle } from '@/components/duel/character'
 import { GameBarHandle } from '@/components/duel/duel-game-bar'
@@ -137,6 +138,18 @@ export const useDuelSocket = ({
   }, [])
 
   const winGame = useCallback(async () => {
+    const getLvl = () =>
+      (
+        queryClient.getQueryData([
+          QUERY_KEYS.playerStatistics,
+          playerId,
+        ]) as PlayerStatisticsSchema
+      ).lvl
+
+    const playerStatisticsQueryPromise = queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.playerStatistics, playerId],
+    })
+
     const genRunSound = victoryHandleRef.current?.runSound()
 
     await frontCharacterHandleRef.current?.updateState({
@@ -145,10 +158,15 @@ export const useDuelSocket = ({
     await backCharacterHandleRef.current?.updateState({
       characterState: 'winner',
     })
+
+    const oldLvl = getLvl()
+    await playerStatisticsQueryPromise
+    const newLvl = getLvl()
+
     victoryHandleRef.current?.updateState({
       type: 'win',
-      oldLevel: 722,
-      newLevel: 754,
+      oldLevel: oldLvl,
+      newLevel: newLvl,
     })
     const showVictoryPromise = victoryHandleRef.current?.show()
 
@@ -344,10 +362,6 @@ export const useDuelSocket = ({
 
           setWinner(gameWinner)
           setCanPull(false)
-
-          await queryClient.invalidateQueries({
-            queryKey: [QUERY_KEYS.playerStatistics, playerId],
-          })
 
           await duelEventsStateRef.current.pullTriggerPromise
 
