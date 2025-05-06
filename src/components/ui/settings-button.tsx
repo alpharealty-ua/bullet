@@ -1,8 +1,16 @@
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { cn } from '@/lib/utils'
 import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { ButtonProps } from '@/components/ui/button'
 
-const SettingsButton = () => {
+type PickAsButton<T> = T extends { as: 'button' }
+  ? Omit<T, 'as' | 'image' | 'bg'>
+  : never
+
+type SettingsProps = PickAsButton<ButtonProps>
+
+const SettingsButton = ({ className, ...props }: SettingsProps) => {
   const modal = useCustomModal()
 
   const handleSettingsClick = () => {
@@ -13,8 +21,12 @@ const SettingsButton = () => {
     <ButtonWithAudio
       as='button'
       image='settings'
-      className='w-10 cursor-pointer bg-center bg-no-repeat p-1.5'
+      className={cn(
+        'w-10 cursor-pointer bg-center bg-no-repeat p-1.5',
+        className,
+      )}
       onClick={handleSettingsClick}
+      {...props}
     />
   )
 }
