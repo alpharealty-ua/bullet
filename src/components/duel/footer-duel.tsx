@@ -1,10 +1,7 @@
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { useCustomModal } from '@/hooks/use-custom-modal'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { Settings } from '@/components/settings'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
-import { Leaderboard } from '@/components/leaderboard/leaderboard'
+import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 
 const DuelFooter = ({
   round,
@@ -16,26 +13,12 @@ const DuelFooter = ({
   prizepool?: number
 }) => {
   const { data: userStatistics } = useUserStatistics()
-  const modal = useCustomModal()
-
-  const handleSettingsClick = () => {
-    modal.show({ contentSlot: <Settings /> })
-  }
-
-  const handleLeaderboardClick = () => {
-    modal.show({ contentSlot: <Leaderboard /> })
-  }
 
   return (
     <footer className='relative flex h-20 shrink-0 justify-between bg-[#f2f2f2] px-2 py-1'>
       <div className='relative flex flex-1 flex-col gap-0.5'>
         <div className='flex items-center gap-1'>
-          <ButtonWithAudio
-            as='button'
-            image='leaderboardstar'
-            onClick={handleLeaderboardClick}
-            className='w-10 cursor-pointer'
-          />
+          <LeaderboardButton as='button' />
           <div className='flex flex-col gap-2'>
             <div className='text-base leading-[1] tracking-tight'>
               Lvl {userStatistics?.lvl ?? 0}
@@ -74,14 +57,6 @@ const DuelFooter = ({
             </div>
           </div>
         )}
-      </div>
-      <div className='absolute right-1 bottom-1'>
-        <ButtonWithAudio
-          as='button'
-          image='settings'
-          className='w-5 cursor-pointer bg-center bg-no-repeat p-1'
-          onClick={handleSettingsClick}
-        />
       </div>
     </footer>
   )
