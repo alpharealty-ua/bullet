@@ -48,12 +48,11 @@ export const useDuelSocket = ({
 
   const stateRef = useRef<{
     pullTriggerPromise: Promise<void>
-    noMoney: boolean
+    canNext: () => boolean
   }>({
     pullTriggerPromise: Promise.resolve(),
-    noMoney: false,
+    canNext: (): boolean => Boolean(!(balance < MIN_DUEL_BET) && !isAfk()),
   })
-  stateRef.current.noMoney = balance < MIN_DUEL_BET
 
   const reset = useCallback(async () => {
     await Promise.all([
@@ -109,12 +108,11 @@ export const useDuelSocket = ({
       duelSocketEvents.leaveDuelGame({ gameId, playerId })
     }
     reset()
-    const canNext = !stateRef.current.noMoney && !isAfk()
-    console.log(canNext, stateRef.current.noMoney, isAfk())
+    const canNext = stateRef.current.canNext()
     navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
       preventScrollReset: true,
     })
-  }, [duelSocketEvents, gameId, isAfk, navigate, playerId, reset])
+  }, [duelSocketEvents, gameId, navigate, playerId, reset])
 
   const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
@@ -329,9 +327,11 @@ export const useDuelSocket = ({
             Object.values(rematchScores)
 
           const diffScore = Math.abs(scorePlayer1 - scorePlayer2)
-          const canRematch = diffScore < 2
 
-          if (canRematch) {
+          const canRematch = diffScore < 2
+          const canNext = stateRef.current.canNext()
+
+          if (canRematch && canNext) {
             rematchRequestHandleRef.current?.show()
           } else {
             await resultPromise
@@ -439,6 +439,7 @@ export const useDuelSocket = ({
     playSound,
     reset,
     queryClient,
+    isAfk,
   ])
 
   useEffect(() => {
