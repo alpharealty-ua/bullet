@@ -302,8 +302,6 @@ export const useDuelSocket = ({
             }
             if (type === 'game:pull') {
               setCanPull(true)
-              frontCharacterHandleRef.current?.updateState({ showInfo: false })
-              backCharacterHandleRef.current?.updateState({ showInfo: false })
             }
           }
 
