@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom'
 
 import { useForm } from 'react-hook-form'
 
+import { useAddBalance } from '@/api/wallet.api'
 import {
   AFK_TIME,
   DUEL_COUNTDOWN,
@@ -37,11 +38,13 @@ const Debug = () => {
     },
   })
 
+  const { mutate: addBalanceMutation } = useAddBalance()
+
   if (!getItem('showDebug')) {
     return null
   }
 
-  const onSubmit = (values: FormValues) => {
+  const handleSubmit = (values: FormValues) => {
     setItem('duelCoundDown', values.duelCoundDown)
     setItem('minDuelBet', values.minDuelBet)
     setItem('maxBet', values.maxBet)
@@ -50,11 +53,15 @@ const Debug = () => {
     location.reload()
   }
 
+  const handleAddMoneyClick = () => {
+    addBalanceMutation(1000)
+  }
+
   return createPortal(
     <div className='absolute top-0 right-[calc(50%+var(--width)/2)] flex w-50 flex-col gap-2 bg-amber-100 p-4'>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(handleSubmit)}
           className='flex w-full flex-col gap-4'
         >
           <FormField
@@ -118,6 +125,13 @@ const Debug = () => {
           />
         </form>
       </Form>
+      <ButtonWithAudio
+        as='button'
+        image='button'
+        text='Add money'
+        className='text-xl'
+        onClick={handleAddMoneyClick}
+      ></ButtonWithAudio>
     </div>,
     document.body,
   )

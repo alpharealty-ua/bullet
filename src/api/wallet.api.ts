@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
+import { useProfile } from '@/api/auth.api'
 
 interface FetchBalanceResponse {
   balance: {
@@ -58,9 +59,24 @@ export const useBalance = (enabled = false) => {
 
 export const useAddBalance = () => {
   const queryClient = useQueryClient()
+  const { data: profile } = useProfile()
 
   return useMutation({
-    mutationFn: addBalance,
+    mutationFn: async (amount: number) => {
+      if (!profile) {
+        return
+      }
+
+      console.log('call')
+
+      return addBalance({
+        userId: profile.id,
+        networkId: 'local',
+        coinId: 'usd',
+        amount: `${amount}00`,
+        description: 'TEST BALANCE',
+      })
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     },
