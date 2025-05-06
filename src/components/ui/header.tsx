@@ -7,6 +7,7 @@ import { Balance } from '@/components/balance/balance'
 import { MoneyBagButton } from '@/components/ui/money-bag-button'
 import { ProfileLink } from '@/components/ui/profile-link'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { SettingsButton } from '@/components/ui/settings-button'
 
 interface HeaderProps {
   logoText?: string
@@ -36,9 +37,10 @@ export const Header = ({
           'loading'
         ) : user ? (
           <>
-            {!hideProfile && (
-              <ProfileLink isModal={isModalProfileLink} className='self-end' />
-            )}
+            <div className='flex items-center justify-end gap-2'>
+              {!hideProfile && <ProfileLink isModal={isModalProfileLink} />}
+              <SettingsButton className='w-4 p-0' />
+            </div>
             {!isLoading && (
               <div className='flex gap-1'>
                 <MoneyBagButton

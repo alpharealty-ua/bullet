@@ -1,12 +1,12 @@
 import React from 'react'
 import { To } from 'react-router'
 
-import { cn } from '@/lib/utils'
-import { ButtonProps, OmitUnion } from './button'
-import { ButtonWithAudio } from './button-with-audio'
 import { ROUTES } from '@/routes/path'
-import { Leaderboard } from '../leaderboard/leaderboard'
 import { useCustomModal } from '@/hooks/use-custom-modal'
+import { cn } from '@/lib/utils'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Leaderboard } from '@/components/leaderboard/leaderboard'
+import { ButtonProps, OmitUnion } from '@/components/ui/button'
 
 type OmitTo<T> = T extends { to: To } ? Omit<T, 'to'> : T
 
