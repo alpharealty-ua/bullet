@@ -12,7 +12,6 @@ import { SettingsButton } from '@/components/ui/settings-button'
 interface HeaderProps {
   logoText?: string
   hideLogo?: boolean
-  hideProfile?: boolean
   hideNoMoney?: boolean
   isModalProfileLink?: boolean
 }
@@ -20,7 +19,6 @@ interface HeaderProps {
 export const Header = ({
   logoText,
   hideLogo,
-  hideProfile,
   hideNoMoney,
   isModalProfileLink,
 }: HeaderProps) => {
@@ -38,7 +36,7 @@ export const Header = ({
         ) : user ? (
           <>
             <div className='flex items-center justify-end gap-2'>
-              {!hideProfile && <ProfileLink isModal={isModalProfileLink} />}
+              <ProfileLink isModal={isModalProfileLink} />
               <SettingsButton className='w-4 p-0' />
             </div>
             {!isLoading && (
