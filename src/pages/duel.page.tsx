@@ -23,6 +23,7 @@ import { RematchRequest } from '@/components/rematch-request'
 import { Matchmaker } from '@/components/matchmaker/matchmaker'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
+import { Footer } from '@/components/ui/footer'
 
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId = null } = useParams() as { gameId?: string }
@@ -129,7 +130,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         {typePage !== 'enter-arena' && (
           <DuelGameBar gameBarRef={topGameBarHandleRef} />
         )}
-        <div className='relative flex min-h-148 w-full grow flex-col justify-end gap-10 py-5'>
+        <div className='relative flex min-h-145 w-full grow flex-col justify-end gap-10 py-5'>
           <AnimationInOut
             in={typePage !== 'duel'}
             className={cn(
@@ -227,13 +228,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         gameOverHandleRef={gameOverHandleRef}
         onClick={handleGameOverClick}
       />
-      <DuelFooter
-        round={round}
-        hasPull={hasPull}
-        prizepool={2000}
-        hideRound={typePage !== 'duel'}
-        hidePrizepool={typePage === 'enter-arena'}
-      />
+      {typePage === 'enter-arena' ? (
+        <Footer />
+      ) : (
+        <DuelFooter round={round} hasPull={hasPull} prizepool={2000} />
+      )}
     </>
   )
 }
