@@ -27,7 +27,7 @@ const MoneyBagButton = ({
         noMoney && 'animate-wiggle text-4xl',
         className,
       )}
-      {...(noMoney ? { bg: '', text: '💀' } : { image: 'moneybag' })}
+      {...(noMoney ? { bg: '', children: '💀' } : { image: 'moneybag' })}
       onClick={handleAddMoney}
       {...props}
     />
