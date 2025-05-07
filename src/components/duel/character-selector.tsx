@@ -2,40 +2,65 @@ import { useEffect, useState } from 'react'
 import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
-import { usePurchaseCharacter } from '@/api/character.api'
+import { usePurchaseCharacter, useUserCharacters } from '@/api/character.api'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
-import { UserCharacterListSchema } from '@/lib/schemas/character.schema'
 import { cn } from '@/lib/utils'
 import { CharacterType, IMAGES } from '@/lib/constants'
 import { Character } from '@/components/duel/character'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Notification } from '@/components/ui/notification'
+import { Loading } from '@/components/ui/loading'
 
-const CharacterSelector = ({
-  characters,
-  onSelect,
-}: {
-  characters: UserCharacterListSchema
+interface CharacterSelectorProps {
   onSelect: (selected: boolean) => void
-}) => {
+}
+
+const CharacterSelector = ({ onSelect }: CharacterSelectorProps) => {
+  const { data: characters, isLoading, isSuccess } = useUserCharacters()
   const {
     mutate: purchaseCharacterMutation,
     isPending: isPurchasing,
-    error,
-    isSuccess,
+    error: isPurchaseError,
+    isSuccess: isPurchaseSuccess,
   } = usePurchaseCharacter()
   const setCharacterName = useGameStore(
     ({ setCharacterName }) => setCharacterName,
   )
   const characterName = useGameStore(({ characterName }) => characterName)
   const playSound = useSettingsStore(({ playSound }) => playSound)
-  const [activeIndex, setActiveIndex] = useState(
-    characters.findIndex((n) => n.id === characterName) ?? 0,
-  )
+  const [activeIndex, setActiveIndex] = useState(0)
   const [type, setType] = useState<CharacterType>('front')
   const [showConfirm, setShowConfirm] = useState(false)
   const [showResult, setShowResult] = useState(false)
+
+  useEffect(() => {
+    if (!characters) {
+      return
+    }
+
+    const activeIndex = characters.findIndex((n) => n.id === characterName)
+    setActiveIndex(activeIndex)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading])
+
+  useEffect(() => {
+    if (!characters) {
+      return
+    }
+
+    const selected = Boolean(
+      characters.find((_, index) => index === activeIndex)?.purchased,
+    )
+    onSelect(selected)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onSelect, characters])
+
+  if (isLoading || !isSuccess) {
+    return <Loading />
+  }
 
   const changeIndex = (index: number) => {
     const newIndex =
@@ -84,15 +109,6 @@ const CharacterSelector = ({
   const handleUnlockClick = () => setShowConfirm(true)
 
   const handleBackClick = () => setShowConfirm(false)
-
-  // TODO: REFACTOR
-  useEffect(() => {
-    const selected = Boolean(
-      characters.find((_, index) => index === activeIndex)?.purchased,
-    )
-    onSelect(selected)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSelect, characters])
 
   return (
     <>
@@ -197,11 +213,16 @@ const CharacterSelector = ({
         flip
       </ButtonWithAudio>
       <>
-        <Notification type='error' message={showResult ? error?.message : ''} />
+        <Notification
+          type='error'
+          message={showResult ? isPurchaseError?.message : ''}
+        />
         <Notification
           type='success'
           message={
-            showResult && isSuccess ? 'You have purchased a character' : ''
+            showResult && isPurchaseSuccess
+              ? 'You have purchased a character'
+              : ''
           }
         />
       </>

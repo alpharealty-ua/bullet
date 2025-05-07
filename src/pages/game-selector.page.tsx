@@ -1,21 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 
-import { useUserCharacters } from '@/api/character.api'
 import { ROUTES } from '@/routes/path'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { CharacterSelector } from '@/components/duel/character-selector'
-import { Loading } from '@/components/ui/loading'
 
 const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
-  const { data: characters, isLoading, isSuccess } = useUserCharacters()
   const [selected, setSelected] = useState(false)
   const isDuel = format === 'duel'
   const isSolo = format === 'solo'
   const isDisabled = isDuel && !selected
-
-  const handleSelectCharacter = useCallback((selected: boolean) => {
-    setSelected(selected)
-  }, [])
 
   const handleButtonClick = (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -46,17 +39,7 @@ const GameSelectorPage = ({ format }: { format: 'solo' | 'duel' }) => {
             data-disabled={isDisabled}
           />
         </div>
-        {isDuel &&
-          (isLoading || !isSuccess ? (
-            <Loading />
-          ) : (
-            <CharacterSelector
-              // TODO: REMOVE LATER, ONLY FOR TEST
-              // @ts-ignore
-              characters={[{ id: 'daisy', purchased: true }, ...characters]}
-              onSelect={handleSelectCharacter}
-            />
-          ))}
+        {isDuel && <CharacterSelector onSelect={setSelected} />}
       </main>
     </>
   )

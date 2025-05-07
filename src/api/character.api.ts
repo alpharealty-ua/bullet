@@ -72,7 +72,17 @@ export const fetchUserCharacters =
     const { data } = await api.get<UserCharactersResponse>(
       routes.userCharacters,
     )
-    return userCharacterSchemaArray.parse(data)
+
+    return [
+      // @ts-ignore
+      // TODO: REMOVE LATER, ONLY FOR TEST
+      {
+        id: 'daisy',
+        purchased: true,
+        formattedPrice: 0,
+      },
+      ...userCharacterSchemaArray.parse(data),
+    ]
   }
 
 // TODO: ADD SCHEMA
