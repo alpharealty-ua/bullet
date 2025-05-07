@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { socketDuel, socketMatchmaker } from '@/socket/socket'
+import { duelSocket, matchmakerSocket } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
@@ -38,7 +38,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     'duel'
 
   const duelSocketEvents = useMemo(
-    () => new DuelSocketEvents(socketDuel, token!),
+    () => new DuelSocketEvents(duelSocket, token!),
     [token],
   )
 
@@ -65,7 +65,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
   const matchmakerEvents = useMemo(
     () =>
-      new MatchmakerSocketEvents(socketMatchmaker, token!, {
+      new MatchmakerSocketEvents(matchmakerSocket, token!, {
         username: user.username,
         characterName,
         region: 'us-west',

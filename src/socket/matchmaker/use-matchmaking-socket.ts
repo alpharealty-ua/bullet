@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { socketMatchmaker as socket } from '@/socket/socket'
+import { matchmakerSocket } from '@/socket/socket'
 import {
   PingData,
   MatchmakingStatus,
@@ -292,7 +292,7 @@ const useMatchmakingSocket = (
   }, [matchmakerEvents, playSound, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
-    socket.connected
+    matchmakerSocket.connected
       ? matchmakerEvents.disconnect()
       : matchmakerEvents.connect()
   }, [matchmakerEvents])
