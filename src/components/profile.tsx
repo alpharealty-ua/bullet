@@ -102,7 +102,7 @@ const Profile = ({ user }: ProfileProps) => {
           value='changePassword'
           className='flex grow flex-col gap-6'
         >
-          <div className='flex flex-col items-center gap-4 p-4'>
+          <div className='flex flex-col items-center gap-4 p-4 px-10'>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleChangePasswordSubmit)}
