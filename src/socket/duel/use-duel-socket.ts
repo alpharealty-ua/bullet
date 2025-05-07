@@ -211,12 +211,20 @@ export const useDuelSocket = ({
     winner,
     setWinner,
     pullTriggerPromise: Promise.resolve(),
-    canNext: (): boolean => Boolean(!(balance < MIN_DUEL_BET) && !isAfk()),
+    balance,
+    canNext: (): boolean => {
+      const balance = duelEventsStateRef.current.balance
+      return Boolean(!(balance < MIN_DUEL_BET) && !isAfk())
+    },
     isLeftOpponent,
     setIsLeftOpponent,
     isDisconnectedOpponent,
     setIsDisconnectedOpponent,
   })
+
+  useEffect(() => {
+    duelEventsStateRef.current.balance = balance
+  }, [balance])
 
   useEffect(() => {
     const setRound = (round: number) => {
