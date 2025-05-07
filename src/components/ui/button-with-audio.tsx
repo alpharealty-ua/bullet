@@ -45,7 +45,15 @@ const ButtonWithAudio = React.forwardRef<
     }
   }
 
-  const handlePointerDown = async () => {
+  const handlePointerDown = async (
+    event:
+      | React.MouseEvent<HTMLAnchorElement, MouseEvent>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (event.button !== 0) {
+      return
+    }
+
     if ('disabled' in allProps && allProps.disabled) {
       return
     }
@@ -76,8 +84,9 @@ const ButtonWithAudio = React.forwardRef<
   }
 
   const handleClick = async (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent> &
-      React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event:
+      | React.MouseEvent<HTMLAnchorElement, MouseEvent>
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     const isMouseDownFired = isMouseDownFiredRef.current
     const isTrusted = event.isTrusted
@@ -90,7 +99,7 @@ const ButtonWithAudio = React.forwardRef<
 
     if (dispatchedAfterAnimation) {
       const prevFocus = document.activeElement
-      const promise = onClick && onClick(event)
+      const promise = onClick && onClick(event as Parameters<typeof onClick>[0])
 
       if (
         promise instanceof Promise &&
