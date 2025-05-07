@@ -3,12 +3,16 @@ import { CSSTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
 
-type Props = Partial<ComponentProps<typeof CSSTransition>> & {
+type AnimationInOutProps = Partial<ComponentProps<typeof CSSTransition>> & {
   children: React.ReactNode
   className?: string
 }
 
-const AnimationInOut = ({ children, className, ...props }: Props) => {
+const AnimationInOut = ({
+  children,
+  className,
+  ...props
+}: AnimationInOutProps) => {
   const nodeRef = useRef(null)
 
   return (

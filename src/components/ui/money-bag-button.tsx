@@ -3,6 +3,11 @@ import { ButtonProps } from '@/components/ui/button'
 import { useShowAddMoneyModal } from '@/hooks/use-add-money-modal'
 import { cn } from '@/lib/utils'
 
+type MoneyBagButtonProps = ButtonProps & {
+  balance: number
+  noMoney: boolean
+}
+
 const MoneyBagButton = ({
   balance,
   noMoney,
@@ -11,10 +16,7 @@ const MoneyBagButton = ({
   text,
   image,
   ...props
-}: ButtonProps & {
-  balance: number
-  noMoney: boolean
-}) => {
+}: MoneyBagButtonProps) => {
   const showAddMoneyModal = useShowAddMoneyModal()
 
   const handleAddMoney = showAddMoneyModal

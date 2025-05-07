@@ -28,7 +28,11 @@ const formTypes: Record<FormType, FormTypeConfig> = {
   },
 }
 
-const ChangeForm = ({ type }: { type: FormType }) => {
+interface ChangeFormProps {
+  type: FormType
+}
+
+const ChangeForm = ({ type }: ChangeFormProps) => {
   const formConfig = formTypes[type]
   return (
     <div className='flex flex-col items-center gap-1'>

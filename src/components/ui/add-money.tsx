@@ -4,7 +4,9 @@ import { Balance } from '@/components/balance/balance'
 import { OffersList } from '@/components/offers-list'
 import { cn } from '@/lib/utils'
 
-const AddMoney = ({ className, ...props }: ComponentProps<'div'>) => {
+interface AddMoneyProps extends ComponentProps<'div'> {}
+
+const AddMoney = ({ className, ...props }: AddMoneyProps) => {
   return (
     <div className={cn('flex flex-col', className)} {...props}>
       <div className='flex items-center justify-between'>

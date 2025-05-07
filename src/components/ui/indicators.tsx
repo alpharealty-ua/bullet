@@ -2,13 +2,11 @@ import { cn } from '@/lib/utils'
 
 export type Indicator = 'confirm' | 'cancel' | 'init'
 
-const Indicators = ({
-  indicators,
-  className,
-  ...props
-}: {
+type IndicatorsProps = {
   indicators: Indicator[]
-} & React.ComponentProps<'div'>) => {
+} & React.ComponentProps<'div'>
+
+const Indicators = ({ indicators, className, ...props }: IndicatorsProps) => {
   return (
     <div
       className={cn(

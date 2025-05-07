@@ -12,21 +12,16 @@ const sizes = {
   xl: 'max-w-70',
 } satisfies Record<LogoSize, string>
 
-interface LogoProps {
+type LogoProps = (
+  | ({ as: 'link' } & LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>)
+  | ({ as: 'button' } & React.ButtonHTMLAttributes<HTMLButtonElement>)
+  | ({ as: 'div' } & React.HTMLAttributes<HTMLDivElement>)
+) & {
   size?: LogoSize
   text?: string
 }
 
-const Logo = ({
-  size = 'md',
-  text,
-  ...props
-}: (
-  | ({ as: 'link' } & LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>)
-  | ({ as: 'button' } & React.ButtonHTMLAttributes<HTMLButtonElement>)
-  | ({ as: 'div' } & React.HTMLAttributes<HTMLDivElement>)
-) &
-  LogoProps) => {
+const Logo = ({ size = 'md', text, ...props }: LogoProps) => {
   const { as, ...componentProps } = props
   // eslint-disable-next-line
   const Comp: any = as === 'link' ? Link : as

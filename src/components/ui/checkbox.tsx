@@ -1,14 +1,16 @@
+interface CheckbotProps<Name extends string> {
+  label: string
+  name: Name
+  checked?: boolean
+  onChange: (name: Name, checked: boolean) => void
+}
+
 const Checkbox = <Name extends string>({
   label,
   name,
   onChange,
   checked,
-}: {
-  label: string
-  name: Name
-  checked?: boolean
-  onChange: (name: Name, checked: boolean) => void
-}) => {
+}: CheckbotProps<Name>) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(name, event.target.checked)
   }

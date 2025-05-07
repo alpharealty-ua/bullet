@@ -4,12 +4,12 @@ import {
   HiOutlineExclamationCircle,
 } from 'react-icons/hi'
 
-interface FormErrorProps {
+interface NotificationProps {
   message?: string
   type: 'error' | 'success'
 }
 
-const Notification = ({ type, message }: FormErrorProps) => {
+const Notification = ({ type, message }: NotificationProps) => {
   if (!message) return null
 
   const Icon =

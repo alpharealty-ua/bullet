@@ -1,7 +1,11 @@
 import { ZodError } from 'zod'
 import { Notification } from './notification'
 
-const RequestError = ({ error }: { error: Error | null }) => {
+interface RequestErrorProps {
+  error: Error | null
+}
+
+const RequestError = ({ error }: RequestErrorProps) => {
   if (error instanceof ZodError) {
     return (
       <div className='flex grow'>
