@@ -17,12 +17,8 @@ const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
   const navigate = useNavigate()
 
   const handleProfileClick = () => {
-    if (!user) {
-      return
-    }
-
     isModal
-      ? modal.show({ contentSlot: <Profile user={user} /> })
+      ? modal.show({ contentSlot: <Profile /> })
       : navigate(ROUTES.cabinet.profile)
   }
 

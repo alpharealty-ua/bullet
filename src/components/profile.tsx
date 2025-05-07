@@ -3,13 +3,12 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { usePlayerStatistics } from '@/api/leaderboard.api'
-import { useLogin } from '@/api/auth.api'
+import { useLogin, useUser } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
 import {
   ChangePasswordSchema,
   changePasswordSchema,
 } from '@/lib/schemas/change-password.schema'
-import { UserSchema } from '@/lib/schemas/auth.schema'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
@@ -26,12 +25,8 @@ import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
 import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
 
-// TODO: MOVE FETCH USE TO COMPONENT
-interface ProfileProps {
-  user: UserSchema
-}
-
-const Profile = ({ user }: ProfileProps) => {
+const Profile = () => {
+  const user = useUser()
   const {
     data: playerStatistics,
     isLoading,

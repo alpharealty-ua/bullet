@@ -85,7 +85,6 @@ export const fetchUserCharacters =
     ]
   }
 
-// TODO: ADD SCHEMA
 export const purchaseCharacter = async (
   characterName: CharacterName,
 ): Promise<void> => {
