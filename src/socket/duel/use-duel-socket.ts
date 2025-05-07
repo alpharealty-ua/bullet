@@ -356,7 +356,7 @@ export const useDuelSocket = ({
           }
 
           const { winner: gameWinner = null } = payload
-          const { rematchScores } = payload.rematchInfo
+          const { rematchScores, canRematch } = payload.rematchInfo
 
           setWinner(gameWinner)
           setCanPull(false)
@@ -374,10 +374,15 @@ export const useDuelSocket = ({
 
           const diffScore = Math.abs(scorePlayer1 - scorePlayer2)
 
-          const canRematch = diffScore < 2
+          const hasWinnerRematch = diffScore < 2
           const canNext = duelEventsStateRef.current.canNext()
 
-          if (canRematch && canNext && !isDisconnectedOpponent) {
+          if (
+            canRematch &&
+            hasWinnerRematch &&
+            canNext &&
+            !isDisconnectedOpponent
+          ) {
             rematchRequestHandleRef.current?.show()
           } else {
             await resultPromise
