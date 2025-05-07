@@ -36,7 +36,7 @@ export const Header = ({
         ) : user ? (
           <>
             <div className='flex items-center justify-end gap-2'>
-              <ProfileLink isModal={isModalProfileLink} />
+              <ProfileLink as={isModalProfileLink ? 'button' : 'link'} />
               <SettingsButton className='w-4 p-0' />
             </div>
             {!isLoading && (

@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
 
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
@@ -7,20 +6,32 @@ import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { Profile } from '@/components/profile'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { ButtonProps, OmitTo, OmitUnion } from '@/components/ui/button'
 
-interface ProfileLinkProps extends React.ComponentProps<'button'> {
-  isModal?: boolean
-}
+type ProfileLinkProps = OmitUnion<ButtonProps, 'onClick' | 'bg' | 'image'>
 
-const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
+const ProfileLink = ({ className, ...props }: OmitTo<ProfileLinkProps>) => {
   const modal = useCustomModal()
   const { data: user } = useProfile()
-  const navigate = useNavigate()
 
-  const handleProfileClick = () => {
-    isModal
+  const handleProfileClick = async (
+    event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+  ) => {
+    event.preventDefault()
+
+    const targetEl = event.currentTarget
+
+    if (!(targetEl instanceof HTMLElement)) {
+      return
+    }
+
+    await new Promise((res) => setTimeout(res))
+
+    props.as === 'button'
       ? modal.show({ contentSlot: <Profile /> })
-      : navigate(ROUTES.cabinet.profile)
+      : targetEl.dispatchEvent(
+          new PointerEvent('click', { bubbles: true, cancelable: true }),
+        )
   }
 
   useEffect(() => {
@@ -33,16 +44,23 @@ const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
     return null
   }
 
+  const allProps: ProfileLinkProps =
+    props.as === 'link'
+      ? {
+          ...props,
+          to: ROUTES.cabinet.profile,
+        }
+      : { ...props }
+
   return (
     <ButtonWithAudio
-      as='button'
       bg=''
       className={cn(
         'hover:text-green cursor-pointer text-sm leading-[1] font-normal transition-all active:scale-90',
         className,
       )}
       onClick={handleProfileClick}
-      {...props}
+      {...allProps}
     >
       {user.username}
     </ButtonWithAudio>
