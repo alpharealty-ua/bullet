@@ -137,7 +137,7 @@ export const PRIVATE_ROUTES = [
     path: ROUTES.duel.enterArena,
     element: (
       <PageWrapper
-        headerProps={{ logoText: 'Duel' }}
+        headerProps={{ logoText: 'Duel', isModalProfileLink: true }}
         footerProps={{ leaderboardButton: 'button' }}
       >
         <DuelPage variant='play' />
