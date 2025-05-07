@@ -26,7 +26,15 @@ const useGameStore = create<GameState>()(
       setMatchDetails: (matchDetails: MatchDetails | null) =>
         set({ matchDetails }),
     }),
-    { name: 'game-storage' },
+    {
+      name: 'game-storage',
+      partialize: (state) =>
+        Object.fromEntries(
+          Object.entries(state).filter(
+            ([key]) => !['increaseTime'].includes(key),
+          ),
+        ),
+    },
   ),
 )
 
