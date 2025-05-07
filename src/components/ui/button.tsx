@@ -53,12 +53,11 @@ const Button = React.forwardRef<
       ref={ref}
       className={cn(
         'relative inline-flex cursor-pointer items-center justify-center bg-contain bg-center bg-no-repeat text-3xl font-bold transition-all disabled:scale-100 disabled:cursor-not-allowed data-[disabled=true]:cursor-not-allowed',
-        // TODO: ADD HOVERS
         bg && 'rounded-md border-1 border-black px-4 py-1 text-2xl',
-        bg === 'green' && 'bg-green text-white',
-        bg === 'red' && 'bg-red text-white',
-        bg === 'primary' && 'bg-primary',
-        bg === 'gray' && 'bg-gray-400',
+        bg === 'green' && 'bg-green hover:bg-green/70 text-white',
+        bg === 'red' && 'bg-red hover:bg-red/70 text-white',
+        bg === 'primary' && 'bg-primary hover:bg-primary/90',
+        bg === 'gray' && 'bg-gray-400 hover:bg-gray-100',
         bg === 'white' && 'border-gray-300 bg-white hover:bg-gray-50',
         className,
       )}
