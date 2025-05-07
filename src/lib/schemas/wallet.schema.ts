@@ -22,6 +22,18 @@ export const coinSchema = z.object({
   updatedAt: z.string().nullish(),
 })
 
+export const balanceSchema = z.object({
+  balance: z.object({
+    amount: z.string(),
+    lockedAmount: z.string(),
+    formattedAmount: z.number(),
+    formattedLockedAmount: z.number(),
+  }),
+  activeSelection: z.record(z.unknown()).optional(),
+})
+
 export type NetworkSchema = z.infer<typeof networkSchema>
 
 export type CoinSchema = z.infer<typeof coinSchema>
+
+export type BalanceSchema = z.infer<typeof balanceSchema>

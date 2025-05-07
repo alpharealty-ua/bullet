@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 import { useProfile } from '@/api/auth.api'
+import { balanceSchema, BalanceSchema } from '@/lib/schemas/wallet.schema'
 
 export interface FetchBalanceResponse {
   balance: {
@@ -11,10 +12,6 @@ export interface FetchBalanceResponse {
     formattedLockedAmount: number
   }
   activeSelection?: Record<string, unknown>
-}
-
-interface AddBalanceResponse {
-  amount: string
 }
 
 interface AddBalancePayload {
@@ -32,19 +29,13 @@ const routes = {
   addBalance: `/${prefix}/add-balance`,
 } as const
 
-// TODO: ADD VALIDATION
-export const fetchBalance = async (): Promise<FetchBalanceResponse> => {
+export const fetchBalance = async (): Promise<BalanceSchema> => {
   const { data } = await api.get<FetchBalanceResponse>(routes.balance)
-  return data
+  return balanceSchema.parse(data)
 }
 
-export const addBalance = async (
-  payload: AddBalancePayload,
-): Promise<AddBalanceResponse> => {
-  const { data } = await api.post<AddBalanceResponse>(
-    routes.addBalance,
-    payload,
-  )
+export const addBalance = async (payload: AddBalancePayload): Promise<void> => {
+  const { data } = await api.post<void>(routes.addBalance, payload)
   return data
 }
 
