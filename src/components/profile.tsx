@@ -93,10 +93,11 @@ const Profile = ({ user }: ProfileProps) => {
           <ButtonWithAudio
             as='button'
             className='self-center'
-            text='logout'
             bg='red'
             onClick={handleLogout}
-          />
+          >
+            logout
+          </ButtonWithAudio>
         </TabsContent>
         <TabsContent
           value='changePassword'
@@ -153,10 +154,11 @@ const Profile = ({ user }: ProfileProps) => {
                   as='button'
                   className='text-2xl'
                   image='button'
-                  text='Change password'
                   type='submit'
                   disabled={isPending}
-                />
+                >
+                  Change password
+                </ButtonWithAudio>
               </form>
             </Form>
           </div>

@@ -22,10 +22,11 @@ const PlaceWager = () => {
               <div className='absolute h-full'>
                 <ButtonWithAudio
                   as='button'
-                  text='Place bet'
                   bg='primary'
                   className='h-full px-1 text-[0.625rem]'
-                />
+                >
+                  Place bet
+                </ButtonWithAudio>
               </div>
             </div>
           )}

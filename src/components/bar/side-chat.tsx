@@ -101,11 +101,12 @@ const SideChat = ({
         <ButtonWithAudio
           as='button'
           className='absolute top-1/2 right-2 -translate-y-1/2 px-1 text-xs'
-          text='Send'
           bg='red'
           onClick={addMessage}
           disabled={message === ''}
-        />
+        >
+          Send
+        </ButtonWithAudio>
       </div>
     </div>
   )

@@ -69,8 +69,9 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
         onClick={handleClaim}
         as='button'
         bg={offer.canClaim ? 'primary' : 'gray'}
-        text={isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'}
-      />
+      >
+        {isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'}
+      </ButtonWithAudio>
     </div>
   )
 }

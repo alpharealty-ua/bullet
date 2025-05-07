@@ -68,10 +68,12 @@ const ForgotPasswordForm = () => {
         <ButtonWithAudio
           as='button'
           image='button'
-          text='Reset'
           type='submit'
           disabled={isPending}
-        />
+        >
+          {' '}
+          Reset
+        </ButtonWithAudio>
         <ChangeForm type='register' />
       </form>
     </Form>

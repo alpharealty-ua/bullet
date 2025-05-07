@@ -119,19 +119,21 @@ const Debug = () => {
           <ButtonWithAudio
             as='button'
             image='button'
-            text='Apply'
             type='submit'
             className='text-xl'
-          />
+          >
+            Apply
+          </ButtonWithAudio>
         </form>
       </Form>
       <ButtonWithAudio
         as='button'
         image='button'
-        text='Add money'
         className='text-xl'
         onClick={handleAddMoneyClick}
-      ></ButtonWithAudio>
+      >
+        Add money
+      </ButtonWithAudio>
     </div>,
     document.body,
   )

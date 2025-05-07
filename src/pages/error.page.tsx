@@ -17,13 +17,9 @@ const ErrorPage = () => {
         <h3 className='text-3xl'>Opps, something went wrong!</h3>
         {message && <h4 className='text-xl'>{message}</h4>}
         <div>
-          <ButtonWithAudio
-            as='link'
-            to='/'
-            className='text-lg'
-            text='Go to home page'
-            bg='primary'
-          />
+          <ButtonWithAudio as='link' to='/' className='text-lg' bg='primary'>
+            Go to home page
+          </ButtonWithAudio>
         </div>
       </div>
     </>

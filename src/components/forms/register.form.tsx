@@ -128,10 +128,11 @@ const RegisterForm = () => {
         <ButtonWithAudio
           as='button'
           image='button'
-          text='Register'
           type='submit'
           disabled={isPending}
-        />
+        >
+          Register
+        </ButtonWithAudio>
         <ChangeForm type='register' />
       </form>
     </Form>

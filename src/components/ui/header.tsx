@@ -64,15 +64,17 @@ export const Header = ({
               className='w-24 text-xs'
               image='button'
               to={ROUTES.auth.login}
-              text='Login'
-            />
+            >
+              Login
+            </ButtonWithAudio>
             <ButtonWithAudio
               as='link'
               className='w-24 text-xs'
               image='button'
               to={ROUTES.auth.register}
-              text='Register'
-            />
+            >
+              Register
+            </ButtonWithAudio>
           </div>
         )}
       </div>

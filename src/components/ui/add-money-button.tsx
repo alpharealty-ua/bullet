@@ -9,12 +9,9 @@ const AddMoneyButton = () => {
 
   return (
     <div className='relative flex flex-col items-center justify-center pt-8'>
-      <ButtonWithAudio
-        as='button'
-        image='button'
-        text='Add money'
-        onClick={handleAddMoney}
-      />
+      <ButtonWithAudio as='button' image='button' onClick={handleAddMoney}>
+        Add money
+      </ButtonWithAudio>
     </div>
   )
 }

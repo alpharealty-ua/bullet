@@ -25,10 +25,7 @@ export type asButton = {
   as: 'button'
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-// TODO: REMOVE TEXT
-export type ButtonProps = {
-  text?: string
-} & (
+export type ButtonProps = (
   | { image: keyof typeof imagesMap; bg?: undefined }
   | {
       image?: undefined
@@ -44,7 +41,7 @@ export type OmitUnion<T, Keys extends keyof T> = T extends T ? Omit<T, Keys> : T
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
->(({ className, image, bg, text, children, as, ...props }, ref) => {
+>(({ className, image, bg, children, as, ...props }, ref) => {
   // eslint-disable-next-line
   const Comp: any = as === 'link' ? Link : 'button'
 
@@ -63,14 +60,14 @@ const Button = React.forwardRef<
       )}
       {...props}
     >
-      {(text || children) && (
+      {children && (
         <span
           className={cn(
             !bg && 'absolute inset-0 inline-flex items-center justify-center',
             bg && 'relative flex items-center gap-2',
           )}
         >
-          {text || children}
+          {children}
         </span>
       )}
       {image && <img src={imagesMap[image]} alt='' className='w-full' />}

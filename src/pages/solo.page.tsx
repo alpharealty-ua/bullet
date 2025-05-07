@@ -68,8 +68,9 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
                     as='link'
                     to={`${ROUTES.solo.watch}/${watchingLargestGame.gameId}`}
                     bg='primary'
-                    text='Watch'
-                  />
+                  >
+                    Watch
+                  </ButtonWithAudio>
                 </div>
               </>
             )}

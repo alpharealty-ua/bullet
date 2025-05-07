@@ -91,10 +91,11 @@ const LoginForm = () => {
         <ButtonWithAudio
           as='button'
           image='button'
-          text='Login'
           type='submit'
           disabled={isPending}
-        />
+        >
+          Login
+        </ButtonWithAudio>
         <div className='text-center text-xs uppercase'>Or continue with</div>
         <GoogleLoginButton />
         <ChangeForm type='forgotPassword' />

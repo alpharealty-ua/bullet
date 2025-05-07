@@ -13,7 +13,6 @@ const MoneyBagButton = ({
   noMoney,
   className,
   bg,
-  text,
   image,
   ...props
 }: MoneyBagButtonProps) => {

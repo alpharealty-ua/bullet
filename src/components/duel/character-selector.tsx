@@ -149,9 +149,10 @@ const CharacterSelector = ({
                           <ButtonWithAudio
                             as='button'
                             bg='primary'
-                            text='Unlock'
                             onClick={handleUnlockClick}
-                          />
+                          >
+                            Unlock{' '}
+                          </ButtonWithAudio>
                         </>
                       ) : (
                         <>
@@ -160,17 +161,19 @@ const CharacterSelector = ({
                             <ButtonWithAudio
                               as='button'
                               bg='green'
-                              text={isPurchasing ? 'Purchasing...' : 'Purchase'}
                               className='text-base'
                               onClick={handlePurchaseClick}
-                            />
+                            >
+                              {isPurchasing ? 'Purchasing...' : 'Purchase'}
+                            </ButtonWithAudio>
                             <ButtonWithAudio
                               as='button'
                               bg='red'
-                              text='back'
                               className='text-base'
                               onClick={handleBackClick}
-                            />
+                            >
+                              back
+                            </ButtonWithAudio>
                           </div>
                         </>
                       )}
@@ -190,12 +193,9 @@ const CharacterSelector = ({
           <PiArrowFatRightFill />
         </ButtonWithAudio>
       </div>
-      <ButtonWithAudio
-        as='button'
-        bg='primary'
-        text='flip'
-        onClick={handleFlipClick}
-      />
+      <ButtonWithAudio as='button' bg='primary' onClick={handleFlipClick}>
+        flip
+      </ButtonWithAudio>
       <>
         <Notification type='error' message={showResult ? error?.message : ''} />
         <Notification
