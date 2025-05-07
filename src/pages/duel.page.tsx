@@ -110,7 +110,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         matchmakerEvents.disconnect()
       })
     }
-  }, [duelSocketEvents, matchmakerEvents, isUnmounted, gameId])
+  }, [duelSocketEvents, matchmakerEvents, isUnmounted])
 
   useEffect(() => {
     matchmakerEvents.attachEventListeners()
@@ -120,7 +120,21 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       matchmakerEvents.dettachEventListeners()
       duelSocketEvents.dettachEventListeners()
     }
-  }, [duelSocketEvents, matchmakerEvents, gameId])
+  }, [duelSocketEvents, matchmakerEvents])
+
+  useEffect(() => {
+    return () => {
+      queueMicrotask(() => {
+        if (!isUnmounted()) {
+          return
+        }
+
+        if (gameId && playerId) {
+          duelSocketEvents.leaveDuelGame({ gameId, playerId })
+        }
+      })
+    }
+  }, [duelSocketEvents, isUnmounted, gameId, playerId])
 
   return (
     <>
