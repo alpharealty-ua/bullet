@@ -16,6 +16,7 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { notify, SocketEvents } from '@/socket/utils'
+import { CharacterName } from '@/lib/constants'
 
 type OnEvents =
   | { type: 'connect'; payload: undefined }
@@ -45,7 +46,7 @@ class MatchmakerSocketEvents extends SocketEvents {
     public token: string,
     public metadata: {
       username: string
-      characterName: string
+      characterName: CharacterName
       region: string
     },
   ) {
