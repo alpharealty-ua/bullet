@@ -54,23 +54,38 @@ const imagesMap = {
 // A function cva need for work prettier-plugin-tailwindcss
 const cva = (className: string) => className
 const positionStylesMap = {
-  front: {
-    nubcat: cva('top-0 left-[30%] aspect-[1/2.3] w-[40%]'),
-    mickey: cva('top-[13%] left-[14%] aspect-[1/1.8] w-[29.5%]'),
-    fatty: cva('top-[6%] left-[15%] aspect-[1/2.4] w-[22.5%] rotate-12'),
-    'anime-1': cva('top-[24%] left-[10%] aspect-[1/1.82] w-[14.5%]'),
-    'anime-2': cva('top-[15%] left-[33%] aspect-[1/2.1] w-[14%]'),
-    daisy: cva('top-[20%] left-[29%] aspect-[1/2.2] w-[13%]'),
+  gun: {
+    front: {
+      nubcat: cva('top-0 left-[30%] aspect-[1/2.3] w-[40%]'),
+      mickey: cva('top-[13%] left-[14%] aspect-[1/1.8] w-[29.5%]'),
+      fatty: cva('top-[6%] left-[15%] aspect-[1/2.4] w-[22.5%] rotate-12'),
+      'anime-1': cva('top-[24%] left-[10%] aspect-[1/1.82] w-[14.5%]'),
+      'anime-2': cva('top-[15%] left-[33%] aspect-[1/2.1] w-[14%]'),
+      daisy: cva('top-[9%] left-[18%] aspect-[1/2] w-[17.5%]'),
+    },
+    back: {
+      nubcat: cva('right-[6%] w-[20%]'),
+      mickey: cva('top-[17%] right-[22%] w-[10%]'),
+      fatty: cva('right-[14%] w-[14%] -rotate-8'),
+      'anime-1': cva('top-[20%] left-[30%] w-[6.5%]'),
+      'anime-2': cva('top-[17%] right-[33.5%] w-[6%]'),
+      daisy: cva('top-[0%] right-[11%] w-[14%]'),
+    },
   },
-  back: {
-    nubcat: cva('right-[6%] w-[20%]'),
-    mickey: cva('top-[17%] right-[22%] w-[10%]'),
-    fatty: cva('right-[14%] w-[14%] -rotate-8'),
-    'anime-1': cva('top-[20%] left-[30%] w-[6.5%]'),
-    'anime-2': cva('top-[17%] right-[33.5%] w-[6%]'),
-    daisy: cva('top-[10%] right-[18%] w-[11%]'),
+  hand: {
+    front: {
+      nubcat: cva('bottom-[-10%] left-[38.5%]'),
+      mickey: cva('h-[80%]'),
+      fatty: cva('left-[40%] h-[64%]'),
+      'anime-1': cva('h-[65%]'),
+      'anime-2': cva('h-[65%]'),
+      daisy: cva('top-[30%] bottom-auto left-[22%] h-[115%]'),
+    },
   },
-} satisfies Record<CharacterType, Record<CharacterName, string>>
+} satisfies {
+  gun: Record<CharacterType, Record<CharacterName, string>>
+  hand: Record<Exclude<CharacterType, 'back'>, Record<CharacterName, string>>
+}
 
 const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
   (
@@ -81,14 +96,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     const gunRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef(0)
     const [showShot, setShowShot] = useState(false)
-    const hideGun = characterType === 'back'
-    const isFront = characterType === 'front'
-    const isNubcat = characterName === 'nubcat'
-    const isMickey = characterName === 'mickey'
-    const isFatty = characterName === 'fatty'
-    const isAnime1 = characterName === 'anime-1'
-    const isAnime2 = characterName === 'anime-2'
-    const isDaisy = characterName === 'daisy'
+    const isBack = characterType === 'back'
 
     const images = imagesMap[characterName]
 
@@ -127,7 +135,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           ref={mergeRefs(ref, gunRef)}
           className={cn(
             'absolute z-[50] aspect-[1/1.5]',
-            positionStylesMap[characterType][characterName],
+            positionStylesMap.gun[characterType][characterName],
             className,
           )}
           {...props}
@@ -139,14 +147,9 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           <div
             className={cn(
               'absolute bottom-0 left-1/2 aspect-[1632/1830] h-[90%] -translate-x-1/2 bg-contain bg-center bg-no-repeat',
-              hideGun && 'opacity-0',
-              isFront && isNubcat && 'bottom-[-10%] left-[38.5%]',
-              isFront && isMickey && 'b h-[80%]',
-              isFront && isFatty && 'b left-[40%] h-[64%]',
-              isFront && isAnime1 && 'b h-[65%]',
-              isFront && isAnime2 && 'b h-[65%]',
-              isFront && isAnime2 && 'b h-[65%]',
-              isFront && isDaisy && 'top-[30%] bottom-auto left-[30%] h-[92%]',
+              isBack && 'opacity-0',
+              characterType === 'front' &&
+                positionStylesMap.hand[characterType][characterName],
             )}
             style={{
               backgroundImage: `url(${images.hand})`,
@@ -167,7 +170,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           <div
             className={cn(
               'absolute top-[10%] right-0 left-0 aspect-square',
-              hideGun && 'opacity-0',
+              isBack && 'opacity-0',
             )}
             data-chamber
           >
@@ -182,7 +185,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
           <div
             className={cn(
               'pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat',
-              hideGun && 'opacity-0',
+              isBack && 'opacity-0',
             )}
             style={{
               backgroundImage: `url(${IMAGES.gunbodycharacter})`,
@@ -200,8 +203,8 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               ></div>
               <div
                 className={cn(
-                  'absolute inset-0 scale-600',
-                  'zoom-in fade-in fill-mode-backwards animate-in bg-contain bg-center bg-no-repeat delay-250 duration-150 ease-linear',
+                  'absolute inset-0 scale-600 bg-contain bg-center bg-no-repeat',
+                  'zoom-in fade-in fill-mode-backwards animate-in delay-250 duration-150 ease-linear',
                 )}
                 style={{ backgroundImage: `url(${IMAGES.shot2})` }}
               ></div>
