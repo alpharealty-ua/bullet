@@ -6,6 +6,7 @@ import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { Profile } from '@/components/profile'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 interface ProfileLinkProps extends React.ComponentProps<'button'> {
   isModal?: boolean
@@ -33,17 +34,18 @@ const ProfileLink = ({ className, isModal, ...props }: ProfileLinkProps) => {
   }
 
   return (
-    // TODO: ADD MOUSE CLICK
-    <button
+    <ButtonWithAudio
+      as='button'
+      bg=''
       className={cn(
-        'hover:text-green cursor-pointer leading-[1] transition-all active:scale-90',
+        'hover:text-green cursor-pointer text-sm leading-[1] font-normal transition-all active:scale-90',
         className,
       )}
       onClick={handleProfileClick}
       {...props}
     >
       {user.username}
-    </button>
+    </ButtonWithAudio>
   )
 }
 

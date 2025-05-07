@@ -60,16 +60,20 @@ const Button = React.forwardRef<
       )}
       {...props}
     >
-      {children && (
-        <span
-          className={cn(
-            !bg && 'absolute inset-0 inline-flex items-center justify-center',
-            bg && 'relative flex items-center gap-2',
-          )}
-        >
-          {children}
-        </span>
-      )}
+      {children &&
+        (bg === '' ? (
+          children
+        ) : (
+          <span
+            className={cn(
+              bg === undefined &&
+                'absolute inset-0 inline-flex items-center justify-center',
+              bg && 'relative flex items-center gap-2',
+            )}
+          >
+            {children}
+          </span>
+        ))}
       {image && <img src={imagesMap[image]} alt='' className='w-full' />}
     </Comp>
   )
