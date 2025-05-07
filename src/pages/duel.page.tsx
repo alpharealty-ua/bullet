@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
@@ -7,7 +7,6 @@ import { duelSocket, matchmakerSocket } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
-import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
@@ -24,14 +23,34 @@ import { Matchmaker } from '@/components/matchmaker/matchmaker'
 import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 
+const useIsHMR = () => {
+  const isHMR = useRef(false)
+
+  useEffect(() => {
+    const on = () => (isHMR.current = true)
+    const off = () => (isHMR.current = false)
+
+    import.meta.hot?.on('vite:beforeUpdate', on)
+    import.meta.hot?.on('vite:afterUpdate', off)
+
+    return () => {
+      import.meta.hot?.off('vite:beforeUpdate', on)
+      import.meta.hot?.off('vite:beforeUpdate', off)
+    }
+  }, [])
+
+  return useCallback(() => isHMR.current, [])
+}
+
 const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const { gameId = null } = useParams() as { gameId?: string }
   const token = useAuthStore(({ accessToken }) => accessToken)
   const user = useUser()
   const { data: userStatistics } = useUserStatistics()
   const characterName = useGameStore(({ characterName }) => characterName)
-  const playerId = user.id
   const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
+  const isHMR = useIsHMR()
+  const playerId = user.id
   const { pathname } = useLocation()
   const typePage: 'enter-arena' | 'next' | 'duel' =
     (['enter-arena', 'next'] as const).find((s) => pathname.includes(s)) ??
@@ -94,47 +113,42 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     await gameOverHandleRef.current?.hide()
   }
 
-  // TODO: REFACTOR. FIND ANOTHER WAY PREVENT DISCONNECT WHEN HMR
-  const isUnmounted = useUnmountedState()
   useEffect(() => {
-    duelSocketEvents.connect()
-    matchmakerEvents.connect()
-
-    return () => {
-      queueMicrotask(() => {
-        if (!isUnmounted()) {
+    if (isHMR()) {
+      return () => {
+        if (isHMR()) {
           return
         }
 
         duelSocketEvents.disconnect()
         matchmakerEvents.disconnect()
-      })
+      }
     }
-  }, [duelSocketEvents, matchmakerEvents, isUnmounted])
 
-  useEffect(() => {
-    matchmakerEvents.attachEventListeners()
-    duelSocketEvents.attachEventListeners()
+    duelSocketEvents.connect()
+    matchmakerEvents.connect()
 
     return () => {
-      matchmakerEvents.dettachEventListeners()
-      duelSocketEvents.dettachEventListeners()
+      if (isHMR()) {
+        return
+      }
+
+      duelSocketEvents.disconnect()
+      matchmakerEvents.disconnect()
     }
-  }, [duelSocketEvents, matchmakerEvents])
+  }, [duelSocketEvents, matchmakerEvents, isHMR])
 
   useEffect(() => {
     return () => {
-      queueMicrotask(() => {
-        if (!isUnmounted()) {
-          return
-        }
+      if (isHMR()) {
+        return
+      }
 
-        if (gameId && playerId) {
-          duelSocketEvents.leaveDuelGame({ gameId, playerId })
-        }
-      })
+      if (gameId && playerId) {
+        duelSocketEvents.leaveDuelGame({ gameId, playerId })
+      }
     }
-  }, [duelSocketEvents, isUnmounted, gameId, playerId])
+  }, [duelSocketEvents, isHMR, gameId, playerId])
 
   return (
     <>

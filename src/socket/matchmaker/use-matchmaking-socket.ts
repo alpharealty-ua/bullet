@@ -90,7 +90,6 @@ const useMatchmakingSocket = (
           setConnectionStatus('disconnected')
           break
         }
-        // TODO: NEVER CALL - COMPONENT ALREADY UNMOUNTED AND DETACH ALL EVENTS
         case 'disconnect': {
           setConnectionStatus('disconnected')
           setMatchmakingStatus('not-in-queue')

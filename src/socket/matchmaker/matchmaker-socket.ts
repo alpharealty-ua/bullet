@@ -61,14 +61,15 @@ class MatchmakerSocketEvents extends SocketEvents {
     try {
       this.socket.auth = { token: this.token }
       this.socket.connect()
+      this.attachEventListeners()
     } catch (error) {
       console.error(`Error connecting to duel game service:`, error)
     }
   }
 
   disconnect() {
-    notify(`Disconnected from matchmaker service`, 'info')
     this.socket.disconnect()
+    this.dettachEventListeners()
   }
 
   attachEventListeners() {
@@ -85,6 +86,7 @@ class MatchmakerSocketEvents extends SocketEvents {
     })
     // TODO: NOT CALL IF UNMOUNT
     this.on('disconnect', () => {
+      notify(`Disconnected from matchmaker service`, 'info')
       this.onEvent({ type: 'disconnect', payload: undefined })
     })
     this.on('connect_error', (data: { message: string }) => {
