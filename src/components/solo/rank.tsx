@@ -1,6 +1,6 @@
 const Rank = ({ value }: { value: number }) => {
   return (
-    <div className='relative left-[1px] h-4 w-full overflow-hidden border-2 border-black bg-[#eee]'>
+    <div className='relative left-[0.063rem] h-4 w-full overflow-hidden border-2 border-black bg-[#eee]'>
       <div className='absolute inset-0 -right-1 -left-1'>
         <div
           className='bg-primary absolute inset-0 -skew-x-30 transition-all'

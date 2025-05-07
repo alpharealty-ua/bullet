@@ -137,7 +137,7 @@ const DuelGameBar = ({ gameBarRef }: DuelGameBarProps) => {
                   <div className='absolute inset-0 duration-0 ease-linear [.is-active:not(.is-selected)_&]:bg-[#30ff00]'></div>
                   <div className='relative'>
                     {number === 50 ? (
-                      <IoSkull className='2xs:text-base relative -top-[1px] inline-block text-sm' />
+                      <IoSkull className='2xs:text-base relative -top-[0.063rem] inline-block text-sm' />
                     ) : (
                       number
                     )}

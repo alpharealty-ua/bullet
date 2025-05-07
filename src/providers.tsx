@@ -18,7 +18,7 @@ export function Providers({
       <ReactQueryDevtools />
       <GoogleOAuthProvider clientId='81416906591-dm3vrjmromctfao0ln0124ajdiqm3gpi.apps.googleusercontent.com'>
         <div
-          className='custom-scroll relative mx-auto flex h-dvh min-h-[600px] w-full max-w-[var(--width)] translate-0 flex-col overflow-x-hidden overflow-y-scroll bg-cover bg-[right_center] lg:min-h-[780px]'
+          className='custom-scroll relative mx-auto flex h-dvh min-h-152 w-full max-w-[var(--width)] translate-0 flex-col overflow-x-hidden overflow-y-scroll bg-cover bg-[right_center] lg:min-h-200'
           style={{ backgroundImage: `url(${IMAGES.wrapper})` }}
         >
           <NiceModal.Provider>{children}</NiceModal.Provider>
