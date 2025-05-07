@@ -21,6 +21,8 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,
+    jackpotHandleRef,
+    multiplierHandleRef,
     offer,
     bet,
     jackpot,
@@ -109,11 +111,13 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               title={'Prizepool'}
               value={`$${jackpot}`}
               open={jackpot !== -1}
+              resultHandle={jackpotHandleRef}
             />
             <Result
               title={'Multiplier'}
               value={`${multiplier}x`}
               open={multiplier !== -1}
+              resultHandle={multiplierHandleRef}
             />
             <Result
               title={'the banker offers...'}

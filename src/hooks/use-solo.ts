@@ -23,6 +23,7 @@ import { RevolverHandle } from '@/components/guns/revolver'
 import { VictoryHandle } from '@/components/victory'
 import { GameOverHandle } from '@/components/game-over'
 import { FooterHandle } from '@/components/solo/footer-solo'
+import { ResultHandle } from '@/components/solo/result'
 
 const useSolo = (variant: VariantGame) => {
   const navigate = useNavigate()
@@ -35,6 +36,8 @@ const useSolo = (variant: VariantGame) => {
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const revolverHandleRef = useRef<RevolverHandle>(null)
+  const jackpotHandleRef = useRef<ResultHandle>(null)
+  const multiplierHandleRef = useRef<ResultHandle>(null)
   const { data: gameDetails } = useGameDetails(variant === 'play')
   const { mutateAsync: acceptOfferMutation } = useAcceptOffer()
   const { mutateAsync: startGameMutation } = useStartGame()
@@ -45,7 +48,6 @@ const useSolo = (variant: VariantGame) => {
   const [bet, setBet] = useState(0)
   const [jackpot, setJackpot] = useState(-1)
   const [offer, setOffer] = useState<Offer | null>(null)
-  // TODO: ADD REF HANDLE FOR NOT RE RENDER COMPONENT
   const [multiplier, setMultiplier] = useState(-1)
   const [startedMultiplierSpin, setStartedMultiplierSpin] = useState(false)
   const isStartedGame = Boolean(gameId)
@@ -122,20 +124,31 @@ const useSolo = (variant: VariantGame) => {
             Math.min(currentIndex++, FINISH_INDEX) % MULTIPLIERS.length
           const multiplier = MULTIPLIERS[newIndex]
 
-          setMultiplier(multiplier)
-          setJackpot(bet * multiplier)
+          jackpotHandleRef.current?.updateState({
+            value: `$${bet * multiplier}`,
+          })
+          multiplierHandleRef.current?.updateState({ value: `${multiplier}x` })
 
           if (currentIndex > FINISH_INDEX) {
+            setJackpot(bet * multiplier)
+            setMultiplier(multiplier)
+            jackpotHandleRef.current?.updateState({ activeRef: false })
+            multiplierHandleRef.current?.updateState({ activeRef: false })
             return
           }
 
           return spin(lag)
         }
 
+        jackpotHandleRef.current?.show()
+        multiplierHandleRef.current?.show()
+        jackpotHandleRef.current?.updateState({ activeRef: true })
+        multiplierHandleRef.current?.updateState({ activeRef: true })
+
         spin(0).then(resolve)
       })
     },
-    [bet, playSound, setJackpot, setMultiplier],
+    [bet, playSound],
   )
 
   const deal = async () => {
@@ -317,6 +330,14 @@ const useSolo = (variant: VariantGame) => {
     setBet(Number(game.betAmount))
     setCountBullet(5 - game.currentPosition)
     setMultiplier(game.multiplier)
+    jackpotHandleRef.current?.show()
+    multiplierHandleRef.current?.show()
+    jackpotHandleRef.current?.updateState({
+      value: `${game.potentialWin}`,
+    })
+    multiplierHandleRef.current?.updateState({
+      value: `${game.multiplier}`,
+    })
 
     if (game.currentOffer) {
       setOffer(game.currentOffer)
@@ -341,6 +362,8 @@ const useSolo = (variant: VariantGame) => {
     gameOverHandleRef,
     victoryHandleRef,
     revolverHandleRef,
+    jackpotHandleRef,
+    multiplierHandleRef,
     offer,
     bet,
     jackpot,
