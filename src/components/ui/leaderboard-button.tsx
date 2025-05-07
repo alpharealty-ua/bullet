@@ -46,12 +46,13 @@ const LeaderboardButton = ({
         )
   }
 
-  // TODO: FIX TS ERROR
-  // @ts-ignore
-  const allProps: LeaderboardButtonProps = {
-    ...props,
-    ...(props.as === 'button' ? undefined : { to: ROUTES.leaderboard.root }),
-  }
+  const allProps: LeaderboardButtonProps =
+    props.as === 'link'
+      ? {
+          ...props,
+          to: ROUTES.leaderboard.root,
+        }
+      : { ...props }
 
   return (
     <ButtonWithAudio

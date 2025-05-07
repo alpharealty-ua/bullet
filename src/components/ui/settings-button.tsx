@@ -4,11 +4,9 @@ import { Settings } from '@/components/settings'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { ButtonProps } from '@/components/ui/button'
 
-type PickAsButton<T> = T extends { as: 'button' }
-  ? Omit<T, 'as' | 'image' | 'bg'>
-  : never
+type PickAsButton<T> = T extends { as: 'button' } ? T : never
 
-type SettingsProps = PickAsButton<ButtonProps>
+type SettingsProps = Omit<PickAsButton<ButtonProps>, 'as' | 'image' | 'bg'>
 
 const SettingsButton = ({ className, ...props }: SettingsProps) => {
   const modal = useCustomModal()
