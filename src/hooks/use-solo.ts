@@ -11,7 +11,7 @@ import {
   usePullGame,
   useStartGame,
 } from '@/api/game.api'
-import { useBalance } from '@/api/wallet.api'
+import { type FetchBalanceResponse, useBalance } from '@/api/wallet.api'
 import { useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
@@ -64,6 +64,12 @@ const useSolo = (variant: VariantGame) => {
       })
     }
 
+    const balance = (
+      (await queryClient.getQueryData([
+        QUERY_KEYS.balance,
+      ])) as FetchBalanceResponse
+    ).balance.formattedAmount
+
     victoryHandleRef.current?.hide()
     gameOverHandleRef.current?.hide()
 
@@ -75,7 +81,7 @@ const useSolo = (variant: VariantGame) => {
     setOffer(null)
     setCountBullet(5)
     setMultiplier(-1)
-  }, [queryClient, gameId, isUnmounted, bet, balance, navigate, variant])
+  }, [queryClient, gameId, isUnmounted, bet, navigate, variant])
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {

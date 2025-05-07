@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils'
 
-// TODO: RED ADD HANDLE
 interface ResultProps {
   title: string
   value: string

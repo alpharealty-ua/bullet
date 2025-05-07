@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, ROUTE_PREFIX, QUERY_KEYS } from '@/api/api'
 import { useProfile } from '@/api/auth.api'
 
-interface FetchBalanceResponse {
+export interface FetchBalanceResponse {
   balance: {
     amount: string
     lockedAmount: string
@@ -32,6 +32,7 @@ const routes = {
   addBalance: `/${prefix}/add-balance`,
 } as const
 
+// TODO: ADD VALIDATION
 export const fetchBalance = async (): Promise<FetchBalanceResponse> => {
   const { data } = await api.get<FetchBalanceResponse>(routes.balance)
   return data
@@ -66,8 +67,6 @@ export const useAddBalance = () => {
       if (!profile) {
         return
       }
-
-      console.log('call')
 
       return addBalance({
         userId: profile.id,
