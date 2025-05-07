@@ -46,9 +46,7 @@ const ButtonWithAudio = React.forwardRef<
   }
 
   const handlePointerDown = async (
-    event:
-      | React.MouseEvent<HTMLAnchorElement, MouseEvent>
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
     if (event.button !== 0) {
       return
@@ -84,9 +82,7 @@ const ButtonWithAudio = React.forwardRef<
   }
 
   const handleClick = async (
-    event:
-      | React.MouseEvent<HTMLAnchorElement, MouseEvent>
-      | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
   ) => {
     const isMouseDownFired = isMouseDownFiredRef.current
     const isTrusted = event.isTrusted

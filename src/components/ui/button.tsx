@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, LinkProps } from 'react-router'
+import { Link, LinkProps, To } from 'react-router'
 
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -37,6 +37,8 @@ export type ButtonProps = (
 // Distributive Conditional Types.
 // See more https://www.typescriptlang.org/docs/handbook/2/conditional-types.html
 export type OmitUnion<T, Keys extends keyof T> = T extends T ? Omit<T, Keys> : T
+
+export type OmitTo<T> = T extends { to: To } ? Omit<T, 'to'> : T
 
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,

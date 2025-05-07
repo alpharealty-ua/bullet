@@ -1,14 +1,11 @@
 import React from 'react'
-import { To } from 'react-router'
 
 import { ROUTES } from '@/routes/path'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 import { cn } from '@/lib/utils'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Leaderboard } from '@/components/leaderboard/leaderboard'
-import { ButtonProps, OmitUnion } from '@/components/ui/button'
-
-type OmitTo<T> = T extends { to: To } ? Omit<T, 'to'> : T
+import { ButtonProps, OmitTo, OmitUnion } from '@/components/ui/button'
 
 type LeaderboardButtonProps = OmitUnion<ButtonProps, 'onClick' | 'bg' | 'image'>
 
