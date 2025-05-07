@@ -11,7 +11,7 @@ export type PingData = {
 export type AdditionalPlayerMetadata = {
   username: string
   region: string
-  characterName: string
+  characterName: CharacterName
 }
 
 type PlayerMetadata = {
@@ -23,21 +23,20 @@ type PlayerMetadata = {
 
 export type JoinMatchmaking = {
   betOptions?: BetOptions
-  metadata?: AdditionalPlayerMetadata // Optional: Additional metadata
+  metadata?: AdditionalPlayerMetadata
   matchConfirmationRequired: boolean
 }
 
 export type ConfirmMatch = {
-  matchId: string // ID of the match to confirm
-  // Optional: Bet options for the match
+  matchId: string
   betOptions?: BetOptions
 }
 
 type BetOptions = {
-  networkId: string // Blockchain network ID
-  coinId: string // Cryptocurrency ID
-  betAmount: string // Bet amount
-  maxRounds?: number // Maximum number of rounds
+  networkId: string
+  coinId: string
+  betAmount: string
+  maxRounds?: number
 }
 
 type MatchFoundMetadata = {
@@ -49,18 +48,17 @@ type MatchFoundMetadata = {
 }
 
 export type MatchFoundResponse = {
-  matchId: string // ID of the match
-  players: string[] // Array of player IDs
-  // Match metadata, including bet options if available
+  matchId: string
+  players: string[]
   metadata: MatchFoundMetadata
-  confirmationRequired: boolean // Whether confirmation is required
-  confirmationTimeoutSeconds: number // Timeout for confirmation in seconds
+  confirmationRequired: boolean
+  confirmationTimeoutSeconds: number
 }
 
 export type MatchConfirmationUpdate = {
-  matchId: string // ID of the match
-  confirmedPlayers: string[] // Array of player IDs who have confirmed
-  totalPlayers: number // Total number of players in the match
+  matchId: string
+  confirmedPlayers: string[]
+  totalPlayers: number
   betOptions?: BetOptions
 }
 
@@ -132,10 +130,16 @@ export type PingUpdateResponse = {
 
 export type MatchCreatedResponse = {
   matchId: string
-  gameId: string
   players: string[]
-  bet: Omit<BetOptions, 'maxRounds'>
-  metadata?: Record<string, unknown>
+  confirmationRequired: string
+  metadata?: {
+    averagePing?: number
+    betOptions: Omit<BetOptions, 'maxRounds'>
+    confirmationRequired: boolean
+    confirmationTimeoutSeconds?: string
+    pingDifference?: number
+    playerMetadata: Record<string, PlayerMetadata>
+  }
 }
 
 export type DuelGameCreatedResponse = {
@@ -156,13 +160,7 @@ export type MatchDetails = {
   matchId: string
   pingDifference: number
   averagePing: number
-  gameId: string
-  opponent: {
-    ping: number
-    username: string
-    region: string
-    characterName: CharacterName
-  }
+  opponent: AdditionalPlayerMetadata
 }
 
 export type Statistics = {

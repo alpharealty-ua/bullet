@@ -115,13 +115,11 @@ const useMatchmakingSocket = (
             setAuthenticated(true)
             setConnectionStatus('authenticated')
 
-            // Update stats
             setStatistics((p) => ({
               ...p,
               playersInQueue: payload.playersInQueue || 0,
             }))
 
-            // Update ping if available
             if (payload.currentPing) {
               setPingData((p) => ({
                 ...p,
@@ -138,8 +136,8 @@ const useMatchmakingSocket = (
         }
         case 'joinedMatchmaking': {
           notify('You have Joined the matchmaking queue', 'success')
+          payload.message && notify(payload.message, 'info')
 
-          // Update matchmaking status
           if (matchmakingStatus === 'not-in-queue') {
             setMatchmakingStatus('searching')
             setMatchDetails(null)
@@ -147,13 +145,6 @@ const useMatchmakingSocket = (
 
           setPlayerId(payload.playerId)
 
-          // Log if this is a re-join after match cancellation
-          if (
-            payload.message &&
-            payload.message.includes('Returned to matchmaking after')
-          ) {
-            notify(payload.message, 'info')
-          }
           return
         }
         case 'leftMatchmaking': {
@@ -168,15 +159,10 @@ const useMatchmakingSocket = (
           return
         }
         case 'matchFound': {
-          // Show a notification
           notify('Match found! Please confirm to join the game.', 'success')
 
-          // Update matchmaking status
           setMatchmakingStatus('match-found')
-
           setMatchId(payload.matchId)
-
-          // Create player confirmation indicators
           setIndicators(
             payload.players.map((playerId) => ({
               playerId,
@@ -184,10 +170,8 @@ const useMatchmakingSocket = (
             })),
           )
 
-          // Play match found sound
           playSound('matchFound')
 
-          // TODO: SET ALL RESPONSE DATA
           if (payload.confirmationRequired) {
             const confirmationTimeoutSeconds =
               payload.confirmationTimeoutSeconds || 10
@@ -202,7 +186,6 @@ const useMatchmakingSocket = (
             return
           }
 
-          // Update player confirmation indicators
           setIndicators((prev) =>
             prev.map((indicator) =>
               payload.confirmedPlayers.includes(indicator.playerId)
@@ -214,7 +197,6 @@ const useMatchmakingSocket = (
           return
         }
         case 'matchCanceled': {
-          // Update matchmaking status based on whether the player was returned to queue
           const status =
             payload.reason === 'player_declined' &&
             payload.declinedBy !== playerId
@@ -222,10 +204,8 @@ const useMatchmakingSocket = (
               : 'not-in-queue'
           setMatchmakingStatus(status)
 
-          // Play match canceled sound
           playSound('matchCanceled')
 
-          // Show reason in a more user-friendly way
           let reason = 'Unknown reason'
           if (payload.reason === 'confirmation_timeout') {
             reason = 'Not all players confirmed in time'
@@ -238,19 +218,15 @@ const useMatchmakingSocket = (
           return
         }
         case 'matchCreated': {
-          // Update matchmaking status
-
-          setMatchmakingStatus('match-created')
-
-          playSound('matchConfirmed')
-
-          // Show a notification
           notify(
             'Match created successfully! Game is being prepared.',
             'success',
           )
 
-          // Find opponent's player ID
+          setMatchmakingStatus('match-created')
+
+          playSound('matchConfirmed')
+
           const opponentPlayerId = payload.players.find((id) => id !== playerId)
           const metadata = payload.metadata
 
@@ -258,33 +234,19 @@ const useMatchmakingSocket = (
             matchId: payload.matchId,
             pingDifference: Number(metadata?.pingDifference) || 0,
             averagePing: Number(metadata?.averagePing) || 0,
-            gameId: String(metadata?.gameId) || '',
-            opponent: {
-              ping: 0,
-              username: '',
-              region: '',
-              characterName: 'fatty',
-            },
-          }
-
-          // Set opponent details if available
-          if (
-            opponentPlayerId &&
-            metadata &&
-            metadata.playerMetadata &&
-            typeof metadata.playerMetadata === 'object' &&
-            opponentPlayerId in metadata.playerMetadata
-          ) {
-            // @ts-ignore
-            const opponentData = metadata.playerMetadata[opponentPlayerId]
-            if (opponentData) {
-              // TODO: FIX ANY
-              matchDetails.opponent.ping = opponentData.ping ?? '--'
-              matchDetails.opponent.username = opponentData.username ?? ''
-              matchDetails.opponent.region = opponentData.region ?? ''
-              matchDetails.opponent.characterName =
-                opponentData.characterName ?? ''
-            }
+            opponent:
+              opponentPlayerId &&
+              metadata &&
+              metadata.playerMetadata &&
+              typeof metadata.playerMetadata === 'object' &&
+              opponentPlayerId in metadata.playerMetadata &&
+              metadata.playerMetadata[opponentPlayerId]
+                ? metadata.playerMetadata[opponentPlayerId]
+                : {
+                    username: '',
+                    region: '',
+                    characterName: 'fatty',
+                  },
           }
 
           setMatchDetails(matchDetails)
@@ -315,7 +277,7 @@ const useMatchmakingSocket = (
               return
             }
             case 'Cannot leave matchmaking while a match confirmation is pending': {
-              // Re-enable the leave button if the server rejected the leave request
+              notify(message, 'error')
               return
             }
           }
