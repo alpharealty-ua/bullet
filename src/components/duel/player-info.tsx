@@ -52,8 +52,7 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
           </div>
           <div className='flex justify-between gap-2'>
             <div className='self-end'>
-              <strong>win:</strong>
-              {win}%
+              <strong>win</strong> {win}%
             </div>
             <div
               className='h-6 w-10 bg-gray-100 bg-contain bg-center bg-no-repeat'
