@@ -20,7 +20,7 @@ const RisingStars = ({ list, user }: RisingStarsProps) => {
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Precision</th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Speed</th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>
-            Perfect Hit %
+            Perfect Shot
           </th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Record</th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Games</th>

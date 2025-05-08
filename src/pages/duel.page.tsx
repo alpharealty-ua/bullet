@@ -167,7 +167,12 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   return (
     <>
       {variant === 'watch' && <Bar />}
-      <div className='relative flex grow flex-col'>
+      <div
+        className='relative flex grow flex-col'
+        // onClick={() => {
+        //   rematchRequestHandleRef.current?.show()
+        // }}
+      >
         {typePage !== 'enter-arena' && (
           <DuelGameBar gameBarRef={topGameBarHandleRef} />
         )}

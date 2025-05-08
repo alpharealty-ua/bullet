@@ -62,7 +62,7 @@ const MatchmakerPersonalStatistics = ({
               value: userStatistics.percentile,
             },
             {
-              label: 'Perfect Hit %',
+              label: 'Perfect Shot',
               value: userStatistics.perfectHitRate,
             },
           ].map(({ value, label }, i) => (

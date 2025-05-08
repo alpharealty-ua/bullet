@@ -49,7 +49,7 @@ export const PlayerStatistics = ({ list, user }: PlayerStatisticsProps) => {
             value: list.percentile,
           },
           {
-            label: 'Perfect Hit %',
+            label: 'Perfect Shot',
             value: list.perfectHitRate,
           },
           {

@@ -24,7 +24,7 @@ const RegionalChampions = ({ list, user }: RegionalChampionsProps) => {
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Precision</th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>Speed</th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>
-            Perfect Hit %
+            Perfect Shot
           </th>
           <th className='px-2 py-3 font-normal whitespace-nowrap'>
             W/L Record

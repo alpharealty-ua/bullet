@@ -23,7 +23,7 @@ const TopPlayers = ({ list, user }: TopPlayersProps) => {
             Speed adapt
           </th>
           <th className='max-w-20 px-2 py-3 text-left font-normal'>
-            Perfect Hit %
+            Perfect Shot
           </th>
           <th className='max-w-20 px-2 py-3 text-left font-normal'>Win rate</th>
         </tr>
