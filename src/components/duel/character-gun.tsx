@@ -134,7 +134,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
         <div
           ref={mergeRefs(ref, gunRef)}
           className={cn(
-            'absolute z-[50] aspect-[1/1.5]',
+            'absolute z-1 aspect-[1/1.5]',
             positionStylesMap.gun[characterType][characterName],
             className,
           )}
