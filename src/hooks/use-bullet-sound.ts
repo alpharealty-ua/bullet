@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 
 import { useSettingsStore } from '@/store/settings.store'
-import { getAudio } from '@/lib/utils'
+import { getSound } from '@/lib/utils'
 
 const useBulletSound = () => {
   const music = useSettingsStore(({ music }) => music)
-  const audioElRef = useRef(getAudio('bulletTrack'))
+  const audioElRef = useRef(getSound('bulletTrack'))
+
   useEffect(() => {
     audioElRef.current.muted = !music
   }, [music])
@@ -13,6 +14,7 @@ const useBulletSound = () => {
   useEffect(() => {
     const soundEl = audioElRef.current
     soundEl.loop = true
+    soundEl.volume = 0.5
 
     // Skip autoplay policy
     soundEl.play().catch(() => 0)

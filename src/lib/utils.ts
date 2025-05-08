@@ -44,7 +44,7 @@ export const wait = (timeout: number) => {
   return { promise, timeoutId }
 }
 
-export const getAudio = (key: AudioKeys): HTMLAudioElement => {
+export const getSound = (key: AudioKeys): HTMLAudioElement => {
   return new Audio(AUDIOS[key])
 }
 
