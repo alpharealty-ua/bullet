@@ -406,6 +406,15 @@ export const useDuelSocket = ({
           const canNext = duelEventsStateRef.current.canNext()
           const opponnentPresent = !isLeftOpponent && !isDisconnectedOpponent
 
+          if (isDraw) {
+            await resultPromise
+            reset()
+            navigate(ROUTES.duel.enterArena, {
+              preventScrollReset: true,
+            })
+            return
+          }
+
           if (canRematch && hasWinnerRematch && canNext && opponnentPresent) {
             rematchRequestHandleRef.current?.show()
           } else {
