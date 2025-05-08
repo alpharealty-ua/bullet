@@ -257,8 +257,13 @@ export const useDuelSocket = ({
 
     duelSocketEvents.updateEvents(async (event) => {
       const { type, payload } = event
-      const { round, winner, isDisconnectedOpponent, gameEnded } =
-        duelEventsStateRef.current
+      const {
+        round,
+        winner,
+        isDisconnectedOpponent,
+        isLeftOpponent,
+        gameEnded,
+      } = duelEventsStateRef.current
 
       switch (type) {
         case 'connect': {
@@ -399,13 +404,9 @@ export const useDuelSocket = ({
 
           const hasWinnerRematch = diffScore < 2
           const canNext = duelEventsStateRef.current.canNext()
+          const opponnentPresent = !isLeftOpponent && !isDisconnectedOpponent
 
-          if (
-            canRematch &&
-            hasWinnerRematch &&
-            canNext &&
-            !isDisconnectedOpponent
-          ) {
+          if (canRematch && hasWinnerRematch && canNext && opponnentPresent) {
             rematchRequestHandleRef.current?.show()
           } else {
             await resultPromise
@@ -483,10 +484,15 @@ export const useDuelSocket = ({
           return
         }
         case 'game:player_disconnected': {
-          setIsDisconnectedOpponent(true)
-          // if (rematchRequestHandleRef.current?.getState().show) {
-          //   nextOpponnet()
-          // }
+          const isUser = payload.disconnectedPlayerId === playerId
+          const isOpponent = !isUser
+
+          if (isOpponent) {
+            setIsDisconnectedOpponent(true)
+            if (gameEnded) {
+              nextOpponnet()
+            }
+          }
           return
         }
         case 'error': {
