@@ -16,7 +16,7 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { notify, SocketEvents } from '@/socket/utils'
-import { CharacterName } from '@/lib/constants'
+import { BET_AMOUNT, CharacterName, MAX_ROUNDS } from '@/lib/constants'
 
 type OnEvents =
   | { type: 'connect'; payload: undefined }
@@ -61,7 +61,6 @@ class MatchmakerSocketEvents extends SocketEvents {
     try {
       this.socket.auth = { token: this.token }
       this.socket.connect()
-      this.attachEventListeners()
     } catch (error) {
       console.error(`Error connecting to duel game service:`, error)
     }
@@ -69,7 +68,6 @@ class MatchmakerSocketEvents extends SocketEvents {
 
   disconnect() {
     this.socket.disconnect()
-    this.dettachEventListeners()
   }
 
   attachEventListeners() {
@@ -130,12 +128,12 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.matchmakerPingClient?.dettachEventListeners()
   }
 
-  joinMatchmaking(maxRounds = 10) {
+  joinMatchmaking(maxRounds = MAX_ROUNDS) {
     const payload: JoinMatchmaking = {
       betOptions: {
         networkId: 'local',
         coinId: 'usd',
-        betAmount: '100000',
+        betAmount: `${BET_AMOUNT}00`,
         maxRounds,
       },
       metadata: {

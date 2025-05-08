@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form'
 import { useAddBalance } from '@/api/wallet.api'
 import {
   AFK_TIME,
+  BET_AMOUNT,
   DUEL_COUNTDOWN,
   MAX_BET,
+  MAX_ROUNDS,
   MIN_DUEL_BET,
 } from '@/lib/constants'
 import { getItem, setItem } from '@/lib/localstorage'
@@ -26,6 +28,8 @@ type FormValues = {
   minDuelBet: string
   maxBet: string
   afkTime: string
+  maxRounds: string
+  betAmount: string
 }
 
 const Debug = () => {
@@ -35,6 +39,8 @@ const Debug = () => {
       minDuelBet: String(MIN_DUEL_BET),
       maxBet: String(MAX_BET),
       afkTime: String(AFK_TIME),
+      maxRounds: String(MAX_ROUNDS),
+      betAmount: String(BET_AMOUNT),
     },
   })
 
@@ -49,6 +55,8 @@ const Debug = () => {
     setItem('minDuelBet', values.minDuelBet)
     setItem('maxBet', values.maxBet)
     setItem('afkTime', values.afkTime)
+    setItem('maxRounds', values.maxRounds)
+    setItem('betAmount', values.betAmount)
 
     location.reload()
   }
@@ -71,7 +79,12 @@ const Debug = () => {
               <FormItem>
                 <FormLabel>Duel start countdown</FormLabel>
                 <FormControl>
-                  <FormInput disabled={disabled} type='number' {...field} />
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,7 +97,12 @@ const Debug = () => {
               <FormItem>
                 <FormLabel>Min duel bet</FormLabel>
                 <FormControl>
-                  <FormInput disabled={disabled} type='number' {...field} />
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,7 +115,12 @@ const Debug = () => {
               <FormItem>
                 <FormLabel>Max bet</FormLabel>
                 <FormControl>
-                  <FormInput disabled={disabled} type='number' {...field} />
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,7 +133,48 @@ const Debug = () => {
               <FormItem>
                 <FormLabel>Afk time</FormLabel>
                 <FormControl>
-                  <FormInput disabled={disabled} type='number' {...field} />
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='maxRounds'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Max rounds</FormLabel>
+                <FormControl>
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='betAmount'
+            render={({ field: { disabled, ...field } }) => (
+              <FormItem>
+                <FormLabel>Bet amounds</FormLabel>
+                <FormControl>
+                  <FormInput
+                    className='h-10'
+                    disabled={disabled}
+                    type='number'
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
