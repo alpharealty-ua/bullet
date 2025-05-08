@@ -107,9 +107,6 @@ export const useDuelSocket = ({
   }
 
   const nextOpponnet = useCallback(() => {
-    if (gameId && playerId) {
-      duelSocketEvents.leaveDuelGame({ gameId, playerId })
-    }
     reset()
     const canNext = duelEventsStateRef.current.canNext()
     navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
@@ -222,6 +219,8 @@ export const useDuelSocket = ({
     setIsLeftOpponent,
     isDisconnectedOpponent,
     setIsDisconnectedOpponent,
+    gameEnded,
+    setGameEnded,
   })
 
   useEffect(() => {
@@ -454,6 +453,8 @@ export const useDuelSocket = ({
         }
         case 'game:rematch_cancelled': {
           notify(payload.message, 'info')
+
+          console.log('game:rematch_cancelled')
 
           const isUser = payload.playerId === playerId
           const userOrOpponent = isUser ? 'user' : 'opponnent'
