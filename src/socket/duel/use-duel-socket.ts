@@ -279,16 +279,24 @@ export const useDuelSocket = ({
             setRound(game.currentRound)
             setCanPull(false)
 
-            const winPlayer = game.players.find((p) => p.status === 'alive')
+            const losePlayer = game.players.find(
+              (p) => p.status === 'eliminated',
+            )
 
-            const isWin = winPlayer && winPlayer.userId === playerId
+            const isLose = losePlayer && losePlayer.userId === playerId
 
-            await frontCharacterHandleRef.current?.updateState({
-              characterState: isWin ? 'eliminated' : 'winner',
-            })
-            await backCharacterHandleRef.current?.updateState({
-              characterState: !isWin ? 'eliminated' : 'winner',
-            })
+            if (losePlayer) {
+              await frontCharacterHandleRef.current?.updateState({
+                characterState: !isLose ? 'eliminated' : 'winner',
+              })
+              await backCharacterHandleRef.current?.updateState({
+                characterState: isLose ? 'eliminated' : 'winner',
+              })
+              return
+            }
+
+            await victoryHandleRef.current?.updateState({ type: 'draw' })
+            await victoryHandleRef.current?.show()
 
             return
           }
