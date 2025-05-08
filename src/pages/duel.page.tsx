@@ -258,6 +258,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         <RematchRequest
           onRequest={handleRequestRematch}
           onCancel={handleCancelRematch}
+          onCountdownEnd={handleCancelRematch}
           rematchRequestHandleRef={rematchRequestHandleRef}
         />
         {typePage !== 'enter-arena' && (

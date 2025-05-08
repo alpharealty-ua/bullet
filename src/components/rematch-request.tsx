@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 import { Indicator, Indicators } from '@/components/ui/indicators'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
+import { Countdown } from '@/components/ui/countdown'
 
 export interface RematchRequestHandle
   extends UpdateShowMethods<RematchRequestState> {
@@ -23,12 +24,14 @@ interface RematchRequestProps {
   rematchRequestHandleRef?: React.ForwardedRef<RematchRequestHandle>
   onRequest: () => void
   onCancel: () => void
+  onCountdownEnd: () => void
 }
 
 const RematchRequest = ({
   rematchRequestHandleRef,
   onRequest,
   onCancel,
+  onCountdownEnd: onCountdoenEnd,
 }: RematchRequestProps) => {
   const {
     state: { show, indicators },
@@ -69,6 +72,7 @@ const RematchRequest = ({
     >
       <div className='2xs:border-t-3 flex items-center gap-2 border-t-2 border-black bg-white p-2'>
         <div className='text-2xl'>Rematch?</div>
+
         <div className='flex justify-between gap-1'>
           <ButtonWithAudio
             as='button'
@@ -87,6 +91,12 @@ const RematchRequest = ({
             <RxCross1 />
           </ButtonWithAudio>
         </div>
+        <Countdown
+          time={7}
+          onEnd={onCountdoenEnd}
+          className='w-5 items-center justify-center text-center'
+          playSound
+        />
       </div>
       <Indicators
         className='w-11 border-b-0'

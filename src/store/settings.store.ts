@@ -14,6 +14,7 @@ export type PlaySound = (
 ) => Promise<HTMLAudioElement>
 interface SettingsState extends Record<SettingsKeys, boolean> {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
+  getSound: (key: AudioKeys) => HTMLAudioElement
   playSound: PlaySound
 }
 
@@ -23,10 +24,7 @@ const useSettingsStore = create<SettingsState>()(
       ...DEFAULT_SETTINGS,
       change: (payload: Partial<Record<SettingsKeys, boolean>>) =>
         set({ ...payload }),
-      playSound: async (
-        key: AudioKeys,
-        play = true,
-      ): Promise<HTMLAudioElement> => {
+      getSound: (key: AudioKeys): HTMLAudioElement => {
         const audioEl = new Audio(AUDIOS[key])
         const muted = !get().soundEffects
 
@@ -46,6 +44,14 @@ const useSettingsStore = create<SettingsState>()(
             )
           }
         }
+
+        return audioEl
+      },
+      playSound: async (
+        key: AudioKeys,
+        play = true,
+      ): Promise<HTMLAudioElement> => {
+        const audioEl = get().getSound(key)
 
         if (play) {
           await audioEl.play()

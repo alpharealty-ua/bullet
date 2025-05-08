@@ -129,6 +129,8 @@ export const AUDIOS = {
   matchCanceled: '/assets/audios/match-canceled.mp3',
   holy: '/assets/audios/holy.mp3',
   bounce: '/assets/audios/bounce.mp3',
+  timer: '/assets/audios/timer.mp3',
+  negativebeeps: '/assets/audios/negative-beeps.mp3',
 } as const
 
 export const SRC_AUDIOS = Object.values(AUDIOS)

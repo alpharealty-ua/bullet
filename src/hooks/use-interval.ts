@@ -11,10 +11,12 @@ const useInterval = (callback: () => void, delay: number | null) => {
     const func = () => {
       savedCallback.current()
     }
+    let id: number
     if (delay !== null) {
-      const id = setInterval(func, delay)
-      return () => clearInterval(id)
+      id = window.setInterval(func, delay)
     }
+
+    return () => clearInterval(id)
   }, [delay])
 }
 
