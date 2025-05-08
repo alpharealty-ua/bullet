@@ -100,21 +100,30 @@ const EnterArena = ({
           </button>
         </div>
       </form>
-      <div className='animate-in fade-in max-w-80 px-3 duration-500'>
-        <div className='text-lg'>
-          {matchmakingStatusMap[matchmakingStatus]}
-          {(isSearching || isFound || isMatchCreated) && (
-            <>
-              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-0 duration-400 ease-linear'>
-                .
-              </span>
-              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-200 duration-400 ease-linear'>
-                .
-              </span>
-              <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-400 duration-400 ease-linear'>
-                .
-              </span>
-            </>
+      <div className='animate-in fade-in max-w-100 px-3 duration-500'>
+        <div className='flex min-h-10 items-center gap-4'>
+          <div className='text-lg'>
+            {matchmakingStatusMap[matchmakingStatus]}
+            {(isSearching || isFound || isMatchCreated) && (
+              <>
+                <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-0 duration-400 ease-linear'>
+                  .
+                </span>
+                <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-200 duration-400 ease-linear'>
+                  .
+                </span>
+                <span className='repeat-infinite direction-alternate inline-block animate-[pulse-period] rounded-full align-bottom delay-400 duration-400 ease-linear'>
+                  .
+                </span>
+              </>
+            )}
+          </div>
+          {isMatchCreated && (
+            <Countdown
+              time={DUEL_COUNTDOWN}
+              onEnd={onMatchCreatedCountdownEnd}
+              className='inline-flex text-3xl'
+            />
           )}
         </div>
         {isFound && (
@@ -143,13 +152,6 @@ const EnterArena = ({
               </ButtonWithAudio>
             </div>
           </div>
-        )}
-        {isMatchCreated && (
-          <Countdown
-            time={DUEL_COUNTDOWN}
-            onEnd={onMatchCreatedCountdownEnd}
-            className='my-4 flex items-center justify-center text-5xl'
-          />
         )}
       </div>
     </div>

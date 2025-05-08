@@ -26,7 +26,7 @@ const Countdown = ({ className, time, onEnd, ...props }: CountdownProps) => {
   return (
     <div
       className={cn(
-        'text-red text-xl',
+        'text-red inline-flex text-xl',
         'repeat-infinite direction-alternate animate-[pulse-time] duration-500 will-change-contents',
         className,
       )}
