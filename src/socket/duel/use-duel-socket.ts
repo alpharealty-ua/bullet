@@ -38,6 +38,7 @@ export const useDuelSocket = ({
   const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
   const [winner, setWinner] = useState<Winner | null>(null)
+  const [gameEnded, setGameEnded] = useState(false)
   const [isLeftOpponent, setIsLeftOpponent] = useState(false)
   const [isDisconnectedOpponent, setIsDisconnectedOpponent] = useState(false)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
@@ -61,10 +62,11 @@ export const useDuelSocket = ({
       rematchRequestHandleRef.current?.reset(),
     ])
 
-    setWinner((duelEventsStateRef.current.winner = null))
     setPulls([])
     setCanPull(true)
     setRound((duelEventsStateRef.current.round = 1))
+    setWinner((duelEventsStateRef.current.winner = null))
+    setGameEnded((duelEventsStateRef.current.gameEnded = false))
     setIsLeftOpponent((duelEventsStateRef.current.isLeftOpponent = false))
     setIsDisconnectedOpponent(
       (duelEventsStateRef.current.isDisconnectedOpponent = false),
@@ -237,6 +239,11 @@ export const useDuelSocket = ({
       duelEventsStateRef.current.winner = winner
     }
 
+    const setGameEnded = (eneded: boolean) => {
+      duelEventsStateRef.current.setGameEnded(eneded)
+      duelEventsStateRef.current.gameEnded = eneded
+    }
+
     const setIsLeftOpponent = (isLeftOpponent: boolean) => {
       duelEventsStateRef.current.setIsLeftOpponent(isLeftOpponent)
       duelEventsStateRef.current.isLeftOpponent = isLeftOpponent
@@ -251,7 +258,7 @@ export const useDuelSocket = ({
 
     duelSocketEvents.updateEvents(async (event) => {
       const { type, payload } = event
-      const { round, winner, isDisconnectedOpponent } =
+      const { round, winner, isDisconnectedOpponent, gameEnded } =
         duelEventsStateRef.current
 
       switch (type) {
@@ -367,6 +374,7 @@ export const useDuelSocket = ({
           const { rematchScores, canRematch } = payload.rematchInfo
 
           setWinner(gameWinner)
+          setGameEnded(true)
           setCanPull(false)
 
           await duelEventsStateRef.current.pullTriggerPromise
@@ -454,7 +462,15 @@ export const useDuelSocket = ({
           return
         }
         case 'game:player_left': {
-          setIsLeftOpponent(true)
+          const isUser = payload.leavingUserId === playerId
+          const isOpponent = !isUser
+
+          if (isOpponent) {
+            setIsLeftOpponent(true)
+            if (gameEnded) {
+              nextOpponnet()
+            }
+          }
           return
         }
         case 'game:player_disconnected': {

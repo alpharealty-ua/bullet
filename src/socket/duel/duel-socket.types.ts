@@ -100,7 +100,7 @@ export interface CountdownUpdateResponse {
 }
 export interface PlayerLeftResponse {
   gameId: string
-  leavingPlayerId: string
+  leavingUserId: string
   winner?: Player
   message: string
 }
