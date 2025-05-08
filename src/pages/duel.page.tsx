@@ -27,15 +27,13 @@ const useIsHMR = () => {
   const isHMR = useRef(false)
 
   useEffect(() => {
-    const on = () => (isHMR.current = true)
-    const off = () => (isHMR.current = false)
-
-    import.meta.hot?.on('vite:beforeUpdate', on)
-    import.meta.hot?.on('vite:afterUpdate', off)
+    const beforeUpdate = () => {
+      isHMR.current = true
+    }
+    import.meta.hot?.on('vite:beforeUpdate', beforeUpdate)
 
     return () => {
-      import.meta.hot?.off('vite:beforeUpdate', on)
-      import.meta.hot?.off('vite:beforeUpdate', off)
+      requestAnimationFrame(() => (isHMR.current = false))
     }
   }, [])
 
@@ -113,22 +111,24 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     await gameOverHandleRef.current?.hide()
   }
 
+  // strict mode works only in dev mode
+  const isFirstRender = useRef(import.meta.env.DEV)
   useEffect(() => {
-    if (isHMR()) {
-      return () => {
-        if (isHMR()) {
-          return
-        }
-
-        duelSocketEvents.disconnect()
-        matchmakerEvents.disconnect()
-      }
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
     }
 
-    duelSocketEvents.connect()
-    matchmakerEvents.connect()
+    const connect = () => {
+      if (isHMR()) {
+        return
+      }
 
-    return () => {
+      duelSocketEvents.connect()
+      matchmakerEvents.connect()
+    }
+
+    const disconnect = () => {
       if (isHMR()) {
         return
       }
@@ -136,7 +136,21 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       duelSocketEvents.disconnect()
       matchmakerEvents.disconnect()
     }
+
+    connect()
+
+    return disconnect
   }, [duelSocketEvents, matchmakerEvents, isHMR])
+
+  useEffect(() => {
+    duelSocketEvents.attachEventListeners()
+    matchmakerEvents.attachEventListeners()
+
+    return () => {
+      duelSocketEvents.dettachEventListeners()
+      matchmakerEvents.dettachEventListeners()
+    }
+  }, [duelSocketEvents, matchmakerEvents])
 
   useEffect(() => {
     return () => {

@@ -82,7 +82,6 @@ class DuelSocketEvents extends SocketEvents {
     try {
       this.socket.auth = { token: this.token }
       this.socket.connect()
-      this.attachEventListeners()
     } catch (error) {
       console.error(`Error connecting to duel game service:`, error)
     }
@@ -90,7 +89,6 @@ class DuelSocketEvents extends SocketEvents {
 
   disconnect() {
     this.socket.disconnect()
-    this.dettachEventListeners()
   }
 
   joinDuelGame(payload: BaseDuelPayload) {

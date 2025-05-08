@@ -115,7 +115,7 @@ export const useDuelSocket = ({
     navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
       preventScrollReset: true,
     })
-  }, [duelSocketEvents, gameId, navigate, playerId, reset])
+  }, [navigate, reset])
 
   const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
