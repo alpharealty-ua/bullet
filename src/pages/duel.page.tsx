@@ -111,6 +111,20 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     await gameOverHandleRef.current?.hide()
   }
 
+  useEffect(() => {
+    if (!(gameId && playerId)) {
+      return
+    }
+
+    return () => {
+      if (isHMR()) {
+        return
+      }
+
+      duelSocketEvents.leaveDuelGame({ gameId, playerId })
+    }
+  }, [duelSocketEvents, isHMR, gameId, playerId])
+
   // strict mode works only in dev mode
   const isFirstRender = useRef(import.meta.env.DEV)
   useEffect(() => {
@@ -151,18 +165,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       matchmakerEvents.dettachEventListeners()
     }
   }, [duelSocketEvents, matchmakerEvents])
-
-  useEffect(() => {
-    return () => {
-      if (isHMR()) {
-        return
-      }
-
-      if (gameId && playerId) {
-        duelSocketEvents.leaveDuelGame({ gameId, playerId })
-      }
-    }
-  }, [duelSocketEvents, isHMR, gameId, playerId])
 
   return (
     <>
