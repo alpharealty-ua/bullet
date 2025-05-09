@@ -83,11 +83,11 @@ const useSolo = (variant: VariantGame) => {
     const hasPrevBet = bet !== 0
     const prevBet = hasPrevBet ? (bet > balance ? balance : bet) : 0
 
-    setJackpot(-1)
-    setBet(prevBet)
-    setOffer(null)
     setCountBullet(5)
+    setBet(prevBet)
+    setJackpot(-1)
     setMultiplier(-1)
+    setOffer(null)
   }, [
     queryClient,
     gameId,
@@ -294,22 +294,33 @@ const useSolo = (variant: VariantGame) => {
       return
     }
 
-    setJackpot(gameDetails.formattedPotentialWin ?? 0)
-    setBet(gameDetails.formattedBetAmount ?? 0)
     setCountBullet(5 - Number(gameDetails.currentPosition ?? 0))
+    setBet(gameDetails.formattedBetAmount ?? 0)
+    setJackpot(gameDetails.formattedPotentialWin ?? 0)
     setMultiplier(Number(gameDetails.multiplier ?? 0))
+    setOffer(gameDetails.currentOffer ?? null)
 
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
     const isWin = gameDetails.status === 'COMPLETED_WIN'
     if (isGameOver) gameOver()
     if (isWin) winGame()
+
+    return () => {
+      setCountBullet(5)
+      setBet(-1)
+      setJackpot(-1)
+      setMultiplier(-1)
+      setOffer(null)
+    }
   }, [
     gameDetails,
     gameOver,
+    newGame,
     setBet,
     setCountBullet,
     setJackpot,
     setMultiplier,
+    setOffer,
     winGame,
   ])
 

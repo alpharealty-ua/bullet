@@ -280,16 +280,20 @@ const useGameSocket = (
     setBet(Number(game.betAmount))
     setCountBullet(5 - game.currentPosition)
     setMultiplier(game.multiplier)
-
-    if (game.currentOffer) {
-      setOffer(game.currentOffer)
-    }
+    setOffer(game.currentOffer)
 
     const isGameOver = game.status === 'COMPLETED_LOSE'
     const isWin = game.status === 'COMPLETED_WIN'
-
     if (isGameOver) gameOver()
     if (isWin) winGame()
+
+    return () => {
+      setCountBullet(5)
+      setBet(-1)
+      setJackpot(-1)
+      setMultiplier(-1)
+      setOffer(null)
+    }
   }, [
     watchGame,
     isPlay,

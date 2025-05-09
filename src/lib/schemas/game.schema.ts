@@ -31,12 +31,15 @@ export const gameSchema = z.object({
   potentialWin: z.string(),
   actualWin: z.string().nullable(),
   currentPosition: z.number(),
+  currentOffer: offerSchema.nullish(),
   formattedBetAmount: z.number(),
   formattedPotentialWin: z.number(),
   formattedActualWin: z.number().nullable(),
   createdAt: z.string().nullish(),
   updatedAt: z.string().nullish(),
 })
+
+export type OfferSchema = z.infer<typeof offerSchema>
 
 export type GameSchema = z.infer<typeof gameSchema>
 

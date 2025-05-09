@@ -1,18 +1,19 @@
 import { create } from 'zustand'
 
 import { Offer } from '@/api/game.api'
+import { OfferSchema } from '@/lib/schemas/game.schema'
 
 interface SoloState {
   countBullet: number
   bet: number
   jackpot: number
   multiplier: number
-  offer: Offer | null
+  offer: OfferSchema | null
   setCountBullet: (countBullet: number) => void
   setBet: (bet: number) => void
   setJackpot: (jackpot: number) => void
   setMultiplier: (multiplier: number) => void
-  setOffer: (offer: Offer | null) => void
+  setOffer: (offer: OfferSchema | null) => void
 }
 
 const useSoloStore = create<SoloState>()((set) => ({
