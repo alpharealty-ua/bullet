@@ -12,6 +12,7 @@ import { NextSearch } from '@/components/matchmaker/next-search'
 import { AddMoneyButton } from '@/components/ui/add-money-button'
 import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
 import { MatchmakerTrophies } from '@/components/matchmaker//matchmaker-trophies'
+import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmaker-recent-games'
 
 const Matchmaker = ({
   matchmakerEvents,
@@ -60,10 +61,10 @@ const Matchmaker = ({
   }
 
   return (
-    <div className='my-auto w-full'>
+    <div className='my-auto h-full w-full overflow-hidden'>
       {noMoney && <AddMoneyButton />}
       {!noMoney && (
-        <div className='flex w-full flex-col items-center justify-center gap-3'>
+        <div className='flex h-full w-full flex-col items-center justify-center gap-3 overflow-hidden'>
           {isNextSearch && (
             <NextSearch
               matchmakingStatus={matchmakingStatus}
@@ -84,8 +85,9 @@ const Matchmaker = ({
             />
           )}
           {!isNextSearch && <MatchmakerPersonalStatistics />}
-          {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
+          {!isNextSearch && <MatchmakerPersonalRecentGames />}
           {!isNextSearch && <MatchmakerTrophies />}
+          {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
         </div>
       )}
     </div>
