@@ -286,14 +286,6 @@ const useGameSocket = (
     const isWin = game.status === 'COMPLETED_WIN'
     if (isGameOver) gameOver()
     if (isWin) winGame()
-
-    return () => {
-      setCountBullet(5)
-      setBet(-1)
-      setJackpot(-1)
-      setMultiplier(-1)
-      setOffer(null)
-    }
   }, [
     watchGame,
     isPlay,
@@ -305,6 +297,16 @@ const useGameSocket = (
     setMultiplier,
     setOffer,
   ])
+
+  useEffect(() => {
+    return () => {
+      setCountBullet(5)
+      setBet(-1)
+      setJackpot(-1)
+      setMultiplier(-1)
+      setOffer(null)
+    }
+  }, [setBet, setCountBullet, setJackpot, setMultiplier, setOffer])
 
   return { watchGame, watchingLargestGame }
 }

@@ -304,14 +304,6 @@ const useSolo = (variant: VariantGame) => {
     const isWin = gameDetails.status === 'COMPLETED_WIN'
     if (isGameOver) gameOver()
     if (isWin) winGame()
-
-    return () => {
-      setCountBullet(5)
-      setBet(-1)
-      setJackpot(-1)
-      setMultiplier(-1)
-      setOffer(null)
-    }
   }, [
     gameDetails,
     gameOver,
@@ -324,12 +316,15 @@ const useSolo = (variant: VariantGame) => {
     winGame,
   ])
 
-  const { watchGame, watchingLargestGame } = useGameSocket(
-    isPlay,
-    pullGame,
-    gameOver,
-    winGame,
-  )
+  useEffect(() => {
+    return () => {
+      setCountBullet(5)
+      setBet(-1)
+      setJackpot(-1)
+      setMultiplier(-1)
+      setOffer(null)
+    }
+  }, [setBet, setCountBullet, setJackpot, setMultiplier, setOffer])
 
   return {
     footerHandleRef,
@@ -351,9 +346,10 @@ const useSolo = (variant: VariantGame) => {
     setBet,
     pull,
     deal,
-    watchGame,
-    watchingLargestGame,
     newGame,
+    winGame,
+    gameOver,
+    pullGame,
   }
 }
 

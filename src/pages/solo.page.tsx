@@ -1,3 +1,4 @@
+import { useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'
@@ -35,9 +36,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     setBet,
     pull,
     deal,
-    watchGame,
-    watchingLargestGame,
     newGame,
+    winGame,
+    gameOver,
+    pullGame,
   } = useSolo(variant)
 
   const handlePull = async () => {
@@ -51,6 +53,13 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const hanldeGameOverClick = async () => {
     await newGame()
   }
+
+  const { watchGame, watchingLargestGame } = useGameSocket(
+    variant === 'play',
+    pullGame,
+    gameOver,
+    winGame,
+  )
 
   return (
     <>
