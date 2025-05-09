@@ -4,7 +4,9 @@ import { persist } from 'zustand/middleware'
 import { MatchDetails } from '@/socket/matchmaker/matchmaker-soket.types'
 import { CharacterName } from '@/lib/constants'
 
+// TODO: RENAME TO DUEL
 interface GameState {
+  // TODO: MOVE TO SETTINGS
   increaseTime: number
   characterName: CharacterName
   matchDetails: MatchDetails | null

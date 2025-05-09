@@ -101,6 +101,7 @@ export const useDuelSocket = ({
   }
 
   const cancelRematch = () => {
+    // TODO: CHECK IF REMATCH CREATED, IF CREATED NOT LEAVE
     leaveGame(false)
   }
 

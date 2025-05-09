@@ -15,6 +15,7 @@ import { type FetchBalanceResponse, useBalance } from '@/api/wallet.api'
 import { useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
+import { useSoloStore } from '@/store/solo.store'
 import { useWait } from '@/hooks/use-wait'
 import { useUnmountedState } from '@/hooks/use-unmount-state'
 import { randomIntFromInterval } from '@/lib/utils'
@@ -44,12 +45,16 @@ const useSolo = (variant: VariantGame) => {
   const { data: allGames = [] } = useAllGames()
   const { mutateAsync: gamePullMutation } = usePullGame()
   const playSound = useSettingsStore(({ playSound }) => playSound)
-  const [countBullet, setCountBullet] = useState(5)
-  const [bet, setBet] = useState(0)
-  const [jackpot, setJackpot] = useState(-1)
-  const [offer, setOffer] = useState<Offer | null>(null)
-  const [multiplier, setMultiplier] = useState(-1)
-  const [startedMultiplierSpin, setStartedMultiplierSpin] = useState(false)
+  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
+  const setBet = useSoloStore(({ setBet }) => setBet)
+  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
+  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
+  const setOffer = useSoloStore(({ setOffer }) => setOffer)
+  const countBullet = useSoloStore(({ countBullet }) => countBullet)
+  const bet = useSoloStore(({ bet }) => bet)
+  const jackpot = useSoloStore(({ jackpot }) => jackpot)
+  const multiplier = useSoloStore(({ multiplier }) => multiplier)
+  const offer = useSoloStore(({ offer }) => offer)
   const isStartedGame = Boolean(gameId)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
@@ -83,7 +88,19 @@ const useSolo = (variant: VariantGame) => {
     setOffer(null)
     setCountBullet(5)
     setMultiplier(-1)
-  }, [queryClient, gameId, isUnmounted, bet, navigate, variant])
+  }, [
+    queryClient,
+    gameId,
+    isUnmounted,
+    bet,
+    setJackpot,
+    setBet,
+    setOffer,
+    setCountBullet,
+    setMultiplier,
+    navigate,
+    variant,
+  ])
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
@@ -148,10 +165,11 @@ const useSolo = (variant: VariantGame) => {
         spin(0).then(resolve)
       })
     },
-    [bet, playSound],
+    [bet, playSound, setJackpot, setMultiplier],
   )
 
   const deal = async () => {
+    // TODO: CHECK END GAME
     if (offer) {
       await acceptOfferMutation(offer.id)
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
@@ -176,9 +194,7 @@ const useSolo = (variant: VariantGame) => {
       )
 
       if (multiplierIndex !== -1) {
-        setStartedMultiplierSpin(true)
         await getMultiplier(multiplierIndex)
-        setStartedMultiplierSpin(false)
       }
     },
     [bet, getMultiplier, navigate, queryClient, startGameMutation],
@@ -201,10 +217,10 @@ const useSolo = (variant: VariantGame) => {
     const genRunSound = victoryHandleRef.current?.runSound()
 
     await victoryHandleRef.current?.updateState({
-      show: true,
       type: 'win',
       win: jackpot,
     })
+    await victoryHandleRef.current?.show()
     await genRunSound?.next()
     await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
     await genRunSound?.next()
@@ -275,52 +291,34 @@ const useSolo = (variant: VariantGame) => {
   }, [allGames, navigate, isStartedGame])
 
   useEffect(() => {
-    if (startedMultiplierSpin) {
-      return
-    }
-
-    if (!isStartedGame) {
-      return
-    }
-
     if (!gameDetails) {
       return
     }
 
-    const jackpot = gameDetails.formattedPotentialWin ?? 0
-    const bet = gameDetails.formattedBetAmount ?? 0
-    const multiplier = Number(gameDetails.multiplier ?? 0)
-    const countBullet = 5 - Number(gameDetails.currentPosition ?? 0)
+    setJackpot(gameDetails.formattedPotentialWin ?? 0)
+    setBet(gameDetails.formattedBetAmount ?? 0)
+    setCountBullet(5 - Number(gameDetails.currentPosition ?? 0))
+    setMultiplier(Number(gameDetails.multiplier ?? 0))
+
     const isGameOver = gameDetails.status === 'COMPLETED_LOSE'
     const isWin = gameDetails.status === 'COMPLETED_WIN'
-
-    setJackpot(jackpot)
-    setBet(bet)
-    setCountBullet(countBullet)
-    setMultiplier(multiplier)
     if (isGameOver) gameOver()
     if (isWin) winGame()
   }, [
     gameDetails,
-    setJackpot,
+    gameOver,
     setBet,
     setCountBullet,
+    setJackpot,
     setMultiplier,
-    gameOver,
     winGame,
-    isStartedGame,
-    startedMultiplierSpin,
   ])
 
   const { watchGame, watchingLargestGame } = useGameSocket(isPlay, pullGame)
 
   // Update state from watched game if available (for watch mode)
   useEffect(() => {
-    if (startedMultiplierSpin) {
-      return
-    }
-
-    if (isPlay || !watchGame?.game || !isStartedGame) {
+    if (isPlay || !watchGame?.game) {
       return
     }
 
@@ -330,14 +328,6 @@ const useSolo = (variant: VariantGame) => {
     setBet(Number(game.betAmount))
     setCountBullet(5 - game.currentPosition)
     setMultiplier(game.multiplier)
-    jackpotHandleRef.current?.show()
-    multiplierHandleRef.current?.show()
-    jackpotHandleRef.current?.updateState({
-      value: `${game.potentialWin}`,
-    })
-    multiplierHandleRef.current?.updateState({
-      value: `${game.multiplier}`,
-    })
 
     if (game.currentOffer) {
       setOffer(game.currentOffer)
@@ -348,14 +338,7 @@ const useSolo = (variant: VariantGame) => {
 
     if (isGameOver) gameOver()
     if (isWin) winGame()
-  }, [
-    watchGame,
-    isPlay,
-    isStartedGame,
-    gameOver,
-    winGame,
-    startedMultiplierSpin,
-  ])
+  }, [watchGame, isPlay, isStartedGame, gameOver, winGame])
 
   return {
     footerHandleRef,
