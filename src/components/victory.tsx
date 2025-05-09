@@ -60,11 +60,6 @@ const Victory = ({ victoryHandleRef }: VictoryProps) => {
   useImperativeHandle(victoryHandleRef, () => ({
     runSound,
     ...methods,
-    reset: async () => {
-      const promise = methods.reset()
-      methods.updateState((p) => ({ ...p, type }))
-      return promise
-    },
   }))
 
   return (

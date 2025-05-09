@@ -43,7 +43,11 @@ const useUpdateShow = <ComponentState extends { show: boolean }>(
 
   const hide = () => updateState({ show: false } as Partial<ComponentState>)
 
-  const reset = () => updateState(intiState)
+  const reset = () => {
+    const promise = updateState((p) => ({ ...p, show: intiState.show }))
+    promise.then(() => updateState(intiState))
+    return promise
+  }
 
   const getState = () => state
 
