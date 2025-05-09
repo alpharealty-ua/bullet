@@ -13,10 +13,11 @@ import {
   DuelGameCreatedResponse,
   JoinMatchmaking,
   ErrorResponse,
+  AdditionalPlayerMetadata,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client'
 import { notify, SocketEvents } from '@/socket/utils'
-import { BET_AMOUNT, CharacterName, MAX_ROUNDS } from '@/lib/constants'
+import { BET_AMOUNT, MAX_ROUNDS } from '@/lib/constants'
 
 type OnEvents =
   | { type: 'connect'; payload: undefined }
@@ -41,15 +42,7 @@ class MatchmakerSocketEvents extends SocketEvents {
   private onEvent: (events: OnEvents) => void = () => {}
   private matchmakerPingClient: MatchmakerPingClient | null = null
 
-  constructor(
-    protected socket: Socket,
-    public token: string,
-    public metadata: {
-      username: string
-      characterName: CharacterName
-      region: string
-    },
-  ) {
+  constructor(protected socket: Socket) {
     super(socket)
   }
 
@@ -57,9 +50,9 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.onEvent = onEvent
   }
 
-  connect() {
+  connect(token: string) {
     try {
-      this.socket.auth = { token: this.token }
+      this.socket.auth = { token }
       this.socket.connect()
     } catch (error) {
       console.error(`Error connecting to duel game service:`, error)
@@ -128,7 +121,7 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.matchmakerPingClient?.dettachEventListeners()
   }
 
-  joinMatchmaking(maxRounds = MAX_ROUNDS) {
+  joinMatchmaking(metadata: AdditionalPlayerMetadata, maxRounds = MAX_ROUNDS) {
     const payload: JoinMatchmaking = {
       betOptions: {
         networkId: 'local',
@@ -136,11 +129,7 @@ class MatchmakerSocketEvents extends SocketEvents {
         betAmount: `${BET_AMOUNT}00`,
         maxRounds,
       },
-      metadata: {
-        username: this.metadata.username,
-        characterName: this.metadata.characterName,
-        region: this.metadata.region,
-      },
+      metadata,
       matchConfirmationRequired: false,
     }
 

@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { duelSocket, matchmakerSocket } from '@/socket/socket'
+import { duelSocket, matchmakerEvents } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
@@ -20,7 +20,6 @@ import { GameOver } from '@/components/game-over'
 import { Victory } from '@/components/victory'
 import { RematchRequest } from '@/components/rematch-request'
 import { Matchmaker } from '@/components/matchmaker/matchmaker'
-import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 
 const useIsHMR = () => {
@@ -80,16 +79,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     duelSocketEvents,
   })
 
-  const matchmakerEvents = useMemo(
-    () =>
-      new MatchmakerSocketEvents(matchmakerSocket, token!, {
-        username: user.username,
-        characterName,
-        region: 'us-west',
-      }),
-    [characterName, token, user.username],
-  )
-
   const handlePull = async () => {
     await pull()
   }
@@ -139,7 +128,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       }
 
       duelSocketEvents.connect()
-      matchmakerEvents.connect()
+      matchmakerEvents.connect(token!)
     }
 
     const disconnect = () => {
@@ -154,7 +143,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     connect()
 
     return disconnect
-  }, [duelSocketEvents, matchmakerEvents, isHMR])
+  }, [duelSocketEvents, isHMR, token])
 
   useEffect(() => {
     duelSocketEvents.attachEventListeners()
@@ -164,7 +153,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       duelSocketEvents.dettachEventListeners()
       matchmakerEvents.dettachEventListeners()
     }
-  }, [duelSocketEvents, matchmakerEvents])
+  }, [duelSocketEvents])
 
   return (
     <>
@@ -185,7 +174,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           >
             {typePage !== 'duel' && (
               <Matchmaker
-                matchmakerEvents={matchmakerEvents}
                 isNextSearch={typePage === 'next'}
                 autoJoin={typePage === 'next'}
               />

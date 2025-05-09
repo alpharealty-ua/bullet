@@ -1,9 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useBalance } from '@/api/wallet.api'
 import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
-import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
+import { useUser } from '@/api/auth.api'
+import { useGameStore } from '@/store/game.store'
+import { useAuthStore } from '@/store/auth.store'
 import { ROUTES } from '@/routes/path'
 import { MIN_DUEL_BET } from '@/lib/constants'
 import { EnterArena } from '@/components/matchmaker/enter-arena'
@@ -14,17 +16,27 @@ import { MatchmakerTrophies } from '@/components/matchmaker//matchmaker-trophies
 import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmaker-recent-games'
 
 const Matchmaker = ({
-  matchmakerEvents,
   autoJoin,
   isNextSearch,
 }: {
-  matchmakerEvents: MatchmakerSocketEvents
   autoJoin?: boolean
   isNextSearch?: boolean
 }) => {
+  const user = useUser()
+  const token = useAuthStore(({ accessToken }) => accessToken)
+  const characterName = useGameStore(({ characterName }) => characterName)
   const navigate = useNavigate()
   const { data: balance } = useBalance()
   const noMoney = balance < MIN_DUEL_BET
+
+  const metadata = useMemo(
+    () => ({
+      username: user.username,
+      characterName,
+      region: 'us-west',
+    }),
+    [user, characterName],
+  )
 
   const {
     joinMatchmaking,
@@ -35,7 +47,11 @@ const Matchmaker = ({
     indicators,
     confirmationTimeoutSeconds,
     gameId,
-  } = useMatchmakingSocket(matchmakerEvents, autoJoin && !noMoney)
+  } = useMatchmakingSocket({
+    token: token!,
+    autoJoin: Boolean(autoJoin && !noMoney),
+    metadata,
+  })
 
   const handleSearch = () => {
     matchmakingStatus === 'not-in-queue'

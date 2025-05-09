@@ -1,5 +1,6 @@
 import { io } from 'socket.io-client'
 
+import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { ENV } from '@/lib/env'
 
 const GAME_SOCKET_URL = `${ENV.API_URL}/game`
@@ -23,3 +24,5 @@ export const duelSocket = io(DUEL_SOCKET_URL, {
   transports: ['websocket'],
   autoConnect: false,
 })
+
+export const matchmakerEvents = new MatchmakerSocketEvents(matchmakerSocket)

@@ -1,26 +1,31 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { matchmakerSocket } from '@/socket/socket'
+import { matchmakerEvents, matchmakerSocket } from '@/socket/socket'
 import {
   PingData,
   MatchmakingStatus,
   ConnectionStatus,
   Statistics,
   MatchDetails,
+  AdditionalPlayerMetadata,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
 import { notify } from '@/socket/utils'
-import { MatchmakerSocketEvents } from '@/socket/matchmaker/matchmaker-socket'
 import { useGameStore } from '@/store/game.store'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
 import { Indicator } from '@/components/ui/indicators'
 
-const useMatchmakingSocket = (
-  matchmakerEvents: MatchmakerSocketEvents,
-  autoJoin = false,
-) => {
+const useMatchmakingSocket = ({
+  token,
+  autoJoin,
+  metadata,
+}: {
+  token: string
+  autoJoin: boolean
+  metadata: AdditionalPlayerMetadata
+}) => {
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
   const [pingData, setPingData] = useState<PingData>({
@@ -288,17 +293,17 @@ const useMatchmakingSocket = (
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
     })
-  }, [matchmakerEvents, playSound, queryClient, setMatchDetails])
+  }, [playSound, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
     matchmakerSocket.connected
       ? matchmakerEvents.disconnect()
-      : matchmakerEvents.connect()
-  }, [matchmakerEvents])
+      : matchmakerEvents.connect(token)
+  }, [token])
 
   const joinMatchmaking = useCallback(() => {
-    matchmakerEvents.joinMatchmaking()
-  }, [matchmakerEvents])
+    matchmakerEvents.joinMatchmaking(metadata)
+  }, [metadata])
 
   const leaveMatchmaking = useCallback(() => {
     const { matchmakingStatus } = matchmakerEventsStateRef.current
