@@ -256,7 +256,16 @@ export const useDuelSocket = ({
     }
 
     duelSocketEvents.updateEvents(async (event) => {
+      if (
+        event.payload &&
+        'gameId' in event.payload &&
+        event.payload.gameId !== gameId
+      ) {
+        return
+      }
+
       const { type, payload } = event
+
       const {
         round,
         winner,
@@ -534,6 +543,7 @@ export const useDuelSocket = ({
   }, [
     duelSocketEvents,
     playerId,
+    gameId,
     winGame,
     gameOver,
     playerPull,
