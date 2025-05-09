@@ -61,13 +61,9 @@ const RegionalChampions = ({ list, user }: RegionalChampionsProps) => {
               <td className='px-2 py-3'>{player.speed}</td>
               <td className='px-2 py-3'>{player.perfectHitPercent}%</td>
               <td className='px-2 py-3 whitespace-nowrap'>
-                <span className='font-medium text-green-600'>
-                  {player.wins}W
-                </span>
+                <span className='text-green font-medium'>{player.wins}W</span>
                 <span>/</span>
-                <span className='font-medium text-red-600'>
-                  {player.losses}L
-                </span>
+                <span className='text-red font-medium'>{player.losses}L</span>
               </td>
             </tr>
           )

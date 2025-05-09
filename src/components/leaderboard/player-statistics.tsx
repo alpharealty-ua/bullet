@@ -34,8 +34,8 @@ export const PlayerStatistics = ({
           <tr className='bg-white text-left duration-150 even:bg-gray-50 hover:bg-blue-50'>
             <td className='px-2 py-3 font-semibold text-gray-500'>Record</td>
             <td className='px-2 py-3 font-medium'>
-              <span className='text-green-600'>{list.gamesWon}W</span>/
-              <span className='text-red-600'>{list.gamesLost}L</span>
+              <span className='text-green'>{list.gamesWon}W</span>/
+              <span className='text-red'>{list.gamesLost}L</span>
             </td>
           </tr>
           {getPlayerStatistics(list).map(({ label, value }, i) => (

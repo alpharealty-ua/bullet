@@ -82,7 +82,7 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
                   </td>
                   <td className='px-2 py-3'>{game.opponentScore}</td>
                   <td
-                    className={`px-2 py-3 font-medium ${game.result === 'win' ? 'text-green-600' : 'text-red-600'}`}
+                    className={`px-2 py-3 font-medium ${game.result === 'win' ? 'text-green' : 'text-red'}`}
                   >
                     {game.result}
                   </td>

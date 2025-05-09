@@ -54,7 +54,7 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
       <div>
         <h3 className='text-lg font-medium'>{offer.name}</h3>
         <p className='text-sm text-gray-500'>{offer.description}</p>
-        <p className='mt-2 font-semibold text-green-600'>
+        <p className='text-green mt-2 font-semibold'>
           Reward: {offer.formattedRewardAmount} {offer.coin.symbol}
         </p>
         {timeLeft && (
@@ -85,7 +85,7 @@ const OffersList = () => {
 
   if (error) {
     return (
-      <div className='py-4 text-center text-red-500'>Failed to load offers</div>
+      <div className='text-red py-4 text-center'>Failed to load offers</div>
     )
   }
 

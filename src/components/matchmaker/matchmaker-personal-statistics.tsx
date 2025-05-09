@@ -30,11 +30,11 @@ const MatchmakerPersonalStatistics = ({
         <div className='grid grid-cols-3 gap-1'>
           <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
             <div className='text-xl'>
-              <span className='font-medium text-green-600'>
+              <span className='text-green font-medium'>
                 {statistics.gamesWon}W
               </span>
               <span>/</span>
-              <span className='font-medium text-red-600'>
+              <span className='text-red font-medium'>
                 {statistics.gamesLost}L
               </span>
             </div>
