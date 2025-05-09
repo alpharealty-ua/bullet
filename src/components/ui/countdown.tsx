@@ -25,11 +25,12 @@ const Countdown = ({
 
   const countdown = () => {
     const time = --timeRef.current
-
     setTime(time)
+
     if (time === -1) {
       onEnd && onEnd()
       setTime(0)
+      // need force becouse is changed time 0 => 0
       forceUdate((p) => !p)
       if (playSound) {
         getSound('negativebeeps').play()
@@ -45,8 +46,9 @@ const Countdown = ({
     }
 
     const audioEl = audioElRef.current
-    audioEl.play()
+    audioEl.volume = 0.5
     audioEl.loop = true
+    audioEl.play()
 
     return () => {
       audioEl.pause()
