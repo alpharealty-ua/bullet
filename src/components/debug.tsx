@@ -47,10 +47,6 @@ const Debug = () => {
 
   const { mutate: addBalanceMutation } = useAddBalance()
 
-  if (!getItem('showDebug')) {
-    return null
-  }
-
   const handleSubmit = (values: FormValues) => {
     setItem('duelCoundDown', values.duelCoundDown)
     setItem('minDuelBet', values.minDuelBet)

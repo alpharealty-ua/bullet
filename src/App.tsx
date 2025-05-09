@@ -9,10 +9,11 @@ import { useBulletSound } from '@/hooks/use-bullet-sound'
 import { Notification } from '@/components/ui/notification'
 import { Debug } from '@/components/debug'
 import { Providers } from '@/providers'
+import { getItem } from '@/lib/localstorage'
 
 const RootRouter = () => (
   <Providers>
-    <Debug />
+    {getItem('showDebug') && <Debug />}
     <App />
   </Providers>
 )
