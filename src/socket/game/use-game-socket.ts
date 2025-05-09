@@ -7,7 +7,7 @@ import { gameSocket } from '@/socket/socket'
 import { useAuthStore } from '@/store/auth.store'
 import { useSoloStore } from '@/store/solo.store'
 
-type PullGameFn = (
+export type PullGameFn = (
   gameId: string,
   result?: {
     success: boolean
@@ -60,7 +60,6 @@ type GameUpdateEvent = {
 
 // TODO: REFACTOR HOOK
 const useGameSocket = (
-  isPlay: boolean,
   pullGame: PullGameFn,
   gameOver: () => Promise<void>,
   winGame: () => Promise<void>,
@@ -121,9 +120,10 @@ const useGameSocket = (
   }, [token])
 
   useEffect(() => {
-    if (isPlay || !gameId) {
+    if (!gameId) {
       return
     }
+
     let isUnmounted = false
 
     setWatchGame(null)
@@ -222,10 +222,10 @@ const useGameSocket = (
       gameSocket.off('offer_accepted', offerAccepted)
       gameSocket.off('offer_rejected', offerRejected)
     }
-  }, [isPlay, gameId, pullGame])
+  }, [gameId, pullGame])
 
   useEffect(() => {
-    if (gameId || isPlay) {
+    if (gameId) {
       return
     }
 
@@ -266,11 +266,11 @@ const useGameSocket = (
     return () => {
       clearTimeout(interalID)
     }
-  }, [gameId, isPlay, navigate])
+  }, [gameId, navigate])
 
   // Update state from watched game if available (for watch mode)
   useEffect(() => {
-    if (isPlay || !watchGame?.game) {
+    if (!watchGame?.game) {
       return
     }
 
@@ -288,7 +288,6 @@ const useGameSocket = (
     if (isWin) winGame()
   }, [
     watchGame,
-    isPlay,
     gameOver,
     winGame,
     setJackpot,
@@ -300,6 +299,7 @@ const useGameSocket = (
 
   useEffect(() => {
     return () => {
+      return
       setCountBullet(5)
       setBet(-1)
       setJackpot(-1)

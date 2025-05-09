@@ -1,4 +1,4 @@
-import { useGameSocket } from '@/socket/game/use-game-socket'
+import { PullGameFn, useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'
@@ -54,65 +54,15 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     await newGame()
   }
 
-  const { watchGame, watchingLargestGame } = useGameSocket(
-    variant === 'play',
-    pullGame,
-    gameOver,
-    winGame,
-  )
-
   return (
     <>
       <div className='min-h-60'>
         {variant === 'watch' && (
-          <div className='flex flex-col gap-6 p-4'>
-            {!watchGame && watchingLargestGame && (
-              <>
-                <div className='text-xl'>Largest prize game</div>
-                <div className='align-items flex items-center justify-between'>
-                  <Result
-                    title={'Prizepool'}
-                    value={`$${watchingLargestGame.jackpot}`}
-                    open={true}
-                  />
-                  <ButtonWithAudio
-                    as='link'
-                    to={`${ROUTES.solo.watch}/${watchingLargestGame.gameId}`}
-                    bg='primary'
-                  >
-                    Watch
-                  </ButtonWithAudio>
-                </div>
-              </>
-            )}
-            {watchGame && watchGame.game && (
-              <div className='flex flex-col gap-3'>
-                <div className='text-xl'>Game Details</div>
-                <div className='grid grid-cols-2 gap-3'>
-                  <Result
-                    title={'Player'}
-                    value={watchGame.game.user.username}
-                    open={true}
-                  />
-                  <Result
-                    title={'Bet Amount'}
-                    value={`$${watchGame.game.formattedBetAmount}`}
-                    open={true}
-                  />
-                  <Result
-                    title={'Multiplier'}
-                    value={`${watchGame.game.multiplier}x`}
-                    open={true}
-                  />
-                  <Result
-                    title={'Status'}
-                    value={watchGame.game.status}
-                    open={true}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+          <WatchGame
+            winGame={winGame}
+            gameOver={gameOver}
+            pullGame={pullGame}
+          />
         )}
         {variant === 'play' && !noMoney && (
           <div className='flex flex-col gap-3 pt-2'>
@@ -199,3 +149,72 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 }
 
 export { SoloPage }
+
+const WatchGame = ({
+  pullGame,
+  gameOver,
+  winGame,
+}: {
+  pullGame: PullGameFn
+  gameOver: () => Promise<void>
+  winGame: () => Promise<void>
+}) => {
+  const { watchGame, watchingLargestGame } = useGameSocket(
+    pullGame,
+    gameOver,
+    winGame,
+  )
+
+  return (
+    <>
+      <div className='flex flex-col gap-6 p-4'>
+        {!watchGame && watchingLargestGame && (
+          <>
+            <div className='text-xl'>Largest prize game</div>
+            <div className='align-items flex items-center justify-between'>
+              <Result
+                title={'Prizepool'}
+                value={`$${watchingLargestGame.jackpot}`}
+                open={true}
+              />
+              <ButtonWithAudio
+                as='link'
+                to={`${ROUTES.solo.watch}/${watchingLargestGame.gameId}`}
+                bg='primary'
+              >
+                Watch
+              </ButtonWithAudio>
+            </div>
+          </>
+        )}
+        {watchGame && watchGame.game && (
+          <div className='flex flex-col gap-3'>
+            <div className='text-xl'>Game Details</div>
+            <div className='grid grid-cols-2 gap-3'>
+              <Result
+                title={'Player'}
+                value={watchGame.game.user.username}
+                open={true}
+              />
+              <Result
+                title={'Bet Amount'}
+                value={`$${watchGame.game.formattedBetAmount}`}
+                open={true}
+              />
+              <Result
+                title={'Multiplier'}
+                value={`${watchGame.game.multiplier}x`}
+                open={true}
+              />
+              <Result
+                title={'Status'}
+                value={watchGame.game.status}
+                open={true}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  )
+}
