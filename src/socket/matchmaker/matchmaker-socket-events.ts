@@ -19,7 +19,7 @@ import { MatchmakerPingClient } from '@/socket/matchmaker/matchmaker-ping-client
 import { notify, SocketEvents } from '@/socket/utils'
 import { BET_AMOUNT, MAX_ROUNDS } from '@/lib/constants'
 
-type OnEvents =
+type MatchmakerEventList =
   | { type: 'connect'; payload: undefined }
   | { type: 'connect_error'; payload: { message: string } }
   | { type: 'disconnect'; payload: undefined }
@@ -38,7 +38,7 @@ type OnEvents =
       payload: ErrorResponse
     }
 
-class MatchmakerSocketEvents extends SocketEvents<OnEvents> {
+class MatchmakerSocketEvents extends SocketEvents<MatchmakerEventList> {
   private matchmakerPingClient: MatchmakerPingClient | null = null
 
   constructor(protected socket: Socket) {
@@ -147,4 +147,4 @@ class MatchmakerSocketEvents extends SocketEvents<OnEvents> {
   }
 }
 
-export { MatchmakerSocketEvents, type OnEvents }
+export { MatchmakerSocketEvents, type MatchmakerEventList }

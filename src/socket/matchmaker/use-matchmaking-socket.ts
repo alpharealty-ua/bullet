@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { matchmakerEvents, matchmakerSocket } from '@/socket/socket'
-import { OnEvents } from '@/socket/matchmaker/matchmaker-socket'
+import { MatchmakerEventList } from '@/socket/matchmaker/matchmaker-socket-events'
 import {
   PingData,
   MatchmakingStatus,
@@ -75,7 +75,7 @@ const useMatchmakingSocket = ({
   })
 
   useEffect(() => {
-    const handle = async (event: OnEvents) => {
+    const handle = async (event: MatchmakerEventList) => {
       const { type, payload } = event
       const {
         matchId,
@@ -286,6 +286,10 @@ const useMatchmakingSocket = ({
               notify(message, 'error')
               return
             }
+            case 'Not in matchmaking': {
+              notify(message, 'error')
+              return
+            }
           }
           console.error(event, payload)
           notify('Unhandled error ' + event, 'info')
@@ -293,7 +297,7 @@ const useMatchmakingSocket = ({
         }
       }
       console.error(event)
-      notify('Unhandled event ' + event.type, 'info')
+      notify('Unhandled event ' + event, 'info')
     }
 
     matchmakerEvents.addEventsListener(handle)
@@ -314,15 +318,6 @@ const useMatchmakingSocket = ({
   }, [metadata])
 
   const leaveMatchmaking = useCallback(() => {
-    const { matchmakingStatus } = matchmakerEventsStateRef.current
-    if (matchmakingStatus === 'match-found') {
-      notify(
-        'Cannot leave matchmaking while a match confirmation is active. Please accept or decline the match first.',
-        'warning',
-      )
-      return
-    }
-
     matchmakerEvents.leaveMatchmaking()
   }, [])
 

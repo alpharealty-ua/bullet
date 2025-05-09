@@ -7,8 +7,8 @@ import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
 import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
-import { OnEvents } from '@/socket/duel/duel-socket-events'
-import { duelSocketEvents } from '@/socket/socket'
+import { DuelEventList } from '@/socket/duel/duel-socket-events'
+import { duelEvents } from '@/socket/socket'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
@@ -97,7 +97,7 @@ export const useDuelSocket = ({
       playerId,
     }
 
-    duelSocketEvents.requestRematch(payload)
+    duelEvents.requestRematch(payload)
   }
 
   const cancelRematch = () => {
@@ -217,7 +217,7 @@ export const useDuelSocket = ({
 
     setPulls((p) => [...p, round])
 
-    duelSocketEvents.pullTrigger(payload)
+    duelEvents.pullTrigger(payload)
   }
 
   // TODO: USE ZUSTAND
@@ -262,7 +262,7 @@ export const useDuelSocket = ({
   }, [balance])
 
   useEffect(() => {
-    const handle = async (event: OnEvents) => {
+    const handle = async (event: DuelEventList) => {
       if (
         event.payload &&
         'gameId' in event.payload &&
@@ -550,10 +550,10 @@ export const useDuelSocket = ({
       notify('Unhandled event ' + event.type, 'info')
     }
 
-    duelSocketEvents.addEventsListener(handle)
+    duelEvents.addEventsListener(handle)
 
     return () => {
-      duelSocketEvents.removeEventsListener(handle)
+      duelEvents.removeEventsListener(handle)
     }
   }, [
     playerId,
@@ -576,8 +576,8 @@ export const useDuelSocket = ({
       return
     }
 
-    duelSocketEvents.joinDuelGame({ gameId, playerId })
-  }, [duelSocketEvents, gameId, playerId])
+    duelEvents.joinDuelGame({ gameId, playerId })
+  }, [gameId, playerId])
 
   return {
     gameOverHandleRef,

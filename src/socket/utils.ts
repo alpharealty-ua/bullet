@@ -8,21 +8,21 @@ export const notify = (
   !import.meta.env.PROD && toast[type](message)
 }
 
-export class SocketEvents<OnEvents = undefined> {
+export class SocketEvents<EventList = undefined> {
   protected socketEventListeners: (() => void)[] = []
-  protected eventListeners: ((event: OnEvents) => void)[] = []
+  protected eventListeners: ((event: EventList) => void)[] = []
 
   constructor(protected socket: Socket) {}
 
-  onEvent(event: OnEvents) {
+  onEvent(event: EventList) {
     this.eventListeners.forEach((onEvent) => onEvent(event))
   }
 
-  addEventsListener(onEvent: (event: OnEvents) => void) {
+  addEventsListener(onEvent: (event: EventList) => void) {
     this.eventListeners.push(onEvent)
   }
 
-  removeEventsListener(onEvent: (event: OnEvents) => void) {
+  removeEventsListener(onEvent: (event: EventList) => void) {
     const index = this.eventListeners.findIndex((onEvt) => onEvt === onEvent)
 
     if (index === -1) {

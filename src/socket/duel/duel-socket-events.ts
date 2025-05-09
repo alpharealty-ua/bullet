@@ -28,7 +28,7 @@ import {
 } from '@/socket/duel/duel-socket.types'
 import { notify, SocketEvents } from '@/socket/utils'
 
-export type OnEvents =
+export type DuelEventList =
   | { type: 'connect'; payload: undefined }
   | { type: 'connect_error'; payload: { message: string } }
   | { type: 'disconnect'; payload: undefined }
@@ -64,7 +64,7 @@ export type OnEvents =
       payload: { event: string; message: string; timestamp: string }
     }
 
-class DuelSocketEvents extends SocketEvents<OnEvents> {
+class DuelSocketEvents extends SocketEvents<DuelEventList> {
   constructor(protected socket: Socket) {
     super(socket)
   }
@@ -115,6 +115,7 @@ class DuelSocketEvents extends SocketEvents<OnEvents> {
     })
 
     this.on('disconnect', () => {
+      notify(`Disconnected from duel service`, 'info')
       this.onEvent({ type: 'disconnect', payload: undefined })
     })
 

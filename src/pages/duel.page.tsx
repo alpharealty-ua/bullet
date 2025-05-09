@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { matchmakerEvents, duelSocketEvents } from '@/socket/socket'
+import { matchmakerEvents, duelEvents } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { useGameStore } from '@/store/game.store'
@@ -103,7 +103,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         return
       }
 
-      duelSocketEvents.leaveDuelGame({ gameId, playerId })
+      duelEvents.leaveDuelGame({ gameId, playerId })
     }
   }, [isHMR, gameId, playerId])
 
@@ -120,7 +120,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         return
       }
 
-      duelSocketEvents.connect(token!)
+      duelEvents.connect(token!)
       matchmakerEvents.connect(token!)
     }
 
@@ -129,7 +129,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         return
       }
 
-      duelSocketEvents.disconnect()
+      duelEvents.disconnect()
       matchmakerEvents.disconnect()
     }
 
@@ -139,11 +139,11 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   }, [isHMR, token])
 
   useEffect(() => {
-    duelSocketEvents.attachEventListeners()
+    duelEvents.attachEventListeners()
     matchmakerEvents.attachEventListeners()
 
     return () => {
-      duelSocketEvents.dettachEventListeners()
+      duelEvents.dettachEventListeners()
       matchmakerEvents.dettachEventListeners()
     }
   }, [])
