@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { Offer } from '@/api/game.api'
 import { gameSocket } from '@/socket/socket'
 import { useAuthStore } from '@/store/auth.store'
+import { useSoloStore } from '@/store/solo.store'
 
 type PullGameFn = (
   gameId: string,
@@ -58,8 +59,18 @@ type GameUpdateEvent = {
 }
 
 // TODO: REFACTOR HOOK
-const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
+const useGameSocket = (
+  isPlay: boolean,
+  pullGame: PullGameFn,
+  gameOver: () => Promise<void>,
+  winGame: () => Promise<void>,
+) => {
   const { gameId } = useParams<{ gameId: string }>()
+  const setCountBullet = useSoloStore(({ setCountBullet }) => setCountBullet)
+  const setBet = useSoloStore(({ setBet }) => setBet)
+  const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
+  const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
+  const setOffer = useSoloStore(({ setOffer }) => setOffer)
 
   const navigate = useNavigate()
 
@@ -256,6 +267,40 @@ const useGameSocket = (isPlay: boolean, pullGame: PullGameFn) => {
       clearTimeout(interalID)
     }
   }, [gameId, isPlay, navigate])
+
+  // Update state from watched game if available (for watch mode)
+  useEffect(() => {
+    if (isPlay || !watchGame?.game) {
+      return
+    }
+
+    const game = watchGame.game
+
+    setJackpot(Number(game.potentialWin))
+    setBet(Number(game.betAmount))
+    setCountBullet(5 - game.currentPosition)
+    setMultiplier(game.multiplier)
+
+    if (game.currentOffer) {
+      setOffer(game.currentOffer)
+    }
+
+    const isGameOver = game.status === 'COMPLETED_LOSE'
+    const isWin = game.status === 'COMPLETED_WIN'
+
+    if (isGameOver) gameOver()
+    if (isWin) winGame()
+  }, [
+    watchGame,
+    isPlay,
+    gameOver,
+    winGame,
+    setJackpot,
+    setBet,
+    setCountBullet,
+    setMultiplier,
+    setOffer,
+  ])
 
   return { watchGame, watchingLargestGame }
 }

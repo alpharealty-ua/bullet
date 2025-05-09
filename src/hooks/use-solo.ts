@@ -276,19 +276,18 @@ const useSolo = (variant: VariantGame) => {
   }, [bet, gameId, pullGame, startGame])
 
   useEffect(() => {
-    if (isStartedGame) {
+    if (isStartedGame || !isPlay) {
       return
     }
 
     const activeGame = allGames.find((game) => game.status === 'ACTIVE')
-
     if (activeGame) {
       navigate(ROUTES.solo.game(activeGame.id), {
         preventScrollReset: true,
         replace: true,
       })
     }
-  }, [allGames, navigate, isStartedGame])
+  }, [allGames, navigate, isStartedGame, isPlay])
 
   useEffect(() => {
     if (!gameDetails) {
@@ -314,31 +313,12 @@ const useSolo = (variant: VariantGame) => {
     winGame,
   ])
 
-  const { watchGame, watchingLargestGame } = useGameSocket(isPlay, pullGame)
-
-  // Update state from watched game if available (for watch mode)
-  useEffect(() => {
-    if (isPlay || !watchGame?.game) {
-      return
-    }
-
-    const game = watchGame.game
-
-    setJackpot(Number(game.potentialWin))
-    setBet(Number(game.betAmount))
-    setCountBullet(5 - game.currentPosition)
-    setMultiplier(game.multiplier)
-
-    if (game.currentOffer) {
-      setOffer(game.currentOffer)
-    }
-
-    const isGameOver = game.status === 'COMPLETED_LOSE'
-    const isWin = game.status === 'COMPLETED_WIN'
-
-    if (isGameOver) gameOver()
-    if (isWin) winGame()
-  }, [watchGame, isPlay, isStartedGame, gameOver, winGame])
+  const { watchGame, watchingLargestGame } = useGameSocket(
+    isPlay,
+    pullGame,
+    gameOver,
+    winGame,
+  )
 
   return {
     footerHandleRef,
