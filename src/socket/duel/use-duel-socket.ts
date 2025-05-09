@@ -103,16 +103,21 @@ export const useDuelSocket = ({
   }
 
   const cancelRematch = () => {
-    nextOpponnet()
+    leaveGame()
   }
 
-  const nextOpponnet = useCallback(() => {
-    reset()
-    const canNext = duelEventsStateRef.current.canNext()
-    navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
-      preventScrollReset: true,
-    })
-  }, [navigate, reset])
+  const leaveGame = useCallback(
+    async (hasNext = true) => {
+      await duelEventsStateRef.current.resultPromise
+
+      reset()
+      const canNext = hasNext && duelEventsStateRef.current.canNext()
+      navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
+        preventScrollReset: true,
+      })
+    },
+    [navigate, reset],
+  )
 
   const gameOver = useCallback(async () => {
     await backCharacterHandleRef.current?.updateState({
@@ -210,6 +215,7 @@ export const useDuelSocket = ({
     winner,
     setWinner,
     pullTriggerPromise: Promise.resolve(),
+    resultPromise: Promise.resolve(),
     balance,
     canNext: (): boolean => {
       const balance = duelEventsStateRef.current.balance
@@ -404,7 +410,7 @@ export const useDuelSocket = ({
           const isWin = gameWinner?.id === playerId
 
           const result = isDraw ? drawGame : isWin ? winGame : gameOver
-          const resultPromise = result()
+          duelEventsStateRef.current.resultPromise = result()
 
           const [scorePlayer1 = 0, scorePlayer2 = 0] =
             Object.values(rematchScores)
@@ -412,25 +418,22 @@ export const useDuelSocket = ({
           const diffScore = Math.abs(scorePlayer1 - scorePlayer2)
 
           const hasWinnerRematch = diffScore < 2
+          const hasNext = !isDraw
           const canNext = duelEventsStateRef.current.canNext()
           const opponnentPresent = !isLeftOpponent && !isDisconnectedOpponent
 
-          if (isDraw) {
-            await resultPromise
-            reset()
-            navigate(ROUTES.duel.enterArena, {
-              preventScrollReset: true,
-            })
+          if (
+            canRematch &&
+            hasWinnerRematch &&
+            hasNext &&
+            canNext &&
+            opponnentPresent
+          ) {
+            rematchRequestHandleRef.current?.show()
             return
           }
 
-          if (canRematch && hasWinnerRematch && canNext && opponnentPresent) {
-            rematchRequestHandleRef.current?.show()
-          } else {
-            await resultPromise
-            nextOpponnet()
-            return
-          }
+          leaveGame(hasNext)
 
           return
         }
@@ -444,6 +447,8 @@ export const useDuelSocket = ({
           return
         }
         case 'game:rematch_requested': {
+          notify(payload.message, 'info')
+
           const isUser = payload.userId === playerId
           const userOrOpponent = isUser ? 'user' : 'opponnent'
 
@@ -452,7 +457,6 @@ export const useDuelSocket = ({
             'confirm',
           )
 
-          notify(payload.message, 'info')
           return
         }
         case 'game:rematch_created': {
@@ -495,8 +499,9 @@ export const useDuelSocket = ({
 
           if (isOpponent) {
             setIsLeftOpponent(true)
+
             if (gameEnded) {
-              nextOpponnet()
+              leaveGame()
             }
           }
           return
@@ -507,8 +512,9 @@ export const useDuelSocket = ({
 
           if (isOpponent) {
             setIsDisconnectedOpponent(true)
+
             if (gameEnded) {
-              nextOpponnet()
+              leaveGame()
             }
           }
           return
@@ -523,7 +529,7 @@ export const useDuelSocket = ({
                 if (
                   payload.message.includes('You are not a participant in game')
                 ) {
-                  nextOpponnet()
+                  leaveGame()
                 }
               }
               if (event === 'game:pull_trigger') {
@@ -550,7 +556,7 @@ export const useDuelSocket = ({
     opponentPull,
     drawGame,
     navigate,
-    nextOpponnet,
+    leaveGame,
     playSound,
     reset,
     queryClient,
