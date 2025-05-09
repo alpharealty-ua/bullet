@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'

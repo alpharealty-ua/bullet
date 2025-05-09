@@ -71,6 +71,7 @@ export const useDuelSocket = ({
     setIsDisconnectedOpponent(
       (duelEventsStateRef.current.isDisconnectedOpponent = false),
     )
+    duelEventsStateRef.current.leaveGameCalled = false
   }, [])
 
   const opponentPull = useCallback(async (shot: boolean) => {
@@ -103,15 +104,28 @@ export const useDuelSocket = ({
   }
 
   const cancelRematch = () => {
-    leaveGame()
+    leaveGame(false)
   }
 
   const leaveGame = useCallback(
-    async (hasNext = true) => {
-      await duelEventsStateRef.current.resultPromise
+    async (wait = true) => {
+      if (duelEventsStateRef.current.leaveGameCalled) {
+        return
+      }
 
-      reset()
-      const canNext = hasNext && duelEventsStateRef.current.canNext()
+      if (!duelEventsStateRef.current.gameEnded) {
+        return
+      }
+
+      duelEventsStateRef.current.leaveGameCalled = true
+
+      if (wait) {
+        await duelEventsStateRef.current.resultPromise
+      }
+
+      const hasWinner = Boolean(duelEventsStateRef.current.winner)
+      const canNext = hasWinner && duelEventsStateRef.current.canNext()
+      await reset()
       navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
         preventScrollReset: true,
       })
@@ -209,6 +223,7 @@ export const useDuelSocket = ({
     duelSocketEvents.pullTrigger(payload)
   }
 
+  // TODO: ADD SET STATE WRAPPER
   const duelEventsStateRef = useRef({
     round,
     setRound,
@@ -227,6 +242,7 @@ export const useDuelSocket = ({
     setIsDisconnectedOpponent,
     gameEnded,
     setGameEnded,
+    leaveGameCalled: false,
   })
 
   useEffect(() => {
@@ -272,13 +288,8 @@ export const useDuelSocket = ({
 
       const { type, payload } = event
 
-      const {
-        round,
-        winner,
-        isDisconnectedOpponent,
-        isLeftOpponent,
-        gameEnded,
-      } = duelEventsStateRef.current
+      const { round, winner, isDisconnectedOpponent, isLeftOpponent } =
+        duelEventsStateRef.current
 
       switch (type) {
         case 'connect': {
@@ -422,18 +433,19 @@ export const useDuelSocket = ({
           const canNext = duelEventsStateRef.current.canNext()
           const opponnentPresent = !isLeftOpponent && !isDisconnectedOpponent
 
-          if (
+          const showRematch =
             canRematch &&
             hasWinnerRematch &&
             hasNext &&
             canNext &&
             opponnentPresent
-          ) {
+
+          if (showRematch) {
             rematchRequestHandleRef.current?.show()
             return
           }
 
-          leaveGame(hasNext)
+          leaveGame()
 
           return
         }
@@ -500,9 +512,7 @@ export const useDuelSocket = ({
           if (isOpponent) {
             setIsLeftOpponent(true)
 
-            if (gameEnded) {
-              leaveGame()
-            }
+            leaveGame()
           }
           return
         }
@@ -513,9 +523,7 @@ export const useDuelSocket = ({
           if (isOpponent) {
             setIsDisconnectedOpponent(true)
 
-            if (gameEnded) {
-              leaveGame()
-            }
+            leaveGame()
           }
           return
         }
@@ -529,6 +537,7 @@ export const useDuelSocket = ({
                 if (
                   payload.message.includes('You are not a participant in game')
                 ) {
+                  setGameEnded(true)
                   leaveGame()
                 }
               }

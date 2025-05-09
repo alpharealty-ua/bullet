@@ -32,6 +32,7 @@ type FormValues = {
   betAmount: string
 }
 
+// TODO: ADD SOCKET EVENTS
 const Debug = () => {
   const form = useForm<FormValues>({
     defaultValues: {
