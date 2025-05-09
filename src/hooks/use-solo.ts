@@ -12,7 +12,6 @@ import {
   useStartGame,
 } from '@/api/game.api'
 import { type FetchBalanceResponse, useBalance } from '@/api/wallet.api'
-import { useGameSocket } from '@/socket/game/use-game-socket'
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSoloStore } from '@/store/solo.store'

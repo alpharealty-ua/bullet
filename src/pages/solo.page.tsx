@@ -64,28 +64,30 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
             pullGame={pullGame}
           />
         )}
-        {variant === 'play' && !noMoney && (
-          <div className='flex flex-col gap-3 pt-2'>
-            <Result
-              title={'Prizepool'}
-              value={`$${jackpot}`}
-              open={jackpot !== -1}
-              resultHandle={jackpotHandleRef}
-            />
-            <Result
-              title={'Multiplier'}
-              value={`${multiplier}x`}
-              open={multiplier !== -1}
-              resultHandle={multiplierHandleRef}
-            />
-            <Result
-              title={'the banker offers...'}
-              value={`$${offer ? offer.amount.slice(0, -2) : '0'}`}
-              open={Boolean(offer)}
-            />
-          </div>
-        )}
-        {noMoney && <AddMoneyButton />}
+        {variant === 'play' &&
+          (noMoney ? (
+            <AddMoneyButton />
+          ) : (
+            <div className='flex flex-col gap-3 pt-2'>
+              <Result
+                title={'Prizepool'}
+                value={`$${jackpot}`}
+                open={jackpot !== -1}
+                resultHandle={jackpotHandleRef}
+              />
+              <Result
+                title={'Multiplier'}
+                value={`${multiplier}x`}
+                open={multiplier !== -1}
+                resultHandle={multiplierHandleRef}
+              />
+              <Result
+                title={'the banker offers...'}
+                value={`$${offer ? offer.amount.slice(0, -2) : '0'}`}
+                open={Boolean(offer)}
+              />
+            </div>
+          ))}
       </div>
       <div className='relative mt-auto flex min-h-80 flex-1 items-end px-8 pt-2'>
         <Revolver
@@ -150,6 +152,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
 
 export { SoloPage }
 
+// TODO: REFACTOR
 const WatchGame = ({
   pullGame,
   gameOver,
