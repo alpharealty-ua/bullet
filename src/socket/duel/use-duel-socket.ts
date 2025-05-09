@@ -6,8 +6,8 @@ import { QUERY_KEYS } from '@/api/api'
 import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
-import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
+import { duelSocketEvents } from '@/socket/socket'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
@@ -23,11 +23,9 @@ import { RematchRequestHandle } from '@/components/rematch-request'
 export const useDuelSocket = ({
   gameId,
   playerId,
-  duelSocketEvents,
 }: {
   gameId: string | null
   playerId: string
-  duelSocketEvents: DuelSocketEvents
 }) => {
   const navigate = useNavigate()
   const { data: balance } = useBalance()

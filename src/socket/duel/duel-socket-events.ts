@@ -67,10 +67,7 @@ export type OnEvents =
 class DuelSocketEvents extends SocketEvents {
   private onEvent: (events: OnEvents) => void = () => {}
 
-  constructor(
-    protected socket: Socket,
-    private token: string,
-  ) {
+  constructor(protected socket: Socket) {
     super(socket)
   }
 
@@ -78,9 +75,9 @@ class DuelSocketEvents extends SocketEvents {
     this.onEvent = onEvent
   }
 
-  connect() {
+  connect(token: string) {
     try {
-      this.socket.auth = { token: this.token }
+      this.socket.auth = { token: token }
       this.socket.connect()
     } catch (error) {
       console.error(`Error connecting to duel game service:`, error)

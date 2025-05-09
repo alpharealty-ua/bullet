@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useLocation, useParams } from 'react-router'
 
 import { useUser } from '@/api/auth.api'
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { duelSocket, matchmakerEvents } from '@/socket/socket'
+import { matchmakerEvents, duelSocketEvents } from '@/socket/socket'
 import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
-import { DuelSocketEvents } from '@/socket/duel/duel-socket-events'
 import { useGameStore } from '@/store/game.store'
 import { useAuthStore } from '@/store/auth.store'
 import { VariantGame } from '@/lib/constants'
@@ -53,11 +52,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     (['enter-arena', 'next'] as const).find((s) => pathname.includes(s)) ??
     'duel'
 
-  const duelSocketEvents = useMemo(
-    () => new DuelSocketEvents(duelSocket, token!),
-    [token],
-  )
-
   const {
     gameOverHandleRef,
     victoryHandleRef,
@@ -76,7 +70,6 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   } = useDuelSocket({
     gameId,
     playerId,
-    duelSocketEvents,
   })
 
   const handlePull = async () => {
@@ -112,7 +105,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
 
       duelSocketEvents.leaveDuelGame({ gameId, playerId })
     }
-  }, [duelSocketEvents, isHMR, gameId, playerId])
+  }, [isHMR, gameId, playerId])
 
   // strict mode works only in dev mode
   const isFirstRender = useRef(import.meta.env.DEV)
@@ -127,7 +120,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         return
       }
 
-      duelSocketEvents.connect()
+      duelSocketEvents.connect(token!)
       matchmakerEvents.connect(token!)
     }
 
@@ -143,7 +136,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     connect()
 
     return disconnect
-  }, [duelSocketEvents, isHMR, token])
+  }, [isHMR, token])
 
   useEffect(() => {
     duelSocketEvents.attachEventListeners()
@@ -153,7 +146,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
       duelSocketEvents.dettachEventListeners()
       matchmakerEvents.dettachEventListeners()
     }
-  }, [duelSocketEvents])
+  }, [])
 
   return (
     <>
