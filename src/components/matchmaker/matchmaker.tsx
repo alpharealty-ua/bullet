@@ -87,7 +87,6 @@ const Matchmaker = ({
           {!isNextSearch && <MatchmakerPersonalStatistics />}
           {!isNextSearch && <MatchmakerPersonalRecentGames />}
           {!isNextSearch && <MatchmakerTrophies />}
-          {!isNextSearch && <MatchmakerStatistics statistics={statistics} />}
         </div>
       )}
     </div>
