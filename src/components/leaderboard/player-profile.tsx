@@ -11,14 +11,15 @@ import {
 import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loading } from '@/components/ui/loading'
-import { Notification } from '@/components/ui/notification'
 import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
+import { RequestError } from '@/components/ui/request-error'
 
 const PlayerProfile = ({ playerId }: { playerId: string }) => {
   const {
     data: playerStatistics,
     isLoading,
     isSuccess,
+    error,
   } = usePlayerStatistics(playerId)
 
   if (isLoading) {
@@ -26,9 +27,7 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
   }
 
   if (!isSuccess) {
-    return (
-      <Notification type='error' message='Failed to load player statistics' />
-    )
+    return <RequestError error={error} />
   }
 
   const { recentGames, performanceTrend } = playerStatistics
