@@ -64,15 +64,9 @@ export type OnEvents =
       payload: { event: string; message: string; timestamp: string }
     }
 
-class DuelSocketEvents extends SocketEvents {
-  private onEvent: (events: OnEvents) => void = () => {}
-
+class DuelSocketEvents extends SocketEvents<OnEvents> {
   constructor(protected socket: Socket) {
     super(socket)
-  }
-
-  updateEvents(onEvent: (events: OnEvents) => void) {
-    this.onEvent = onEvent
   }
 
   connect(token: string) {

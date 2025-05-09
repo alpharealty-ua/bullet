@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { matchmakerEvents, matchmakerSocket } from '@/socket/socket'
+import { OnEvents } from '@/socket/matchmaker/matchmaker-socket'
 import {
   PingData,
   MatchmakingStatus,
@@ -79,7 +80,7 @@ const useMatchmakingSocket = ({
       matchmakerEventsStateRef.current.matchmakingStatus = status
     }
 
-    matchmakerEvents.updateEvents(async (event) => {
+    const handle = async (event: OnEvents) => {
       const { type, payload } = event
       const { matchId, playerId, matchmakingStatus } =
         matchmakerEventsStateRef.current
@@ -292,7 +293,13 @@ const useMatchmakingSocket = ({
       }
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
-    })
+    }
+
+    matchmakerEvents.addEventsListener(handle)
+
+    return () => {
+      matchmakerEvents.removeEventsListener(handle)
+    }
   }, [playSound, queryClient, setMatchDetails])
 
   const toggleConnection = useCallback(() => {
@@ -316,7 +323,7 @@ const useMatchmakingSocket = ({
     }
 
     matchmakerEvents.leaveMatchmaking()
-  }, [matchmakerEvents])
+  }, [])
 
   const confirmMatch = () => {
     if (matchId === null) {

@@ -7,6 +7,7 @@ import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
 import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
+import { OnEvents } from '@/socket/duel/duel-socket-events'
 import { duelSocketEvents } from '@/socket/socket'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
@@ -275,7 +276,7 @@ export const useDuelSocket = ({
       duelEventsStateRef.current.isDisconnectedOpponent = isDisconnectedOpponent
     }
 
-    duelSocketEvents.updateEvents(async (event) => {
+    const handle = async (event: OnEvents) => {
       if (
         event.payload &&
         'gameId' in event.payload &&
@@ -552,9 +553,14 @@ export const useDuelSocket = ({
       }
       console.error(event)
       notify('Unhandled event ' + event.type, 'info')
-    })
+    }
+
+    duelSocketEvents.addEventsListener(handle)
+
+    return () => {
+      duelSocketEvents.removeEventsListener(handle)
+    }
   }, [
-    duelSocketEvents,
     playerId,
     gameId,
     winGame,

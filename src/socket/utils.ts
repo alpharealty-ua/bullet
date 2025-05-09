@@ -8,14 +8,33 @@ export const notify = (
   !import.meta.env.PROD && toast[type](message)
 }
 
-export class SocketEvents {
-  protected eventListener: (() => void)[] = []
+export class SocketEvents<OnEvents = undefined> {
+  protected socketEventListeners: (() => void)[] = []
+  protected eventListeners: ((event: OnEvents) => void)[] = []
 
   constructor(protected socket: Socket) {}
 
+  onEvent(event: OnEvents) {
+    this.eventListeners.forEach((onEvent) => onEvent(event))
+  }
+
+  addEventsListener(onEvent: (event: OnEvents) => void) {
+    this.eventListeners.push(onEvent)
+  }
+
+  removeEventsListener(onEvent: (event: OnEvents) => void) {
+    const index = this.eventListeners.findIndex((onEvt) => onEvt === onEvent)
+
+    if (index === -1) {
+      return
+    }
+
+    this.eventListeners.splice(index, 1)
+  }
+
   dettachEventListeners() {
     let off = null
-    while ((off = this.eventListener.pop())) {
+    while ((off = this.socketEventListeners.pop())) {
       off()
     }
   }
@@ -23,7 +42,7 @@ export class SocketEvents {
   on<T>(event: string, handler: (...args: T[]) => void) {
     this.socket.on(event, handler)
 
-    this.eventListener.push(() => {
+    this.socketEventListeners.push(() => {
       this.socket.off(event, handler)
     })
   }

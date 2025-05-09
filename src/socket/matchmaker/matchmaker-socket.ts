@@ -38,16 +38,11 @@ type OnEvents =
       payload: ErrorResponse
     }
 
-class MatchmakerSocketEvents extends SocketEvents {
-  private onEvent: (events: OnEvents) => void = () => {}
+class MatchmakerSocketEvents extends SocketEvents<OnEvents> {
   private matchmakerPingClient: MatchmakerPingClient | null = null
 
   constructor(protected socket: Socket) {
     super(socket)
-  }
-
-  updateEvents(onEvent: (events: OnEvents) => void) {
-    this.onEvent = onEvent
   }
 
   connect(token: string) {
@@ -75,7 +70,6 @@ class MatchmakerSocketEvents extends SocketEvents {
     this.on('connect', () => {
       this.onEvent({ type: 'connect', payload: undefined })
     })
-    // TODO: NOT CALL IF UNMOUNT
     this.on('disconnect', () => {
       notify(`Disconnected from matchmaker service`, 'info')
       this.onEvent({ type: 'disconnect', payload: undefined })
