@@ -12,23 +12,21 @@ const RegionalChampions = ({ list, user }: RegionalChampionsProps) => {
   return (
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
-        <tr className='bg-gray-50 text-gray-500'>
-          <th className='px-2 py-3 text-left font-normal whitespace-nowrap'>
-            Region
-          </th>
-          <th className='px-2 py-3 text-left font-normal whitespace-nowrap'>
-            Champion
-          </th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Country</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>LVL</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Precision</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Speed</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>
-            Perfect Shot
-          </th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>
-            W/L Record
-          </th>
+        <tr className='bg-gray-50 text-gray-500 uppercase'>
+          {[
+            'Region',
+            'Player',
+            'Country',
+            'LVL',
+            'Precision',
+            'Speed adapt',
+            'Perfect Shot',
+            'W/L Record',
+          ].map((label, i) => (
+            <th key={i} className='max-w-20 px-2 py-3 text-left font-normal'>
+              {label}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>

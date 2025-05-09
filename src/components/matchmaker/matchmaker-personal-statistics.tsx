@@ -1,5 +1,6 @@
 import { useUserStatistics } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
+import { getPlayerStatistics } from '@/lib/schemas/leaderboard.schema'
 import { Loading } from '@/components/ui/loading'
 import { Notification } from '@/components/ui/notification'
 
@@ -10,12 +11,7 @@ const MatchmakerPersonalStatistics = ({
   className,
   ...props
 }: MatchmakerPersonalStatisticsProps) => {
-  const {
-    data: userStatistics,
-    isLoading,
-    isSuccess,
-    error,
-  } = useUserStatistics()
+  const { data: statistics, isLoading, isSuccess, error } = useUserStatistics()
 
   return (
     <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
@@ -35,37 +31,16 @@ const MatchmakerPersonalStatistics = ({
           <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
             <div className='text-xl'>
               <span className='font-medium text-green-600'>
-                {userStatistics.gamesWon}W
+                {statistics.gamesWon}W
               </span>
               <span>/</span>
               <span className='font-medium text-red-600'>
-                {userStatistics.gamesLost}L
+                {statistics.gamesLost}L
               </span>
             </div>
             <div className='text-xs text-[#7f8c8d]'>Record</div>
           </div>
-          {[
-            {
-              label: 'Total games',
-              value: userStatistics.totalGames,
-            },
-            {
-              label: 'Win rate',
-              value: userStatistics.winRate,
-            },
-            {
-              label: 'Lvl',
-              value: userStatistics.lvl,
-            },
-            {
-              label: 'Percentile',
-              value: userStatistics.percentile,
-            },
-            {
-              label: 'Perfect Shot',
-              value: userStatistics.perfectHitRate,
-            },
-          ].map(({ value, label }, i) => (
+          {getPlayerStatistics(statistics).map(({ value, label }, i) => (
             <div
               key={i}
               className='flex flex-col items-center gap-1 bg-white p-1 shadow'

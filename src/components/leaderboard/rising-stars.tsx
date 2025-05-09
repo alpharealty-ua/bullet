@@ -12,18 +12,20 @@ const RisingStars = ({ list, user }: RisingStarsProps) => {
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
         <tr className='bg-gray-50 text-gray-500 uppercase'>
-          <th className='px-2 py-3 text-left font-normal whitespace-nowrap'>
-            Player
-          </th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Country</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>LVL</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Precision</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Speed</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>
-            Perfect Shot
-          </th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Record</th>
-          <th className='px-2 py-3 font-normal whitespace-nowrap'>Games</th>
+          {[
+            'Player',
+            'Country',
+            'LVL',
+            'Precision',
+            'Speed adapt',
+            'Perfect Shot',
+            'W/L Record',
+            'Games',
+          ].map((label, i) => (
+            <th key={i} className='max-w-20 px-2 py-3 text-left font-normal'>
+              {label}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>

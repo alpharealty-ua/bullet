@@ -144,3 +144,26 @@ export const playerStatisticsSchema = z.object({
 })
 
 export type PlayerStatisticsSchema = z.infer<typeof playerStatisticsSchema>
+
+export const getPlayerStatistics = (statistics: PlayerStatisticsSchema) => [
+  {
+    label: 'Total games',
+    value: statistics.totalGames,
+  },
+  {
+    label: 'Win rate',
+    value: statistics.winRate,
+  },
+  {
+    label: 'Lvl',
+    value: statistics.lvl,
+  },
+  {
+    label: 'Percentile',
+    value: statistics.percentile,
+  },
+  {
+    label: 'Perfect Shot',
+    value: statistics.perfectHitRate,
+  },
+]

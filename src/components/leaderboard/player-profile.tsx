@@ -52,7 +52,7 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
         className='flex grow flex-col gap-6'
       >
         <div className='cuctom-scroll'>
-          <PlayerStatistics list={playerStatistics} />
+          <PlayerStatistics statistics={playerStatistics} />
         </div>
       </TabsContent>
       <TabsContent value='stats' className='flex grow flex-col gap-6'>

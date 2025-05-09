@@ -80,7 +80,7 @@ const Profile = () => {
         >
           {isSuccess ? (
             <div className='cuctom-scroll'>
-              <PlayerStatistics list={playerStatistics} user={user} />
+              <PlayerStatistics statistics={playerStatistics} user={user} />
             </div>
           ) : (
             <RequestError error={error} />

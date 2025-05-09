@@ -13,19 +13,19 @@ const TopPlayers = ({ list, user }: TopPlayersProps) => {
     <table className='w-full divide-y divide-gray-200 text-center text-sm'>
       <thead>
         <tr className='bg-gray-50 text-gray-500 uppercase'>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>Rank</th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>Player</th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>LVL</th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>
-            Precision
-          </th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>
-            Speed adapt
-          </th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>
-            Perfect Shot
-          </th>
-          <th className='max-w-20 px-2 py-3 text-left font-normal'>Win rate</th>
+          {[
+            'Rank',
+            'Player',
+            'LVL',
+            'Precision',
+            'Speed adapt',
+            'Perfect Shot',
+            'Win rate',
+          ].map((label, i) => (
+            <th key={i} className='max-w-20 px-2 py-3 text-left font-normal'>
+              {label}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>
