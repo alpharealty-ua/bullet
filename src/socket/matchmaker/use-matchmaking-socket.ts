@@ -61,29 +61,30 @@ const useMatchmakingSocket = ({
     matchId,
     playerId,
     matchmakingStatus,
-    setMatchId,
-    setPlayerId,
-    setMatchmakingStatus,
+    setMatchId: (matchId: string | null) => {
+      setMatchId((matchmakerEventsStateRef.current.matchId = matchId))
+    },
+    setPlayerId: (playerId: string | null) => {
+      setPlayerId((matchmakerEventsStateRef.current.playerId = playerId))
+    },
+    setMatchmakingStatus: (status: MatchmakingStatus) => {
+      setMatchmakingStatus(
+        (matchmakerEventsStateRef.current.matchmakingStatus = status),
+      )
+    },
   })
 
   useEffect(() => {
-    const setMatchId = (matchId: string | null) => {
-      matchmakerEventsStateRef.current.setMatchId(matchId)
-      matchmakerEventsStateRef.current.matchId = matchId
-    }
-    const setPlayerId = (playerId: string | null) => {
-      matchmakerEventsStateRef.current.setPlayerId(playerId)
-      matchmakerEventsStateRef.current.playerId = playerId
-    }
-    const setMatchmakingStatus = (status: MatchmakingStatus) => {
-      matchmakerEventsStateRef.current.setMatchmakingStatus(status)
-      matchmakerEventsStateRef.current.matchmakingStatus = status
-    }
-
     const handle = async (event: OnEvents) => {
       const { type, payload } = event
-      const { matchId, playerId, matchmakingStatus } =
-        matchmakerEventsStateRef.current
+      const {
+        matchId,
+        playerId,
+        matchmakingStatus,
+        setMatchId,
+        setPlayerId,
+        setMatchmakingStatus,
+      } = matchmakerEventsStateRef.current
 
       switch (type) {
         case 'connect': {

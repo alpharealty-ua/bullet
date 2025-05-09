@@ -63,13 +63,11 @@ export const useDuelSocket = ({
 
     setPulls([])
     setCanPull(true)
-    setRound((duelEventsStateRef.current.round = 1))
-    setWinner((duelEventsStateRef.current.winner = null))
-    setGameEnded((duelEventsStateRef.current.gameEnded = false))
-    setIsLeftOpponent((duelEventsStateRef.current.isLeftOpponent = false))
-    setIsDisconnectedOpponent(
-      (duelEventsStateRef.current.isDisconnectedOpponent = false),
-    )
+    duelEventsStateRef.current.setRound(1)
+    duelEventsStateRef.current.setWinner(null)
+    duelEventsStateRef.current.setGameEnded(false)
+    duelEventsStateRef.current.setIsLeftOpponent(false)
+    duelEventsStateRef.current.setIsDisconnectedOpponent(false)
     duelEventsStateRef.current.leaveGameCalled = false
   }, [])
 
@@ -222,12 +220,16 @@ export const useDuelSocket = ({
     duelSocketEvents.pullTrigger(payload)
   }
 
-  // TODO: ADD SET STATE WRAPPER
+  // TODO: USE ZUSTAND
   const duelEventsStateRef = useRef({
     round,
-    setRound,
+    setRound: (round: number) => {
+      setRound((duelEventsStateRef.current.round = round))
+    },
     winner,
-    setWinner,
+    setWinner: (winner: Winner | null) => {
+      setWinner((duelEventsStateRef.current.winner = winner))
+    },
     pullTriggerPromise: Promise.resolve(),
     resultPromise: Promise.resolve(),
     balance,
@@ -236,11 +238,22 @@ export const useDuelSocket = ({
       return Boolean(!(balance < MIN_DUEL_BET) && !isAfk())
     },
     isLeftOpponent,
-    setIsLeftOpponent,
+    setIsLeftOpponent: (isLeftOpponent: boolean) => {
+      setIsLeftOpponent(
+        (duelEventsStateRef.current.isLeftOpponent = isLeftOpponent),
+      )
+    },
     isDisconnectedOpponent,
-    setIsDisconnectedOpponent,
+    setIsDisconnectedOpponent: (isDisconnectedOpponent: boolean) => {
+      setIsDisconnectedOpponent(
+        (duelEventsStateRef.current.isDisconnectedOpponent =
+          isDisconnectedOpponent),
+      )
+    },
     gameEnded,
-    setGameEnded,
+    setGameEnded: (eneded: boolean) => {
+      setGameEnded((duelEventsStateRef.current.gameEnded = eneded))
+    },
     leaveGameCalled: false,
   })
 
@@ -249,33 +262,6 @@ export const useDuelSocket = ({
   }, [balance])
 
   useEffect(() => {
-    const setRound = (round: number) => {
-      duelEventsStateRef.current.setRound(round)
-      duelEventsStateRef.current.round = round
-    }
-
-    const setWinner = (winner: Winner | null) => {
-      duelEventsStateRef.current.setWinner(winner)
-      duelEventsStateRef.current.winner = winner
-    }
-
-    const setGameEnded = (eneded: boolean) => {
-      duelEventsStateRef.current.setGameEnded(eneded)
-      duelEventsStateRef.current.gameEnded = eneded
-    }
-
-    const setIsLeftOpponent = (isLeftOpponent: boolean) => {
-      duelEventsStateRef.current.setIsLeftOpponent(isLeftOpponent)
-      duelEventsStateRef.current.isLeftOpponent = isLeftOpponent
-    }
-
-    const setIsDisconnectedOpponent = (isDisconnectedOpponent: boolean) => {
-      duelEventsStateRef.current.setIsDisconnectedOpponent(
-        isDisconnectedOpponent,
-      )
-      duelEventsStateRef.current.isDisconnectedOpponent = isDisconnectedOpponent
-    }
-
     const handle = async (event: OnEvents) => {
       if (
         event.payload &&
@@ -287,8 +273,17 @@ export const useDuelSocket = ({
 
       const { type, payload } = event
 
-      const { round, winner, isDisconnectedOpponent, isLeftOpponent } =
-        duelEventsStateRef.current
+      const {
+        round,
+        winner,
+        isDisconnectedOpponent,
+        isLeftOpponent,
+        setRound,
+        setWinner,
+        setGameEnded,
+        setIsLeftOpponent,
+        setIsDisconnectedOpponent,
+      } = duelEventsStateRef.current
 
       switch (type) {
         case 'connect': {
