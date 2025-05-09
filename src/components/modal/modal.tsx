@@ -62,7 +62,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       <div
         ref={mergeRefs(ref, modalRef)}
         className={cn(
-          'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col justify-start gap-12 overflow-auto bg-cover bg-[right_center] py-12 duration-200',
+          'fill-mode-both custom-scroll absolute inset-0 z-50 flex flex-col justify-start gap-8 overflow-auto bg-cover bg-[right_center] py-6 duration-200',
           className,
           isOpen
             ? 'animate-in fade-in-0 zoom-in-95'
@@ -76,7 +76,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             <button onClick={handleClose}>
               <FaArrowLeft className='text-red cursor-pointer text-3xl transition-all hover:text-black' />
             </button>
-            <Logo as='button' size='lg' onClick={handleClose} />
+            <Logo as='button' size='md' onClick={handleClose} />
           </div>
           <ButtonWithAudio
             as='button'
