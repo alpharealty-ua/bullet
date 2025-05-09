@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { usePlayerStatistics } from '@/api/leaderboard.api'
-import { useLogin, useUser } from '@/api/auth.api'
+import { useLogin } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
 import {
   ChangePasswordSchema,
@@ -21,18 +20,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
-import { Loading } from '@/components/ui/loading'
-import { RequestError } from '@/components/ui/request-error'
-import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
+import { MatchmakerPersonalRecentGames } from './matchmaker/matchmaker-recent-games'
+import { MatchmakerPersonalStatistics } from './matchmaker/matchmaker-personal-statistics'
 
 const Profile = () => {
-  const user = useUser()
-  const {
-    data: playerStatistics,
-    isLoading,
-    isSuccess,
-    error,
-  } = usePlayerStatistics(user.id)
   const { error: mutationError, isPending } = useLogin()
   const [isSubmitSuccess, setIsSuccess] = useState(false)
   const resetTokens = useAuthStore(({ resetTokens }) => resetTokens)
@@ -44,10 +35,6 @@ const Profile = () => {
       passwordConfirm: '',
     },
   })
-
-  if (isLoading) {
-    return <Loading />
-  }
 
   const handleLogout = async () => {
     resetTokens()
@@ -65,7 +52,7 @@ const Profile = () => {
   return (
     <>
       <Tabs
-        className='flex shrink-0 grow flex-col overflow-hidden'
+        className='flex flex-col overflow-hidden'
         defaultValue='personalStatistics'
       >
         <TabsList>
@@ -76,15 +63,10 @@ const Profile = () => {
         </TabsList>
         <TabsContent
           value='personalStatistics'
-          className='flex grow flex-col gap-6'
+          className='flex grow flex-col gap-6 overflow-hidden'
         >
-          {isSuccess ? (
-            <div className='cuctom-scroll'>
-              <PlayerStatistics statistics={playerStatistics} user={user} />
-            </div>
-          ) : (
-            <RequestError error={error} />
-          )}
+          <MatchmakerPersonalStatistics />
+          <MatchmakerPersonalRecentGames />
           <ButtonWithAudio
             as='button'
             className='self-center'
