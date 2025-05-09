@@ -2,7 +2,7 @@ import { useUserStatistics } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
 import { getPlayerStatistics } from '@/lib/schemas/leaderboard.schema'
 import { Loading } from '@/components/ui/loading'
-import { Notification } from '@/components/ui/notification'
+import { RequestError } from '@/components/ui/request-error'
 
 interface MatchmakerPersonalStatisticsProps
   extends React.ComponentProps<'div'> {}
@@ -24,7 +24,7 @@ const MatchmakerPersonalStatistics = ({
             Statistics not found
           </div>
         ) : (
-          <Notification type='error' message={error?.message} />
+          <RequestError error={error} />
         )
       ) : (
         <div className='grid grid-cols-3 gap-1'>
