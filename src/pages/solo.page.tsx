@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { ROUTES } from '@/routes/path'
 import { useSettingsStore } from '@/store/settings.store'
 import { useSolo } from '@/hooks/use-solo'
@@ -143,11 +145,10 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
           <div className='relative'>
             <AnimationInOut
               in={isStartedGame && Boolean(offer)}
-              timeout={400}
               className={cn(
-                'zoom-in-50 zoom-out-50 mt-auto',
-                'data-open:delay-1200 data-open:duration-1000',
-                'data-close:duration-400',
+                'zoom-in-50 zoom-out-50',
+                '[data-open=true]:delay-1200 [data-open=true]:duration-1000',
+                '[data-close=true]:duration-400',
               )}
             >
               <ButtonWithAudio
