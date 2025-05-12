@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { toast } from 'react-toastify'
 
 import { Offer } from '@/api/game.api'
 import { gameSocket } from '@/socket/socket'
