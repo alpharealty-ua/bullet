@@ -56,7 +56,9 @@ const useSolo = (variant: VariantGame) => {
   const offer = useSoloStore(({ offer }) => offer)
   const isStartedGame = Boolean(gameId)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
-  const maxBet = Math.min(isStartedGame ? bet + balance : balance, MAX_BET)
+  const maxBet = Math.floor(
+    Math.min(isStartedGame ? bet + balance : balance, MAX_BET),
+  )
   const [showHelpers, setShowHelpers] = useState(true)
   const isPlay = variant === 'play'
 
@@ -103,11 +105,7 @@ const useSolo = (variant: VariantGame) => {
 
   const getMultiplier = useCallback(
     async (multiplierIndex: number): Promise<void> => {
-      const revolverHandle = revolverHandleRef.current
-
-      if (revolverHandle === null) {
-        return
-      }
+      const bet = useSoloStore.getState().bet
 
       const length = MULTIPLIERS.length
       const AMOUNT_CHAMBER =
@@ -131,7 +129,7 @@ const useSolo = (variant: VariantGame) => {
 
           currentIndex += amountMissSpin
 
-          await revolverHandle.spin(interval + correctLag)
+          await revolverHandleRef.current?.spin(interval + correctLag)
 
           const realInterval = Date.now() - (startSpin + correctLag)
 
@@ -164,7 +162,7 @@ const useSolo = (variant: VariantGame) => {
         spin(0).then(resolve)
       })
     },
-    [bet, playSound, setJackpot, setMultiplier],
+    [playSound, setJackpot, setMultiplier],
   )
 
   const deal = async () => {
@@ -179,6 +177,8 @@ const useSolo = (variant: VariantGame) => {
 
   const startGame = useCallback(
     async (result?: { gameId: string; multiplier: string }) => {
+      const bet = useSoloStore.getState().bet
+
       const { gameId, multiplier } =
         result ??
         (await startGameMutation({
@@ -196,7 +196,7 @@ const useSolo = (variant: VariantGame) => {
         await getMultiplier(multiplierIndex)
       }
     },
-    [bet, getMultiplier, navigate, queryClient, startGameMutation],
+    [getMultiplier, navigate, queryClient, startGameMutation],
   )
 
   const gameOver = useCallback(async () => {
@@ -260,6 +260,8 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const pull = useCallback(async () => {
+    const bet = useSoloStore.getState().bet
+
     if (!gameId && bet === 0) {
       footerHandleRef.current?.wiggleWager()
       return
@@ -272,7 +274,7 @@ const useSolo = (variant: VariantGame) => {
     }
 
     await pullGame(gameId)
-  }, [bet, gameId, pullGame, startGame])
+  }, [gameId, pullGame, startGame])
 
   useEffect(() => {
     if (isStartedGame || !isPlay) {
@@ -314,16 +316,6 @@ const useSolo = (variant: VariantGame) => {
     setOffer,
     winGame,
   ])
-
-  useEffect(() => {
-    return () => {
-      setCountBullet(5)
-      setBet(-1)
-      setJackpot(-1)
-      setMultiplier(-1)
-      setOffer(null)
-    }
-  }, [setBet, setCountBullet, setJackpot, setMultiplier, setOffer])
 
   return {
     footerHandleRef,
