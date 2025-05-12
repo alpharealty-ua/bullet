@@ -79,28 +79,29 @@ const Matchmaker = ({
       {noMoney && <AddMoneyButton />}
       {!noMoney && (
         <div className='flex h-full w-full flex-col items-center justify-center gap-3 overflow-hidden'>
-          {isNextSearch && (
+          {isNextSearch ? (
             <NextSearch
               matchmakingStatus={matchmakingStatus}
               onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
               onLeave={handleLeave}
             />
+          ) : (
+            <>
+              <EnterArena
+                onDecline={declineMatch}
+                onConfirm={confirmMatch}
+                onSearch={handleSearch}
+                onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
+                indicators={indicators}
+                confirmationTimeoutSeconds={confirmationTimeoutSeconds}
+                matchmakingStatus={matchmakingStatus}
+                defaultValue={`${MIN_DUEL_BET}`}
+              />
+              <MatchmakerPersonalStatistics />
+              <MatchmakerPersonalRecentGames short />
+              <MatchmakerTrophies />
+            </>
           )}
-          {!isNextSearch && (
-            <EnterArena
-              onDecline={declineMatch}
-              onConfirm={confirmMatch}
-              onSearch={handleSearch}
-              onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
-              indicators={indicators}
-              confirmationTimeoutSeconds={confirmationTimeoutSeconds}
-              matchmakingStatus={matchmakingStatus}
-              defaultValue={`${MIN_DUEL_BET}`}
-            />
-          )}
-          {!isNextSearch && <MatchmakerPersonalStatistics />}
-          {!isNextSearch && <MatchmakerPersonalRecentGames />}
-          {!isNextSearch && <MatchmakerTrophies />}
         </div>
       )}
     </div>
