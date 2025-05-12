@@ -25,6 +25,7 @@ const Bet = ({
   const sliderWrapperRef = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState(bet)
   const [percent, setPercent] = useState(0)
+  const isDisabled = disabled || maxBet === 0
 
   const changeValue = useCallback(
     (bet: number, callOnBet = true) => {
@@ -44,7 +45,7 @@ const Bet = ({
   }, [maxBet, bet, changeValue])
 
   useEffect(() => {
-    if (disabled) {
+    if (isDisabled) {
       return
     }
 
@@ -127,12 +128,12 @@ const Bet = ({
     return () => {
       buttonEl.removeEventListener('pointerdown', pointerDown)
     }
-  }, [maxBet, onBet, disabled, changeValue])
+  }, [maxBet, onBet, isDisabled, changeValue])
 
   const handleSliderClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    if (disabled) {
+    if (isDisabled) {
       return
     }
 
@@ -167,7 +168,7 @@ const Bet = ({
   const handleSliderDbClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    if (disabled) {
+    if (isDisabled) {
       return
     }
 
@@ -211,7 +212,7 @@ const Bet = ({
         <div
           className={cn(
             'absolute inset-0 top-0 right-2 left-2 cursor-pointer',
-            disabled && 'cursor-not-allowed',
+            isDisabled && 'cursor-not-allowed',
           )}
           onClick={handleSliderClick}
           onDoubleClick={handleSliderDbClick}
@@ -221,7 +222,7 @@ const Bet = ({
             className={cn(
               'absolute top-1/2 left-0 z-[3] h-10 w-10 -translate-1/2 cursor-pointer touch-none rounded-full bg-contain bg-center bg-no-repeat disabled:cursor-not-allowed',
             )}
-            disabled={disabled}
+            disabled={isDisabled}
             style={{
               left: `${percent}%`,
             }}
@@ -253,7 +254,7 @@ const Bet = ({
               size === 'sm' && 'text-sm',
             )}
             onClick={handleMaxBetClick}
-            disabled={disabled}
+            disabled={isDisabled}
           >
             Max
           </button>
