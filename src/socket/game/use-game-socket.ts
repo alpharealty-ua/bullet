@@ -277,7 +277,7 @@ const useGameSocket = (
     }
     const game = watchGame.game
 
-    setJackpot(Number(game.potentialWin))
+    setJackpot(Number(game.formattedActualWin))
     setBet(Number(game.betAmount))
     setCountBullet(5 - game.currentPosition)
     setMultiplier(game.multiplier)
