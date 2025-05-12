@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { useBalance } from '@/api/wallet.api'
 import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
 import { useUser } from '@/api/auth.api'
-import { useGameStore } from '@/store/game.store'
+import { useDuelStore } from '@/store/duel.store'
 import { useAuthStore } from '@/store/auth.store'
 import { ROUTES } from '@/routes/path'
 import { MIN_DUEL_BET } from '@/lib/constants'
@@ -24,7 +24,7 @@ const Matchmaker = ({
 }) => {
   const user = useUser()
   const token = useAuthStore(({ accessToken }) => accessToken)
-  const characterName = useGameStore(({ characterName }) => characterName)
+  const characterName = useDuelStore(({ characterName }) => characterName)
   const navigate = useNavigate()
   const { data: balance } = useBalance()
   const noMoney = balance < MIN_DUEL_BET

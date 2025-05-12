@@ -16,6 +16,8 @@ interface SettingsState extends Record<SettingsKeys, boolean> {
   change: (payload: Partial<Record<SettingsKeys, boolean>>) => void
   getSound: (key: AudioKeys) => HTMLAudioElement
   playSound: PlaySound
+  increaseTime: number
+  setIncreaseTime: (increaseTime: number | undefined) => void
 }
 
 const useSettingsStore = create<SettingsState>()(
@@ -59,8 +61,19 @@ const useSettingsStore = create<SettingsState>()(
 
         return audioEl
       },
+      increaseTime: 500,
+      setIncreaseTime: (increaseTime: number | undefined) =>
+        set({ increaseTime: increaseTime ?? 500 }),
     }),
-    { name: 'settings-store' },
+    {
+      name: 'settings-store',
+      partialize: (state) =>
+        Object.fromEntries(
+          Object.entries(state).filter(
+            ([key]) => !['increaseTime'].includes(key),
+          ),
+        ),
+    },
   ),
 )
 

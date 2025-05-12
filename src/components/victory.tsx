@@ -2,7 +2,6 @@ import { useImperativeHandle } from 'react'
 
 import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { useSettingsStore } from '@/store/settings.store'
-import { useGameStore } from '@/store/game.store'
 import { IMAGES } from '@/lib/constants'
 import { cn, waitEndAudio } from '@/lib/utils'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
@@ -26,7 +25,9 @@ interface VictoryState {
 
 const Victory = ({ victoryHandleRef }: VictoryProps) => {
   const playSound = useSettingsStore(({ playSound }) => playSound)
-  const setIncreaseTime = useGameStore(({ setIncreaseTime }) => setIncreaseTime)
+  const setIncreaseTime = useSettingsStore(
+    ({ setIncreaseTime }) => setIncreaseTime,
+  )
   const {
     state: { show, type, win, oldLevel, newLevel },
     timeout,

@@ -3,7 +3,7 @@ import { IoLockClosed } from 'react-icons/io5'
 import { PiArrowFatLeftFill, PiArrowFatRightFill } from 'react-icons/pi'
 
 import { usePurchaseCharacter, useUserCharacters } from '@/api/character.api'
-import { useGameStore } from '@/store/game.store'
+import { useDuelStore } from '@/store/duel.store'
 import { useSettingsStore } from '@/store/settings.store'
 import { cn } from '@/lib/utils'
 import { CharacterType, IMAGES } from '@/lib/constants'
@@ -24,10 +24,10 @@ const CharacterSelector = ({ onSelect }: CharacterSelectorProps) => {
     error: isPurchaseError,
     isSuccess: isPurchaseSuccess,
   } = usePurchaseCharacter()
-  const setCharacterName = useGameStore(
+  const setCharacterName = useDuelStore(
     ({ setCharacterName }) => setCharacterName,
   )
-  const characterName = useGameStore(({ characterName }) => characterName)
+  const characterName = useDuelStore(({ characterName }) => characterName)
   const playSound = useSettingsStore(({ playSound }) => playSound)
   const [activeIndex, setActiveIndex] = useState(0)
   const [type, setType] = useState<CharacterType>('front')

@@ -13,7 +13,7 @@ import {
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
 import { notify } from '@/socket/utils'
-import { useGameStore } from '@/store/game.store'
+import { useDuelStore } from '@/store/duel.store'
 import { useSettingsStore } from '@/store/settings.store'
 import { wait } from '@/lib/utils'
 import { Indicator } from '@/components/ui/indicators'
@@ -51,8 +51,8 @@ const useMatchmakingSocket = ({
   const [indicators, setIndicators] = useState<
     { action: Indicator; playerId: string }[]
   >([])
-  const setMatchDetails = useGameStore(({ setMatchDetails }) => setMatchDetails)
-  const matchDetails = useGameStore(({ matchDetails }) => matchDetails)
+  const setMatchDetails = useDuelStore(({ setMatchDetails }) => setMatchDetails)
+  const matchDetails = useDuelStore(({ matchDetails }) => matchDetails)
   const [matchId, setMatchId] = useState<string | null>(null)
   const [gameId, setGameId] = useState<string | null>(null)
   const [playerId, setPlayerId] = useState<string | null>(null)

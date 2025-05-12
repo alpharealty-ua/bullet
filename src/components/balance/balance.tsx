@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 
 import { useBalance } from '@/api/wallet.api'
 import { useIncreaseBalance } from '@/components/balance/use-increase-balance'
-import { useGameStore } from '@/store/game.store'
+import { useSettingsStore } from '@/store/settings.store'
 import { cn, formatNumber } from '@/lib/utils'
 
 const Balance = () => {
   const { data: balance } = useBalance()
-  const increaseTime = useGameStore(({ increaseTime }) => increaseTime)
+  const increaseTime = useSettingsStore(({ increaseTime }) => increaseTime)
   const { totalElRef, addedElRef } = useIncreaseBalance({
     value: balance,
     increaseTime,

@@ -4,25 +4,18 @@ import { persist } from 'zustand/middleware'
 import { MatchDetails } from '@/socket/matchmaker/matchmaker-soket.types'
 import { CharacterName } from '@/lib/constants'
 
-// TODO: RENAME TO DUEL
-interface GameState {
-  // TODO: MOVE TO SETTINGS
-  increaseTime: number
+interface DuelState {
   characterName: CharacterName
   matchDetails: MatchDetails | null
-  setIncreaseTime: (increaseTime: number | undefined) => void
   setCharacterName: (characterName: CharacterName) => void
   setMatchDetails: (matchDetails: MatchDetails | null) => void
 }
 
-const useGameStore = create<GameState>()(
+const useDuelStore = create<DuelState>()(
   persist(
     (set) => ({
       characterName: 'nubcat',
-      increaseTime: 500,
       matchDetails: null,
-      setIncreaseTime: (increaseTime: number | undefined) =>
-        set({ increaseTime: increaseTime ?? 500 }),
       setCharacterName: (characterName: CharacterName) =>
         set({ characterName }),
       setMatchDetails: (matchDetails: MatchDetails | null) =>
@@ -30,14 +23,8 @@ const useGameStore = create<GameState>()(
     }),
     {
       name: 'game-storage',
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(
-            ([key]) => !['increaseTime'].includes(key),
-          ),
-        ),
     },
   ),
 )
 
-export { useGameStore }
+export { useDuelStore }
