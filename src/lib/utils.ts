@@ -112,3 +112,22 @@ export const debounce = <T extends unknown[], U>(
     })
   }
 }
+export const trottle = <Args extends unknown[]>(
+  fn: (...args: Args) => void,
+  delay: number,
+) => {
+  let isWaiting = false
+
+  return (...args: Args) => {
+    if (isWaiting) {
+      return
+    }
+
+    fn(...args)
+    isWaiting = true
+
+    window.setTimeout(() => {
+      isWaiting = false
+    }, delay)
+  }
+}

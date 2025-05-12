@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
 import { AFK_TIME } from '@/lib/constants'
+import { trottle } from '@/lib/utils'
 
 const events = ['pointerdown', 'pointermove', 'wheel', 'keydown', 'scroll']
 
@@ -10,9 +11,9 @@ const useAfk = () => {
   const isAfk = useCallback(() => isAfkRef.current, [])
 
   useEffect(() => {
-    const cb = () => {
+    const cb = trottle(() => {
       lastActiveRef.current = Date.now()
-    }
+    }, 1000)
 
     events.forEach((event) =>
       window.addEventListener(event, cb, { passive: true }),
