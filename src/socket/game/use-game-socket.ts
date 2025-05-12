@@ -70,6 +70,7 @@ const useGameSocket = (
   const setJackpot = useSoloStore(({ setJackpot }) => setJackpot)
   const setMultiplier = useSoloStore(({ setMultiplier }) => setMultiplier)
   const setOffer = useSoloStore(({ setOffer }) => setOffer)
+  const [error, setError] = useState('')
 
   const navigate = useNavigate()
 
@@ -245,7 +246,7 @@ const useGameSocket = (
         ) => {
           if (!response.success) {
             clearTimeout(interalID)
-            toast.error(response.message)
+            setError(response.message)
             return
           }
 
@@ -299,7 +300,6 @@ const useGameSocket = (
 
   useEffect(() => {
     return () => {
-      return
       setCountBullet(5)
       setBet(-1)
       setJackpot(-1)
@@ -308,7 +308,7 @@ const useGameSocket = (
     }
   }, [setBet, setCountBullet, setJackpot, setMultiplier, setOffer])
 
-  return { watchGame, watchingLargestGame }
+  return { watchGame, watchingLargestGame, error }
 }
 
 export { useGameSocket }

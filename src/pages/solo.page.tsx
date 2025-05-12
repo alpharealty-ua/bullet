@@ -13,6 +13,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 import { Victory } from '@/components/victory'
 import { AddMoneyButton } from '@/components/ui/add-money-button'
+import { Notification } from '@/components/ui/notification'
 
 const SoloPage = ({ variant }: { variant: VariantGame }) => {
   const invertButtons = useSettingsStore(({ invertButtons }) => invertButtons)
@@ -162,7 +163,7 @@ const WatchGame = ({
   gameOver: () => Promise<void>
   winGame: () => Promise<void>
 }) => {
-  const { watchGame, watchingLargestGame } = useGameSocket(
+  const { watchGame, watchingLargestGame, error } = useGameSocket(
     pullGame,
     gameOver,
     winGame,
@@ -171,6 +172,7 @@ const WatchGame = ({
   return (
     <>
       <div className='flex flex-col gap-6 p-4'>
+        <Notification type='error' message={error} />
         {!watchGame && watchingLargestGame && (
           <>
             <div className='text-xl'>Largest prize game</div>
