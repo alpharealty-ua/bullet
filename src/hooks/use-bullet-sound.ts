@@ -14,7 +14,7 @@ const useBulletSound = () => {
   useEffect(() => {
     const soundEl = audioElRef.current
     soundEl.loop = true
-    soundEl.volume = 0.5
+    soundEl.volume = 0.25
 
     // Skip autoplay policy
     soundEl.play().catch(() => 0)
