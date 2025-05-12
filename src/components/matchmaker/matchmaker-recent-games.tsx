@@ -4,9 +4,12 @@ import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
 
 interface MatchmakerPersonalStatisticsProps
-  extends React.ComponentProps<'div'> {}
+  extends React.ComponentProps<'div'> {
+  short?: boolean
+}
 
 const MatchmakerPersonalRecentGames = ({
+  short,
   className,
   ...props
 }: MatchmakerPersonalStatisticsProps) => {
@@ -54,7 +57,10 @@ const MatchmakerPersonalRecentGames = ({
               {playerStatistics.recentGames.map((game, index) => (
                 <tr
                   key={index}
-                  className='bg-white transition-colors even:bg-gray-50 hover:bg-blue-50'
+                  className={cn(
+                    'bg-white transition-colors even:bg-gray-50 hover:bg-blue-50',
+                    short && 'nth-[n+6]:hidden',
+                  )}
                 >
                   <td
                     className={cn(
