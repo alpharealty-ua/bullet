@@ -37,9 +37,10 @@ export const useDuelSocket = ({
   const [canPull, setCanPull] = useState(true)
   const [round, setRound] = useState(1)
   const [winner, setWinner] = useState<Winner | null>(null)
-  const [gameEnded, setGameEnded] = useState(false)
+  const [isGameEnded, setIsGameEnded] = useState(false)
   const [isLeftOpponent, setIsLeftOpponent] = useState(false)
   const [isDisconnectedOpponent, setIsDisconnectedOpponent] = useState(false)
+  const [isRematchCreated, setIsRematchCreated] = useState(false)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -65,9 +66,10 @@ export const useDuelSocket = ({
     setCanPull(true)
     duelEventsStateRef.current.setRound(1)
     duelEventsStateRef.current.setWinner(null)
-    duelEventsStateRef.current.setGameEnded(false)
+    duelEventsStateRef.current.setIsGameEnded(false)
     duelEventsStateRef.current.setIsLeftOpponent(false)
     duelEventsStateRef.current.setIsDisconnectedOpponent(false)
+    duelEventsStateRef.current.setIsRematchCreated(false)
     duelEventsStateRef.current.leaveGameCalled = false
   }, [])
 
@@ -101,7 +103,9 @@ export const useDuelSocket = ({
   }
 
   const cancelRematch = () => {
-    // TODO: CHECK IF REMATCH CREATED, IF CREATED NOT LEAVE
+    if (isRematchCreated) {
+      return
+    }
     leaveGame(false)
   }
 
@@ -111,7 +115,7 @@ export const useDuelSocket = ({
         return
       }
 
-      if (!duelEventsStateRef.current.gameEnded) {
+      if (!duelEventsStateRef.current.isGameEnded) {
         return
       }
 
@@ -251,9 +255,15 @@ export const useDuelSocket = ({
           isDisconnectedOpponent),
       )
     },
-    gameEnded,
-    setGameEnded: (eneded: boolean) => {
-      setGameEnded((duelEventsStateRef.current.gameEnded = eneded))
+    isGameEnded,
+    setIsGameEnded: (isGameEnded: boolean) => {
+      setIsGameEnded((duelEventsStateRef.current.isGameEnded = isGameEnded))
+    },
+    isRematchCreated,
+    setIsRematchCreated: (isRematchCreated: boolean) => {
+      setIsRematchCreated(
+        (duelEventsStateRef.current.isRematchCreated = isRematchCreated),
+      )
     },
     leaveGameCalled: false,
   })
@@ -281,9 +291,10 @@ export const useDuelSocket = ({
         isLeftOpponent,
         setRound,
         setWinner,
-        setGameEnded,
+        setIsGameEnded: setGameEnded,
         setIsLeftOpponent,
         setIsDisconnectedOpponent,
+        setIsRematchCreated,
       } = duelEventsStateRef.current
 
       switch (type) {
@@ -469,10 +480,10 @@ export const useDuelSocket = ({
         case 'game:rematch_created': {
           notify(payload.message, 'info')
 
+          setIsRematchCreated(true)
+
           await rematchRequestHandleRef.current?.action('user', 'confirm')
           await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
-
-          await wait(1500).promise
 
           const rematchGameId = payload.rematchGame.id
           await reset()
