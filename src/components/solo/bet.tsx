@@ -29,7 +29,7 @@ const Bet = ({
   const changeValue = useCallback(
     (bet: number, callOnBet = true) => {
       bet = Math.max(0, Math.min(Math.round(bet), maxBet))
-      const percent = Math.max(0, Math.min((bet / maxBet) * 100, 100))
+      const percent = Math.max(0, Math.min((bet / (maxBet || 1)) * 100, 100))
       callOnBet && onBet && onBet(bet)
       setValue(bet)
       setPercent(Math.min(percent, 100))
