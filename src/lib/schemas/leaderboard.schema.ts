@@ -2,14 +2,14 @@ import { z } from 'zod'
 
 const topPlayerSchema = z.object({
   rank: z.number(),
-  // TODO: REMOVE NULLISH
+  // TODO: BACKEND. REMOVE NULLISH
   flag: z.string().nullish(),
   username: z.string(),
   lvl: z.number(),
   precision: z.number(),
   consistency: z.number(),
   speed: z.number(),
-  // TODO: REMOVE NULLISH
+  // TODO: BACKEND. REMOVE NULLISH
   perfectHitPercent: z.number().nullish(),
   region: z.string(),
   wins: z.number(),

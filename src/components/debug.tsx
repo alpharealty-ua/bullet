@@ -35,7 +35,6 @@ type FormValues = {
   betAmount: string
 }
 
-// TODO: ADD SOCKET EVENTS
 const Debug = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const form = useForm<FormValues>({

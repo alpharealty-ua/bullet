@@ -106,6 +106,7 @@ export const useDuelSocket = ({
     if (isRematchCreated) {
       return
     }
+
     leaveGame(false)
   }
 

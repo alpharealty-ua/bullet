@@ -75,7 +75,7 @@ export const fetchUserCharacters =
 
     return [
       // @ts-ignore
-      // TODO: REMOVE LATER, ONLY FOR TEST
+      // TODO: BACKEND. REMOVE LATER, ONLY FOR TEST
       {
         id: 'daisy',
         purchased: true,
