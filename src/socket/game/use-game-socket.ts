@@ -149,12 +149,13 @@ const useGameSocket = (
       }
     })
 
-    const pullResult = (response: unknown) => {
+    const pullResult = (response: {
+      success: boolean
+      position: number
+      offer: Offer | null
+    }) => {
       console.log('pull_result', response)
-      pullGame(
-        gameId,
-        response as { success: boolean; position: number; offer: Offer | null },
-      )
+      pullGame(gameId, response)
     }
 
     const gameUpdate = (response: GameUpdateEvent) => {
@@ -274,7 +275,6 @@ const useGameSocket = (
     if (!watchGame?.game) {
       return
     }
-
     const game = watchGame.game
 
     setJackpot(Number(game.potentialWin))
