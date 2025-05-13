@@ -20,10 +20,7 @@ const Leaderboard = () => {
   }
 
   return (
-    <Tabs
-      className='flex shrink-0 grow flex-col overflow-hidden'
-      defaultValue='top'
-    >
+    <Tabs className='grow' defaultValue='top'>
       <TabsList>
         <TabsTrigger value='top'>Top 20 Players</TabsTrigger>
         <TabsTrigger value='stats'>Regional Champions</TabsTrigger>

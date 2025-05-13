@@ -34,10 +34,7 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
   const { recentGames, performanceTrend } = playerStatistics
 
   return (
-    <Tabs
-      className='flex shrink-0 grow flex-col overflow-hidden'
-      defaultValue='personalStatistics'
-    >
+    <Tabs className='' defaultValue='personalStatistics'>
       <TabsList>
         <TabsTrigger value='personalStatistics'>
           Personal statistics

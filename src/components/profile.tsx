@@ -51,10 +51,7 @@ const Profile = () => {
 
   return (
     <>
-      <Tabs
-        className='flex flex-col overflow-hidden'
-        defaultValue='personalStatistics'
-      >
+      <Tabs className='' defaultValue='personalStatistics'>
         <TabsList>
           <TabsTrigger value='personalStatistics'>
             Personal statistics

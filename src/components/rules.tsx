@@ -4,10 +4,7 @@ const Rules = () => {
   return (
     <div className='flex flex-col gap-4'>
       <h3 className='px-4 text-3xl font-bold'>Game Rules</h3>
-      <Tabs
-        className='flex shrink-0 grow flex-col gap-4 overflow-hidden'
-        defaultValue='duel'
-      >
+      <Tabs className='' defaultValue='duel'>
         <TabsList>
           <TabsTrigger value='duel' className='text-base'>
             DUEL
