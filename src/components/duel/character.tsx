@@ -82,7 +82,27 @@ const Character = React.forwardRef<HTMLDivElement, CharacterProps>(
         {...props}
       >
         {playerInfoProps && (
-          <PlayerInfo {...playerInfoProps} visible={showInfo} />
+          <PlayerInfo
+            {...playerInfoProps}
+            className={cn(
+              playerInfoProps.className,
+              name === 'nubcat' &&
+                (type === 'front' ? 'translate-x-[1%]' : 'translate-x-[13%]'),
+              name === 'mickey' &&
+                (type === 'front' ? '-translate-x-[5%]' : '-translate-x-[10%]'),
+              name === 'fatty' &&
+                (type === 'front' ? '-translate-x-[10%]' : '-translate-x-[5%]'),
+              name === 'anime-1' &&
+                (type === 'front'
+                  ? '-translate-x-[10%]'
+                  : '-translate-x-[25%]'),
+              name === 'anime-2' &&
+                (type === 'front' ? 'translate-x-[25%]' : '-translate-x-[25%]'),
+              name === 'daisy' &&
+                (type === 'front' ? '-translate-x-[12%]' : 'translate-x-[10%]'),
+            )}
+            visible={showInfo}
+          />
         )}
         <div
           className={cn(
