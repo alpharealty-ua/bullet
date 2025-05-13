@@ -1,5 +1,5 @@
 import { useUserStatistics } from '@/api/leaderboard.api'
-import { cn } from '@/lib/utils'
+import { cn, formatDate } from '@/lib/utils'
 import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
 
@@ -75,9 +75,7 @@ const MatchmakerPersonalRecentGames = ({
                       {game.opponentUsername}
                     </div>
                   </td>
-                  <td className='p-1'>
-                    {new Date(game.date).toLocaleDateString('en-US')}
-                  </td>
+                  <td className='p-1'>{formatDate(new Date(game.date))}</td>
                   <td className='p-1'>{game.opponentScore}</td>
                 </tr>
               ))}

@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Loading } from '@/components/ui/loading'
 import { PlayerStatistics } from '@/components/leaderboard/player-statistics'
 import { RequestError } from '@/components/ui/request-error'
+import { formatDate } from '@/lib/utils'
 
 const PlayerProfile = ({ playerId }: { playerId: string }) => {
   const {
@@ -87,7 +88,7 @@ const PlayerProfile = ({ playerId }: { playerId: string }) => {
                     {game.result}
                   </td>
                   <td className='px-2 py-3'>
-                    {new Date(game.date).toLocaleDateString('en-US')}
+                    {formatDate(new Date(game.date))}
                   </td>
                 </tr>
               ))}

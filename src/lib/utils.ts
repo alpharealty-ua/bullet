@@ -33,6 +33,8 @@ export const formatBet = (value: number) => {
 export const formatNumber = (value: number) =>
   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
+export const formatDate = (date: Date) => date.toLocaleDateString('en-GB')
+
 export const addZerro = (number: number) => `${number > 9 ? '' : `0`}${number}`
 
 export const wait = (timeout: number) => {
