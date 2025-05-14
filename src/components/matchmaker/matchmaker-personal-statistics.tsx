@@ -14,7 +14,13 @@ const MatchmakerPersonalStatistics = ({
   const { data: statistics, isLoading, isSuccess, error } = useUserStatistics()
 
   return (
-    <div className={cn('flex w-full flex-col gap-2', className)} {...props}>
+    <div
+      className={cn(
+        'flex min-h-37 w-full flex-col gap-2 overflow-hidden',
+        className,
+      )}
+      {...props}
+    >
       <div className='px-2'>Personal statistics</div>
       {isLoading ? (
         <Loading size='sm' diration='row' />
@@ -27,7 +33,7 @@ const MatchmakerPersonalStatistics = ({
           <RequestError error={error} />
         )
       ) : (
-        <div className='grid grid-cols-3 gap-1'>
+        <div className='custom-scroll grid grid-cols-3 gap-1'>
           <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
             <div className='text-xl'>
               <span className='text-green font-medium'>
