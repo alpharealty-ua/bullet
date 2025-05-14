@@ -19,7 +19,7 @@ const MatchmakerTrophies = ({
     <>
       <div
         className={cn(
-          'flex min-h-25 flex-col gap-2 overflow-hidden',
+          'flex min-h-25 shrink-5 flex-col gap-2 overflow-hidden',
           className,
         )}
         {...props}
