@@ -66,14 +66,14 @@ const Profile = ({ onLogout }: ProfileProps) => {
         </TabsList>
         <TabsContent
           value='personalStatistics'
-          className='flex grow flex-col gap-6 overflow-hidden'
+          className='flex h-auto grow flex-col justify-start gap-2 overflow-hidden'
         >
           <MatchmakerPersonalStatistics />
           <MatchmakerPersonalRecentGames />
           <MatchmakerTrophies />
           <ButtonWithAudio
             as='button'
-            className='shrink-0 self-center'
+            className='min-h-10 self-center'
             bg='red'
             onClick={handleLogout}
           >

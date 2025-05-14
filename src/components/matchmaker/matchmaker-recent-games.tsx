@@ -23,7 +23,7 @@ const MatchmakerPersonalRecentGames = ({
   return (
     <div
       className={cn(
-        'flex min-h-40 w-full flex-col gap-2 overflow-hidden',
+        'flex min-h-43 w-full flex-col gap-2 overflow-hidden',
         className,
       )}
       {...props}
@@ -59,7 +59,7 @@ const MatchmakerPersonalRecentGames = ({
                   key={index}
                   className={cn(
                     'bg-white transition-colors even:bg-gray-50 hover:bg-blue-50',
-                    short && 'nth-[n+6]:hidden',
+                    short && 'nth-[n+5]:hidden',
                   )}
                 >
                   <td

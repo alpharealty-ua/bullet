@@ -31,7 +31,7 @@ const MatchmakerTrophies = ({
               (image, i) => (
                 <Dialog key={i}>
                   <DialogTrigger className='cursor-pointer'>
-                    <span className='block aspect-square h-18 overflow-hidden opacity-80 transition-all hover:opacity-100'>
+                    <span className='block aspect-square h-18 overflow-hidden opacity-20 transition-all hover:opacity-100'>
                       <img src={image.image} alt='' />
                     </span>
                   </DialogTrigger>

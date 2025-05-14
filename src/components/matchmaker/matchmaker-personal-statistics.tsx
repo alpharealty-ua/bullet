@@ -16,7 +16,7 @@ const MatchmakerPersonalStatistics = ({
   return (
     <div
       className={cn(
-        'flex min-h-37 w-full flex-col gap-2 overflow-hidden',
+        'flex min-h-36 w-full flex-col gap-2 overflow-hidden',
         className,
       )}
       {...props}
