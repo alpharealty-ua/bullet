@@ -58,7 +58,7 @@ const EnterArena = ({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-2',
+        'flex shrink-0 flex-col items-center justify-center',
         className,
       )}
       {...props}

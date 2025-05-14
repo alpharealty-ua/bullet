@@ -33,7 +33,7 @@ const MatchmakerPersonalRecentGames = ({
         <Loading size='sm' diration='row' />
       ) : !isSuccess ? (
         error?.message.includes('not found') ? (
-          <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
+          <div className='flex flex-col items-center gap-0.5 bg-white p-1 shadow'>
             Statistics not found
           </div>
         ) : (

@@ -78,7 +78,7 @@ const Matchmaker = ({
     <div className='my-auto h-full w-full overflow-hidden py-3'>
       {noMoney && <AddMoneyButton />}
       {!noMoney && (
-        <div className='flex h-full w-full flex-col items-center justify-center gap-3 overflow-hidden'>
+        <div className='flex h-full w-full flex-col items-center justify-center gap-2 overflow-hidden'>
           {isNextSearch ? (
             <NextSearch
               matchmakingStatus={matchmakingStatus}

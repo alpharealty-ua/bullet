@@ -26,7 +26,7 @@ const MatchmakerPersonalStatistics = ({
         <Loading size='sm' diration='row' />
       ) : !isSuccess ? (
         error?.message.includes('not found') ? (
-          <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
+          <div className='flex flex-col items-center gap-0.5 bg-white p-1 shadow'>
             Statistics not found
           </div>
         ) : (
@@ -34,7 +34,7 @@ const MatchmakerPersonalStatistics = ({
         )
       ) : (
         <div className='custom-scroll grid grid-cols-3 gap-1'>
-          <div className='flex flex-col items-center gap-1 bg-white p-1 shadow'>
+          <div className='flex flex-col items-center gap-0.5 bg-white p-1 shadow'>
             <div className='text-xl'>
               <span className='text-green font-medium'>
                 {statistics.gamesWon}W
@@ -49,7 +49,7 @@ const MatchmakerPersonalStatistics = ({
           {getPlayerStatistics(statistics).map(({ value, label }, i) => (
             <div
               key={i}
-              className='flex flex-col items-center gap-1 bg-white p-1 shadow'
+              className='flex flex-col items-center gap-0.5 bg-white p-1 shadow'
             >
               <div className='text-xl'>{Number(value.toFixed(2))}</div>
               <div className='text-xs text-[#7f8c8d]'>{label}</div>
