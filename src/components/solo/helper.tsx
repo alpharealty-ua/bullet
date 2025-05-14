@@ -2,18 +2,12 @@ import { cn } from '@/lib/utils'
 import { IMAGES } from '@/lib/constants'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 
-const imagesMap = {
-  wagehere: IMAGES.wagerhere,
-  startgame: IMAGES.startgame,
+interface HelperProps {
+  image: keyof typeof IMAGES.label
+  show: boolean
 }
 
-const Helper = ({
-  image,
-  show,
-}: {
-  image: keyof typeof imagesMap
-  show: boolean
-}) => {
+const Helper = ({ image, show }: HelperProps) => {
   return (
     <AnimationInOut
       in={show}
@@ -22,11 +16,11 @@ const Helper = ({
       className={cn(
         'absolute bottom-full w-22.5 bg-contain bg-center bg-no-repeat',
         'slide-out-to-top-4 fade-in slide-in-from-top-4 duration-400',
-        image === 'wagehere' && 'left-4',
+        image === 'wagerhere' && 'left-4',
         image === 'startgame' && 'right-0',
       )}
     >
-      <img src={imagesMap[image]} alt='' />
+      <img src={IMAGES.label[image]} alt='' />
     </AnimationInOut>
   )
 }

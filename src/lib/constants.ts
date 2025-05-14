@@ -5,65 +5,94 @@ export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 export type VariantGame = 'play' | 'watch'
 
 export const IMAGES = {
-  gamerules: '/assets/images/game-rules.svg',
-  close: '/assets/images/close.svg',
-  moneybag: '/assets/images/money-bag.svg',
   logo: '/assets/images/logo.svg',
   wrapper: '/assets/images/wrapper.png',
-  blood: '/assets/images/blood.svg',
-  you: '/assets/images/you.svg',
-  died: '/assets/images/died.svg',
-  deal: '/assets/images/deal.svg',
-  duel: '/assets/images/duel.svg',
-  watch: '/assets/images/watch.svg',
-  button: '/assets/images/button.svg',
-  startgame: '/assets/images/start-game.svg',
-  wagerhere: '/assets/images/wager-here.svg',
-  gunchamber: '/assets/images/compressed/gun-chamber.png',
-  gunbody: '/assets/images/compressed/gun-body.png',
-  gunchambercharacter: '/assets/images/gun-chamber-character.png',
-  gunbodycharacter: '/assets/images/gun-body-character.png',
-  gunhandcharacternubcat: '/assets/images/gun-hand-character-nubcat.png',
-  gunfingercharacternubcat: '/assets/images/gun-finger-character-nubcat.png',
-  gunhandcharactermickey: '/assets/images/gun-hand-character-mickey.png',
-  gunfingercharactermickey: '/assets/images/gun-finger-character-mickey.png',
-  gunhandcharacterfatty: '/assets/images/gun-hand-character-fatty.png',
-  gunfingercharacterfatty: '/assets/images/gun-finger-character-fatty.png',
-  gunhandcharacteranime: '/assets/images/gun-hand-character-anime.png',
-  gunfingercharacteranime: '/assets/images/gun-finger-character-anime.png',
-  gunhandcharacterdaisy: '/assets/images/gun-hand-character-daisy.png',
-  gunfingercharacterdaisy: '/assets/images/gun-finger-character-daisy.png',
-  solo: '/assets/images/solo.svg',
-  play: '/assets/images/play.svg',
-  pull: '/assets/images/pull.svg',
+
   footer: '/assets/images/footer.svg',
-  settings: '/assets/images/settings.svg',
   bullet: '/assets/images/bullet.png',
   sliderbar: '/assets/images/sliderbar.svg',
-  characternubcatfront: '/assets/images/character-nubcat-front.png',
-  charactermickeyfront: '/assets/images/character-mickey-front.png',
-  characterfattyfront: '/assets/images/character-fatty-front.png',
-  characteranime1front: '/assets/images/character-anime-1-front.png',
-  characteranime2front: '/assets/images/character-anime-2-front.png',
-  characterdaisyfront: '/assets/images/character-daisy-front.png',
-  characternubcatback: '/assets/images/character-nubcat-back.png',
-  charactermickeyback: '/assets/images/character-mickey-back.png',
-  characterfattyback: '/assets/images/character-fatty-back.png',
-  characteranime1back: '/assets/images/character-anime-1-back.png',
-  characteranime2back: '/assets/images/character-anime-2-back.png',
-  characterdaisyback: '/assets/images/character-daisy-back.png',
-  flagusa: '/assets/images/flag-usa.png',
-  flagchina: '/assets/images/flag-china.png',
-  flagmexico: '/assets/images/flag-mexico.png',
   texture: '/assets/images/texture.png',
-  shot1: '/assets/images/shot-1.png',
-  shot2: '/assets/images/shot-2.png',
-  shot3: '/assets/images/shot-3.png',
-  shotrevolver1: '/assets/images/shot-revolver-1.png',
-  shotrevolver2: '/assets/images/shot-revolver-2.png',
-  shotrevolver3: '/assets/images/shot-revolver-3.png',
-  leaderboardstar: '/assets/images/leaderboardstar.png',
   enterarena: '/assets/images/enter-arena.svg',
+  label: {
+    startgame: '/assets/images/start-game.svg',
+    wagerhere: '/assets/images/wager-here.svg',
+  },
+  button: {
+    button: '/assets/images/button.svg',
+    solo: '/assets/images/solo.svg',
+    play: '/assets/images/play.svg',
+    pull: '/assets/images/pull.svg',
+    deal: '/assets/images/deal.svg',
+    duel: '/assets/images/duel.svg',
+    watch: '/assets/images/watch.svg',
+    gamerules: '/assets/images/game-rules.svg',
+    close: '/assets/images/close.svg',
+    moneybag: '/assets/images/money-bag.svg',
+    leaderboardstar: '/assets/images/leaderboardstar.png',
+    settings: '/assets/images/settings.svg',
+  },
+  gameover: {
+    blood: '/assets/images/blood.svg',
+    you: '/assets/images/you.svg',
+    died: '/assets/images/died.svg',
+  },
+  revolver: {
+    chamber: '/assets/images/compressed/gun-chamber.png',
+    body: '/assets/images/compressed/gun-body.png',
+    shot1: '/assets/images/shot-revolver-1.png',
+    shot2: '/assets/images/shot-revolver-2.png',
+    shot3: '/assets/images/shot-revolver-3.png',
+  },
+  gun: {
+    chamber: '/assets/images/gun-chamber-character.png',
+    body: '/assets/images/gun-body-character.png',
+    shot1: '/assets/images/shot-1.png',
+    shot2: '/assets/images/shot-2.png',
+    shot3: '/assets/images/shot-3.png',
+  },
+  character: {
+    nubcat: {
+      front: '/assets/images/character-nubcat-front.png',
+      back: '/assets/images/character-nubcat-back.png',
+      hand: '/assets/images/gun-hand-character-nubcat.png',
+      finger: '/assets/images/gun-finger-character-nubcat.png',
+    },
+    mickey: {
+      front: '/assets/images/character-mickey-front.png',
+      back: '/assets/images/character-mickey-back.png',
+      hand: '/assets/images/gun-hand-character-mickey.png',
+      finger: '/assets/images/gun-finger-character-mickey.png',
+    },
+    fatty: {
+      front: '/assets/images/character-fatty-front.png',
+      back: '/assets/images/character-fatty-back.png',
+      hand: '/assets/images/gun-hand-character-fatty.png',
+      finger: '/assets/images/gun-finger-character-fatty.png',
+    },
+    ['anime-1']: {
+      front: '/assets/images/character-anime-1-front.png',
+      back: '/assets/images/character-anime-1-back.png',
+      hand: '/assets/images/gun-hand-character-anime.png',
+      finger: '/assets/images/gun-finger-character-anime.png',
+    },
+    ['anime-2']: {
+      front: '/assets/images/character-anime-2-front.png',
+      back: '/assets/images/character-anime-2-back.png',
+      hand: '/assets/images/gun-hand-character-anime.png',
+      finger: '/assets/images/gun-finger-character-anime.png',
+    },
+    daisy: {
+      front: '/assets/images/character-daisy-front.png',
+      back: '/assets/images/character-daisy-back.png',
+      hand: '/assets/images/gun-hand-character-daisy.png',
+      finger: '/assets/images/gun-finger-character-daisy.png',
+    },
+  },
+  flag: {
+    usa: '/assets/images/flag-usa.png',
+    china: '/assets/images/flag-china.png',
+    mexico: '/assets/images/flag-mexico.png',
+  },
   trophy: {
     // TODO: ADD IMAGE NAME FOR EACH TROPHY
     1: '/assets/images/trophy-1.png',
@@ -85,40 +114,18 @@ export const IMAGE_SRC_LIST = Object.values(IMAGES)
 
 export const TROPHY_IMAGES_SRC_LIST = Object.values(IMAGES.trophy)
 
-export const CHARACTER_LIST = {
-  nubcat: {
-    back: IMAGES.characternubcatback,
-    front: IMAGES.characternubcatfront,
-  },
-  mickey: {
-    back: IMAGES.charactermickeyback,
-    front: IMAGES.charactermickeyfront,
-  },
-  fatty: {
-    back: IMAGES.characterfattyback,
-    front: IMAGES.characterfattyfront,
-  },
-  ['anime-1']: {
-    back: IMAGES.characteranime1back,
-    front: IMAGES.characteranime1front,
-  },
-  ['anime-2']: {
-    back: IMAGES.characteranime2back,
-    front: IMAGES.characteranime2front,
-  },
-  daisy: {
-    back: IMAGES.characterdaisyback,
-    front: IMAGES.characterdaisyfront,
-  },
-} satisfies Record<CharacterName, Record<CharacterType, string>>
+export const CHARACTER_LIST = IMAGES.character satisfies Record<
+  CharacterName,
+  Record<CharacterType, string>
+>
 
 export const characterNameList = [
-  'daisy',
   'nubcat',
   'mickey',
   'fatty',
   'anime-1',
   'anime-2',
+  'daisy',
 ] as const
 
 export type CharacterName = (typeof characterNameList)[number]
@@ -176,15 +183,15 @@ export type SettingsKeys = keyof typeof SETTINGS
 export const LANGUAGE_LIST = [
   {
     language: 'usa',
-    flag: IMAGES.flagusa,
+    flag: IMAGES.flag.usa,
   },
   {
     language: 'china',
-    flag: IMAGES.flagchina,
+    flag: IMAGES.flag.china,
   },
   {
     language: 'mexico',
-    flag: IMAGES.flagmexico,
+    flag: IMAGES.flag.mexico,
   },
 ] as const
 

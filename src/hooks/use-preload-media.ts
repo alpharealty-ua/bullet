@@ -4,7 +4,9 @@ import { SRC_AUDIOS, IMAGE_SRC_LIST } from '@/lib/constants'
 
 export const usePreloadMedia = () => {
   useEffect(() => {
-    const loadImage = (src: string | Record<string, string>) => {
+    const loadImage = (
+      src: string | Record<string, string | Record<string, string>>,
+    ) => {
       if (typeof src === 'object') {
         Object.values(src).forEach(loadImage)
         return

@@ -64,14 +64,16 @@ const GameOver = ({ gameOverHandleRef, onClick }: GameOverProps) => {
             'absolute inset-0 bg-cover bg-center',
             'animate-in fade-in fill-mode-both duration-100',
           )}
-          style={!blood ? { backgroundImage: `url(${IMAGES.blood})` } : {}}
+          style={
+            !blood ? { backgroundImage: `url(${IMAGES.gameover.blood})` } : {}
+          }
         >
           <div
             className={cn(
               'absolute bottom-[72%] left-[30%] h-35 w-35 bg-contain bg-center text-5xl text-transparent uppercase select-none',
               'animate-in fade-in fill-mode-both delay-100 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.you})` }}
+            style={{ backgroundImage: `url(${IMAGES.gameover.you})` }}
           >
             You
           </div>
@@ -80,7 +82,7 @@ const GameOver = ({ gameOverHandleRef, onClick }: GameOverProps) => {
               'uppercasee absolute top-[46%] right-[8%] h-38 w-39 bg-contain bg-center text-5xl text-transparent select-none',
               'animate-in fade-in fill-mode-both delay-200 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.died})` }}
+            style={{ backgroundImage: `url(${IMAGES.gameover.died})` }}
           >
             Died
           </div>

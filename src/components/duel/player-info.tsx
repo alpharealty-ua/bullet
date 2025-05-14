@@ -56,7 +56,7 @@ const PlayerInfo = React.forwardRef<HTMLDivElement, PlayerInfoProps>(
             </div>
             <div
               className='h-6 w-10 bg-gray-100 bg-contain bg-center bg-no-repeat'
-              style={{ backgroundImage: `url(${IMAGES.flagusa})` }}
+              style={{ backgroundImage: `url(${IMAGES.flag.usa})` }}
             ></div>
           </div>
         </div>

@@ -24,33 +24,6 @@ export interface GunCharacterProps
   characterType: CharacterType
 }
 
-const imagesMap = {
-  fatty: {
-    hand: IMAGES.gunhandcharacterfatty,
-    finger: IMAGES.gunfingercharacterfatty,
-  },
-  mickey: {
-    hand: IMAGES.gunhandcharactermickey,
-    finger: IMAGES.gunfingercharactermickey,
-  },
-  nubcat: {
-    hand: IMAGES.gunhandcharacternubcat,
-    finger: IMAGES.gunfingercharacternubcat,
-  },
-  'anime-1': {
-    hand: IMAGES.gunhandcharacteranime,
-    finger: IMAGES.gunfingercharacteranime,
-  },
-  'anime-2': {
-    hand: IMAGES.gunhandcharacteranime,
-    finger: IMAGES.gunfingercharacteranime,
-  },
-  daisy: {
-    hand: IMAGES.gunhandcharacterdaisy,
-    finger: IMAGES.gunfingercharacterdaisy,
-  },
-} satisfies Record<CharacterName, { hand: string; finger: string } | null>
-
 // A function cva need for work prettier-plugin-tailwindcss
 const cva = (className: string) => className
 const positionStylesMap = {
@@ -98,7 +71,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
     const [showShot, setShowShot] = useState(false)
     const isBack = characterType === 'back'
 
-    const images = imagesMap[characterName]
+    const images = IMAGES.character[characterName]
 
     const shot = useShot(playSound, setShowShot)
 
@@ -177,7 +150,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
             <div
               className={'absolute inset-0 bg-contain bg-center bg-no-repeat'}
               style={{
-                backgroundImage: `url(${IMAGES.gunchambercharacter})`,
+                backgroundImage: `url(${IMAGES.gun.chamber})`,
               }}
               data-chamber-rotate
             ></div>
@@ -188,7 +161,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
               isBack && 'opacity-0',
             )}
             style={{
-              backgroundImage: `url(${IMAGES.gunbodycharacter})`,
+              backgroundImage: `url(${IMAGES.gun.body})`,
             }}
             data-body
           ></div>
@@ -199,14 +172,14 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
                   'absolute inset-0 scale-300 bg-contain bg-center bg-no-repeat',
                   'zoom-in-50 fade-in fill-mode-backwards animate-in delay-100 duration-150 ease-linear',
                 )}
-                style={{ backgroundImage: `url(${IMAGES.shot1})` }}
+                style={{ backgroundImage: `url(${IMAGES.gun.shot1})` }}
               ></div>
               <div
                 className={cn(
                   'absolute inset-0 scale-600 bg-contain bg-center bg-no-repeat',
                   'zoom-in fade-in fill-mode-backwards animate-in delay-250 duration-150 ease-linear',
                 )}
-                style={{ backgroundImage: `url(${IMAGES.shot2})` }}
+                style={{ backgroundImage: `url(${IMAGES.gun.shot2})` }}
               ></div>
             </div>
           )}
@@ -218,7 +191,7 @@ const GunCharacter = React.forwardRef<HTMLDivElement, GunCharacterProps>(
                 'fixed inset-0 z-50 mx-auto max-w-[var(--width)]',
                 'fill-mode-both fade-in animate-in bg-cover bg-center bg-no-repeat delay-350 duration-150 ease-linear',
               )}
-              style={{ backgroundImage: `url(${IMAGES.shot3})` }}
+              style={{ backgroundImage: `url(${IMAGES.gun.shot3})` }}
             ></div>
           ),
           document.body,

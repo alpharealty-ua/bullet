@@ -4,21 +4,6 @@ import { Link, LinkProps, To } from 'react-router'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-const imagesMap = {
-  button: IMAGES.button,
-  solo: IMAGES.solo,
-  play: IMAGES.play,
-  pull: IMAGES.pull,
-  deal: IMAGES.deal,
-  duel: IMAGES.duel,
-  watch: IMAGES.watch,
-  gamerules: IMAGES.gamerules,
-  close: IMAGES.close,
-  moneybag: IMAGES.moneybag,
-  leaderboardstar: IMAGES.leaderboardstar,
-  settings: IMAGES.settings,
-}
-
 export type asLink = { as: 'link' } & LinkProps &
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 export type asButton = {
@@ -26,7 +11,7 @@ export type asButton = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 export type ButtonProps = (
-  | { image: keyof typeof imagesMap; bg?: undefined }
+  | { image: keyof typeof IMAGES.button; bg?: undefined }
   | {
       image?: undefined
       bg: 'green' | 'red' | 'primary' | 'white' | 'gray' | ''
@@ -76,7 +61,7 @@ const Button = React.forwardRef<
             {children}
           </span>
         ))}
-      {image && <img src={imagesMap[image]} alt='' className='w-full' />}
+      {image && <img src={IMAGES.button[image]} alt='' className='w-full' />}
     </Comp>
   )
 })

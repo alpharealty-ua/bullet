@@ -248,7 +248,7 @@ const Revolver = React.forwardRef<
           >
             <div
               className='absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-100 ease-linear'
-              style={{ backgroundImage: `url(${IMAGES.gunchamber})` }}
+              style={{ backgroundImage: `url(${IMAGES.revolver.chamber})` }}
               data-chamber-speed
             ></div>
           </div>
@@ -256,7 +256,7 @@ const Revolver = React.forwardRef<
         <div
           className='pointer-events-none absolute inset-0 bg-contain bg-center bg-no-repeat'
           style={{
-            backgroundImage: `url(${IMAGES.gunbody})`,
+            backgroundImage: `url(${IMAGES.revolver.body})`,
           }}
           data-body
         ></div>
@@ -268,42 +268,42 @@ const Revolver = React.forwardRef<
               'absolute inset-[25%] mx-auto bg-contain bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-0 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot1})` }}
           ></div>
           <div
             className={cn(
               'absolute inset-0 mx-auto bg-contain bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-100 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver2})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot2})` }}
           ></div>
           <div
             className={cn(
               'absolute inset-0 mx-auto scale-125 bg-contain bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-200 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver3})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot3})` }}
           ></div>
           <div
             className={cn(
               'absolute inset-0 mx-auto scale-400 bg-[length:35%] bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-300 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot1})` }}
           ></div>
           <div
             className={cn(
               'absolute inset-0 mx-auto scale-600 bg-[length:35%] bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-400 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot1})` }}
           ></div>
           <div
             className={cn(
               'absolute inset-0 mx-auto scale-800 bg-[length:35%] bg-center bg-no-repeat',
               'fill-mode-both animate-[revolver-shot] delay-500 duration-100',
             )}
-            style={{ backgroundImage: `url(${IMAGES.shotrevolver1})` }}
+            style={{ backgroundImage: `url(${IMAGES.revolver.shot1})` }}
           ></div>
         </div>
       )}
