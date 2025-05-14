@@ -101,9 +101,9 @@ const Profile = ({ onLogout }: ProfileProps) => {
               <button
                 key={i}
                 className={cn(
-                  'bg-white p-2 opacity-33',
+                  'bg-white px-1 py-4 opacity-33',
                   player.online &&
-                    'bg-green hover:bg-green/70 cursor-pointer text-white opacity-100 transition-all',
+                    'bg-green hover:bg-green/70 cursor-pointer text-white opacity-100 shadow transition-all',
                   !player.online && 'cursor-not-allowed',
                 )}
                 disabled={!player.online}
