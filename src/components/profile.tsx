@@ -8,6 +8,7 @@ import {
   ChangePasswordSchema,
   changePasswordSchema,
 } from '@/lib/schemas/change-password.schema'
+import { cn } from '@/lib/utils'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import {
@@ -62,6 +63,7 @@ const Profile = ({ onLogout }: ProfileProps) => {
           <TabsTrigger value='personalStatistics'>
             Personal statistics
           </TabsTrigger>
+          <TabsTrigger value='friends'>Friends</TabsTrigger>
           <TabsTrigger value='changePassword'>Change password</TabsTrigger>
         </TabsList>
         <TabsContent
@@ -73,16 +75,48 @@ const Profile = ({ onLogout }: ProfileProps) => {
           <MatchmakerTrophies />
           <ButtonWithAudio
             as='button'
-            className='min-h-10 self-center'
+            className='min-h-10 basis-10 self-center'
             bg='red'
             onClick={handleLogout}
           >
             logout
           </ButtonWithAudio>
         </TabsContent>
+        <TabsContent value='friends' className='flex grow flex-col gap-2'>
+          <div className='grid grid-cols-4 gap-1'>
+            {[
+              { name: 'Player', online: true },
+              { name: 'Player', online: true },
+              { name: 'Player', online: true },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+              { name: 'Player', online: false },
+            ].map((player, i) => (
+              <button
+                key={i}
+                className={cn(
+                  'bg-white p-2 opacity-33',
+                  player.online &&
+                    'bg-green hover:bg-green/70 cursor-pointer text-white opacity-100 transition-all',
+                  !player.online && 'cursor-not-allowed',
+                )}
+                disabled={!player.online}
+                title={player.online ? 'Online' : 'Offline'}
+              >
+                {`${player.name} ${i}`}
+              </button>
+            ))}
+          </div>
+        </TabsContent>
         <TabsContent
           value='changePassword'
-          className='flex grow flex-col gap-6'
+          className='flex grow flex-col gap-2'
         >
           <div className='flex flex-col items-center gap-4 p-4 px-10'>
             <Form {...form}>
