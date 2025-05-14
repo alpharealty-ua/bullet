@@ -107,8 +107,8 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               in={isStartedGame && Boolean(offer)}
               className={cn(
                 'zoom-in-50 zoom-out-50',
-                '[data-open="true"]:delay-1200 [data-open="true"]:duration-1000',
-                '[data-close="true"]:duration-400',
+                'data-[open=true]:delay-1200 data-[open=true]:duration-1000',
+                'data-[close=true]:duration-400',
               )}
             >
               <ButtonWithAudio
