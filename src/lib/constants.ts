@@ -94,25 +94,34 @@ export const IMAGES = {
     mexico: '/assets/images/flag-mexico.png',
   },
   trophy: {
-    // TODO: ADD IMAGE NAME FOR EACH TROPHY
-    1: '/assets/images/trophy-1.png',
-    2: '/assets/images/trophy-2.png',
-    3: '/assets/images/trophy-3.png',
-    4: '/assets/images/trophy-4.png',
-    5: '/assets/images/trophy-5.png',
-    6: '/assets/images/trophy-6.png',
-    7: '/assets/images/trophy-7.png',
-    8: '/assets/images/trophy-8.png',
-    9: '/assets/images/trophy-9.png',
-    10: '/assets/images/trophy-10.png',
-    11: '/assets/images/trophy-11.png',
-    12: '/assets/images/trophy-12.png',
+    alphaunit: {
+      bronze: '/assets/images/trophy-alpha-unit-bronze.png',
+      silver: '/assets/images/trophy-alpha-unit-silver.png',
+      gold: '/assets/images/trophy-alpha-unit-gold.png',
+    },
+    nobrackes: {
+      bronze: '/assets/images/trophy-no-brackes-bronze.png',
+      silver: '/assets/images/trophy-no-brackes-silver.png',
+      gold: '/assets/images/trophy-no-brackes-gold.png',
+    },
+    unmoveableforce: {
+      bronze: '/assets/images/trophy-unmoveable-force-bronze.png',
+      silver: '/assets/images/trophy-unmoveable-force-silver.png',
+      gold: '/assets/images/trophy-unmoveable-force-gold.png',
+    },
+    deathmechanic: {
+      bronze: '/assets/images/trophy-death-mechanic-bronze.png',
+      silver: '/assets/images/trophy-death-mechanic-silver.png',
+      gold: '/assets/images/trophy-death-mechanic-gold.png',
+    },
   },
 } as const
 
 export const IMAGE_SRC_LIST = Object.values(IMAGES)
 
 export const TROPHY_IMAGES_SRC_LIST = Object.values(IMAGES.trophy)
+  .map((e) => [e.bronze, e.silver, e.gold])
+  .flat()
 
 export const CHARACTER_LIST = IMAGES.character satisfies Record<
   CharacterName,
