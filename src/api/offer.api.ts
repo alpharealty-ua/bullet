@@ -83,6 +83,7 @@ const routes = {
   claimOffer: (offerId: string) => `/${prefix}/offers/${offerId}/claim`,
 } as const
 
+// TODO: ADD ZOD VALIDATION
 export const fetchUserOffers = async (): Promise<UserOffersResponse> => {
   const { data } = await api.get<UserOffersResponse>(routes.userOffers)
   return data

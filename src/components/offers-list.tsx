@@ -51,27 +51,34 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
 
   return (
     <div className='flex items-start justify-between gap-4'>
-      <div>
-        <h3 className='text-lg font-medium'>{offer.name}</h3>
-        <p className='text-sm text-gray-500'>{offer.description}</p>
-        <p className='text-green mt-2 font-semibold'>
+      <div className='flex flex-col gap-2'>
+        <div>
+          <h3 className='text-lg font-medium'>{offer.name}</h3>
+          <p className='text-sm text-gray-500'>{offer.description}</p>
+        </div>
+        <p className='text-green font-semibold'>
           Reward: {offer.formattedRewardAmount} {offer.coin.symbol}
         </p>
         {timeLeft && (
-          <div className='mt-2 text-sm text-gray-500'>
+          <div className='text-sm text-gray-500'>
             Available again in: {timeLeft}
           </div>
         )}
       </div>
-      <ButtonWithAudio
-        className={cn(isPending && 'opacity-75')}
-        disabled={!offer.canClaim || isPending}
-        onClick={handleClaim}
-        as='button'
-        bg={offer.canClaim ? 'primary' : 'gray'}
-      >
-        {isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'}
-      </ButtonWithAudio>
+      <div className='flex min-w-34 shrink-0 justify-end'>
+        <ButtonWithAudio
+          className={cn(
+            'w-full',
+            isPending && 'text-lg opacity-75 transition-none',
+          )}
+          disabled={!offer.canClaim || isPending}
+          onClick={handleClaim}
+          as='button'
+          bg={offer.canClaim ? 'primary' : 'gray'}
+        >
+          {isPending ? 'Claiming...' : offer.canClaim ? 'Claim' : 'Claimed'}
+        </ButtonWithAudio>
+      </div>
     </div>
   )
 }
