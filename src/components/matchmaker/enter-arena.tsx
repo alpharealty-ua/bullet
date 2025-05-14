@@ -7,7 +7,7 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
 import { Indicator, Indicators } from '@/components/ui/indicators'
 
-interface EnterArenaProps {
+interface EnterArenaProps extends React.ComponentProps<'div'> {
   onDecline: () => void
   onConfirm: () => void
   onSearch: (amount: number) => void
@@ -35,6 +35,8 @@ const EnterArena = ({
   confirmationTimeoutSeconds,
   matchmakingStatus,
   defaultValue,
+  className,
+  ...props
 }: EnterArenaProps) => {
   const isSearching = matchmakingStatus === 'searching'
   const isFound = matchmakingStatus === 'match-found'
@@ -46,21 +48,21 @@ const EnterArena = ({
     const form = event.target as HTMLFormElement
     const input = form.querySelector('[data-value]') as HTMLInputElement
 
-    if (input === null) {
+    if (input === null || input.value === '') {
       return
     }
 
-    const value = input.value
-
-    if (value === '') {
-      return
-    }
-
-    onSearch(Number(value))
+    onSearch(Number(input.value))
   }
 
   return (
-    <div className='relative mx-auto flex w-full flex-col items-center justify-center gap-2'>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center gap-2',
+        className,
+      )}
+      {...props}
+    >
       <form onSubmit={handleSubmit} className='flex max-w-46 flex-col gap-2'>
         <button className='hover:text-green cursor-pointer text-2xl transition-all'>
           Enter arena
