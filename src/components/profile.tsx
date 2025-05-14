@@ -24,7 +24,11 @@ import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmake
 import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
 import { MatchmakerTrophies } from '@/components/matchmaker/matchmaker-trophies'
 
-const Profile = () => {
+interface ProfileProps {
+  onLogout?: () => void
+}
+
+const Profile = ({ onLogout }: ProfileProps) => {
   const { error: mutationError, isPending } = useLogin()
   const [isSubmitSuccess, setIsSuccess] = useState(false)
   const resetTokens = useAuthStore(({ resetTokens }) => resetTokens)
@@ -38,6 +42,7 @@ const Profile = () => {
   })
 
   const handleLogout = async () => {
+    onLogout && onLogout()
     resetTokens()
   }
 
@@ -68,7 +73,7 @@ const Profile = () => {
           <MatchmakerTrophies />
           <ButtonWithAudio
             as='button'
-            className='self-center'
+            className='shrink-0 self-center'
             bg='red'
             onClick={handleLogout}
           >

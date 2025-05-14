@@ -28,7 +28,9 @@ const ProfileLink = ({ className, ...props }: OmitTo<ProfileLinkProps>) => {
     await new Promise((res) => setTimeout(res))
 
     props.as === 'button'
-      ? modal.show({ contentSlot: <Profile /> })
+      ? modal.show({
+          contentSlot: <Profile onLogout={modal.remove} />,
+        })
       : targetEl.dispatchEvent(
           new PointerEvent('click', { bubbles: true, cancelable: true }),
         )
