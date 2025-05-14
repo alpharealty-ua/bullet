@@ -23,7 +23,7 @@ const MatchmakerPersonalRecentGames = ({
   return (
     <div
       className={cn(
-        'flex min-h-43 w-full flex-col gap-2 overflow-hidden',
+        'flex min-h-40 w-full flex-col gap-2 overflow-hidden',
         className,
       )}
       {...props}
@@ -41,7 +41,7 @@ const MatchmakerPersonalRecentGames = ({
         )
       ) : (
         <div className='custom-scroll grow'>
-          <table className='w-full divide-y divide-gray-200 text-center text-sm'>
+          <table className='w-full divide-y divide-gray-200 text-center text-xs'>
             <thead>
               <tr className='sticky top-0 bg-gray-50 text-gray-500 uppercase'>
                 {['Result', 'Opponent', 'Date', 'LVL change'].map(
