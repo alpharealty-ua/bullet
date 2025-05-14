@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
+import { QUERY_KEYS } from '@/api/api'
 import { useClaimOffer, UserOffer, useUserOffers } from '@/api/offer.api'
 import { cn, formatTimeRemaining } from '@/lib/utils'
 import { ButtonWithAudio } from './ui/button-with-audio'
 
 const OfferItem = ({ offer }: { offer: UserOffer }) => {
+  const queryClient = useQueryClient()
   const { mutate: claimOffer, isPending } = useClaimOffer()
   const [timeLeft, setTimeLeft] = useState<string | null>(null)
 
@@ -20,6 +23,7 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
 
       if (diff <= 0) {
         setTimeLeft(null)
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.userOffers] })
         return
       }
 
@@ -30,7 +34,7 @@ const OfferItem = ({ offer }: { offer: UserOffer }) => {
     const interval = setInterval(updateTime, 1000)
 
     return () => clearInterval(interval)
-  }, [offer.nextClaimAt])
+  }, [offer.nextClaimAt, queryClient])
 
   const handleClaim = () => {
     claimOffer(offer.id, {
