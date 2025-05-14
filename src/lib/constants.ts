@@ -123,6 +123,79 @@ export const TROPHY_IMAGES_SRC_LIST = Object.values(IMAGES.trophy)
   .map((e) => [e.bronze, e.silver, e.gold])
   .flat()
 
+export type TrophyName = keyof typeof IMAGES.trophy
+
+export const trophyDescription = {
+  alphaunit: {
+    name: 'ALPHA UNIT',
+    bronze: {
+      image: IMAGES.trophy.alphaunit.bronze,
+      description: 'record 5 consecutive wins',
+    },
+    silber: {
+      image: IMAGES.trophy.alphaunit.silver,
+      description: 'record 10 consecutive wins',
+    },
+    gold: {
+      image: IMAGES.trophy.alphaunit.gold,
+      description: 'record 25 consecutive wins',
+    },
+  },
+  nobrackes: {
+    name: 'NO BRAKES',
+    bronze: {
+      image: IMAGES.trophy.nobrackes.bronze,
+      description: 'Play 50 games',
+    },
+    silber: {
+      image: IMAGES.trophy.nobrackes.silver,
+      description: 'play 200 games',
+    },
+    gold: {
+      image: IMAGES.trophy.nobrackes.gold,
+      description: 'play 500 games',
+    },
+  },
+  unmoveableforce: {
+    name: 'UNMOVEABLE FORCE',
+    bronze: {
+      image: IMAGES.trophy.unmoveableforce.bronze,
+      description: 'win one best of three series',
+    },
+    silber: {
+      image: IMAGES.trophy.unmoveableforce.silver,
+      description: 'win 5 best of three series in a row',
+    },
+    gold: {
+      image: IMAGES.trophy.unmoveableforce.gold,
+      description: 'win 10 best of three series in a row',
+    },
+  },
+  deathmechanic: {
+    name: 'DEATH MECHANIC',
+    bronze: {
+      image: IMAGES.trophy.deathmechanic.bronze,
+      description: 'perform 5 perfect shot kills in a row',
+    },
+    silber: {
+      image: IMAGES.trophy.deathmechanic.silver,
+      description: 'perform 10 perfect shot kills in a row',
+    },
+    gold: {
+      image: IMAGES.trophy.deathmechanic.gold,
+      description: 'perform 25 perfect shot kills in a row',
+    },
+  },
+} satisfies Record<
+  TrophyName,
+  {
+    name: string
+    bronze: { image: string; description: string }
+    silber: { image: string; description: string }
+    gold: { image: string; description: string }
+  }
+>
+
 export const CHARACTER_LIST = IMAGES.character satisfies Record<
   CharacterName,
   Record<CharacterType, string>

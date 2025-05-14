@@ -13,6 +13,7 @@
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
     "@hookform/resolvers": "^4.1.2",
+    "@radix-ui/react-dialog": "^1.1.13",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@radix-ui/react-tabs": "^1.1.3",
