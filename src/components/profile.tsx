@@ -20,8 +20,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
-import { MatchmakerPersonalRecentGames } from './matchmaker/matchmaker-recent-games'
-import { MatchmakerPersonalStatistics } from './matchmaker/matchmaker-personal-statistics'
+import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmaker-recent-games'
+import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
+import { MatchmakerTrophies } from '@/components/matchmaker/matchmaker-trophies'
 
 const Profile = () => {
   const { error: mutationError, isPending } = useLogin()
@@ -64,6 +65,7 @@ const Profile = () => {
         >
           <MatchmakerPersonalStatistics />
           <MatchmakerPersonalRecentGames />
+          <MatchmakerTrophies />
           <ButtonWithAudio
             as='button'
             className='self-center'
