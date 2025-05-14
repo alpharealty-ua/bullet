@@ -208,7 +208,7 @@ const Rules = () => {
             <h4 className='font-bold'>Multipliers and Probabilities</h4>
             <p>
               Your potential winnings depend on the multiplier assigned at the
-              start of your game:
+              start of your game based on $100 wager:
             </p>
             <table className='w-full divide-y divide-gray-200 text-center text-sm'>
               <thead>
