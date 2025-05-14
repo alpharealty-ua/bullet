@@ -64,9 +64,26 @@ export const IMAGES = {
   shotrevolver3: '/assets/images/shot-revolver-3.png',
   leaderboardstar: '/assets/images/leaderboardstar.png',
   enterarena: '/assets/images/enter-arena.svg',
+  trophy: {
+    // TODO: ADD IMAGE NAME FOR EACH TROPHY
+    1: '/assets/images/trophy-1.png',
+    2: '/assets/images/trophy-2.png',
+    3: '/assets/images/trophy-3.png',
+    4: '/assets/images/trophy-4.png',
+    5: '/assets/images/trophy-5.png',
+    6: '/assets/images/trophy-6.png',
+    7: '/assets/images/trophy-7.png',
+    8: '/assets/images/trophy-8.png',
+    9: '/assets/images/trophy-9.png',
+    10: '/assets/images/trophy-10.png',
+    11: '/assets/images/trophy-11.png',
+    12: '/assets/images/trophy-12.png',
+  },
 } as const
 
-export const SRC_IMAGES = Object.values(IMAGES)
+export const IMAGE_SRC_LIST = Object.values(IMAGES)
+
+export const TROPHY_IMAGES_SRC_LIST = Object.values(IMAGES.trophy)
 
 export const CHARACTER_LIST = {
   nubcat: {
