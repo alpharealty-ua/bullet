@@ -29,6 +29,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
     bet,
     jackpot,
     isStartedGame,
+    isEndedGame,
     multiplier,
     countBullet,
     noMoney,
@@ -115,6 +116,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
                 as='button'
                 className='w-24'
                 image='deal'
+                disabled={isEndedGame}
                 onClick={handleDeal}
               />
             </AnimationInOut>
@@ -128,6 +130,7 @@ const SoloPage = ({ variant }: { variant: VariantGame }) => {
               as='button'
               className='w-24'
               image='pull'
+              disabled={isEndedGame}
               onClick={handlePull}
               skipWaitAnimation
             />

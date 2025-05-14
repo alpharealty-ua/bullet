@@ -54,6 +54,7 @@ const useSolo = (variant: VariantGame) => {
   const jackpot = useSoloStore(({ jackpot }) => jackpot)
   const multiplier = useSoloStore(({ multiplier }) => multiplier)
   const offer = useSoloStore(({ offer }) => offer)
+  const [isEndedGame, setIsEndedGame] = useState(false)
   const isStartedGame = Boolean(gameId)
   const noMoney = !isStartedGame && !(balance > 0 || bet > 0)
   const maxBet = Math.floor(
@@ -89,6 +90,7 @@ const useSolo = (variant: VariantGame) => {
     setJackpot(-1)
     setMultiplier(-1)
     setOffer(null)
+    setIsEndedGame(false)
   }, [
     queryClient,
     gameId,
@@ -166,7 +168,6 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const deal = async () => {
-    // TODO: CHECK END GAME
     if (offer) {
       await acceptOfferMutation(offer.id)
       await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.balance] })
@@ -200,6 +201,7 @@ const useSolo = (variant: VariantGame) => {
   )
 
   const gameOver = useCallback(async () => {
+    setIsEndedGame(true)
     const soundGen = gameOverHandleRef.current?.runSound()
     await soundGen?.next()
     await gameOverHandleRef.current?.updateState({
@@ -213,6 +215,7 @@ const useSolo = (variant: VariantGame) => {
   }, [wait, newGame])
 
   const winGame = useCallback(async () => {
+    setIsEndedGame(true)
     const genRunSound = victoryHandleRef.current?.runSound()
 
     await victoryHandleRef.current?.updateState({
@@ -328,6 +331,7 @@ const useSolo = (variant: VariantGame) => {
     bet,
     jackpot,
     isStartedGame,
+    isEndedGame,
     multiplier,
     countBullet,
     noMoney,
