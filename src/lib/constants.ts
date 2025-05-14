@@ -2,8 +2,6 @@ import { getItem } from '@/lib/localstorage'
 
 export const MULTIPLIERS = [2, 3, 5, 10, 25, 100, 1000]
 
-export type FormatGame = 'solo' | 'duel'
-
 export type VariantGame = 'play' | 'watch'
 
 export const IMAGES = {
@@ -176,8 +174,6 @@ export const LANGUAGE_LIST = [
 export type Language = (typeof LANGUAGE_LIST)[number]['language']
 
 export const LOCAL_STORAGE_KEYS = {
-  token: 'TOKEN',
-  endTime: 'END_TIME',
   showDebug: 'SHOW_DEBUG',
   maxBet: 'MAX_BET',
   minDuelBet: 'MIN_DUEL_BET',
@@ -189,6 +185,7 @@ export const LOCAL_STORAGE_KEYS = {
 
 export type LocalStorageKeys = keyof typeof LOCAL_STORAGE_KEYS
 
+// TODO: TRANSFORM TO OBJECT
 export const MAX_BET = Number(getItem('maxBet') ?? 10_000)
 
 export const MIN_DUEL_BET = Number(getItem('minDuelBet') ?? 1_000)
