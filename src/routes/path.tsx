@@ -15,6 +15,7 @@ export const ROUTES = {
   },
   player: {
     root: '/player',
+    player: (playerId: string) => `/player/${playerId}`,
   },
   solo: {
     root: '/solo',

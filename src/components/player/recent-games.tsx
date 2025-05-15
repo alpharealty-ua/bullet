@@ -1,24 +1,27 @@
-import { useUserStatistics } from '@/api/leaderboard.api'
+import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { cn, formatDate } from '@/lib/utils'
 import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
+import { Link } from 'react-router'
+import { ROUTES } from '@/routes/path'
 
-interface MatchmakerPersonalStatisticsProps
-  extends React.ComponentProps<'div'> {
+interface RecentGamessProps extends React.ComponentProps<'div'> {
+  playerId: string
   short?: boolean
 }
 
-const MatchmakerPersonalRecentGames = ({
+const RecentGames = ({
   short,
   className,
+  playerId,
   ...props
-}: MatchmakerPersonalStatisticsProps) => {
+}: RecentGamessProps) => {
   const {
     data: playerStatistics,
     isLoading,
     isSuccess,
     error,
-  } = useUserStatistics()
+  } = usePlayerStatistics(playerId)
 
   return (
     <div
@@ -71,9 +74,12 @@ const MatchmakerPersonalRecentGames = ({
                     {game.result}
                   </td>
                   <td className='p-1'>
-                    <div className='max-w-30 overflow-hidden text-ellipsis'>
+                    <Link
+                      to={ROUTES.player.player(playerStatistics.userId)}
+                      className='hover:text-green max-w-30 overflow-hidden text-ellipsis'
+                    >
                       {game.opponentUsername}
-                    </div>
+                    </Link>
                   </td>
                   <td className='p-1'>{formatDate(new Date(game.date))}</td>
                   <td className='p-1'>{game.score}</td>
@@ -87,4 +93,4 @@ const MatchmakerPersonalRecentGames = ({
   )
 }
 
-export { MatchmakerPersonalRecentGames }
+export { RecentGames }

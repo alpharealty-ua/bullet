@@ -9,12 +9,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-interface MatchmakerStatisticsProps extends React.ComponentProps<'div'> {}
+interface TrophiesProps extends React.ComponentProps<'div'> {
+  playerId: string
+}
 
-const MatchmakerTrophies = ({
-  className,
-  ...props
-}: MatchmakerStatisticsProps) => {
+const Trophies = ({ className, playerId, ...props }: TrophiesProps) => {
   return (
     <>
       <div
@@ -52,4 +51,4 @@ const MatchmakerTrophies = ({
   )
 }
 
-export { MatchmakerTrophies }
+export { Trophies }

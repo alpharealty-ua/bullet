@@ -11,9 +11,9 @@ import { MIN_DUEL_BET } from '@/lib/constants'
 import { EnterArena } from '@/components/matchmaker/enter-arena'
 import { NextSearch } from '@/components/matchmaker/next-search'
 import { AddMoneyButton } from '@/components/ui/add-money-button'
-import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
-import { MatchmakerTrophies } from '@/components/matchmaker//matchmaker-trophies'
-import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmaker-recent-games'
+import { PersonalStatistics } from '@/components/player/personal-statistics'
+import { Trophies } from '@/components/player/trophies'
+import { RecentGames } from '@/components/player/recent-games'
 
 const Matchmaker = ({
   autoJoin,
@@ -97,9 +97,9 @@ const Matchmaker = ({
                 matchmakingStatus={matchmakingStatus}
                 defaultValue={`${MIN_DUEL_BET}`}
               />
-              <MatchmakerPersonalStatistics />
-              <MatchmakerPersonalRecentGames short />
-              <MatchmakerTrophies />
+              <PersonalStatistics playerId={user.id} />
+              <RecentGames playerId={user.id} short />
+              <Trophies playerId={user.id} />
             </>
           )}
         </div>

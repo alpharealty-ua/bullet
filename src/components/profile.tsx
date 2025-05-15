@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useLogin } from '@/api/auth.api'
+import { useLogin, useUser } from '@/api/auth.api'
 import { useAuthStore } from '@/store/auth.store'
 import {
   ChangePasswordSchema,
@@ -21,15 +21,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Notification } from '@/components/ui/notification'
-import { MatchmakerPersonalRecentGames } from '@/components/matchmaker/matchmaker-recent-games'
-import { MatchmakerPersonalStatistics } from '@/components/matchmaker/matchmaker-personal-statistics'
-import { MatchmakerTrophies } from '@/components/matchmaker/matchmaker-trophies'
+import { RecentGames } from '@/components/player/recent-games'
+import { PersonalStatistics } from '@/components/player/personal-statistics'
+import { Trophies } from '@/components/player/trophies'
 
 interface ProfileProps {
   onLogout?: () => void
 }
 
 const Profile = ({ onLogout }: ProfileProps) => {
+  const user = useUser()
   const { error: mutationError, isPending } = useLogin()
   const [isSubmitSuccess, setIsSuccess] = useState(false)
   const resetTokens = useAuthStore(({ resetTokens }) => resetTokens)
@@ -70,9 +71,9 @@ const Profile = ({ onLogout }: ProfileProps) => {
           value='personalStatistics'
           className='flex h-auto grow flex-col justify-start gap-2 overflow-hidden'
         >
-          <MatchmakerPersonalStatistics />
-          <MatchmakerPersonalRecentGames />
-          <MatchmakerTrophies />
+          <PersonalStatistics playerId={user.id} />
+          <RecentGames playerId={user.id} />
+          <Trophies playerId={user.id} />
           <ButtonWithAudio
             as='button'
             className='min-h-8 self-center text-sm'

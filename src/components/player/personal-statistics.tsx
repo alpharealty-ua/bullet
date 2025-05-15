@@ -1,17 +1,24 @@
-import { useUserStatistics } from '@/api/leaderboard.api'
+import { usePlayerStatistics } from '@/api/leaderboard.api'
 import { cn } from '@/lib/utils'
 import { getPlayerStatistics } from '@/lib/schemas/leaderboard.schema'
 import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
 
-interface MatchmakerPersonalStatisticsProps
-  extends React.ComponentProps<'div'> {}
+interface PersonalStatisticsProps extends React.ComponentProps<'div'> {
+  playerId: string
+}
 
-const MatchmakerPersonalStatistics = ({
+const PersonalStatistics = ({
   className,
+  playerId,
   ...props
-}: MatchmakerPersonalStatisticsProps) => {
-  const { data: statistics, isLoading, isSuccess, error } = useUserStatistics()
+}: PersonalStatisticsProps) => {
+  const {
+    data: statistics,
+    isLoading,
+    isSuccess,
+    error,
+  } = usePlayerStatistics(playerId)
 
   return (
     <div
@@ -61,4 +68,4 @@ const MatchmakerPersonalStatistics = ({
   )
 }
 
-export { MatchmakerPersonalStatistics }
+export { PersonalStatistics }
