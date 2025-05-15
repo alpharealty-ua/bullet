@@ -13,7 +13,7 @@ const Rules = () => {
             Solo
           </TabsTrigger>
         </TabsList>
-        <TabsContent value='duel' className='flex flex-col gap-8 px-4 text-sm'>
+        <TabsContent value='duel' className='flex flex-col gap-6 px-4 text-sm'>
           <div className='flex flex-col gap-2'>
             <h4 className='font-bold'>Game Overview</h4>
             <p>
@@ -113,7 +113,7 @@ const Rules = () => {
             </ul>
           </div>
         </TabsContent>
-        <TabsContent value='solo' className='flex flex-col gap-8 px-4 text-sm'>
+        <TabsContent value='solo' className='flex flex-col gap-6 px-4 text-sm'>
           <div className='flex flex-col gap-2'>
             <h4 className='font-bold'>Game Overview</h4>
             <p>

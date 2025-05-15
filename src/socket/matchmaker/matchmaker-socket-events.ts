@@ -50,7 +50,7 @@ class MatchmakerSocketEvents extends SocketEvents<MatchmakerEventList> {
       this.socket.auth = { token }
       this.socket.connect()
     } catch (error) {
-      console.error(`Error connecting to duel game service:`, error)
+      console.error(`Error connecting to matchmaker service:`, error)
     }
   }
 
