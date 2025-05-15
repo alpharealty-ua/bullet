@@ -1,6 +1,6 @@
 import { GiCrossedBones, GiCheckMark } from 'react-icons/gi'
 
-import { ButtonWithAudio } from './button-with-audio'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 interface ActionsProps {
   onConfirm: () => void

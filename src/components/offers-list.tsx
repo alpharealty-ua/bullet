@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { QUERY_KEYS } from '@/api/api'
 import { useClaimOffer, UserOffer, useUserOffers } from '@/api/offer.api'
 import { cn, formatTimeRemaining } from '@/lib/utils'
-import { ButtonWithAudio } from './ui/button-with-audio'
+import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const OfferItem = ({ offer }: { offer: UserOffer }) => {
   const queryClient = useQueryClient()

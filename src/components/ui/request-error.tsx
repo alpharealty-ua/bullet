@@ -1,5 +1,6 @@
 import { ZodError } from 'zod'
-import { Notification } from './notification'
+
+import { Notification } from '@/components/ui/notification'
 
 interface RequestErrorProps {
   error: Error | null

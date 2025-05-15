@@ -5,8 +5,8 @@ import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { RecentGames } from '@/components/player/recent-games'
 import { PersonalStatistics } from '@/components/player/personal-statistics'
 import { Trophies } from '@/components/player/trophies'
-import { PlayerFriends } from './player/player-friends'
-import { ChangePasswordForm } from './forms/change-password.form'
+import { PlayerFriends } from '@/components/player/player-friends'
+import { ChangePasswordForm } from '@/components/forms/change-password.form'
 
 interface ProfileProps {
   onLogout?: () => void
