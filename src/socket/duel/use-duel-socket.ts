@@ -293,7 +293,6 @@ export const useDuelSocket = ({
         case 'game:reconnected': {
           break
         }
-        // TODO: REMOVE round_current
         case 'game:round_started':
         case 'game:round_current': {
           useDuelStore.setState({ round: payload.roundNumber })

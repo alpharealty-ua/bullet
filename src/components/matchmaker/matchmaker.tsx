@@ -11,7 +11,7 @@ import { MIN_DUEL_BET } from '@/lib/constants'
 import { EnterArena } from '@/components/matchmaker/enter-arena'
 import { NextSearch } from '@/components/matchmaker/next-search'
 import { AddMoneyButton } from '@/components/ui/add-money-button'
-import { PersonalStatistics } from '@/components/player/personal-statistics'
+import { PlayerStatistics } from '@/components/player/player-statistics'
 import { Trophies } from '@/components/player/trophies'
 import { RecentGames } from '@/components/player/recent-games'
 
@@ -91,7 +91,7 @@ const Matchmaker = ({ autoJoin, isNextSearch }: MatchmakerProps) => {
                 onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
                 defaultValue={`${MIN_DUEL_BET}`}
               />
-              <PersonalStatistics playerId={user.id} />
+              <PlayerStatistics playerId={user.id} />
               <RecentGames playerId={user.id} short />
               <Trophies playerId={user.id} />
             </>

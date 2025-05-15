@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { RecentGames } from '@/components/player/recent-games'
-import { PersonalStatistics } from '@/components/player/personal-statistics'
+import { PlayerStatistics } from '@/components/player/player-statistics'
 import { Trophies } from '@/components/player/trophies'
 import { PlayerFriends } from '@/components/player/player-friends'
 import { ChangePasswordForm } from '@/components/forms/change-password.form'
@@ -35,7 +35,7 @@ const Profile = ({ onLogout }: ProfileProps) => {
           value='personalStatistics'
           className='flex h-auto grow flex-col justify-start gap-2 overflow-hidden'
         >
-          <PersonalStatistics playerId={user.id} />
+          <PlayerStatistics playerId={user.id} />
           <RecentGames playerId={user.id} />
           <Trophies playerId={user.id} />
           <ButtonWithAudio

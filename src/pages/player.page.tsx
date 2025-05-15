@@ -1,6 +1,6 @@
 import { useParams } from 'react-router'
 
-import { PlayerProfile } from '@/components/leaderboard/player-profile'
+import { PlayerProfile } from '@/components/player/player-profile'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 
 const PlayerPage = () => {

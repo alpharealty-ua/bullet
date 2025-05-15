@@ -4,15 +4,15 @@ import { getPlayerStatistics } from '@/lib/schemas/leaderboard.schema'
 import { Loading } from '@/components/ui/loading'
 import { RequestError } from '@/components/ui/request-error'
 
-interface PersonalStatisticsProps extends React.ComponentProps<'div'> {
+interface PlayerStatisticsProps extends React.ComponentProps<'div'> {
   playerId: string
 }
 
-const PersonalStatistics = ({
+const PlayerStatistics = ({
   className,
   playerId,
   ...props
-}: PersonalStatisticsProps) => {
+}: PlayerStatisticsProps) => {
   const {
     data: statistics,
     isLoading,
@@ -68,4 +68,4 @@ const PersonalStatistics = ({
   )
 }
 
-export { PersonalStatistics }
+export { PlayerStatistics }
