@@ -1,18 +1,15 @@
 import { useUserStatistics } from '@/api/leaderboard.api'
+import { useDuelStore } from '@/store/duel.store'
 import { IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { LeaderboardButton } from '@/components/ui/leaderboard-button'
 
-const DuelFooter = ({
-  round,
-  hasPull = true,
-  prizepool,
-}: {
-  round?: number
-  hasPull?: boolean
-  prizepool?: number
-}) => {
+const DuelFooter = () => {
+  const round = useDuelStore(({ round }) => round)
+  const pulls = useDuelStore(({ pulls }) => pulls)
+  const prizepool = useDuelStore(({ prizepool }) => prizepool)
   const { data: userStatistics } = useUserStatistics()
+  const hasPull = !pulls.includes(round)
 
   return (
     <footer className='relative flex h-20 shrink-0 justify-between px-2 py-1 text-2xl'>

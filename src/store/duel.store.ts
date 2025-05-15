@@ -16,6 +16,7 @@ interface DuelState {
   leaveGameCalled: boolean
   canPull: boolean
   pulls: number[]
+  prizepool: number
   characterName: CharacterName
   setCharacterName: (characterName: CharacterName) => void
 }
@@ -33,6 +34,7 @@ const useDuelStore = create<DuelState>()(
       isRematchCreated: false,
       leaveGameCalled: false,
       canPull: true,
+      prizepool: 2000,
       pulls: [],
       characterName: 'nubcat',
       setCharacterName: (characterName: CharacterName) =>

@@ -34,9 +34,6 @@ export const useDuelSocket = ({
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
   const isAfk = useAfk()
-  const pulls = useDuelStore(({ pulls }) => pulls)
-  const canPull = useDuelStore(({ canPull }) => canPull)
-  const round = useDuelStore(({ round }) => round)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -45,7 +42,6 @@ export const useDuelSocket = ({
   const bottomGameBarHandleRef = useRef<GameBarHandle>(null)
   const readySetPullHandleRef = useRef<ReadySetPullHandle>(null)
   const rematchRequestHandleRef = useRef<RematchRequestHandle>(null)
-  const hasPull = !pulls.includes(round)
 
   const reset = useCallback(async () => {
     await Promise.all([
@@ -213,8 +209,8 @@ export const useDuelSocket = ({
       playerId,
     }
 
-    const prevPulls = useDuelStore.getState().pulls
-    useDuelStore.setState({ pulls: [...prevPulls, round] })
+    const { pulls, round } = useDuelStore.getState()
+    useDuelStore.setState({ pulls: [...pulls, round] })
 
     duelEvents.pullTrigger(payload)
   }
@@ -553,11 +549,8 @@ export const useDuelSocket = ({
     bottomGameBarHandleRef,
     readySetPullHandleRef,
     rematchRequestHandleRef,
-    round,
     pull,
     requestRematch,
     cancelRematch,
-    hasPull,
-    canPull,
   }
 }

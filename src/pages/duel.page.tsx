@@ -10,7 +10,6 @@ import { useDuelStore } from '@/store/duel.store'
 import { useAuthStore } from '@/store/auth.store'
 import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { VariantGame } from '@/lib/constants'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { DuelFooter } from '@/components/duel/footer-duel'
 import { Bar } from '@/components/bar/bar'
 import { DuelGameBar } from '@/components/duel/duel-game-bar'
@@ -21,6 +20,7 @@ import { Victory } from '@/components/victory'
 import { RematchRequest } from '@/components/rematch-request'
 import { Matchmaker } from '@/components/matchmaker/matchmaker'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
+import { DuelPullButton } from '@/components/duel/duel-button'
 
 const useIsHMR = () => {
   const isHMR = useRef(false)
@@ -62,28 +62,13 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
     bottomGameBarHandleRef,
     readySetPullHandleRef,
     rematchRequestHandleRef,
-    round,
     pull,
     requestRematch,
     cancelRematch,
-    hasPull,
-    canPull,
   } = useDuelSocket({
     gameId,
     playerId,
   })
-
-  const handlePull = async () => {
-    await pull()
-  }
-
-  const handleRequestRematch = async () => {
-    requestRematch()
-  }
-
-  const handleCancelRematch = async () => {
-    cancelRematch()
-  }
 
   const handlePlayerClick = () => {
     frontCharacterHandleRef.current?.toggleInfo()
@@ -222,15 +207,8 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
               in={typePage === 'duel'}
               className='absolute right-0 bottom-0 left-0 flex items-center justify-between px-4'
             >
-              <div className='relative ml-auto'>
-                <ButtonWithAudio
-                  as='button'
-                  className='w-26'
-                  image='pull'
-                  onClick={handlePull}
-                  disabled={!hasPull || !canPull}
-                  skipWaitAnimation
-                />
+              <div className='ml-auto'>
+                <DuelPullButton onPull={pull} />
               </div>
             </AnimationInOut>
           </AnimationInOut>
@@ -240,9 +218,9 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
           />
         </div>
         <RematchRequest
-          onRequest={handleRequestRematch}
-          onCancel={handleCancelRematch}
-          onCountdownEnd={handleCancelRematch}
+          onRequest={requestRematch}
+          onCancel={cancelRematch}
+          onCountdownEnd={cancelRematch}
           rematchRequestHandleRef={rematchRequestHandleRef}
         />
         {typePage !== 'enter-arena' && (
@@ -254,9 +232,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
         gameOverHandleRef={gameOverHandleRef}
         onClick={handleGameOverClick}
       />
-      {typePage !== 'enter-arena' && (
-        <DuelFooter round={round} hasPull={hasPull} prizepool={2000} />
-      )}
+      {typePage !== 'enter-arena' && <DuelFooter />}
     </>
   )
 }
