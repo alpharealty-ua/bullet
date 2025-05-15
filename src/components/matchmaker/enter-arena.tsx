@@ -125,6 +125,7 @@ const EnterArena = ({
               time={DUEL_COUNTDOWN}
               onEnd={onMatchCreatedCountdownEnd}
               className='inline-flex text-3xl'
+              mute
             />
           )}
         </div>
@@ -139,7 +140,7 @@ const EnterArena = ({
                 <Countdown
                   time={confirmationTimeoutSeconds}
                   className='min-w-6'
-                  playSound
+                  mute
                 />
               </div>
               <Indicators indicators={indicators} className='min-w-10' />
