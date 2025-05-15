@@ -2,6 +2,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useProfile } from '@/api/auth.api'
 import { ROUTES } from '@/routes/path'
 import { useAuthStore } from '@/store/auth.store'
+import { PlayerNotification } from '@/components/player-notification'
 import { Logo } from '@/components/ui/logo'
 import { Balance } from '@/components/balance/balance'
 import { MoneyBagButton } from '@/components/ui/money-bag-button'
@@ -78,6 +79,7 @@ export const Header = ({
           </div>
         )}
       </div>
+      <PlayerNotification />
     </header>
   )
 }
