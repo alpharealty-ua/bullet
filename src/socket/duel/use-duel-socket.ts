@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -6,11 +6,12 @@ import { QUERY_KEYS } from '@/api/api'
 import { useBalance } from '@/api/wallet.api'
 import { ROUTES } from '@/routes/path'
 import { useAfk } from '@/hooks/use-afk'
-import { BaseDuelPayload, Winner } from '@/socket/duel/duel-socket.types'
+import { BaseDuelPayload } from '@/socket/duel/duel-socket.types'
 import { DuelEventList } from '@/socket/duel/duel-socket-events'
 import { duelEvents } from '@/socket/socket'
 import { notify } from '@/socket/utils'
 import { useSettingsStore } from '@/store/settings.store'
+import { useDuelStore } from '@/store/duel.store'
 import { wait } from '@/lib/utils'
 import { PlayerStatisticsSchema } from '@/lib/schemas/leaderboard.schema'
 import { MIN_DUEL_BET } from '@/lib/constants'
@@ -33,14 +34,9 @@ export const useDuelSocket = ({
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
   const isAfk = useAfk()
-  const [pulls, setPulls] = useState<number[]>([])
-  const [canPull, setCanPull] = useState(true)
-  const [round, setRound] = useState(1)
-  const [winner, setWinner] = useState<Winner | null>(null)
-  const [isGameEnded, setIsGameEnded] = useState(false)
-  const [isLeftOpponent, setIsLeftOpponent] = useState(false)
-  const [isDisconnectedOpponent, setIsDisconnectedOpponent] = useState(false)
-  const [isRematchCreated, setIsRematchCreated] = useState(false)
+  const pulls = useDuelStore(({ pulls }) => pulls)
+  const canPull = useDuelStore(({ canPull }) => canPull)
+  const round = useDuelStore(({ round }) => round)
   const gameOverHandleRef = useRef<GameOverHandle>(null)
   const victoryHandleRef = useRef<VictoryHandle>(null)
   const frontCharacterHandleRef = useRef<CharacterHandle>(null)
@@ -62,15 +58,7 @@ export const useDuelSocket = ({
       rematchRequestHandleRef.current?.reset(),
     ])
 
-    setPulls([])
-    setCanPull(true)
-    duelEventsStateRef.current.setRound(1)
-    duelEventsStateRef.current.setWinner(null)
-    duelEventsStateRef.current.setIsGameEnded(false)
-    duelEventsStateRef.current.setIsLeftOpponent(false)
-    duelEventsStateRef.current.setIsDisconnectedOpponent(false)
-    duelEventsStateRef.current.setIsRematchCreated(false)
-    duelEventsStateRef.current.leaveGameCalled = false
+    useDuelStore.setState(useDuelStore.getInitialState())
   }, [])
 
   const opponentPull = useCallback(async (shot: boolean) => {
@@ -103,7 +91,7 @@ export const useDuelSocket = ({
   }
 
   const cancelRematch = () => {
-    if (isRematchCreated) {
+    if (useDuelStore.getState().isRematchCreated) {
       return
     }
 
@@ -112,21 +100,25 @@ export const useDuelSocket = ({
 
   const leaveGame = useCallback(
     async (wait = true) => {
-      if (duelEventsStateRef.current.leaveGameCalled) {
+      const { leaveGameCalled, isGameEnded, resultPromise } =
+        useDuelStore.getState()
+
+      if (leaveGameCalled) {
         return
       }
 
-      if (!duelEventsStateRef.current.isGameEnded) {
+      if (!isGameEnded) {
         return
       }
 
-      duelEventsStateRef.current.leaveGameCalled = true
+      useDuelStore.setState({ leaveGameCalled: true })
 
       if (wait) {
-        await duelEventsStateRef.current.resultPromise
+        await resultPromise
       }
+      const { winner } = useDuelStore.getState()
 
-      const hasWinner = Boolean(duelEventsStateRef.current.winner)
+      const hasWinner = Boolean(winner)
       const canNext = hasWinner && duelEventsStateRef.current.canNext()
       await reset()
       navigate(canNext ? ROUTES.duel.next : ROUTES.duel.enterArena, {
@@ -221,52 +213,18 @@ export const useDuelSocket = ({
       playerId,
     }
 
-    setPulls((p) => [...p, round])
+    const prevPulls = useDuelStore.getState().pulls
+    useDuelStore.setState({ pulls: [...prevPulls, round] })
 
     duelEvents.pullTrigger(payload)
   }
 
-  // TODO: USE ZUSTAND
   const duelEventsStateRef = useRef({
-    round,
-    setRound: (round: number) => {
-      setRound((duelEventsStateRef.current.round = round))
-    },
-    winner,
-    setWinner: (winner: Winner | null) => {
-      setWinner((duelEventsStateRef.current.winner = winner))
-    },
-    pullTriggerPromise: Promise.resolve(),
-    resultPromise: Promise.resolve(),
     balance,
     canNext: (): boolean => {
       const balance = duelEventsStateRef.current.balance
       return Boolean(!(balance < MIN_DUEL_BET) && !isAfk())
     },
-    isLeftOpponent,
-    setIsLeftOpponent: (isLeftOpponent: boolean) => {
-      setIsLeftOpponent(
-        (duelEventsStateRef.current.isLeftOpponent = isLeftOpponent),
-      )
-    },
-    isDisconnectedOpponent,
-    setIsDisconnectedOpponent: (isDisconnectedOpponent: boolean) => {
-      setIsDisconnectedOpponent(
-        (duelEventsStateRef.current.isDisconnectedOpponent =
-          isDisconnectedOpponent),
-      )
-    },
-    isGameEnded,
-    setIsGameEnded: (isGameEnded: boolean) => {
-      setIsGameEnded((duelEventsStateRef.current.isGameEnded = isGameEnded))
-    },
-    isRematchCreated,
-    setIsRematchCreated: (isRematchCreated: boolean) => {
-      setIsRematchCreated(
-        (duelEventsStateRef.current.isRematchCreated = isRematchCreated),
-      )
-    },
-    leaveGameCalled: false,
   })
 
   useEffect(() => {
@@ -290,13 +248,8 @@ export const useDuelSocket = ({
         winner,
         isDisconnectedOpponent,
         isLeftOpponent,
-        setRound,
-        setWinner,
-        setIsGameEnded: setGameEnded,
-        setIsLeftOpponent,
-        setIsDisconnectedOpponent,
-        setIsRematchCreated,
-      } = duelEventsStateRef.current
+        pullTriggerPromise,
+      } = useDuelStore.getState()
 
       switch (type) {
         case 'connect': {
@@ -313,8 +266,7 @@ export const useDuelSocket = ({
         case 'game:joined': {
           const { game } = payload
           if (payload.game.status === 'completed') {
-            setRound(game.currentRound)
-            setCanPull(false)
+            useDuelStore.setState({ round: game.currentRound, canPull: false })
 
             const losePlayer = game.players.find(
               (p) => p.status === 'eliminated',
@@ -348,7 +300,7 @@ export const useDuelSocket = ({
         // TODO: REMOVE round_current
         case 'game:round_started':
         case 'game:round_current': {
-          setRound(payload.roundNumber)
+          useDuelStore.setState({ round: payload.roundNumber })
           return
         }
         case 'game:ready':
@@ -357,12 +309,7 @@ export const useDuelSocket = ({
           if (payload.roundNumber === 1) {
             readySetPullHandleRef.current?.start(payload.event)
 
-            if (type === 'game:ready' || type === 'game:take') {
-              setCanPull(false)
-            }
-            if (type === 'game:pull') {
-              setCanPull(true)
-            }
+            useDuelStore.setState({ canPull: type === 'game:pull' })
           }
 
           return
@@ -390,11 +337,11 @@ export const useDuelSocket = ({
             await Promise.all([highlightPromise, pullPromise])
 
             if (payload.fired) {
-              setCanPull(false)
+              useDuelStore.setState({ canPull: false })
             }
           }
 
-          duelEventsStateRef.current.pullTriggerPromise = pullTrigger()
+          useDuelStore.setState({ pullTriggerPromise: pullTrigger() })
           return
         }
         case 'game:player_won': {
@@ -418,17 +365,19 @@ export const useDuelSocket = ({
           const { winner: gameWinner = null } = payload
           const { rematchScores, canRematch } = payload.rematchInfo
 
-          setWinner(gameWinner)
-          setGameEnded(true)
-          setCanPull(false)
+          useDuelStore.setState({
+            winner: gameWinner,
+            isGameEnded: true,
+            canPull: false,
+          })
 
-          await duelEventsStateRef.current.pullTriggerPromise
+          await pullTriggerPromise
 
           const isDraw = !gameWinner
           const isWin = gameWinner?.id === playerId
 
           const result = isDraw ? drawGame : isWin ? winGame : gameOver
-          duelEventsStateRef.current.resultPromise = result()
+          useDuelStore.setState({ resultPromise: result() })
 
           const [scorePlayer1 = 0, scorePlayer2 = 0] =
             Object.values(rematchScores)
@@ -481,7 +430,7 @@ export const useDuelSocket = ({
         case 'game:rematch_created': {
           notify(payload.message, 'info')
 
-          setIsRematchCreated(true)
+          useDuelStore.setState({ isRematchCreated: true })
 
           await rematchRequestHandleRef.current?.action('user', 'confirm')
           await rematchRequestHandleRef.current?.action('opponnent', 'confirm')
@@ -517,7 +466,7 @@ export const useDuelSocket = ({
           const isOpponent = !isUser
 
           if (isOpponent) {
-            setIsLeftOpponent(true)
+            useDuelStore.setState({ isLeftOpponent: true })
 
             leaveGame()
           }
@@ -528,7 +477,7 @@ export const useDuelSocket = ({
           const isOpponent = !isUser
 
           if (isOpponent) {
-            setIsDisconnectedOpponent(true)
+            useDuelStore.setState({ isDisconnectedOpponent: true })
 
             leaveGame()
           }
@@ -544,12 +493,15 @@ export const useDuelSocket = ({
                 if (
                   payload.message.includes('You are not a participant in game')
                 ) {
-                  setGameEnded(true)
+                  useDuelStore.setState({ isGameEnded: true })
                   leaveGame()
                 }
               }
               if (event === 'game:pull_trigger') {
-                setPulls((p) => p.filter((_, i, arr) => i !== arr.length - 1))
+                const prevPulls = useDuelStore.getState().pulls
+                useDuelStore.setState({
+                  pulls: prevPulls.filter((_, i, arr) => i !== arr.length - 1),
+                })
               }
               notify(payload.message, 'error')
               return
@@ -601,12 +553,11 @@ export const useDuelSocket = ({
     bottomGameBarHandleRef,
     readySetPullHandleRef,
     rematchRequestHandleRef,
+    round,
     pull,
     requestRematch,
     cancelRematch,
-    reset,
     hasPull,
     canPull,
-    round,
   }
 }
