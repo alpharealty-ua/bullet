@@ -3,9 +3,9 @@ import { IoPlay } from 'react-icons/io5'
 import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 import { DUEL_COUNTDOWN, IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
 import { Indicator, Indicators } from '@/components/ui/indicators'
+import { Actions } from '@/components/ui/actions'
 
 interface EnterArenaProps extends React.ComponentProps<'div'> {
   onDecline: () => void
@@ -129,29 +129,20 @@ const EnterArena = ({
           )}
         </div>
         {isFound && (
-          <div className='animate-in fade-in flex max-w-80 flex-col gap-1 text-center duration-500'>
-            <div className='text-xs'>
-              A match has been found. Please confirm to join the&nbsp;game.
-            </div>
-            <Indicators indicators={indicators} />
-            <Countdown time={confirmationTimeoutSeconds} />
-            <div className='flex justify-between gap-4'>
-              <ButtonWithAudio
-                as='button'
-                bg='green'
-                className='w-full text-sm'
-                onClick={onConfirm}
-              >
-                Confirm
-              </ButtonWithAudio>
-              <ButtonWithAudio
-                as='button'
-                bg='red'
-                className='w-full text-sm'
-                onClick={onDecline}
-              >
-                Decline
-              </ButtonWithAudio>
+          <div className='animate-in fade-in mx-auto flex max-w-80 flex-col gap-1 text-center duration-500'>
+            <div className='mx-auto flex w-full'>
+              <div className='flex items-center gap-2 border-2 border-r-0 bg-white p-2'>
+                <div className='text-left text-[10px]'>
+                  A match has been found. Please confirm to join the&nbsp;game.
+                </div>
+                <Actions onConfirm={onConfirm} onCancel={onDecline} />
+                <Countdown
+                  time={confirmationTimeoutSeconds}
+                  className='min-w-6'
+                  playSound
+                />
+              </div>
+              <Indicators indicators={indicators} className='min-w-10' />
             </div>
           </div>
         )}
