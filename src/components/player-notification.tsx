@@ -15,7 +15,7 @@ const PlayerNotification = () => {
       setNotifications((p) => [...p, { id: String(Date.now()) }])
       setCount((p) => p + 1)
     },
-    count < 3 ? 2000 : null,
+    count < 3 ? 2345 : null,
   )
 
   const handleCancelClick = (index: number) => {
@@ -34,8 +34,8 @@ const PlayerNotification = () => {
             'slide-out-to-right slide-in-from-right',
           )}
         >
-          <div className='text-xs'>
-            Accept friendship from player{el.id.slice(-2)}
+          <div className='max-w-60 overflow-hidden text-xs text-nowrap text-ellipsis'>
+            Accept friendship from player{el.id.slice(-4)}
           </div>
           <Actions
             onConfirm={() => handleCancelClick(i)}
