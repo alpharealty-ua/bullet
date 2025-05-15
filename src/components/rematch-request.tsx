@@ -1,12 +1,11 @@
 import { useImperativeHandle } from 'react'
-import { RxCheck, RxCross1 } from 'react-icons/rx'
 
 import { UpdateShowMethods, useUpdateShow } from '@/hooks/use-update-show'
 import { cn } from '@/lib/utils'
 import { AnimationInOut } from '@/components/ui/animation-in-out'
 import { Indicator, Indicators } from '@/components/ui/indicators'
-import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
+import { Actions } from '@/components/ui/actions'
 
 export interface RematchRequestHandle
   extends UpdateShowMethods<RematchRequestState> {
@@ -72,25 +71,7 @@ const RematchRequest = ({
     >
       <div className='2xs:border-t-3 flex items-center gap-2 border-t-2 border-black bg-white p-2'>
         <div className='text-2xl'>Rematch?</div>
-
-        <div className='flex justify-between gap-1'>
-          <ButtonWithAudio
-            as='button'
-            bg='white'
-            className='text-green h-4 w-4 rounded-full p-0 pb-0.5 text-xl'
-            onClick={onRequest}
-          >
-            <RxCheck />
-          </ButtonWithAudio>
-          <ButtonWithAudio
-            as='button'
-            bg='white'
-            className='text-red h-4 w-4 rounded-full p-0 text-sm'
-            onClick={onCancel}
-          >
-            <RxCross1 />
-          </ButtonWithAudio>
-        </div>
+        <Actions onConfirm={onRequest} onCancel={onCancel} />
         <Countdown
           time={7}
           onEnd={onCountdoenEnd}
