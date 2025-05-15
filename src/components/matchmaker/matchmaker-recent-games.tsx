@@ -76,7 +76,7 @@ const MatchmakerPersonalRecentGames = ({
                     </div>
                   </td>
                   <td className='p-1'>{formatDate(new Date(game.date))}</td>
-                  <td className='p-1'>{game.opponentScore}</td>
+                  <td className='p-1'>{game.score}</td>
                 </tr>
               ))}
             </tbody>
