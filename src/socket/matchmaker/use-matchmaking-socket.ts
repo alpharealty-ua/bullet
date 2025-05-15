@@ -1,189 +1,131 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { matchmakerEvents, matchmakerSocket } from '@/socket/socket'
+import { matchmakerEvents } from '@/socket/socket'
 import { MatchmakerEventList } from '@/socket/matchmaker/matchmaker-socket-events'
 import {
-  PingData,
-  MatchmakingStatus,
-  ConnectionStatus,
-  Statistics,
   MatchDetails,
   AdditionalPlayerMetadata,
 } from '@/socket/matchmaker/matchmaker-soket.types'
 import { useInterval } from '@/hooks/use-interval'
 import { notify } from '@/socket/utils'
-import { useDuelStore } from '@/store/duel.store'
 import { useSettingsStore } from '@/store/settings.store'
+import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { wait } from '@/lib/utils'
-import { Indicator } from '@/components/ui/indicators'
 
 const useMatchmakingSocket = ({
-  token,
   autoJoin,
   metadata,
 }: {
-  token: string
   autoJoin: boolean
   metadata: AdditionalPlayerMetadata
 }) => {
   const queryClient = useQueryClient()
   const playSound = useSettingsStore(({ playSound }) => playSound)
-  const [pingData, setPingData] = useState<PingData>({
-    ping: 0,
-    jitter: 0,
-    measurements: 0,
-    history: [],
-    sequence: 0,
-  })
-  const [statistics, setStatistics] = useState<Statistics>({
-    playersInQueue: 0,
-    totalMatches: 0,
-    averageWaitTime: 0,
-  })
-  const [confirmationTimeoutSeconds, setConfirmationTimeoutSeconds] =
-    useState(0)
-  const [matchmakingStatus, setMatchmakingStatus] =
-    useState<MatchmakingStatus>('not-in-queue')
-  const [connectionStatus, setConnectionStatus] =
-    useState<ConnectionStatus>('disconnected')
-  const [authenticated, setAuthenticated] = useState(false)
-  const [indicators, setIndicators] = useState<
-    { action: Indicator; playerId: string }[]
-  >([])
-  const setMatchDetails = useDuelStore(({ setMatchDetails }) => setMatchDetails)
-  const matchDetails = useDuelStore(({ matchDetails }) => matchDetails)
-  const [matchId, setMatchId] = useState<string | null>(null)
-  const [gameId, setGameId] = useState<string | null>(null)
-  const [playerId, setPlayerId] = useState<string | null>(null)
-
-  const matchmakerEventsStateRef = useRef({
-    matchId,
-    playerId,
-    matchmakingStatus,
-    setMatchId: (matchId: string | null) => {
-      setMatchId((matchmakerEventsStateRef.current.matchId = matchId))
-    },
-    setPlayerId: (playerId: string | null) => {
-      setPlayerId((matchmakerEventsStateRef.current.playerId = playerId))
-    },
-    setMatchmakingStatus: (status: MatchmakingStatus) => {
-      setMatchmakingStatus(
-        (matchmakerEventsStateRef.current.matchmakingStatus = status),
-      )
-    },
-  })
 
   useEffect(() => {
     const handle = async (event: MatchmakerEventList) => {
       const { type, payload } = event
-      const {
-        matchId,
-        playerId,
-        matchmakingStatus,
-        setMatchId,
-        setPlayerId,
-        setMatchmakingStatus,
-      } = matchmakerEventsStateRef.current
+      const { matchId, playerId, matchmakingStatus } =
+        useMatchmakerStore.getState()
 
       switch (type) {
         case 'connect': {
           notify('Connected to matchmaker service', 'info')
-          setConnectionStatus('authenticating')
-          setGameId(null)
+          useMatchmakerStore.setState({
+            connectionStatus: 'authenticating',
+            gameId: null,
+          })
           return
         }
         case 'connect_error': {
-          setConnectionStatus('disconnected')
+          useMatchmakerStore.setState({ connectionStatus: 'disconnected' })
           break
         }
         case 'disconnect': {
-          setConnectionStatus('disconnected')
-          setMatchmakingStatus('not-in-queue')
-
-          setPingData({
-            ping: 0,
-            jitter: 0,
-            measurements: 0,
-            history: [],
-            sequence: 0,
-          })
-          setAuthenticated(false)
-          setGameId(null)
+          useMatchmakerStore.setState(useMatchmakerStore.getInitialState())
           return
         }
         case 'pingData': {
-          setPingData(payload)
+          useMatchmakerStore.setState({
+            pingData: payload,
+          })
           return
         }
         case 'info': {
           if (payload.authenticated) {
-            setAuthenticated(true)
-            setConnectionStatus('authenticated')
-
-            setStatistics((p) => ({
-              ...p,
-              playersInQueue: payload.playersInQueue || 0,
-            }))
+            const prevStatistics = useMatchmakerStore.getState().statistics
+            useMatchmakerStore.setState({
+              authenticated: true,
+              connectionStatus: 'authenticated',
+              statistics: {
+                ...prevStatistics,
+                playersInQueue: payload.playersInQueue || 0,
+              },
+            })
 
             if (payload.currentPing) {
-              setPingData((p) => ({
-                ...p,
-                ping: payload.currentPing ?? p.ping,
-                jitter: payload.currentJitter ?? p.jitter,
-                measurements: payload.measurementsCount || p.measurements,
-              }))
+              const prevPingData = useMatchmakerStore.getState().pingData
+              useMatchmakerStore.setState({
+                pingData: {
+                  ...prevPingData,
+                  ping: payload.currentPing ?? prevPingData.ping,
+                  jitter: payload.currentJitter ?? prevPingData.jitter,
+                  measurements:
+                    payload.measurementsCount || prevPingData.measurements,
+                },
+              })
             }
-          } else {
-            setAuthenticated(false)
-            setConnectionStatus('not-authenticated')
           }
+
+          useMatchmakerStore.setState({
+            authenticated: payload.authenticated,
+            connectionStatus: payload.authenticated
+              ? 'authenticated'
+              : 'not-authenticated',
+          })
           return
         }
         case 'joinedMatchmaking': {
           notify('You have Joined the matchmaking queue', 'success')
-          payload.message && notify(payload.message, 'info')
 
           if (matchmakingStatus === 'not-in-queue') {
-            setMatchmakingStatus('searching')
-            setMatchDetails(null)
+            useMatchmakerStore.setState({
+              matchmakingStatus: 'searching',
+              matchDetails: null,
+              playerId: payload.playerId,
+            })
           }
-
-          setPlayerId(payload.playerId)
 
           return
         }
         case 'leftMatchmaking': {
           notify('You have left the matchmaking queue', 'info')
 
-          if (matchmakingStatus === 'searching') {
-            setMatchmakingStatus('not-in-queue')
-          }
-
-          setPlayerId(null)
+          useMatchmakerStore.setState({
+            matchmakingStatus:
+              matchmakingStatus === 'searching' ? 'not-in-queue' : undefined,
+            playerId: payload.playerId,
+          })
 
           return
         }
         case 'matchFound': {
           notify('Match found! Please confirm to join the game.', 'success')
 
-          setMatchmakingStatus('match-found')
-          setMatchId(payload.matchId)
-          setIndicators(
-            payload.players.map((playerId) => ({
+          playSound('matchFound')
+
+          useMatchmakerStore.setState({
+            matchmakingStatus: 'match-found',
+            matchId: payload.matchId,
+            indicators: payload.players.map((playerId) => ({
               playerId,
               action: 'init',
             })),
-          )
-
-          playSound('matchFound')
-
-          if (payload.confirmationRequired) {
-            const confirmationTimeoutSeconds =
-              payload.confirmationTimeoutSeconds || 10
-
-            setConfirmationTimeoutSeconds(confirmationTimeoutSeconds)
-          }
+            confirmationTimeoutSeconds: payload.confirmationRequired
+              ? payload.confirmationTimeoutSeconds || 10
+              : undefined,
+          })
 
           return
         }
@@ -192,34 +134,37 @@ const useMatchmakingSocket = ({
             return
           }
 
-          setIndicators((prev) =>
-            prev.map((indicator) =>
+          const prevIndicators = useMatchmakerStore.getState().indicators
+          useMatchmakerStore.setState({
+            indicators: prevIndicators.map((indicator) =>
               payload.confirmedPlayers.includes(indicator.playerId)
                 ? { ...indicator, action: 'confirm' }
                 : { ...indicator },
             ),
-          )
+          })
 
           return
         }
         case 'matchCanceled': {
+          const reason =
+            payload.reason === 'confirmation_timeout'
+              ? 'Not all players confirmed in time'
+              : payload.reason === 'player_declined'
+                ? 'A player declined the match'
+                : 'Unknown reason'
+          notify(`Match canceled: ${reason}`, 'warning')
+
+          playSound('matchCanceled')
+
           const status =
             payload.reason === 'player_declined' &&
             payload.declinedBy !== playerId
               ? 'searching'
               : 'not-in-queue'
-          setMatchmakingStatus(status)
 
-          playSound('matchCanceled')
-
-          let reason = 'Unknown reason'
-          if (payload.reason === 'confirmation_timeout') {
-            reason = 'Not all players confirmed in time'
-          } else if (payload.reason === 'player_declined') {
-            reason = 'A player declined the match'
-          }
-
-          notify(`Match canceled: ${reason}`, 'warning')
+          useMatchmakerStore.setState({
+            matchmakingStatus: status,
+          })
 
           return
         }
@@ -228,8 +173,6 @@ const useMatchmakingSocket = ({
             'Match created successfully! Game is being prepared.',
             'success',
           )
-
-          setMatchmakingStatus('match-created')
 
           playSound('matchConfirmed')
 
@@ -255,20 +198,27 @@ const useMatchmakingSocket = ({
                   },
           }
 
-          setMatchDetails(matchDetails)
-          setMatchId(null)
+          useMatchmakerStore.setState({
+            matchmakingStatus: 'match-created',
+            matchDetails,
+            matchId: null,
+          })
 
           return
         }
         case 'duelGameCreated': {
-          setGameId(payload.gameId)
+          useMatchmakerStore.setState({
+            gameId: payload.gameId,
+          })
           return
         }
         case 'stats': {
-          setStatistics({
-            playersInQueue: payload.playersInQueue || 0,
-            totalMatches: payload.totalMatches || 0,
-            averageWaitTime: Math.round(payload.averageWaitTime || 0),
+          useMatchmakerStore.setState({
+            statistics: {
+              playersInQueue: payload.playersInQueue || 0,
+              totalMatches: payload.totalMatches || 0,
+              averageWaitTime: Math.round(payload.averageWaitTime || 0),
+            },
           })
           return
         }
@@ -278,8 +228,12 @@ const useMatchmakingSocket = ({
           switch (message) {
             case 'Authentication failed': {
               notify(message, 'error')
-              setConnectionStatus('authentication-failed')
-              setAuthenticated(false)
+
+              useMatchmakerStore.setState({
+                connectionStatus: 'authentication-failed',
+                authenticated: false,
+              })
+
               return
             }
             case 'Cannot leave matchmaking while a match confirmation is pending': {
@@ -305,13 +259,7 @@ const useMatchmakingSocket = ({
     return () => {
       matchmakerEvents.removeEventsListener(handle)
     }
-  }, [playSound, queryClient, setMatchDetails])
-
-  const toggleConnection = useCallback(() => {
-    matchmakerSocket.connected
-      ? matchmakerEvents.disconnect()
-      : matchmakerEvents.connect(token)
-  }, [token])
+  }, [playSound, queryClient])
 
   const joinMatchmaking = useCallback(() => {
     matchmakerEvents.joinMatchmaking(metadata)
@@ -322,6 +270,8 @@ const useMatchmakingSocket = ({
   }, [])
 
   const confirmMatch = () => {
+    const matchId = useMatchmakerStore.getState().matchId
+
     if (matchId === null) {
       return
     }
@@ -330,6 +280,8 @@ const useMatchmakingSocket = ({
   }
 
   const declineMatch = () => {
+    const matchId = useMatchmakerStore.getState().matchId
+
     if (matchId === null) {
       return
     }
@@ -341,7 +293,7 @@ const useMatchmakingSocket = ({
     matchmakerEvents.getStats()
   }
 
-  useInterval(getStats, matchmakingStatus === 'match-found' ? null : 1000)
+  useInterval(getStats, 1000)
 
   useEffect(() => {
     if (!autoJoin) {
@@ -369,22 +321,10 @@ const useMatchmakingSocket = ({
   }, [autoJoin, joinMatchmaking, leaveMatchmaking])
 
   return {
-    toggleConnection,
-    matchmakingStatus,
-    connectionStatus,
-    authenticated,
     joinMatchmaking,
     leaveMatchmaking,
-    confirmMatch,
     declineMatch,
-    pingData,
-    statistics,
-    // TODO: USE REF
-    indicators: indicators.map((i) => i.action),
-    matchDetails,
-    confirmationTimeoutSeconds,
-    getStats,
-    gameId,
+    confirmMatch,
   }
 }
 

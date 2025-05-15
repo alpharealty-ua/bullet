@@ -5,7 +5,7 @@ import { useBalance } from '@/api/wallet.api'
 import { useMatchmakingSocket } from '@/socket/matchmaker/use-matchmaking-socket'
 import { useUser } from '@/api/auth.api'
 import { useDuelStore } from '@/store/duel.store'
-import { useAuthStore } from '@/store/auth.store'
+import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { ROUTES } from '@/routes/path'
 import { MIN_DUEL_BET } from '@/lib/constants'
 import { EnterArena } from '@/components/matchmaker/enter-arena'
@@ -15,15 +15,13 @@ import { PersonalStatistics } from '@/components/player/personal-statistics'
 import { Trophies } from '@/components/player/trophies'
 import { RecentGames } from '@/components/player/recent-games'
 
-const Matchmaker = ({
-  autoJoin,
-  isNextSearch,
-}: {
+interface MatchmakerProps {
   autoJoin?: boolean
   isNextSearch?: boolean
-}) => {
+}
+
+const Matchmaker = ({ autoJoin, isNextSearch }: MatchmakerProps) => {
   const user = useUser()
-  const token = useAuthStore(({ accessToken }) => accessToken)
   const characterName = useDuelStore(({ characterName }) => characterName)
   const navigate = useNavigate()
   const { data: balance } = useBalance()
@@ -38,28 +36,22 @@ const Matchmaker = ({
     [user, characterName],
   )
 
-  const {
-    joinMatchmaking,
-    leaveMatchmaking,
-    declineMatch,
-    confirmMatch,
-    matchmakingStatus,
-    indicators,
-    confirmationTimeoutSeconds,
-    gameId,
-  } = useMatchmakingSocket({
-    token: token!,
-    autoJoin: Boolean(autoJoin && !noMoney),
-    metadata,
-  })
+  const { joinMatchmaking, leaveMatchmaking, declineMatch, confirmMatch } =
+    useMatchmakingSocket({
+      autoJoin: Boolean(autoJoin && !noMoney),
+      metadata: metadata,
+    })
 
   const handleSearch = () => {
+    const matchmakingStatus = useMatchmakerStore.getState().matchmakingStatus
     matchmakingStatus === 'not-in-queue'
       ? joinMatchmaking()
       : matchmakingStatus === 'searching' && leaveMatchmaking()
   }
 
   const handleMatchCreatedCountdownEnd = useCallback(async () => {
+    const gameId = useMatchmakerStore.getState().gameId
+
     if (!gameId) {
       return
     }
@@ -67,7 +59,7 @@ const Matchmaker = ({
     navigate(ROUTES.duel.game(gameId), {
       preventScrollReset: true,
     })
-  }, [navigate, gameId])
+  }, [navigate])
 
   const handleLeave = () => {
     leaveMatchmaking()
@@ -81,7 +73,6 @@ const Matchmaker = ({
         <div className='flex h-full w-full flex-col items-center justify-center gap-2 overflow-hidden'>
           {isNextSearch ? (
             <NextSearch
-              matchmakingStatus={matchmakingStatus}
               onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
               onLeave={handleLeave}
             />
@@ -92,9 +83,6 @@ const Matchmaker = ({
                 onConfirm={confirmMatch}
                 onSearch={handleSearch}
                 onMatchCreatedCountdownEnd={handleMatchCreatedCountdownEnd}
-                indicators={indicators}
-                confirmationTimeoutSeconds={confirmationTimeoutSeconds}
-                matchmakingStatus={matchmakingStatus}
                 defaultValue={`${MIN_DUEL_BET}`}
               />
               <PersonalStatistics playerId={user.id} />

@@ -1,10 +1,11 @@
 import { IoPlay } from 'react-icons/io5'
 
 import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
+import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { DUEL_COUNTDOWN, IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { Countdown } from '@/components/ui/countdown'
-import { Indicator, Indicators } from '@/components/ui/indicators'
+import { Indicators } from '@/components/ui/indicators'
 import { Actions } from '@/components/ui/actions'
 
 interface EnterArenaProps extends React.ComponentProps<'div'> {
@@ -12,9 +13,6 @@ interface EnterArenaProps extends React.ComponentProps<'div'> {
   onConfirm: () => void
   onSearch: (amount: number) => void
   onMatchCreatedCountdownEnd: () => void
-  indicators: Indicator[]
-  matchmakingStatus: MatchmakingStatus
-  confirmationTimeoutSeconds: number
   defaultValue: string
 }
 
@@ -31,13 +29,18 @@ const EnterArena = ({
   onConfirm,
   onSearch,
   onMatchCreatedCountdownEnd,
-  indicators,
-  confirmationTimeoutSeconds,
-  matchmakingStatus,
   defaultValue,
   className,
   ...props
 }: EnterArenaProps) => {
+  const matchmakingStatus = useMatchmakerStore(
+    ({ matchmakingStatus }) => matchmakingStatus,
+  )
+  const confirmationTimeoutSeconds = useMatchmakerStore(
+    ({ confirmationTimeoutSeconds }) => confirmationTimeoutSeconds,
+  )
+  const indicators = useMatchmakerStore(({ indicators }) => indicators)
+
   const isSearching = matchmakingStatus === 'searching'
   const isFound = matchmakingStatus === 'match-found'
   const isMatchCreated = matchmakingStatus === 'match-created'
@@ -143,7 +146,10 @@ const EnterArena = ({
                   mute
                 />
               </div>
-              <Indicators indicators={indicators} className='min-w-10' />
+              <Indicators
+                indicators={indicators.map((i) => i.action)}
+                className='min-w-10'
+              />
             </div>
           </div>
         )}

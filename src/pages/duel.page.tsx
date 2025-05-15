@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { useDuelSocket } from '@/socket/duel/use-duel-socket'
 import { useDuelStore } from '@/store/duel.store'
 import { useAuthStore } from '@/store/auth.store'
+import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { VariantGame } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { DuelFooter } from '@/components/duel/footer-duel'
@@ -44,7 +45,7 @@ const DuelPage = ({ variant }: { variant: VariantGame }) => {
   const user = useUser()
   const { data: userStatistics } = useUserStatistics()
   const characterName = useDuelStore(({ characterName }) => characterName)
-  const matchDetails = useDuelStore(({ matchDetails }) => matchDetails)
+  const matchDetails = useMatchmakerStore(({ matchDetails }) => matchDetails)
   const isHMR = useIsHMR()
   const playerId = user.id
   const { pathname } = useLocation()

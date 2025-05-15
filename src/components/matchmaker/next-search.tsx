@@ -1,18 +1,22 @@
+import { useMatchmakerStore } from '@/store/matchmaker.store'
 import { cn } from '@/lib/utils'
 import { IMAGES, DUEL_COUNTDOWN } from '@/lib/constants'
 import { ButtonWithAudio } from '@/components/ui/button-with-audio'
 import { Countdown } from '@/components/ui/countdown'
-import { MatchmakingStatus } from '@/socket/matchmaker/matchmaker-soket.types'
 
-const NextSearch = ({
-  matchmakingStatus,
-  onLeave,
-  onMatchCreatedCountdownEnd,
-}: {
-  matchmakingStatus: MatchmakingStatus
+interface NextSearchProps {
   onLeave: () => void
   onMatchCreatedCountdownEnd: () => void
-}) => {
+}
+
+const NextSearch = ({
+  onLeave,
+  onMatchCreatedCountdownEnd,
+}: NextSearchProps) => {
+  const matchmakingStatus = useMatchmakerStore(
+    ({ matchmakingStatus }) => matchmakingStatus,
+  )
+
   const isFinding =
     matchmakingStatus === 'not-in-queue' || matchmakingStatus === 'searching'
 
