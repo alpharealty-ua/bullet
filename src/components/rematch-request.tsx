@@ -77,6 +77,7 @@ const RematchRequest = ({
           onEnd={onCountdoenEnd}
           className='w-5 items-center justify-center text-center'
           mute
+          endMute
         />
       </div>
       <Indicators

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 type CountdownProps = ComponentProps<'div'> & {
   time: number
   mute?: boolean
+  endMute?: boolean
   onEnd?: () => void
 }
 
@@ -15,6 +16,7 @@ const Countdown = ({
   time,
   onEnd,
   mute,
+  endMute,
   ...props
 }: CountdownProps) => {
   const getSound = useSettingsStore(({ getSound }) => getSound)
@@ -32,7 +34,7 @@ const Countdown = ({
       setTime(0)
       // need force becouse is changed time 0 => 0
       forceUdate((p) => !p)
-      if (mute) {
+      if (endMute) {
         getSound('negativebeeps').play()
         audioElRef.current.pause()
       }
