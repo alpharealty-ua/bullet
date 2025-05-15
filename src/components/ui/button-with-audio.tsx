@@ -116,6 +116,7 @@ const ButtonWithAudio = React.forwardRef<
     }
 
     event.preventDefault()
+    event.stopPropagation()
 
     const notPointerClick =
       'pointerId' in event.nativeEvent && event.nativeEvent.pointerId === -1
