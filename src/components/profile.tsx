@@ -91,7 +91,7 @@ const Profile = ({ onLogout }: ProfileProps) => {
               { name: 'Player', online: false },
               { name: 'Player', online: false },
               { name: 'Player', online: false },
-              { name: 'Player', online: false },
+              { name: 'Verylongplayername', online: false },
               { name: 'Player', online: false },
               { name: 'Player', online: false },
               { name: 'Player', online: false },
@@ -101,15 +101,15 @@ const Profile = ({ onLogout }: ProfileProps) => {
               <button
                 key={i}
                 className={cn(
-                  'bg-white px-1 py-4 opacity-33',
+                  'max-w-30 overflow-hidden bg-white px-1 py-4 text-sm text-ellipsis',
                   player.online &&
-                    'bg-green hover:bg-green/70 cursor-pointer text-white opacity-100 shadow transition-all',
-                  !player.online && 'cursor-not-allowed',
+                    'bg-green hover:bg-green/70 cursor-pointer text-white shadow transition-all',
+                  !player.online && 'cursor-not-allowed opacity-33',
                 )}
                 disabled={!player.online}
                 title={player.online ? 'Online' : 'Offline'}
               >
-                {`${player.name} ${i}`}
+                {`${player.name}`}
               </button>
             ))}
           </div>
