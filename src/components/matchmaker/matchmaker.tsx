@@ -56,6 +56,12 @@ const Matchmaker = ({ autoJoin, isNextSearch }: MatchmakerProps) => {
       return
     }
 
+    useMatchmakerStore.setState({
+      ...useMatchmakerStore.getInitialState(),
+      // need for game
+      matchDetails: useMatchmakerStore.getState().matchDetails,
+    })
+
     navigate(ROUTES.duel.game(gameId), {
       preventScrollReset: true,
     })
