@@ -75,7 +75,7 @@ const Profile = ({ onLogout }: ProfileProps) => {
           <MatchmakerTrophies />
           <ButtonWithAudio
             as='button'
-            className='min-h-10 basis-10 self-center'
+            className='min-h-8 self-center text-sm'
             bg='red'
             onClick={handleLogout}
           >
