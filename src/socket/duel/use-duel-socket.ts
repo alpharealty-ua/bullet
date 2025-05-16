@@ -239,13 +239,7 @@ export const useDuelSocket = ({
 
       const { type, payload } = event
 
-      const {
-        round,
-        winner,
-        isDisconnectedOpponent,
-        isLeftOpponent,
-        pullTriggerPromise,
-      } = useDuelStore.getState()
+      const { round, winner, pullTriggerPromise } = useDuelStore.getState()
 
       switch (type) {
         case 'connect': {
@@ -367,6 +361,9 @@ export const useDuelSocket = ({
           })
 
           await pullTriggerPromise
+
+          const { isDisconnectedOpponent, isLeftOpponent } =
+            useDuelStore.getState()
 
           const isDraw = !gameWinner
           const isWin = gameWinner?.id === playerId
