@@ -258,18 +258,19 @@ export const useDuelSocket = ({
           if (payload.game.status === 'completed') {
             useDuelStore.setState({ round: game.currentRound, canPull: false })
 
-            const losePlayer = game.players.find(
+            const eliminatedPlayer = game.players.find(
               (p) => p.status === 'eliminated',
             )
 
-            const isLose = losePlayer && losePlayer.userId === playerId
+            const isEliminated =
+              eliminatedPlayer && eliminatedPlayer.userId === playerId
 
-            if (losePlayer) {
+            if (eliminatedPlayer) {
               await frontCharacterHandleRef.current?.updateState({
-                characterState: !isLose ? 'eliminated' : 'winner',
+                characterState: !isEliminated ? 'eliminated' : 'winner',
               })
               await backCharacterHandleRef.current?.updateState({
-                characterState: isLose ? 'eliminated' : 'winner',
+                characterState: isEliminated ? 'eliminated' : 'winner',
               })
               return
             }
@@ -331,11 +332,13 @@ export const useDuelSocket = ({
           }
 
           useDuelStore.setState({ pullTriggerPromise: pullTrigger() })
+
           return
         }
         case 'game:player_won': {
           const isWin = payload.playerId === playerId
           notify(payload.message, isWin ? 'success' : 'error')
+
           return
         }
         case 'game:started': {
@@ -390,6 +393,7 @@ export const useDuelSocket = ({
 
           if (showRematch) {
             rematchRequestHandleRef.current?.show()
+
             return
           }
 
@@ -404,6 +408,7 @@ export const useDuelSocket = ({
           if ((payload.index === 0 && round !== 1) || payload.index === 20) {
             playSound('bounce')
           }
+
           return
         }
         case 'game:rematch_requested': {
@@ -432,6 +437,7 @@ export const useDuelSocket = ({
           navigate(ROUTES.duel.game(rematchGameId), {
             preventScrollReset: true,
           })
+
           return
         }
         case 'game:rematch_cancelled': {
@@ -451,6 +457,7 @@ export const useDuelSocket = ({
         }
         case 'game:countdown_update': {
           console.log('game:countdown_update', payload)
+
           return
         }
         case 'game:player_left': {
@@ -462,6 +469,7 @@ export const useDuelSocket = ({
 
             leaveGame()
           }
+
           return
         }
         case 'game:player_disconnected': {
@@ -473,6 +481,7 @@ export const useDuelSocket = ({
 
             leaveGame()
           }
+
           return
         }
         case 'error': {
@@ -496,10 +505,12 @@ export const useDuelSocket = ({
                 })
               }
               notify(payload.message, 'error')
+
               return
           }
           console.error(payload)
           notify('Unhandled error ' + event, 'info')
+
           return
         }
       }
