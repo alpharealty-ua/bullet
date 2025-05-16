@@ -57,9 +57,7 @@ const Matchmaker = ({ autoJoin, isNextSearch }: MatchmakerProps) => {
     }
 
     useMatchmakerStore.setState({
-      ...useMatchmakerStore.getInitialState(),
-      // need for game
-      matchDetails: useMatchmakerStore.getState().matchDetails,
+      matchmakingStatus: 'not-in-queue',
     })
 
     navigate(ROUTES.duel.game(gameId), {
