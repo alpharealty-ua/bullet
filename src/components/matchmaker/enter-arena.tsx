@@ -41,6 +41,7 @@ const EnterArena = ({
   )
   const indicators = useMatchmakerStore(({ indicators }) => indicators)
 
+  const isNotInQueue = matchmakingStatus === 'not-in-queue'
   const isSearching = matchmakingStatus === 'searching'
   const isFound = matchmakingStatus === 'match-found'
   const isMatchCreated = matchmakingStatus === 'match-created'
@@ -92,15 +93,15 @@ const EnterArena = ({
           <button
             className={cn(
               'relative -top-0.5 flex h-13 w-7 shrink-0 cursor-pointer items-center justify-center font-bold opacity-100 transition-colors disabled:cursor-not-allowed [&:hover_span]:scale-110',
-              (isSearching || isFound) &&
+              !isNotInQueue &&
                 'text-red hover:bg-red/10 active:bg-red/20 text-xl select-none',
-              !(isSearching || isFound) &&
+              isNotInQueue &&
                 'text-green hover:bg-green/10 active:bg-green/20 text-2xl select-none',
             )}
             disabled={isFound || isMatchCreated}
           >
             <span className='transition-transform'>
-              {isSearching || isFound ? 'X' : <IoPlay />}
+              {isNotInQueue ? <IoPlay /> : 'X'}
             </span>
           </button>
         </div>
